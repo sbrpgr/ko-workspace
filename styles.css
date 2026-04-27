@@ -100,6 +100,19 @@ textarea:focus-visible {
   background: rgba(255, 255, 255, 0.88);
 }
 
+.brand-block {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
 .eyebrow {
   margin: 0 0 4px;
   color: var(--primary);
@@ -118,6 +131,29 @@ p {
 h1 {
   font-size: clamp(1.7rem, 3vw, 2.45rem);
   line-height: 1.12;
+}
+
+.help-trigger,
+.help-close {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  min-width: 34px;
+  min-height: 34px;
+  height: 34px;
+  border-radius: 50%;
+  padding: 0;
+  font-weight: 900;
+}
+
+.help-trigger {
+  color: var(--primary);
+  background: #eef5f1;
+}
+
+.help-trigger:hover:not(:disabled),
+.help-close:hover:not(:disabled) {
+  background: #e0eee8;
 }
 
 h2 {
@@ -423,6 +459,63 @@ a {
   outline-offset: 2px;
 }
 
+.help-dialog {
+  width: min(480px, calc(100% - 28px));
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  padding: 0;
+}
+
+.help-dialog::backdrop {
+  background: rgba(14, 22, 20, 0.46);
+}
+
+.help-card {
+  display: grid;
+  gap: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 24px 70px rgba(24, 33, 31, 0.24);
+  padding: 20px;
+}
+
+.help-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.help-steps {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding-left: 22px;
+}
+
+.help-steps li {
+  padding-left: 2px;
+}
+
+.help-steps strong,
+.help-steps span {
+  display: block;
+}
+
+.help-steps strong {
+  font-size: 0.95rem;
+}
+
+.help-steps span {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
 @media (max-width: 900px) {
   .control-strip {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -449,6 +542,10 @@ a {
   .panel-heading {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .title-row {
+    align-items: flex-start;
   }
 
   .status-group,

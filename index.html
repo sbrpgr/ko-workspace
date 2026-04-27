@@ -55,9 +55,20 @@
     <main class="app-shell">
       <section class="workspace" aria-label="음성으로 텍스트 쓰기">
         <header class="topbar">
-          <div>
+          <div class="brand-block">
             <p class="eyebrow">Voice to Text</p>
-            <h1>음성으로 텍스트 쓰기</h1>
+            <div class="title-row">
+              <h1>음성으로 텍스트 쓰기</h1>
+              <button
+                id="helpBtn"
+                class="help-trigger"
+                type="button"
+                aria-label="사용법 보기"
+                title="사용법 보기"
+              >
+                ?
+              </button>
+            </div>
           </div>
           <div class="status-group" aria-live="polite">
             <span id="supportStatus" class="status-pill">확인 중</span>
@@ -154,6 +165,38 @@
     </main>
 
     <button id="selectionCopyBtn" class="selection-copy" type="button" hidden>선택 복사</button>
+
+    <dialog id="helpDialog" class="help-dialog" aria-labelledby="helpTitle">
+      <article class="help-card">
+        <header class="help-header">
+          <div>
+            <p class="eyebrow">Quick Guide</p>
+            <h2 id="helpTitle">사용법</h2>
+          </div>
+          <button id="helpCloseBtn" class="help-close" type="button" aria-label="닫기" title="닫기">
+            ×
+          </button>
+        </header>
+        <ol class="help-steps">
+          <li>
+            <strong>마이크 권한 허용</strong>
+            <span>브라우저 권한 창이 뜨면 허용을 선택합니다.</span>
+          </li>
+          <li>
+            <strong>녹음 시작</strong>
+            <span>말한 내용이 음성 텍스트 영역에 쌓입니다.</span>
+          </li>
+          <li>
+            <strong>형식 선택</strong>
+            <span>일반 대본, 유튜브 영상, 발표문, 회의 요약 중 선택합니다.</span>
+          </li>
+          <li>
+            <strong>대본 만들기</strong>
+            <span>정리된 결과를 복사하거나 TXT 파일로 저장합니다.</span>
+          </li>
+        </ol>
+      </article>
+    </dialog>
 
     <script src="app.js"></script>
   </body>

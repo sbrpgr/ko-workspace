@@ -38,6 +38,9 @@ const els = {
   addSections: document.querySelector("#addSections"),
   meter: document.querySelector(".meter"),
   selectionCopyBtn: document.querySelector("#selectionCopyBtn"),
+  helpBtn: document.querySelector("#helpBtn"),
+  helpDialog: document.querySelector("#helpDialog"),
+  helpCloseBtn: document.querySelector("#helpCloseBtn"),
 };
 
 function init() {
@@ -64,6 +67,9 @@ function bindEvents() {
   els.downloadBtn.addEventListener("click", downloadScript);
   els.transcriptInput.addEventListener("input", updateMeta);
   els.scriptOutput.addEventListener("input", updateOutputMeta);
+  els.helpBtn.addEventListener("click", openHelpDialog);
+  els.helpCloseBtn.addEventListener("click", closeHelpDialog);
+  els.helpDialog.addEventListener("click", closeHelpDialogFromBackdrop);
 
   els.selectionCopyBtn.addEventListener("pointerdown", (event) => event.preventDefault());
   els.selectionCopyBtn.addEventListener("click", copySelectedText);
@@ -83,6 +89,30 @@ function bindEvents() {
   document.addEventListener("selectionchange", queueSelectionCheck);
   window.addEventListener("scroll", hideSelectionCopyButton, true);
   window.addEventListener("resize", hideSelectionCopyButton);
+}
+
+function openHelpDialog() {
+  if (typeof els.helpDialog.showModal === "function") {
+    els.helpDialog.showModal();
+    return;
+  }
+
+  els.helpDialog.setAttribute("open", "");
+}
+
+function closeHelpDialog() {
+  if (typeof els.helpDialog.close === "function") {
+    els.helpDialog.close();
+    return;
+  }
+
+  els.helpDialog.removeAttribute("open");
+}
+
+function closeHelpDialogFromBackdrop(event) {
+  if (event.target === els.helpDialog) {
+    closeHelpDialog();
+  }
 }
 
 function createRecognition() {
