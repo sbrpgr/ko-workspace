@@ -38,5 +38,4 @@
 ## 보안 파일
 
 - `_headers`: Cloudflare Pages 보안 헤더
-- `_redirects`: 짧은 정책 페이지 URL 리다이렉트
 - `.gitignore`: 로컬 브라우저 프로필과 임시 파일 제외
