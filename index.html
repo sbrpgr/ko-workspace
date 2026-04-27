@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="한국어 음성을 브라우저에서 받아 적고 대본 형식으로 정리하는 로컬 우선 음성 대본 생성기입니다."
+    />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:title" content="마이크 대본생성기" />
+    <meta
+      property="og:description"
+      content="한국어 음성 텍스트 변환과 대본 정리를 돕는 웹 도구입니다."
+    />
+    <meta property="og:type" content="website" />
+    <title>마이크 대본생성기</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="workspace" aria-label="마이크 대본생성기">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Speech to Script</p>
+            <h1>마이크 대본생성기</h1>
+          </div>
+          <div class="status-group" aria-live="polite">
+            <span id="supportStatus" class="status-pill">확인 중</span>
+            <span id="recordStatus" class="record-pill">대기</span>
+          </div>
+        </header>
+
+        <section class="control-strip" aria-label="녹음 제어">
+          <button id="startBtn" class="primary-action" type="button">녹음 시작</button>
+          <button id="pauseBtn" type="button" disabled>일시정지</button>
+          <button id="stopBtn" type="button" disabled>종료</button>
+          <button id="clearBtn" type="button">초기화</button>
+          <div class="meter" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </section>
+
+        <section class="editor-grid">
+          <article class="panel transcript-panel">
+            <div class="panel-heading">
+              <div>
+                <h2>음성 텍스트</h2>
+                <p id="liveMeta">0자 · 00:00</p>
+              </div>
+              <span id="interimText" class="interim" aria-live="polite"></span>
+            </div>
+            <textarea
+              id="transcriptInput"
+              spellcheck="true"
+              placeholder="녹음이 시작되면 여기에 말한 내용이 쌓입니다."
+            ></textarea>
+          </article>
+
+          <aside class="panel settings-panel" aria-label="대본 설정">
+            <div class="field">
+              <label for="scriptTitle">제목</label>
+              <input id="scriptTitle" type="text" placeholder="예: 신제품 소개 영상" />
+            </div>
+
+            <div class="field">
+              <label for="scriptType">형식</label>
+              <select id="scriptType">
+                <option value="general">일반 대본</option>
+                <option value="youtube">유튜브 영상</option>
+                <option value="presentation">발표문</option>
+                <option value="meeting">회의 요약</option>
+              </select>
+            </div>
+
+            <label class="check-row">
+              <input id="removeFillers" type="checkbox" checked />
+              <span>군더더기 말 정리</span>
+            </label>
+
+            <label class="check-row">
+              <input id="addSections" type="checkbox" checked />
+              <span>문단 제목 추가</span>
+            </label>
+
+            <button id="makeScriptBtn" class="primary-action wide" type="button">대본 만들기</button>
+          </aside>
+        </section>
+
+        <section class="panel output-panel" aria-label="생성된 대본">
+          <div class="panel-heading">
+            <div>
+              <h2>완성 대본</h2>
+              <p id="outputMeta">0자</p>
+            </div>
+            <div class="action-row">
+              <button id="copyBtn" type="button">복사</button>
+              <button id="downloadBtn" type="button">TXT 저장</button>
+            </div>
+          </div>
+          <textarea
+            id="scriptOutput"
+            spellcheck="true"
+            placeholder="음성 텍스트를 정리한 대본이 여기에 만들어집니다."
+          ></textarea>
+        </section>
+
+        <footer class="site-footer">
+          <a href="privacy.html">개인정보처리방침</a>
+          <a href="terms.html">이용약관</a>
+        </footer>
+      </section>
+    </main>
+
+    <button id="selectionCopyBtn" class="selection-copy" type="button" hidden>선택 복사</button>
+
+    <script src="app.js"></script>
+  </body>
+</html>

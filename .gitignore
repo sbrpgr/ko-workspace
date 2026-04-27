@@ -1,0 +1,4 @@
+.browser-profile/
+.wrangler/
+node_modules/
+*.log
