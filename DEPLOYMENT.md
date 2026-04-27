@@ -31,8 +31,8 @@
 ## 배포 전 교체해야 할 값
 
 - `ads.txt`: AdSense 승인 후 실제 Publisher ID로 교체
-- `robots.txt`: `https://example.com/sitemap.xml`을 실제 도메인으로 교체
-- `sitemap.xml`: `https://example.com`을 실제 도메인으로 교체
+- `robots.txt`: 커스텀 도메인 연결 시 Sitemap 주소 교체
+- `sitemap.xml`: 커스텀 도메인 연결 시 URL 교체
 - `privacy.html`: 운영자 문의처 추가
 
 ## 보안 파일
