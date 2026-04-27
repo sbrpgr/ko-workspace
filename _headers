@@ -5,6 +5,12 @@
   Permissions-Policy: camera=(), geolocation=(), payment=(), usb=(), microphone=(self)
   Content-Security-Policy: default-src 'self'; script-src 'self' https://*.googlesyndication.com https://*.googleadservices.com https://*.doubleclick.net https://fundingchoicesmessages.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https:; frame-src https:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
 
+https://mic-script-generator.pages.dev/*
+  X-Robots-Tag: noindex
+
+https://:version.mic-script-generator.pages.dev/*
+  X-Robots-Tag: noindex
+
 /*.html
   Cache-Control: public, max-age=300
 
@@ -13,6 +19,18 @@
 
 /*.js
   Cache-Control: public, max-age=86400
+
+/*.svg
+  Cache-Control: public, max-age=604800
+
+/site.webmanifest
+  Cache-Control: public, max-age=86400
+
+/sitemap.xml
+  Cache-Control: public, max-age=300
+
+/robots.txt
+  Cache-Control: public, max-age=300
 
 /ads.txt
   Cache-Control: public, max-age=300

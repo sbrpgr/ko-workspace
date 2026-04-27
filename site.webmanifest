@@ -1,0 +1,19 @@
+{
+  "name": "마이크 대본생성기",
+  "short_name": "대본생성기",
+  "description": "한국어 음성을 텍스트로 변환하고 대본 형식으로 정리하는 브라우저 기반 웹 도구입니다.",
+  "lang": "ko-KR",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f6f7f2",
+  "theme_color": "#146c5d",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "64x64",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

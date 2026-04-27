@@ -54,6 +54,13 @@ GitHub 저장소의 `Settings > Secrets and variables > Actions > Repository sec
 - `sitemap.xml`: 현재 `https://ko-workspace.com/` 기준
 - `privacy.html`: 운영자 문의처 추가
 
+## 검색 최적화 파일
+
+- `index.html`: title, meta description, canonical, Open Graph, Twitter Card, JSON-LD
+- `sitemap.xml`: 주요 공개 URL과 `lastmod`
+- `robots.txt`: sitemap 위치 고지
+- `favicon.svg`, `site.webmanifest`: 브라우저와 검색 결과 보조 메타데이터
+
 ## 보안 파일
 
 - `_headers`: Cloudflare Pages 보안 헤더

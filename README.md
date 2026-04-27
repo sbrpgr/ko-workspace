@@ -15,6 +15,13 @@
 - 군더더기 말 정리
 - 복사 및 TXT 저장
 
+## 검색 최적화
+
+- Canonical URL: `https://ko-workspace.com/`
+- Sitemap: `https://ko-workspace.com/sitemap.xml`
+- Robots: `https://ko-workspace.com/robots.txt`
+- 기본 메타 설명, Open Graph, Twitter Card, 구조화 데이터, 웹 앱 manifest 포함
+
 ## 배포
 
 이 프로젝트는 빌드 과정이 없는 정적 웹앱입니다. 현재는 Cloudflare Pages의 기존 Direct Upload 프로젝트(`mic-script-generator`)로 배포되어 있고, GitHub에 올린 뒤 GitHub Actions가 Wrangler로 자동 배포하도록 준비되어 있습니다.
