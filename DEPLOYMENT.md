@@ -27,6 +27,7 @@
 기존 프로젝트 유지 시:
 
 - Project name: `mic-script-generator`
+- Production domain: `https://ko-workspace.com/`
 - Deployment method: GitHub Actions + Wrangler Direct Upload
 - Workflow: `.github/workflows/cloudflare-pages.yml`
 - Production branch: `main`
@@ -49,8 +50,8 @@ GitHub 저장소의 `Settings > Secrets and variables > Actions > Repository sec
 ## 배포 전 교체해야 할 값
 
 - `ads.txt`: AdSense 승인 후 실제 Publisher ID로 교체
-- `robots.txt`: 커스텀 도메인 연결 시 Sitemap 주소 교체
-- `sitemap.xml`: 커스텀 도메인 연결 시 URL 교체
+- `robots.txt`: 현재 `https://ko-workspace.com/sitemap.xml` 기준
+- `sitemap.xml`: 현재 `https://ko-workspace.com/` 기준
 - `privacy.html`: 운영자 문의처 추가
 
 ## 보안 파일

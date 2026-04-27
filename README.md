@@ -21,6 +21,7 @@
 
 - GitHub branch: `main`
 - Cloudflare Pages project: `mic-script-generator`
+- Production domain: `https://ko-workspace.com/`
 - GitHub Secrets 필요: `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_API_TOKEN`
 
 새 Cloudflare Pages 프로젝트를 만들 때는 Git integration을 선택해도 됩니다. 단, 이미 Direct Upload로 만든 Pages 프로젝트는 나중에 Git integration 프로젝트로 전환할 수 없으므로 기존 프로젝트를 유지하려면 현재 GitHub Actions 방식이 적합합니다.
