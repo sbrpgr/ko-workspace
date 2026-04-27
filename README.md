@@ -17,11 +17,13 @@
 
 ## 배포
 
-이 프로젝트는 빌드 과정이 없는 정적 웹앱입니다. GitHub 저장소에 올린 뒤 Cloudflare Pages에서 GitHub 저장소를 연결하는 방식이 권장됩니다.
+이 프로젝트는 빌드 과정이 없는 정적 웹앱입니다. 현재는 Cloudflare Pages의 기존 Direct Upload 프로젝트(`mic-script-generator`)로 배포되어 있고, GitHub에 올린 뒤 GitHub Actions가 Wrangler로 자동 배포하도록 준비되어 있습니다.
 
-- Build command: 비워둠
-- Build output directory: `/`
-- Production branch: `main`
+- GitHub branch: `main`
+- Cloudflare Pages project: `mic-script-generator`
+- GitHub Secrets 필요: `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_API_TOKEN`
+
+새 Cloudflare Pages 프로젝트를 만들 때는 Git integration을 선택해도 됩니다. 단, 이미 Direct Upload로 만든 Pages 프로젝트는 나중에 Git integration 프로젝트로 전환할 수 없으므로 기존 프로젝트를 유지하려면 현재 GitHub Actions 방식이 적합합니다.
 
 ## 참고
 
