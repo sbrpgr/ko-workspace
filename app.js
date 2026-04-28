@@ -642,7 +642,7 @@ function renderHomePage() {
   setHeroCopy(
     BRAND_NAME_EN,
     BRAND_NAME,
-    "필요한 작업을 찾고, 넓은 작업공간에서 바로 처리하세요."
+    "효율적인 작업을 위한 도구. 이제 개인정보 걱정없이 무료로 사용하세요."
   );
 
   setDocumentMeta({
