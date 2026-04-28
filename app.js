@@ -411,6 +411,29 @@ const TOOL_BADGES = {
   "subtitle-timing": "SYNC",
 };
 
+const HOME_CATEGORY_META = {
+  핵심: {
+    label: "Core",
+    description: "가장 자주 쓰는 입력 도구입니다.",
+  },
+  텍스트: {
+    label: "Text",
+    description: "복사한 글, AI 답변, 업무 메모를 빠르게 정리합니다.",
+  },
+  이미지: {
+    label: "Image",
+    description: "이미지 변환과 용량 조절 작업을 브라우저에서 처리합니다.",
+  },
+  PDF: {
+    label: "PDF",
+    description: "문서 병합, 분할, 페이지 추출 같은 기본 PDF 작업입니다.",
+  },
+  자막: {
+    label: "Sub",
+    description: "SRT와 VTT 자막을 정리하고 시간 싱크를 보정합니다.",
+  },
+};
+
 const LIBRARIES = {
   qrcode: {
     global: "qrcode",
@@ -592,7 +615,7 @@ function renderHomePage() {
   setHeroCopy(
     "ko-workspace",
     "ko-workspace",
-    "자주 쓰는 업무 도구를 한 화면에서 바로 열 수 있게 정리한 브라우저 기반 작업 허브입니다."
+    "자주 쓰는 업무 도구를 한 화면에서 고르고 바로 실행하는 작업 허브입니다."
   );
 
   setDocumentMeta({
@@ -604,17 +627,16 @@ function renderHomePage() {
 
   els.toolOverview.innerHTML = `
     <div class="overview-header">
-      <p class="eyebrow">Quick Launch</p>
-      <h2>카테고리별 기능 바로가기</h2>
+      <p class="eyebrow">Tool Launcher</p>
+      <h2>필요한 기능을 바로 여세요</h2>
       <p>
-        메인에서 바로 도구를 고르고, 클릭 즉시 해당 기능 화면으로 들어가 작업할 수 있게 구성했습니다. 텍스트 정리, 이미지 변환, PDF 처리, 자막 보정, 음성 입력까지 카테고리별로 바로 열 수 있습니다.
+        텍스트 정리, 이미지 변환, PDF 처리, 자막 보정, 음성 입력을 카테고리별로 정리했습니다. 각 카드를 누르면 해당 도구가 바로 열립니다.
       </p>
     </div>
-    <div class="overview-meta">
-      <span class="mini-pill">${TOOL_DEFS.length}개 기능</span>
-      <span class="mini-pill">텍스트·이미지·PDF·자막</span>
-      <span class="mini-pill">클릭 즉시 실행</span>
-      <span class="mini-pill">카테고리별 빠른 이동</span>
+    <div class="home-metrics" aria-label="서비스 요약">
+      <span><strong>${TOOL_DEFS.length}</strong><small>tools</small></span>
+      <span><strong>${CATEGORY_ORDER.length - 1}</strong><small>groups</small></span>
+      <span><strong>0</strong><small>login</small></span>
     </div>
   `;
 
@@ -674,13 +696,20 @@ function renderHomeSections() {
   return CATEGORY_ORDER.filter((category) => category !== "전체")
     .map((category) => {
       const tools = TOOL_DEFS.filter((tool) => tool.category === category);
+      const meta = HOME_CATEGORY_META[category] || {
+        label: category,
+        description: `${category} 도구 모음입니다.`,
+      };
       return `
         <section class="home-tool-section">
-          <div class="section-heading">
-            <div>
+          <div class="home-section-head">
+            <span class="home-section-mark">${escapeHtml(meta.label)}</span>
+            <div class="home-section-copy">
               <p class="eyebrow">${escapeHtml(category)}</p>
               <h2>${escapeHtml(category)} 도구</h2>
+              <p>${escapeHtml(meta.description)}</p>
             </div>
+            <span class="home-section-count">${tools.length}개</span>
           </div>
           <div class="tool-launch-grid">
             ${tools.map((tool) => renderToolLaunchCard(tool)).join("")}
@@ -694,10 +723,14 @@ function renderHomeSections() {
 function renderToolLaunchCard(tool) {
   const badge = TOOL_BADGES[tool.id] || tool.title.slice(0, 2).toUpperCase();
   return `
-    <a class="tool-launch-card" href="${tool.path}">
-      <span class="tool-launch-icon">${escapeHtml(badge)}</span>
+    <a class="tool-launch-card" href="${tool.path}" data-category="${escapeHtml(tool.category)}">
+      <span class="tool-launch-top">
+        <span class="tool-launch-icon">${escapeHtml(badge)}</span>
+        <span class="tool-launch-category">${escapeHtml(tool.category)}</span>
+      </span>
       <strong>${escapeHtml(tool.title)}</strong>
       <p>${escapeHtml(tool.summary)}</p>
+      <span class="tool-launch-action" aria-hidden="true">열기</span>
     </a>
   `;
 }
