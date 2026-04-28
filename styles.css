@@ -2371,3 +2371,203 @@ body.tool-mode .hero-copy .eyebrow {
     grid-template-columns: 50px minmax(0, 1fr) 16px;
   }
 }
+
+/* Detail tool refinement */
+body.tool-mode .site-layout {
+  width: min(1420px, calc(100% - 56px));
+}
+
+body.tool-mode .platform-hero,
+body.tool-mode .workspace-stack,
+body.tool-mode .info-grid {
+  max-width: 1240px;
+}
+
+body.tool-mode .platform-hero {
+  padding: 24px 2px 10px;
+}
+
+body.tool-mode .hero-copy {
+  max-width: 900px;
+}
+
+body.tool-mode .hero-copy h1 {
+  font-size: clamp(1.9rem, 2.5vw, 2.65rem);
+}
+
+body.tool-mode .workspace-stack {
+  gap: 14px;
+}
+
+body.tool-mode .workspace-panel {
+  border-color: #e6e9ef;
+  box-shadow: 0 14px 36px rgba(23, 27, 38, 0.07);
+  padding: 22px;
+}
+
+body.tool-mode .tool-workspace,
+body.tool-mode .tool-section,
+body.tool-mode .stack {
+  gap: 16px;
+}
+
+body.tool-mode .tool-grid,
+body.tool-mode .split-editors,
+body.tool-mode .diff-grid {
+  gap: 14px;
+}
+
+body.tool-mode .editor-card,
+body.tool-mode .result-card,
+body.tool-mode .input-card,
+body.tool-mode .action-card,
+body.tool-mode .stats-card,
+body.tool-mode .preview-card,
+body.tool-mode .upload-card {
+  gap: 14px;
+  border-color: #e7ebf1;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfcff 100%);
+  box-shadow: 0 8px 20px rgba(23, 27, 38, 0.045);
+  padding: 18px;
+}
+
+body.tool-mode .action-card {
+  align-content: start;
+}
+
+body.tool-mode .section-heading {
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+}
+
+body.tool-mode .section-heading h2 {
+  color: #1f2430;
+  font-size: 1.08rem;
+}
+
+body.tool-mode .tool-note {
+  color: #6a7280;
+  font-size: 0.88rem;
+}
+
+body.tool-mode textarea,
+body.tool-mode input,
+body.tool-mode select {
+  border-color: #dfe5ee;
+  background: #fbfcff;
+}
+
+body.tool-mode textarea {
+  line-height: 1.62;
+}
+
+body.tool-mode textarea:focus,
+body.tool-mode input:focus,
+body.tool-mode select:focus {
+  border-color: rgba(229, 50, 45, 0.55);
+  box-shadow: 0 0 0 4px rgba(229, 50, 45, 0.09);
+}
+
+body.tool-mode .action-row {
+  gap: 8px;
+}
+
+body.tool-mode .action-row button,
+body.tool-mode label.secondary-action {
+  min-height: 42px;
+  padding-inline: 14px;
+}
+
+body.tool-mode .upload-box {
+  min-height: 180px;
+  border-color: #d9e0eb;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(248, 250, 253, 0.94)),
+    repeating-linear-gradient(135deg, rgba(229, 50, 45, 0.05) 0 8px, transparent 8px 16px);
+}
+
+body.tool-mode .canvas-frame,
+body.tool-mode .image-frame,
+body.tool-mode .qr-frame,
+body.tool-mode .diff-frame,
+body.tool-mode .diff-output {
+  border-color: #e4e9f1;
+  background: #f9fbfe;
+}
+
+body.tool-mode .stat-card,
+body.tool-mode .file-item,
+body.tool-mode .gallery-item {
+  border-color: #e5eaf2;
+  background: #ffffff;
+  box-shadow: 0 6px 16px rgba(23, 27, 38, 0.035);
+}
+
+body.tool-mode .stat-card strong {
+  color: #1f2430;
+  font-size: 1.22rem;
+}
+
+body.tool-mode .check-row {
+  gap: 9px;
+}
+
+body.tool-mode .check-item {
+  border: 1px solid #e6ebf2;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #303746;
+  padding: 9px 10px;
+}
+
+body.tool-mode .mode-btn {
+  justify-content: center;
+}
+
+@media (min-width: 1180px) {
+  body.tool-mode .tool-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(340px, 0.86fr);
+    gap: 16px;
+  }
+
+  body.tool-mode .split-editors,
+  body.tool-mode .diff-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  body.tool-mode .tool-grid.compact {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  body.tool-mode .editor-card textarea,
+  body.tool-mode .result-card textarea,
+  body.tool-mode .input-card textarea {
+    min-height: clamp(360px, 42vh, 580px);
+  }
+
+  body.tool-mode .result-board textarea {
+    min-height: clamp(320px, 38vh, 540px);
+  }
+
+  body.tool-mode .split-editors textarea,
+  body.tool-mode .diff-output {
+    min-height: clamp(360px, 42vh, 560px);
+  }
+
+  body.tool-mode .subtitle-textarea {
+    min-height: clamp(440px, 50vh, 680px);
+  }
+}
+
+@media (max-width: 760px) {
+  body.tool-mode .site-layout {
+    width: min(100% - 18px, 1180px);
+  }
+
+  body.tool-mode .workspace-panel {
+    padding: 16px;
+  }
+}
