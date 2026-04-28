@@ -11,7 +11,7 @@ const TOOL_DEFS = [
   {
     id: "voice-to-text",
     path: "/tools/voice-to-text/",
-    category: "핵심",
+    category: "\uC74C\uC131",
     title: "음성으로 텍스트 쓰기",
     summary:
       "마이크로 말한 내용을 실시간으로 받아 적고, 일반 대본·유튜브 영상·발표문·회의 요약 형식으로 정리합니다.",
@@ -391,33 +391,33 @@ const TOOL_DEFS = [
 ];
 
 const TOOL_MAP = Object.fromEntries(TOOL_DEFS.map((tool) => [tool.id, tool]));
-const CATEGORY_ORDER = ["전체", "핵심", "텍스트", "이미지", "PDF", "자막"];
-const TOOL_BADGES = {
-  "voice-to-text": "음성",
-  "ai-text-cleaner": "AI",
-  "character-counter": "글자",
-  "line-break-cleaner": "줄",
-  "text-extractor": "추출",
-  "duplicate-line-remover": "중복",
-  "find-replace": "찾기",
-  "case-converter": "Aa",
-  "text-diff": "비교",
-  "qr-code-generator": "QR",
-  "image-resizer": "크기",
-  "image-converter": "변환",
-  "image-compressor": "압축",
-  "pdf-merge": "병합",
-  "pdf-split": "분할",
-  "pdf-extract-pages": "추출",
-  "image-to-pdf": "PDF",
-  "pdf-to-image": "PNG",
-  "srt-cleaner": "SRT",
-  "subtitle-converter": "VTT",
-  "subtitle-timing": "싱크",
+const CATEGORY_ORDER = ["\uC804\uCCB4", "\uC74C\uC131", "\uD14D\uC2A4\uD2B8", "\uC774\uBBF8\uC9C0", "PDF", "\uC790\uB9C9"];
+const TOOL_VISUALS = {
+  "voice-to-text": { icon: "\uD83C\uDFA4", tone: "red", copy: "\ub9d0\ud558\uba74 \ubc14\ub85c \ud14d\uc2a4\ud2b8\ub85c \ubc1b\uc544 \uc801\uc2b5\ub2c8\ub2e4." },
+  "ai-text-cleaner": { icon: "\u2728", tone: "violet", copy: "AI \ub2f5\ubcc0\uc758 \ubcc4\ud45c\uc640 \ub9c8\ud06c\ub2e4\uc6b4\uc744 \uc815\ub9ac\ud569\ub2c8\ub2e4." },
+  "character-counter": { icon: "\uD83D\uDD22", tone: "blue", copy: "\uacf5\ubc31 \ud3ec\ud568\uacfc \uc81c\uc678 \uae00\uc790\uc218\ub97c \uacc4\uc0b0\ud569\ub2c8\ub2e4." },
+  "line-break-cleaner": { icon: "\u21B5", tone: "cyan", copy: "\uc904\ubc14\uafc8\uacfc \uacf5\ubc31\uc744 \ubb38\ub2e8\uc73c\ub85c \uc815\ub9ac\ud569\ub2c8\ub2e4." },
+  "text-extractor": { icon: "@", tone: "green", copy: "\uc774\uba54\uc77c, URL, \uc804\ud654\ubc88\ud638\ub9cc \ube60\ub974\uac8c \ucd94\ucd9c\ud569\ub2c8\ub2e4." },
+  "duplicate-line-remover": { icon: "\u29C9", tone: "slate", copy: "\ubaa9\ub85d\uc5d0\uc11c \uc911\ubcf5\ub41c \uc904\uc744 \uc81c\uac70\ud569\ub2c8\ub2e4." },
+  "find-replace": { icon: "\uD83D\uDD0E", tone: "amber", copy: "\ubb38\uc11c \uc548\uc758 \ub2e8\uc5b4\ub97c \ud55c \ubc88\uc5d0 \ubc14\uafc9\ub2c8\ub2e4." },
+  "case-converter": { icon: "Aa", tone: "indigo", copy: "\ub300\uc18c\ubb38\uc790\uc640 camelCase \ud615\uc2dd\uc744 \ubcc0\ud658\ud569\ub2c8\ub2e4." },
+  "text-diff": { icon: "\u2260", tone: "purple", copy: "\ub450 \ud14d\uc2a4\ud2b8\uc758 \ubcc0\uacbd\uc810\uc744 \ube44\uad50\ud569\ub2c8\ub2e4." },
+  "qr-code-generator": { icon: "\u25A6", tone: "emerald", copy: "URL, \ud14d\uc2a4\ud2b8, Wi-Fi QR\uc744 \ub9cc\ub4ed\ub2c8\ub2e4." },
+  "image-resizer": { icon: "\u2194", tone: "orange", copy: "\uc0ac\uc9c4 \ud06c\uae30\ub97c \ud53d\uc140\uc774\ub098 \ube44\uc728\ub85c \uc870\uc808\ud569\ub2c8\ub2e4." },
+  "image-converter": { icon: "\uD83D\uDDBC\uFE0F", tone: "pink", copy: "JPG, PNG, WEBP \ud615\uc2dd\uc744 \ubcc0\ud658\ud569\ub2c8\ub2e4." },
+  "image-compressor": { icon: "\uD83D\uDDDC\uFE0F", tone: "yellow", copy: "\uc5c5\ub85c\ub4dc\uc6a9 \uc774\ubbf8\uc9c0 \uc6a9\ub7c9\uc744 \uc904\uc785\ub2c8\ub2e4." },
+  "pdf-merge": { icon: "\uD83D\uDCCE", tone: "red", copy: "\uc5ec\ub7ec PDF\ub97c \ud558\ub098\uc758 \ubb38\uc11c\ub85c \ud569\uce69\ub2c8\ub2e4." },
+  "pdf-split": { icon: "\u2702", tone: "blue", copy: "PDF\ub97c \ud398\uc774\uc9c0 \ub2e8\uc704\ub85c \ub098\ub215\ub2c8\ub2e4." },
+  "pdf-extract-pages": { icon: "\uD83D\uDCC4", tone: "teal", copy: "\ud544\uc694\ud55c PDF \ud398\uc774\uc9c0\ub9cc \ucd94\ucd9c\ud569\ub2c8\ub2e4." },
+  "image-to-pdf": { icon: "\uD83E\uDDFE", tone: "orange", copy: "\uc774\ubbf8\uc9c0\ub97c PDF \ubb38\uc11c\ub85c \ubcc0\ud658\ud569\ub2c8\ub2e4." },
+  "pdf-to-image": { icon: "\uD83C\uDFDE\uFE0F", tone: "green", copy: "PDF \ud398\uc774\uc9c0\ub97c \uc774\ubbf8\uc9c0\ub85c \uc800\uc7a5\ud569\ub2c8\ub2e4." },
+  "srt-cleaner": { icon: "\uD83C\uDFAC", tone: "slate", copy: "SRT \uc790\ub9c9 \ubc88\ud638\uc640 \ud615\uc2dd\uc744 \uc815\ub9ac\ud569\ub2c8\ub2e4." },
+  "subtitle-converter": { icon: "\uD83D\uDD01", tone: "violet", copy: "SRT\uc640 VTT \uc790\ub9c9 \ud3ec\ub9f7\uc744 \ubcc0\ud658\ud569\ub2c8\ub2e4." },
+  "subtitle-timing": { icon: "\u23F1\uFE0F", tone: "cyan", copy: "\uc790\ub9c9 \uc2f1\ud06c\ub97c \uc55e\ub4a4\ub85c \uc77c\uad04 \ubcf4\uc815\ud569\ub2c8\ub2e4." },
 };
 
 const HOME_CATEGORY_META = {
-  핵심: {
+  "\uC74C\uC131": {
     label: "Core",
     description: "가장 자주 쓰는 입력 도구입니다.",
   },
@@ -620,7 +620,7 @@ function renderHomePage() {
   setHeroCopy(
     BRAND_NAME_EN,
     BRAND_NAME,
-    "자주 쓰는 업무 도구를 한 화면에서 고르고, 넓은 작업공간에서 바로 실행합니다."
+    "필요한 작업을 찾고, 넓은 작업공간에서 바로 처리하세요."
   );
 
   setDocumentMeta({
@@ -630,33 +630,34 @@ function renderHomePage() {
   });
 
   els.toolOverview.innerHTML = `
-    <div class="overview-header">
-      <p class="eyebrow">Tool Launcher</p>
-      <h2>필요한 도구를 바로 선택하세요</h2>
-      <p>
-        텍스트 정리, 이미지 변환, PDF 처리, 자막 보정, 음성 입력을 카테고리별로 정리했습니다. 카드를 누르면 해당 도구가 즉시 열립니다.
-      </p>
-    </div>
-    <div class="home-metrics" aria-label="서비스 요약">
-      <span><strong>${TOOL_DEFS.length}</strong><small>도구</small></span>
-      <span><strong>${CATEGORY_ORDER.length - 1}</strong><small>분류</small></span>
-      <span><strong>0</strong><small>로그인</small></span>
-    </div>
+    <section class="home-toolbar" aria-label="도구 검색">
+      <div class="home-toolbar-copy">
+        <strong>무엇을 처리할까요?</strong>
+        <span>${TOOL_DEFS.length}개 업무 도구를 바로 실행합니다.</span>
+      </div>
+      <label class="home-search" for="homeToolSearch">
+        <span>도구 검색</span>
+        <input id="homeToolSearch" type="search" placeholder="글자수, PDF, QR, 자막" autocomplete="off" />
+      </label>
+    </section>
   `;
 
   els.toolWorkspace.innerHTML = `
-    <div class="stack">
-      ${renderHomeSections()}
-    </div>
+    <section class="home-tool-section home-directory" aria-label="\ub3c4\uad6c \ubaa9\ub85d">
+      <div class="tool-launch-grid">
+        ${TOOL_DEFS.map((tool) => renderToolLaunchCard(tool)).join("")}
+      </div>
+    </section>
   `;
 
+  bindHomeToolSearch();
   renderGuideList([]);
   renderRelatedTools([]);
 }
 
 function renderToolPage(tool) {
   setPageMode("tool");
-  setHeroCopy(tool.category, tool.title, tool.summary);
+  setHeroCopy("무료 온라인 도구", tool.title, tool.summary);
   setDocumentMeta({
     title: `${tool.seoTitle} | ${BRAND_NAME}`,
     description: tool.seoDescription,
@@ -697,46 +698,46 @@ function setPageMode(mode) {
 }
 
 function renderHomeSections() {
-  return CATEGORY_ORDER.filter((category) => category !== "전체")
-    .map((category) => {
-      const tools = TOOL_DEFS.filter((tool) => tool.category === category);
-      const meta = HOME_CATEGORY_META[category] || {
-        label: category,
-        description: `${category} 도구 모음입니다.`,
-      };
-      return `
-        <section class="home-tool-section">
-          <div class="home-section-head">
-            <span class="home-section-mark">${escapeHtml(meta.label)}</span>
-            <div class="home-section-copy">
-              <p class="eyebrow">${escapeHtml(category)}</p>
-              <h2>${escapeHtml(category)} 도구</h2>
-              <p>${escapeHtml(meta.description)}</p>
-            </div>
-            <span class="home-section-count">${tools.length}개</span>
-          </div>
-          <div class="tool-launch-grid">
-            ${tools.map((tool) => renderToolLaunchCard(tool)).join("")}
-          </div>
-        </section>
-      `;
-    })
-    .join("");
+  return `
+    <section class="home-tool-section home-directory" aria-label="\ub3c4\uad6c \ubaa9\ub85d">
+      <div class="tool-launch-grid">
+        ${TOOL_DEFS.map((tool) => renderToolLaunchCard(tool)).join("")}
+      </div>
+    </section>
+  `;
 }
 
 function renderToolLaunchCard(tool) {
-  const badge = TOOL_BADGES[tool.id] || tool.title.slice(0, 2).toUpperCase();
+  const visual = TOOL_VISUALS[tool.id] || {
+    icon: tool.title.slice(0, 1),
+    tone: "slate",
+    copy: tool.summary,
+  };
+  const searchText = [tool.title, tool.summary, visual.copy, ...tool.keywords].join(" ");
+
   return `
-    <a class="tool-launch-card" href="${tool.path}" data-category="${escapeHtml(tool.category)}" aria-label="${escapeHtml(tool.title)} 열기">
-      <span class="tool-launch-top">
-        <span class="tool-launch-icon">${escapeHtml(badge)}</span>
-        <span class="tool-launch-category">${escapeHtml(tool.category)}</span>
+    <a class="tool-launch-card" href="${tool.path}" data-tone="${escapeHtml(visual.tone)}" data-search="${escapeHtml(searchText)}" aria-label="${escapeHtml(tool.title)} 열기">
+      <span class="tool-launch-icon" aria-hidden="true">${escapeHtml(visual.icon)}</span>
+      <span class="tool-launch-body">
+        <strong>${escapeHtml(tool.title)}</strong>
+        <span>${escapeHtml(visual.copy)}</span>
       </span>
-      <strong>${escapeHtml(tool.title)}</strong>
-      <p>${escapeHtml(tool.summary)}</p>
-      <span class="tool-launch-action" aria-hidden="true">바로 열기</span>
+      <span class="tool-launch-arrow" aria-hidden="true">&rsaquo;</span>
     </a>
   `;
+}
+
+function bindHomeToolSearch() {
+  const searchInput = document.querySelector("#homeToolSearch");
+  if (!searchInput) return;
+
+  searchInput.addEventListener("input", () => {
+    const query = searchInput.value.trim().toLowerCase();
+    document.querySelectorAll(".home-directory .tool-launch-card").forEach((card) => {
+      const text = (card.dataset.search || card.textContent || "").toLowerCase();
+      card.hidden = query.length > 0 && !text.includes(query);
+    });
+  });
 }
 
 function setHeroCopy(kicker, title, description) {

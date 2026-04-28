@@ -740,12 +740,6 @@ body.home-mode .tool-workspace {
   color: #126f99;
 }
 
-.tool-launch-category {
-  color: var(--muted);
-  font-size: 0.74rem;
-  font-weight: 900;
-}
-
 .tool-launch-action {
   align-self: end;
   color: var(--primary);
@@ -2161,5 +2155,219 @@ body.home-mode .hero-copy h1 {
 
   .tool-launch-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* App launcher redesign: less copy, stronger visual recognition */
+body[data-page="home"] .overview-panel,
+body.home-mode .overview-panel {
+  margin-top: 6px;
+}
+
+.home-toolbar {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(260px, 420px);
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px 24px;
+  width: 100%;
+  max-width: 1500px;
+  border: 1px solid #e6e9ef;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 14px 32px rgba(23, 27, 38, 0.06);
+  padding: 18px;
+  text-align: left;
+}
+
+.home-toolbar-copy {
+  display: grid;
+  gap: 4px;
+}
+
+.home-toolbar strong {
+  color: #20242d;
+  font-size: 1.16rem;
+  line-height: 1.25;
+}
+
+.home-toolbar span {
+  color: var(--muted);
+  font-size: 0.94rem;
+}
+
+.home-search {
+  display: grid;
+  gap: 7px;
+}
+
+.home-search span {
+  color: #4f5663;
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.home-search input {
+  min-height: 46px;
+  border-color: #dfe4ee;
+  background: #f8fafc;
+  color: #20242d;
+  font-size: 0.95rem;
+  padding: 0 14px;
+}
+
+.home-directory {
+  padding-top: 18px;
+}
+
+.home-directory .tool-launch-grid {
+  grid-template-columns: repeat(auto-fill, minmax(252px, 1fr));
+  gap: 16px;
+}
+
+.home-directory .tool-launch-card {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 15px;
+  min-height: 132px;
+  border: 1px solid #e3e7ef;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(23, 27, 38, 0.045);
+  padding: 18px;
+}
+
+.home-directory .tool-launch-card::before {
+  display: none;
+}
+
+.home-directory .tool-launch-card:hover {
+  border-color: #d6dbe5;
+  box-shadow: 0 16px 34px rgba(23, 27, 38, 0.1);
+  transform: translateY(-2px);
+}
+
+.home-directory .tool-launch-icon {
+  width: 58px;
+  height: 58px;
+  border: 0;
+  border-radius: 8px;
+  font-size: 1.5rem;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+}
+
+.tool-launch-body {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.tool-launch-body strong {
+  color: #20242d;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.tool-launch-body span {
+  display: -webkit-box;
+  overflow: hidden;
+  color: #666d79;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.tool-launch-arrow {
+  color: #a1a8b3;
+  font-size: 1.35rem;
+  font-weight: 900;
+}
+
+.tool-launch-card[data-tone="red"] .tool-launch-icon {
+  background: #fff1f0;
+  color: #e5322d;
+}
+
+.tool-launch-card[data-tone="blue"] .tool-launch-icon {
+  background: #eef5ff;
+  color: #2563eb;
+}
+
+.tool-launch-card[data-tone="green"],
+.tool-launch-card[data-tone="emerald"] {
+  --tone-color: #148a5b;
+}
+
+.tool-launch-card[data-tone="green"] .tool-launch-icon,
+.tool-launch-card[data-tone="emerald"] .tool-launch-icon {
+  background: #eaf8f1;
+  color: #148a5b;
+}
+
+.tool-launch-card[data-tone="orange"] .tool-launch-icon,
+.tool-launch-card[data-tone="amber"] .tool-launch-icon,
+.tool-launch-card[data-tone="yellow"] .tool-launch-icon {
+  background: #fff6e8;
+  color: #b45f06;
+}
+
+.tool-launch-card[data-tone="violet"] .tool-launch-icon,
+.tool-launch-card[data-tone="purple"] .tool-launch-icon,
+.tool-launch-card[data-tone="indigo"] .tool-launch-icon {
+  background: #f2efff;
+  color: #6552d9;
+}
+
+.tool-launch-card[data-tone="cyan"] .tool-launch-icon,
+.tool-launch-card[data-tone="teal"] .tool-launch-icon {
+  background: #e9f8fb;
+  color: #0f7b8b;
+}
+
+.tool-launch-card[data-tone="pink"] .tool-launch-icon {
+  background: #fff0f6;
+  color: #c72d73;
+}
+
+.tool-launch-card[data-tone="slate"] .tool-launch-icon {
+  background: #f1f4f8;
+  color: #465364;
+}
+
+body.home-mode .platform-hero .hero-meta,
+body[data-page="home"] .platform-hero .hero-meta {
+  display: none;
+}
+
+body.home-mode .hero-copy h1,
+body[data-page="home"] .hero-copy h1 {
+  font-size: clamp(2.35rem, 5vw, 4.2rem);
+}
+
+body.home-mode .hero-copy p:last-child,
+body[data-page="home"] .hero-copy p:last-child {
+  max-width: 700px;
+}
+
+.home-directory .tool-launch-card[hidden] {
+  display: none;
+}
+
+body.tool-mode .hero-copy .eyebrow {
+  color: #6b7280;
+}
+
+@media (max-width: 860px) {
+  .home-toolbar {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 560px) {
+  .home-directory .tool-launch-card {
+    grid-template-columns: 50px minmax(0, 1fr) 16px;
   }
 }
