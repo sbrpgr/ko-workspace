@@ -78,7 +78,7 @@ These should be built early because they are fast to implement, safe for browser
 | 찾기 및 바꾸기 | `/tools/find-replace/` | 찾기 바꾸기, 텍스트 일괄 변경, 문자열 치환 | S | Simple bulk replacement with case-sensitive and whole-word options. |
 | 대소문자 변환 | `/tools/case-converter/` | 대소문자 변환, camelCase 변환, snake_case 변환, 케이스 변환 | S | Useful for English text, filenames, labels, and development-adjacent office work. |
 | 텍스트 비교기 | `/tools/text-diff/` | 텍스트 비교, 문서 비교, 변경사항 비교, 두 글 비교 | M | Browser-side line/word diff. Useful, but lower priority than cleanup/extraction tools. |
-| QR 코드 생성기 | `/tools/qr-code-generator/` | QR 코드 만들기, 무료 QR 생성기, URL QR 코드 | S | Use client-side QR library. No server storage. |
+| QR 코드 생성기 | `/tools/qr-code-generator/` | QR 코드 만들기, 무료 QR 생성기, URL QR 코드, QR PNG 저장, QR JPG 저장 | S | Shipped. Client-side QR generation with SVG/PNG/JPG export, simple styling, filename input, contrast fallback, and no server storage. |
 | 이미지 크기 조절 | `/tools/image-resizer/` | 이미지 크기 줄이기, 사진 사이즈 변경, 이미지 리사이즈 | M | Canvas-based browser processing. |
 | 이미지 형식 변환 | `/tools/image-converter/` | WEBP JPG 변환, PNG JPG 변환, 이미지 변환 | M | Browser support varies by format. Clearly state supported formats. |
 | 이미지 용량 압축 | `/tools/image-compressor/` | 이미지 압축, 사진 용량 줄이기, JPG 용량 줄이기, WEBP 압축 | M | Browser-side canvas compression. Avoid server uploads. |

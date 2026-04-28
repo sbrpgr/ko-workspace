@@ -54,6 +54,12 @@ Core constraints:
 ### Image
 
 - `QR 코드 생성기`
+  - Text, URL, and Wi-Fi QR payload generation
+  - Optional download filename input
+  - Simple styling controls: foreground color, background color, module shape, size, and output format
+  - SVG, PNG, and JPG download support
+  - PNG/JPG export is handled by browser-side SVG-to-Canvas conversion
+  - QR scan stability must be preserved with a quiet-zone margin, high error correction, and automatic contrast fallback to dark foreground on light background
 - `이미지 크기 조절`
 - `이미지 형식 변환`
 - `이미지 용량 압축`
@@ -123,6 +129,7 @@ Footer and policy pages should expose the same operator information:
 ## Remaining Work
 
 - Run manual camera and microphone checks on real Chrome/Edge devices after each media-tool change
+- Manually scan generated QR samples on real mobile devices after QR design changes, especially colored or rounded styles
 - Create category landing pages for text, PDF, image, subtitle, voice, and video tools on a separate rollback branch
 - Tune AdSense placements after approval and keep ads outside editor/upload/drop zones
 - Monitor MediaPipe background-effect load failures and add a local fallback if CDN reliability becomes a problem

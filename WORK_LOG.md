@@ -52,3 +52,17 @@
 - Added dynamic FAQPage structured data from the same visible FAQ content
 - Added privacy-safe GTM `dataLayer` events for tool open, run, copy, download, permission request, and FAQ opening
 - Documented analytics allowlists in `ANALYTICS.md` so no input text, file names, extracted data, or recording contents are sent
+
+## 2026-04-29
+
+### QR Code Generator Update
+
+- Improved the QR generator UI with a cleaner preview frame and simpler options
+- Added optional download filename input
+- Kept user-facing options limited to color, background, shape, size, and save format
+- Added SVG, PNG, and JPG download support
+- Implemented PNG/JPG downloads through browser-side SVG-to-Canvas conversion
+- Set QR generation to high error correction and preserved quiet-zone margins for scan stability
+- Added automatic contrast fallback to dark foreground on light background when the selected colors may reduce recognition reliability
+- Bumped static asset cache version to `20260429-12`
+- Deployed commit `18b5f47 Improve QR generator exports` through GitHub Actions / Cloudflare Pages
