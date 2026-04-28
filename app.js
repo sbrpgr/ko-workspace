@@ -5,7 +5,7 @@ const BRAND_NAME = "코워크스페이스";
 const BRAND_NAME_EN = "ko-workspace";
 const BRAND_DISPLAY_NAME = `${BRAND_NAME} (${BRAND_NAME_EN})`;
 const BRAND_DESCRIPTION =
-  "코워크스페이스(ko-workspace)는 로그인 없이 브라우저에서 바로 실행되는 텍스트, 이미지, PDF, 자막, 음성 업무 도구 모음입니다.";
+  "코워크스페이스(ko-workspace)는 로그인 없이 브라우저에서 바로 실행되는 텍스트, 이미지, PDF, 자막, 음성, 영상 업무 도구 모음입니다.";
 
 const TOOL_DEFS = [
   {
@@ -24,6 +24,24 @@ const TOOL_DEFS = [
       { title: "녹음 시작", text: "말한 내용이 실시간으로 음성 텍스트 영역에 누적됩니다." },
       { title: "형식 선택", text: "일반 대본, 유튜브 영상, 발표문, 회의 요약 중 하나를 고릅니다." },
       { title: "결과 저장", text: "정리된 결과를 복사하거나 TXT 파일로 바로 저장합니다." },
+    ],
+  },
+  {
+    id: "webcam-recorder",
+    path: "/tools/webcam-recorder/",
+    category: "영상",
+    title: "웹캠 녹화기",
+    summary:
+      "카메라와 마이크를 브라우저에서 바로 녹화하고, 좌우반전·밝기·대비·채도·필터를 적용해 WebM 파일로 저장합니다.",
+    seoTitle: "웹캠 녹화기 | 브라우저 카메라 녹화",
+    seoDescription:
+      "설치 없이 브라우저에서 웹캠과 마이크를 녹화하고 좌우반전, 밝기, 대비, 채도, 필터를 적용해 WebM으로 저장합니다.",
+    keywords: ["웹캠", "녹화", "WebM", "좌우반전"],
+    guide: [
+      { title: "카메라 허용", text: "브라우저 권한 창에서 카메라와 필요한 경우 마이크 사용을 허용합니다." },
+      { title: "화면 조정", text: "좌우반전, 밝기, 대비, 채도, 필터를 미리보기에서 확인하며 맞춥니다." },
+      { title: "녹화 시작", text: "기본 WebM 형식으로 녹화하며, 지원되는 Chrome 환경에서는 MP4도 선택할 수 있습니다." },
+      { title: "파일 저장", text: "녹화가 끝나면 결과 영상을 확인하고 PC에 바로 다운로드합니다." },
     ],
   },
   {
@@ -387,9 +405,10 @@ const TOOL_DEFS = [
 ];
 
 const TOOL_MAP = Object.fromEntries(TOOL_DEFS.map((tool) => [tool.id, tool]));
-const CATEGORY_ORDER = ["\uC804\uCCB4", "\uC74C\uC131", "\uD14D\uC2A4\uD2B8", "\uC774\uBBF8\uC9C0", "PDF", "\uC790\uB9C9"];
+const CATEGORY_ORDER = ["\uC804\uCCB4", "\uC74C\uC131", "영상", "\uD14D\uC2A4\uD2B8", "\uC774\uBBF8\uC9C0", "PDF", "\uC790\uB9C9"];
 const TOOL_VISUALS = {
   "voice-to-text": { icon: "\uD83C\uDFA4", tone: "red", copy: "\ub9d0\ud558\uba74 \ubc14\ub85c \ud14d\uc2a4\ud2b8\ub85c \ubc1b\uc544 \uc801\uc2b5\ub2c8\ub2e4." },
+  "webcam-recorder": { icon: "\uD83C\uDFA5", tone: "orange", copy: "\uc6f9\ucea0\uacfc \ub9c8\uc774\ud06c\ub97c \ud544\ud130\ub97c \uc801\uc6a9\ud574 \ub179\ud654\ud569\ub2c8\ub2e4." },
   "ai-text-cleaner": { icon: "\u2728", tone: "violet", copy: "AI \ub2f5\ubcc0\uc758 \ubcc4\ud45c\uc640 \ub9c8\ud06c\ub2e4\uc6b4\uc744 \uc815\ub9ac\ud569\ub2c8\ub2e4." },
   "character-counter": { icon: "\uD83D\uDD22", tone: "blue", copy: "\uacf5\ubc31 \ud3ec\ud568\uacfc \uc81c\uc678 \uae00\uc790\uc218\ub97c \uacc4\uc0b0\ud569\ub2c8\ub2e4." },
   "line-break-cleaner": { icon: "\u21B5", tone: "cyan", copy: "\uc904\ubc14\uafc8\uacfc \uacf5\ubc31\uc744 \ubb38\ub2e8\uc73c\ub85c \uc815\ub9ac\ud569\ub2c8\ub2e4." },
@@ -417,6 +436,10 @@ const HOME_CATEGORY_META = {
   "\uC74C\uC131": {
     label: "Core",
     description: "가장 자주 쓰는 입력 도구입니다.",
+  },
+  영상: {
+    label: "Video",
+    description: "카메라 녹화와 영상 작업을 브라우저에서 처리합니다.",
   },
   텍스트: {
     label: "Text",
@@ -845,6 +868,7 @@ function injectStructuredData(tool) {
 
 const TOOL_RENDERERS = {
   "voice-to-text": renderVoiceTool,
+  "webcam-recorder": renderWebcamRecorder,
   "ai-text-cleaner": renderAiTextCleaner,
   "character-counter": renderCharacterCounter,
   "line-break-cleaner": renderLineBreakCleaner,
@@ -1287,6 +1311,622 @@ function renderVoiceTool(container) {
       return silenceDelays[Math.max(index, 0)] + attempt * 600;
     }
     return 900 + attempt * 600;
+  }
+}
+
+function renderWebcamRecorder(container) {
+  const formatOptions = getRecorderFormatOptions();
+  const defaultFormat = formatOptions.find((format) => format.ext === "webm") || formatOptions[0];
+  const mp4Supported = formatOptions.some((format) => format.ext === "mp4");
+
+  container.innerHTML = `
+    <div class="tool-section webcam-recorder-tool">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Camera Recorder</p>
+          <h2>웹캠 녹화</h2>
+        </div>
+        <div class="status-group" aria-live="polite">
+          <span id="cameraSupportStatus" class="status-pill">확인 중</span>
+          <span id="cameraRecordStatus" class="record-pill">대기</span>
+        </div>
+      </div>
+
+      <div class="webcam-grid">
+        <article class="editor-card webcam-preview-card">
+          <div class="section-heading">
+            <div>
+              <h2>카메라 미리보기</h2>
+              <p id="recordingMeta" class="tool-note">00:00 · 녹화 전</p>
+            </div>
+            <span id="recordingBadge" class="recording-badge" hidden>REC</span>
+          </div>
+
+          <div class="webcam-stage">
+            <video id="cameraSourceVideo" playsinline muted hidden></video>
+            <canvas id="cameraPreviewCanvas"></canvas>
+            <div id="webcamPlaceholder" class="webcam-placeholder">
+              <strong>카메라를 켜면 미리보기가 표시됩니다.</strong>
+              <span>영상은 서버로 업로드되지 않고 브라우저에서 바로 녹화됩니다.</span>
+            </div>
+          </div>
+
+          <div class="action-row">
+            <button id="startCameraBtn" class="primary-action" type="button">카메라 켜기</button>
+            <button id="stopCameraBtn" type="button" disabled>카메라 끄기</button>
+            <button id="startRecordingBtn" type="button" disabled>녹화 시작</button>
+            <button id="pauseRecordingBtn" type="button" disabled>일시정지</button>
+            <button id="stopRecordingBtn" type="button" disabled>녹화 종료</button>
+          </div>
+        </article>
+
+        <aside class="editor-card webcam-control-card">
+          <div class="field">
+            <label for="cameraSelect">카메라</label>
+            <select id="cameraSelect" disabled>
+              <option value="">권한 허용 후 선택 가능</option>
+            </select>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="recordQuality">해상도</label>
+              <select id="recordQuality">
+                <option value="720">HD 720p</option>
+                <option value="1080">Full HD 1080p</option>
+                <option value="480">가벼운 480p</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="recordFormat">저장 형식</label>
+              <select id="recordFormat">
+                ${formatOptions
+                  .map(
+                    (format) =>
+                      `<option value="${escapeHtml(format.value)}" ${format.value === defaultFormat?.value ? "selected" : ""}>${escapeHtml(format.label)}</option>`
+                  )
+                  .join("")}
+              </select>
+            </div>
+          </div>
+
+          <div class="check-row">
+            <label class="check-item"><input id="includeMic" type="checkbox" checked /> 마이크 포함</label>
+            <label class="check-item"><input id="mirrorVideo" type="checkbox" checked /> 좌우반전 적용</label>
+          </div>
+
+          <div class="field">
+            <label for="filterPreset">필터</label>
+            <select id="filterPreset">
+              <option value="none">기본</option>
+              <option value="bright">밝고 선명하게</option>
+              <option value="warm">따뜻한 톤</option>
+              <option value="cool">차가운 톤</option>
+              <option value="mono">흑백</option>
+              <option value="cinema">시네마틱</option>
+              <option value="soft">부드럽게</option>
+            </select>
+          </div>
+
+          <div class="range-grid">
+            <label>
+              <span>밝기 <output id="brightnessValue">100%</output></span>
+              <input id="brightnessRange" type="range" min="70" max="140" value="100" />
+            </label>
+            <label>
+              <span>대비 <output id="contrastValue">100%</output></span>
+              <input id="contrastRange" type="range" min="70" max="150" value="100" />
+            </label>
+            <label>
+              <span>채도 <output id="saturationValue">100%</output></span>
+              <input id="saturationRange" type="range" min="0" max="180" value="100" />
+            </label>
+          </div>
+
+          <p id="formatSupportNote" class="tool-note">
+            ${mp4Supported ? "기본은 WebM입니다. 이 브라우저에서는 MP4 직접 녹화도 선택할 수 있습니다." : "기본은 WebM입니다. 현재 브라우저에서는 MP4 직접 녹화를 지원하지 않습니다."}
+          </p>
+        </aside>
+      </div>
+
+      <article class="result-card webcam-result-card">
+        <div class="section-heading">
+          <div>
+            <h2>녹화 파일</h2>
+            <p id="recordedMeta" class="tool-note">녹화를 완료하면 파일 정보가 표시됩니다.</p>
+          </div>
+          <div class="action-row">
+            <button id="downloadVideoBtn" type="button" disabled>영상 저장</button>
+            <button id="clearRecordingBtn" type="button" disabled>결과 지우기</button>
+          </div>
+        </div>
+        <video id="recordedVideo" controls playsinline hidden></video>
+      </article>
+    </div>
+  `;
+
+  const nodes = {
+    supportStatus: container.querySelector("#cameraSupportStatus"),
+    recordStatus: container.querySelector("#cameraRecordStatus"),
+    sourceVideo: container.querySelector("#cameraSourceVideo"),
+    canvas: container.querySelector("#cameraPreviewCanvas"),
+    placeholder: container.querySelector("#webcamPlaceholder"),
+    recordingBadge: container.querySelector("#recordingBadge"),
+    recordingMeta: container.querySelector("#recordingMeta"),
+    recordedMeta: container.querySelector("#recordedMeta"),
+    recordedVideo: container.querySelector("#recordedVideo"),
+    startCameraBtn: container.querySelector("#startCameraBtn"),
+    stopCameraBtn: container.querySelector("#stopCameraBtn"),
+    startRecordingBtn: container.querySelector("#startRecordingBtn"),
+    pauseRecordingBtn: container.querySelector("#pauseRecordingBtn"),
+    stopRecordingBtn: container.querySelector("#stopRecordingBtn"),
+    downloadVideoBtn: container.querySelector("#downloadVideoBtn"),
+    clearRecordingBtn: container.querySelector("#clearRecordingBtn"),
+    cameraSelect: container.querySelector("#cameraSelect"),
+    recordQuality: container.querySelector("#recordQuality"),
+    recordFormat: container.querySelector("#recordFormat"),
+    includeMic: container.querySelector("#includeMic"),
+    mirrorVideo: container.querySelector("#mirrorVideo"),
+    filterPreset: container.querySelector("#filterPreset"),
+    brightnessRange: container.querySelector("#brightnessRange"),
+    contrastRange: container.querySelector("#contrastRange"),
+    saturationRange: container.querySelector("#saturationRange"),
+    brightnessValue: container.querySelector("#brightnessValue"),
+    contrastValue: container.querySelector("#contrastValue"),
+    saturationValue: container.querySelector("#saturationValue"),
+  };
+
+  const state = {
+    stream: null,
+    recorder: null,
+    recordingCanvasStream: null,
+    chunks: [],
+    recordedBlob: null,
+    recordedUrl: "",
+    recordedExtension: "webm",
+    animationId: null,
+    timerId: null,
+    startedAt: 0,
+    elapsedBeforePause: 0,
+    isRecording: false,
+    isPaused: false,
+    lastMimeType: "video/webm",
+  };
+
+  const context = nodes.canvas.getContext("2d", { alpha: false });
+  const mediaSupported =
+    Boolean(navigator.mediaDevices?.getUserMedia) &&
+    Boolean(window.MediaRecorder) &&
+    typeof nodes.canvas.captureStream === "function";
+
+  if (!mediaSupported) {
+    nodes.supportStatus.textContent = "녹화 미지원";
+    nodes.startCameraBtn.disabled = true;
+    nodes.startRecordingBtn.disabled = true;
+    showToast("이 브라우저에서는 웹캠 녹화를 지원하지 않습니다.");
+  } else {
+    nodes.supportStatus.textContent = "브라우저 녹화 준비";
+  }
+
+  nodes.startCameraBtn.addEventListener("click", startCamera);
+  nodes.stopCameraBtn.addEventListener("click", stopCamera);
+  nodes.startRecordingBtn.addEventListener("click", startRecording);
+  nodes.pauseRecordingBtn.addEventListener("click", toggleRecordingPause);
+  nodes.stopRecordingBtn.addEventListener("click", stopRecording);
+  nodes.downloadVideoBtn.addEventListener("click", downloadRecording);
+  nodes.clearRecordingBtn.addEventListener("click", clearRecording);
+  nodes.cameraSelect.addEventListener("change", restartCameraIfIdle);
+  nodes.recordQuality.addEventListener("change", restartCameraIfIdle);
+  nodes.includeMic.addEventListener("change", restartCameraIfIdle);
+  [nodes.brightnessRange, nodes.contrastRange, nodes.saturationRange].forEach((input) => {
+    input.addEventListener("input", syncRangeLabels);
+  });
+  window.addEventListener("beforeunload", stopAllMedia, { once: true });
+
+  syncRangeLabels();
+  syncRecorderButtons();
+
+  async function startCamera() {
+    if (!mediaSupported || state.isRecording) return;
+
+    stopCameraTracks();
+    clearPreview();
+
+    try {
+      nodes.recordStatus.textContent = "권한 요청 중";
+      const constraints = buildCameraConstraints();
+      state.stream = await navigator.mediaDevices.getUserMedia(constraints);
+      nodes.sourceVideo.srcObject = state.stream;
+      await nodes.sourceVideo.play();
+      await populateCameraSelect();
+      nodes.placeholder.hidden = true;
+      nodes.supportStatus.textContent = "카메라 연결됨";
+      nodes.recordStatus.textContent = "대기";
+      startPreviewLoop();
+      syncRecorderButtons();
+    } catch (error) {
+      state.stream = null;
+      nodes.sourceVideo.srcObject = null;
+      nodes.supportStatus.textContent = "권한 필요";
+      nodes.recordStatus.textContent = "대기";
+      nodes.placeholder.hidden = false;
+      showToast(getCameraErrorMessage(error));
+      syncRecorderButtons();
+    }
+  }
+
+  function stopCamera() {
+    if (state.isRecording) {
+      showToast("녹화 종료 후 카메라를 끌 수 있습니다.");
+      return;
+    }
+    stopCameraTracks();
+    stopPreviewLoop();
+    clearPreview();
+    nodes.sourceVideo.srcObject = null;
+    nodes.placeholder.hidden = false;
+    nodes.supportStatus.textContent = mediaSupported ? "브라우저 녹화 준비" : "녹화 미지원";
+    nodes.recordStatus.textContent = "대기";
+    syncRecorderButtons();
+  }
+
+  async function restartCameraIfIdle() {
+    if (!state.stream || state.isRecording) return;
+    await startCamera();
+  }
+
+  function buildCameraConstraints() {
+    const quality = {
+      "1080": { width: 1920, height: 1080 },
+      "720": { width: 1280, height: 720 },
+      "480": { width: 854, height: 480 },
+    }[nodes.recordQuality.value] || { width: 1280, height: 720 };
+
+    const selectedDevice = nodes.cameraSelect.value;
+    return {
+      video: {
+        width: { ideal: quality.width },
+        height: { ideal: quality.height },
+        frameRate: { ideal: 30, max: 30 },
+        ...(selectedDevice ? { deviceId: { exact: selectedDevice } } : {}),
+      },
+      audio: nodes.includeMic.checked
+        ? {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true,
+          }
+        : false,
+    };
+  }
+
+  async function populateCameraSelect() {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const cameras = devices.filter((device) => device.kind === "videoinput");
+    const activeDeviceId = state.stream?.getVideoTracks()[0]?.getSettings().deviceId || "";
+
+    nodes.cameraSelect.innerHTML = cameras.length
+      ? cameras
+          .map((device, index) => {
+            const label = device.label || `카메라 ${index + 1}`;
+            const selected = device.deviceId === activeDeviceId ? "selected" : "";
+            return `<option value="${escapeHtml(device.deviceId)}" ${selected}>${escapeHtml(label)}</option>`;
+          })
+          .join("")
+      : `<option value="">기본 카메라</option>`;
+    nodes.cameraSelect.disabled = cameras.length <= 1 || state.isRecording;
+  }
+
+  function startPreviewLoop() {
+    stopPreviewLoop();
+    drawPreviewFrame();
+  }
+
+  function drawPreviewFrame() {
+    const video = nodes.sourceVideo;
+    const width = video.videoWidth || 1280;
+    const height = video.videoHeight || 720;
+
+    if (nodes.canvas.width !== width || nodes.canvas.height !== height) {
+      nodes.canvas.width = width;
+      nodes.canvas.height = height;
+    }
+
+    context.save();
+    context.fillStyle = "#101828";
+    context.fillRect(0, 0, width, height);
+    context.filter = buildCanvasFilter();
+    if (nodes.mirrorVideo.checked) {
+      context.translate(width, 0);
+      context.scale(-1, 1);
+    }
+    context.drawImage(video, 0, 0, width, height);
+    context.restore();
+
+    state.animationId = window.requestAnimationFrame(drawPreviewFrame);
+  }
+
+  function stopPreviewLoop() {
+    if (state.animationId) {
+      window.cancelAnimationFrame(state.animationId);
+      state.animationId = null;
+    }
+  }
+
+  function clearPreview() {
+    context.clearRect(0, 0, nodes.canvas.width, nodes.canvas.height);
+  }
+
+  function buildCanvasFilter() {
+    const presetFilters = {
+      none: "",
+      bright: "brightness(1.08) contrast(1.06)",
+      warm: "sepia(0.18) saturate(1.14) brightness(1.03)",
+      cool: "hue-rotate(8deg) saturate(1.08) brightness(1.02)",
+      mono: "grayscale(1) contrast(1.08)",
+      cinema: "contrast(1.18) saturate(0.92)",
+      soft: "brightness(1.05) contrast(0.94) saturate(1.08) blur(0.2px)",
+    };
+    return [
+      presetFilters[nodes.filterPreset.value] || "",
+      `brightness(${nodes.brightnessRange.value}%)`,
+      `contrast(${nodes.contrastRange.value}%)`,
+      `saturate(${nodes.saturationRange.value}%)`,
+    ]
+      .filter(Boolean)
+      .join(" ");
+  }
+
+  function startRecording() {
+    if (!mediaSupported) return;
+    if (!state.stream) {
+      showToast("먼저 카메라를 켜 주세요.");
+      return;
+    }
+    if (state.isRecording) return;
+
+    const format = getSelectedFormat();
+    const canvasStream = nodes.canvas.captureStream(30);
+    const tracks = [...canvasStream.getVideoTracks()];
+    if (nodes.includeMic.checked) {
+      tracks.push(...state.stream.getAudioTracks());
+    }
+
+    const recordingStream = new MediaStream(tracks);
+    const options = {
+      videoBitsPerSecond: getVideoBitrate(),
+    };
+    if (format.mime) {
+      options.mimeType = format.mime;
+    }
+
+    try {
+      state.chunks = [];
+      state.recordingCanvasStream = canvasStream;
+      state.recorder = new MediaRecorder(recordingStream, options);
+      state.lastMimeType = state.recorder.mimeType || format.mime || "video/webm";
+      state.recordedExtension = state.lastMimeType.includes("mp4") ? "mp4" : format.ext;
+      state.recorder.addEventListener("dataavailable", (event) => {
+        if (event.data && event.data.size > 0) {
+          state.chunks.push(event.data);
+        }
+      });
+      state.recorder.addEventListener("stop", finalizeRecording, { once: true });
+      state.recorder.start(1000);
+      state.isRecording = true;
+      state.isPaused = false;
+      state.elapsedBeforePause = 0;
+      state.startedAt = Date.now();
+      startRecordingTimer();
+      nodes.recordStatus.textContent = "녹화 중";
+      nodes.recordStatus.classList.add("active");
+      nodes.recordingBadge.hidden = false;
+      syncRecorderButtons();
+    } catch (error) {
+      state.recordingCanvasStream?.getTracks().forEach((track) => track.stop());
+      state.recordingCanvasStream = null;
+      showToast("이 브라우저에서는 선택한 형식으로 녹화할 수 없습니다.");
+      syncRecorderButtons();
+    }
+  }
+
+  function toggleRecordingPause() {
+    if (!state.recorder || !state.isRecording) return;
+
+    if (state.recorder.state === "recording") {
+      state.recorder.pause();
+      state.isPaused = true;
+      state.elapsedBeforePause = getRecordingElapsedMs();
+      state.startedAt = 0;
+      nodes.recordStatus.textContent = "일시정지";
+      nodes.recordStatus.classList.remove("active");
+    } else if (state.recorder.state === "paused") {
+      state.recorder.resume();
+      state.isPaused = false;
+      state.startedAt = Date.now();
+      nodes.recordStatus.textContent = "녹화 중";
+      nodes.recordStatus.classList.add("active");
+    }
+
+    updateRecordingMeta();
+    syncRecorderButtons();
+  }
+
+  function stopRecording() {
+    if (!state.recorder || !state.isRecording) return;
+
+    try {
+      if (state.recorder.state !== "inactive") {
+        state.recorder.stop();
+      }
+    } catch (error) {
+      finalizeRecording();
+    }
+  }
+
+  function finalizeRecording() {
+    stopRecordingTimer();
+    state.isRecording = false;
+    state.isPaused = false;
+    state.startedAt = 0;
+    state.recordingCanvasStream?.getTracks().forEach((track) => track.stop());
+    state.recordingCanvasStream = null;
+
+    nodes.recordStatus.textContent = "녹화 완료";
+    nodes.recordStatus.classList.remove("active");
+    nodes.recordingBadge.hidden = true;
+
+    if (state.chunks.length === 0) {
+      showToast("녹화된 데이터가 없습니다.");
+      syncRecorderButtons();
+      return;
+    }
+
+    clearRecording(false);
+    state.recordedBlob = new Blob(state.chunks, { type: state.lastMimeType });
+    state.recordedUrl = URL.createObjectURL(state.recordedBlob);
+    nodes.recordedVideo.src = state.recordedUrl;
+    nodes.recordedVideo.hidden = false;
+    nodes.recordedMeta.textContent = `${formatClock(Math.floor(state.elapsedBeforePause / 1000))} · ${formatBytes(state.recordedBlob.size)} · ${state.recordedExtension.toUpperCase()}`;
+    nodes.downloadVideoBtn.disabled = false;
+    nodes.clearRecordingBtn.disabled = false;
+    syncRecorderButtons();
+  }
+
+  function clearRecording(resetMeta = true) {
+    if (state.recordedUrl) {
+      URL.revokeObjectURL(state.recordedUrl);
+    }
+    state.recordedBlob = null;
+    state.recordedUrl = "";
+    nodes.recordedVideo.removeAttribute("src");
+    nodes.recordedVideo.load();
+    nodes.recordedVideo.hidden = true;
+    nodes.downloadVideoBtn.disabled = true;
+    nodes.clearRecordingBtn.disabled = true;
+    if (resetMeta) {
+      nodes.recordedMeta.textContent = "녹화를 완료하면 파일 정보가 표시됩니다.";
+    }
+  }
+
+  function downloadRecording() {
+    if (!state.recordedBlob) {
+      showToast("저장할 녹화 파일이 없습니다.");
+      return;
+    }
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+    downloadBlob(state.recordedBlob, `webcam-recording-${timestamp}.${state.recordedExtension}`);
+  }
+
+  function getSelectedFormat() {
+    const selected = formatOptions.find((format) => format.value === nodes.recordFormat.value);
+    if (selected && isRecorderMimeSupported(selected.mime)) return selected;
+    return formatOptions.find((format) => format.ext === "webm") || formatOptions[0] || { mime: "", ext: "webm" };
+  }
+
+  function getVideoBitrate() {
+    if (nodes.recordQuality.value === "1080") return 6000000;
+    if (nodes.recordQuality.value === "480") return 1800000;
+    return 3500000;
+  }
+
+  function startRecordingTimer() {
+    stopRecordingTimer();
+    updateRecordingMeta();
+    state.timerId = window.setInterval(updateRecordingMeta, 500);
+  }
+
+  function stopRecordingTimer() {
+    if (state.timerId) {
+      window.clearInterval(state.timerId);
+      state.timerId = null;
+    }
+    state.elapsedBeforePause = getRecordingElapsedMs();
+    updateRecordingMeta();
+  }
+
+  function getRecordingElapsedMs() {
+    if (!state.startedAt) return state.elapsedBeforePause;
+    return state.elapsedBeforePause + Date.now() - state.startedAt;
+  }
+
+  function updateRecordingMeta() {
+    const seconds = Math.floor(getRecordingElapsedMs() / 1000);
+    const format = getSelectedFormat();
+    const stateText = state.isRecording ? (state.isPaused ? "일시정지" : "녹화 중") : "녹화 전";
+    nodes.recordingMeta.textContent = `${formatClock(seconds)} · ${stateText} · ${format.ext.toUpperCase()}`;
+  }
+
+  function syncRangeLabels() {
+    nodes.brightnessValue.textContent = `${nodes.brightnessRange.value}%`;
+    nodes.contrastValue.textContent = `${nodes.contrastRange.value}%`;
+    nodes.saturationValue.textContent = `${nodes.saturationRange.value}%`;
+  }
+
+  function syncRecorderButtons() {
+    const hasCamera = Boolean(state.stream);
+    nodes.startCameraBtn.disabled = !mediaSupported || state.isRecording;
+    nodes.startCameraBtn.textContent = hasCamera ? "카메라 다시 연결" : "카메라 켜기";
+    nodes.stopCameraBtn.disabled = !hasCamera || state.isRecording;
+    nodes.startRecordingBtn.disabled = !mediaSupported || !hasCamera || state.isRecording;
+    nodes.pauseRecordingBtn.disabled = !state.isRecording;
+    nodes.pauseRecordingBtn.textContent = state.isPaused ? "다시 시작" : "일시정지";
+    nodes.stopRecordingBtn.disabled = !state.isRecording;
+    nodes.cameraSelect.disabled = !hasCamera || state.isRecording || nodes.cameraSelect.options.length <= 1;
+    nodes.recordQuality.disabled = state.isRecording;
+    nodes.recordFormat.disabled = state.isRecording || formatOptions.length === 0;
+    nodes.includeMic.disabled = state.isRecording;
+    updateRecordingMeta();
+  }
+
+  function stopCameraTracks() {
+    state.stream?.getTracks().forEach((track) => track.stop());
+    state.stream = null;
+  }
+
+  function stopAllMedia() {
+    if (state.recorder && state.recorder.state !== "inactive") {
+      try {
+        state.recorder.stop();
+      } catch (error) {
+        // Page is unloading; media cleanup continues below.
+      }
+    }
+    state.recordingCanvasStream?.getTracks().forEach((track) => track.stop());
+    stopCameraTracks();
+    stopPreviewLoop();
+    stopRecordingTimer();
+    if (state.recordedUrl) URL.revokeObjectURL(state.recordedUrl);
+  }
+
+  function getCameraErrorMessage(error) {
+    if (error?.name === "NotAllowedError" || error?.name === "SecurityError") {
+      return "카메라 또는 마이크 권한을 허용해야 녹화를 시작할 수 있습니다.";
+    }
+    if (error?.name === "NotFoundError") {
+      return "연결된 카메라를 찾지 못했습니다.";
+    }
+    if (error?.name === "NotReadableError") {
+      return "다른 앱이 카메라를 사용 중일 수 있습니다.";
+    }
+    return "카메라를 시작하지 못했습니다.";
+  }
+
+  function getRecorderFormatOptions() {
+    if (!window.MediaRecorder) return [];
+    const candidates = [
+      { value: "webm-vp9", label: "WebM VP9 (권장)", mime: "video/webm;codecs=vp9,opus", ext: "webm" },
+      { value: "webm-vp8", label: "WebM VP8", mime: "video/webm;codecs=vp8,opus", ext: "webm" },
+      { value: "webm", label: "WebM 자동", mime: "video/webm", ext: "webm" },
+      { value: "mp4-h264", label: "MP4 H.264 (실험적)", mime: "video/mp4;codecs=h264,aac", ext: "mp4" },
+      { value: "mp4", label: "MP4 자동 (실험적)", mime: "video/mp4", ext: "mp4" },
+      { value: "auto", label: "브라우저 자동", mime: "", ext: "webm" },
+    ];
+    return candidates.filter((format) => isRecorderMimeSupported(format.mime));
+  }
+
+  function isRecorderMimeSupported(mime) {
+    return !mime || MediaRecorder.isTypeSupported(mime);
   }
 }
 
