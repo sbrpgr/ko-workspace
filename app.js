@@ -387,6 +387,29 @@ const TOOL_DEFS = [
 
 const TOOL_MAP = Object.fromEntries(TOOL_DEFS.map((tool) => [tool.id, tool]));
 const CATEGORY_ORDER = ["전체", "핵심", "텍스트", "이미지", "PDF", "자막"];
+const TOOL_BADGES = {
+  "voice-to-text": "MIC",
+  "ai-text-cleaner": "AI",
+  "character-counter": "TXT",
+  "line-break-cleaner": "BR",
+  "text-extractor": "@",
+  "duplicate-line-remover": "DUP",
+  "find-replace": "FR",
+  "case-converter": "Aa",
+  "text-diff": "DIF",
+  "qr-code-generator": "QR",
+  "image-resizer": "IMG",
+  "image-converter": "JPG",
+  "image-compressor": "ZIP",
+  "pdf-merge": "PDF",
+  "pdf-split": "CUT",
+  "pdf-extract-pages": "PGE",
+  "image-to-pdf": "I2P",
+  "pdf-to-image": "P2I",
+  "srt-cleaner": "SRT",
+  "subtitle-converter": "VTT",
+  "subtitle-timing": "SYNC",
+};
 
 const LIBRARIES = {
   qrcode: {
@@ -565,10 +588,11 @@ function renderSidebarTools() {
 }
 
 function renderHomePage() {
+  setPageMode("home");
   setHeroCopy(
-    "Browser-side Office Utilities",
     "ko-workspace",
-    "로그인 없이 브라우저에서 바로 실행되는 업무용 도구 모음입니다. 텍스트 정리, 이미지 편집, PDF 처리, 자막 작업, 음성 텍스트 작성을 한 곳에 모았습니다."
+    "ko-workspace",
+    "자주 쓰는 업무 도구를 한 화면에서 바로 열 수 있게 정리한 브라우저 기반 작업 허브입니다."
   );
 
   setDocumentMeta({
@@ -580,96 +604,32 @@ function renderHomePage() {
 
   els.toolOverview.innerHTML = `
     <div class="overview-header">
-      <p class="eyebrow">Platform Overview</p>
-      <h2>정적 배포로 바로 쓰는 업무 도구 플랫폼</h2>
+      <p class="eyebrow">Quick Launch</p>
+      <h2>카테고리별 기능 바로가기</h2>
       <p>
-        모든 초기 기능은 Cloudflare Pages에 맞춰 브라우저 안에서 실행됩니다. 로그인, 백엔드 서버, 데이터베이스, 별도 API 키 없이 바로 사용할 수 있습니다.
+        메인에서 바로 도구를 고르고, 클릭 즉시 해당 기능 화면으로 들어가 작업할 수 있게 구성했습니다. 텍스트 정리, 이미지 변환, PDF 처리, 자막 보정, 음성 입력까지 카테고리별로 바로 열 수 있습니다.
       </p>
     </div>
     <div class="overview-meta">
-      <span class="mini-pill">${TOOL_DEFS.length}개 도구</span>
-      <span class="mini-pill">텍스트 · 이미지 · PDF · 자막</span>
-      <span class="mini-pill">브라우저 처리</span>
-      <span class="mini-pill">광고 슬롯 분리</span>
-    </div>
-    <div class="overview-hero-grid">
-      <article class="mini-card">
-        <span class="eyebrow">Core</span>
-        <strong>AI 복붙 정리</strong>
-        <p>마크다운과 과한 공백을 일반 문서용 텍스트로 바꾸는 정리 도구입니다.</p>
-      </article>
-      <article class="mini-card">
-        <span class="eyebrow">Voice</span>
-        <strong>음성 텍스트 작성</strong>
-        <p>한국어 음성을 받아 적고 대본 형식으로 정리하는 음성 입력 도구입니다.</p>
-      </article>
-      <article class="mini-card">
-        <span class="eyebrow">PDF</span>
-        <strong>브라우저 PDF 작업</strong>
-        <p>병합, 분할, 추출, 이미지 변환 같은 핵심 PDF 기능을 브라우저에서 처리합니다.</p>
-      </article>
+      <span class="mini-pill">${TOOL_DEFS.length}개 기능</span>
+      <span class="mini-pill">텍스트·이미지·PDF·자막</span>
+      <span class="mini-pill">클릭 즉시 실행</span>
+      <span class="mini-pill">카테고리별 빠른 이동</span>
     </div>
   `;
 
   els.toolWorkspace.innerHTML = `
     <div class="stack">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">Featured Tools</p>
-          <h2>바로 시작할 도구</h2>
-        </div>
-      </div>
-      <div class="tool-grid compact">
-        ${TOOL_DEFS.slice(0, 9)
-          .map(
-            (tool) => `
-              <a class="tool-link" href="${tool.path}">
-                <div class="tool-link-tags">${tool.keywords
-                  .slice(0, 3)
-                  .map((keyword) => `<span>${escapeHtml(keyword)}</span>`)
-                  .join("")}</div>
-                <strong>${escapeHtml(tool.title)}</strong>
-                <p>${escapeHtml(tool.summary)}</p>
-              </a>
-            `
-          )
-          .join("")}
-      </div>
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">Platform Rules</p>
-          <h2>초기 구현 기준</h2>
-        </div>
-      </div>
-      <div class="tool-grid">
-        <article class="mini-card">
-          <strong>브라우저 안에서 처리</strong>
-          <p>텍스트, 이미지, 자막, 기본 PDF 작업은 파일을 서버에 저장하지 않고 브라우저에서 즉시 처리합니다.</p>
-        </article>
-        <article class="mini-card">
-          <strong>업무 흐름 중심</strong>
-          <p>복사 붙여넣기 정리, 데이터 추출, 이미지 변환, 자막 보정처럼 실제 반복 작업에 맞춘 도구만 우선 구현합니다.</p>
-        </article>
-      </div>
+      ${renderHomeSections()}
     </div>
   `;
 
-  renderGuideList([
-    { title: "도구 선택", text: "왼쪽 목록에서 필요한 작업을 고르면 각 도구 페이지로 바로 이동합니다." },
-    { title: "즉시 실행", text: "대부분의 도구는 로그인 없이 곧바로 입력과 결과 생성을 시작할 수 있습니다." },
-    { title: "브라우저 처리", text: "텍스트와 파일은 서버에 저장하지 않고 브라우저 안에서 처리합니다." },
-    { title: "후속 확장", text: "무거운 OCR, 배경 제거, AI 요약 같은 기능은 초기 정적 배포 범위에서 제외합니다." },
-  ]);
-
-  renderRelatedTools([
-    { path: "/tools/ai-text-cleaner/", title: "AI 복붙 서식 정리" },
-    { path: "/tools/voice-to-text/", title: "음성으로 텍스트 쓰기" },
-    { path: "/tools/pdf-merge/", title: "PDF 합치기" },
-    { path: "/tools/srt-cleaner/", title: "SRT 자막 정리" },
-  ]);
+  renderGuideList([]);
+  renderRelatedTools([]);
 }
 
 function renderToolPage(tool) {
+  setPageMode("tool");
   setHeroCopy(tool.category, tool.title, tool.summary);
   setDocumentMeta({
     title: `${tool.seoTitle} | ko-workspace`,
@@ -685,8 +645,6 @@ function renderToolPage(tool) {
     </div>
     <div class="overview-meta">
       ${tool.keywords.map((keyword) => `<span class="mini-pill">${escapeHtml(keyword)}</span>`).join("")}
-      <span class="mini-pill">브라우저 처리</span>
-      <span class="mini-pill">로그인 없음</span>
     </div>
   `;
 
@@ -705,6 +663,43 @@ function renderToolPage(tool) {
   }
 
   renderer(els.toolWorkspace);
+}
+
+function setPageMode(mode) {
+  document.body.classList.toggle("home-mode", mode === "home");
+  document.body.classList.toggle("tool-mode", mode === "tool");
+}
+
+function renderHomeSections() {
+  return CATEGORY_ORDER.filter((category) => category !== "전체")
+    .map((category) => {
+      const tools = TOOL_DEFS.filter((tool) => tool.category === category);
+      return `
+        <section class="home-tool-section">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">${escapeHtml(category)}</p>
+              <h2>${escapeHtml(category)} 도구</h2>
+            </div>
+          </div>
+          <div class="tool-launch-grid">
+            ${tools.map((tool) => renderToolLaunchCard(tool)).join("")}
+          </div>
+        </section>
+      `;
+    })
+    .join("");
+}
+
+function renderToolLaunchCard(tool) {
+  const badge = TOOL_BADGES[tool.id] || tool.title.slice(0, 2).toUpperCase();
+  return `
+    <a class="tool-launch-card" href="${tool.path}">
+      <span class="tool-launch-icon">${escapeHtml(badge)}</span>
+      <strong>${escapeHtml(tool.title)}</strong>
+      <p>${escapeHtml(tool.summary)}</p>
+    </a>
+  `;
 }
 
 function setHeroCopy(kicker, title, description) {
@@ -733,6 +728,10 @@ function setMetaContent(selector, value) {
 }
 
 function renderGuideList(steps) {
+  if (!steps || steps.length === 0) {
+    els.toolGuideList.innerHTML = "";
+    return;
+  }
   els.toolGuideList.innerHTML = steps
     .map(
       (step) => `
@@ -746,6 +745,10 @@ function renderGuideList(steps) {
 }
 
 function renderRelatedTools(items) {
+  if (!items || items.length === 0) {
+    els.relatedTools.innerHTML = "";
+    return;
+  }
   els.relatedTools.innerHTML = items
     .map((item) => `<a href="${item.path}">${escapeHtml(item.title)}</a>`)
     .join("");
