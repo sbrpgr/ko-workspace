@@ -393,27 +393,27 @@ const TOOL_DEFS = [
 const TOOL_MAP = Object.fromEntries(TOOL_DEFS.map((tool) => [tool.id, tool]));
 const CATEGORY_ORDER = ["전체", "핵심", "텍스트", "이미지", "PDF", "자막"];
 const TOOL_BADGES = {
-  "voice-to-text": "MIC",
+  "voice-to-text": "음성",
   "ai-text-cleaner": "AI",
-  "character-counter": "TXT",
-  "line-break-cleaner": "BR",
-  "text-extractor": "@",
-  "duplicate-line-remover": "DUP",
-  "find-replace": "FR",
+  "character-counter": "글자",
+  "line-break-cleaner": "줄",
+  "text-extractor": "추출",
+  "duplicate-line-remover": "중복",
+  "find-replace": "찾기",
   "case-converter": "Aa",
-  "text-diff": "DIF",
+  "text-diff": "비교",
   "qr-code-generator": "QR",
-  "image-resizer": "IMG",
-  "image-converter": "JPG",
-  "image-compressor": "ZIP",
-  "pdf-merge": "PDF",
-  "pdf-split": "CUT",
-  "pdf-extract-pages": "PGE",
-  "image-to-pdf": "I2P",
-  "pdf-to-image": "P2I",
+  "image-resizer": "크기",
+  "image-converter": "변환",
+  "image-compressor": "압축",
+  "pdf-merge": "병합",
+  "pdf-split": "분할",
+  "pdf-extract-pages": "추출",
+  "image-to-pdf": "PDF",
+  "pdf-to-image": "PNG",
   "srt-cleaner": "SRT",
   "subtitle-converter": "VTT",
-  "subtitle-timing": "SYNC",
+  "subtitle-timing": "싱크",
 };
 
 const HOME_CATEGORY_META = {
@@ -620,7 +620,7 @@ function renderHomePage() {
   setHeroCopy(
     BRAND_NAME_EN,
     BRAND_NAME,
-    "자주 쓰는 업무 도구를 한 화면에서 고르고 바로 실행하는 작업 허브입니다."
+    "자주 쓰는 업무 도구를 한 화면에서 고르고, 넓은 작업공간에서 바로 실행합니다."
   );
 
   setDocumentMeta({
@@ -632,15 +632,15 @@ function renderHomePage() {
   els.toolOverview.innerHTML = `
     <div class="overview-header">
       <p class="eyebrow">Tool Launcher</p>
-      <h2>필요한 기능을 바로 여세요</h2>
+      <h2>필요한 도구를 바로 선택하세요</h2>
       <p>
-        텍스트 정리, 이미지 변환, PDF 처리, 자막 보정, 음성 입력을 카테고리별로 정리했습니다. 각 카드를 누르면 해당 도구가 바로 열립니다.
+        텍스트 정리, 이미지 변환, PDF 처리, 자막 보정, 음성 입력을 카테고리별로 정리했습니다. 카드를 누르면 해당 도구가 즉시 열립니다.
       </p>
     </div>
     <div class="home-metrics" aria-label="서비스 요약">
-      <span><strong>${TOOL_DEFS.length}</strong><small>tools</small></span>
-      <span><strong>${CATEGORY_ORDER.length - 1}</strong><small>groups</small></span>
-      <span><strong>0</strong><small>login</small></span>
+      <span><strong>${TOOL_DEFS.length}</strong><small>도구</small></span>
+      <span><strong>${CATEGORY_ORDER.length - 1}</strong><small>분류</small></span>
+      <span><strong>0</strong><small>로그인</small></span>
     </div>
   `;
 
@@ -727,14 +727,14 @@ function renderHomeSections() {
 function renderToolLaunchCard(tool) {
   const badge = TOOL_BADGES[tool.id] || tool.title.slice(0, 2).toUpperCase();
   return `
-    <a class="tool-launch-card" href="${tool.path}" data-category="${escapeHtml(tool.category)}">
+    <a class="tool-launch-card" href="${tool.path}" data-category="${escapeHtml(tool.category)}" aria-label="${escapeHtml(tool.title)} 열기">
       <span class="tool-launch-top">
         <span class="tool-launch-icon">${escapeHtml(badge)}</span>
         <span class="tool-launch-category">${escapeHtml(tool.category)}</span>
       </span>
       <strong>${escapeHtml(tool.title)}</strong>
       <p>${escapeHtml(tool.summary)}</p>
-      <span class="tool-launch-action" aria-hidden="true">열기</span>
+      <span class="tool-launch-action" aria-hidden="true">바로 열기</span>
     </a>
   `;
 }
@@ -793,6 +793,9 @@ function renderRelatedTools(items) {
 
 function injectStructuredData(tool) {
   document.querySelectorAll('script[data-schema="dynamic"]').forEach((node) => node.remove());
+  if (document.querySelector(tool ? 'script[data-schema="static-tool"]' : 'script[data-schema="static-site"]')) {
+    return;
+  }
   const script = document.createElement("script");
   script.type = "application/ld+json";
   script.dataset.schema = "dynamic";
@@ -832,7 +835,13 @@ function injectStructuredData(tool) {
         applicationCategory: "BusinessApplication",
         browserRequirements: "Requires a modern browser with JavaScript enabled",
         inLanguage: "ko-KR",
-        description: tool.summary,
+        description: tool.seoDescription || tool.summary,
+        keywords: tool.keywords.join(", "),
+        publisher: {
+          "@type": "Organization",
+          name: BRAND_NAME,
+          url: `${TOOL_ORIGIN}/`,
+        },
         operatingSystem: "Any",
         offers: {
           "@type": "Offer",
