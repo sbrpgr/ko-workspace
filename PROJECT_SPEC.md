@@ -94,6 +94,12 @@ Each tool page should have:
 - Tool inputs and uploaded files are processed in the browser and not sent to an application server
 - Deployment secrets remain in GitHub Actions Secrets or Cloudflare settings only
 
+## Open Source Fallback Rule
+
+When a browser-side feature fails functional testing, do not keep expanding fragile custom code by default. First check whether a mature open-source browser library can solve the failing area with less risk.
+
+Selection and fallback details are maintained in `OPEN_SOURCE_FALLBACKS.md`.
+
 ## Ad Layout Principle
 
 Ad slots are pre-separated from the work surface.
