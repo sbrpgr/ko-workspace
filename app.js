@@ -25,7 +25,6 @@ const TOOL_DEFS = [
       { title: "형식 선택", text: "일반 대본, 유튜브 영상, 발표문, 회의 요약 중 하나를 고릅니다." },
       { title: "결과 저장", text: "정리된 결과를 복사하거나 TXT 파일로 바로 저장합니다." },
     ],
-    related: ["ai-text-cleaner", "character-counter", "line-break-cleaner"],
   },
   {
     id: "ai-text-cleaner",
@@ -44,7 +43,6 @@ const TOOL_DEFS = [
       { title: "옵션 조정", text: "링크 처리, 코드블록 제거, 제목 처리, 공백 정리 여부를 선택합니다." },
       { title: "결과 사용", text: "출력 텍스트를 복사해서 메일, 워드, 한글, 메신저에 바로 붙여넣습니다." },
     ],
-    related: ["line-break-cleaner", "find-replace", "character-counter"],
   },
   {
     id: "character-counter",
@@ -62,7 +60,6 @@ const TOOL_DEFS = [
       { title: "실시간 확인", text: "입력 즉시 글자수와 바이트 수가 자동으로 계산됩니다." },
       { title: "분량 점검", text: "읽기 시간과 문단 수를 함께 보며 초안 분량을 빠르게 확인합니다." },
     ],
-    related: ["line-break-cleaner", "ai-text-cleaner", "duplicate-line-remover"],
   },
   {
     id: "line-break-cleaner",
@@ -80,7 +77,23 @@ const TOOL_DEFS = [
       { title: "옵션 선택", text: "문장 줄바꿈 합치기, 빈 줄 정리, 공백 압축 같은 옵션을 켭니다." },
       { title: "출력 확인", text: "정리된 문단을 복사해 바로 문서에 옮깁니다." },
     ],
-    related: ["ai-text-cleaner", "duplicate-line-remover", "find-replace"],
+  },
+  {
+    id: "markdown-editor",
+    path: "/tools/markdown-editor/",
+    category: "텍스트",
+    title: "마크다운 편집기",
+    summary:
+      "서식 없는 텍스트를 제목, 굵게, 목록, 인용, 링크 같은 마크다운 문법으로 빠르게 편집하고 미리보기로 확인합니다.",
+    seoTitle: "마크다운 편집기 | 온라인 Markdown 작성 도구",
+    seoDescription:
+      "브라우저에서 마크다운 문서를 작성하고 미리보기, 복사, 저장까지 할 수 있는 무료 온라인 편집기입니다.",
+    keywords: ["마크다운", "Markdown", "문서 작성", "편집기"],
+    guide: [
+      { title: "내용 입력", text: "서식 없는 텍스트나 초안 문장을 붙여넣습니다." },
+      { title: "문법 적용", text: "제목, 굵게, 목록, 인용, 코드, 링크 버튼으로 마크다운 형식을 빠르게 넣습니다." },
+      { title: "미리보기 확인", text: "오른쪽 미리보기에서 문서 형태를 확인하고 복사하거나 MD 파일로 저장합니다." },
+    ],
   },
   {
     id: "text-extractor",
@@ -98,7 +111,6 @@ const TOOL_DEFS = [
       { title: "항목별 분리", text: "이메일, 링크, 전화번호가 자동으로 각각의 목록으로 정리됩니다." },
       { title: "개별 복사", text: "필요한 항목만 골라 바로 복사해 후속 작업에 사용합니다." },
     ],
-    related: ["duplicate-line-remover", "find-replace", "character-counter"],
   },
   {
     id: "duplicate-line-remover",
@@ -116,7 +128,6 @@ const TOOL_DEFS = [
       { title: "기준 선택", text: "대소문자 구분, 공백 정리, 정렬 옵션을 선택합니다." },
       { title: "결과 활용", text: "중복이 제거된 목록을 복사하거나 저장합니다." },
     ],
-    related: ["text-extractor", "line-break-cleaner", "character-counter"],
   },
   {
     id: "find-replace",
@@ -134,7 +145,6 @@ const TOOL_DEFS = [
       { title: "검색 조건 설정", text: "찾을 값, 바꿀 값, 대소문자 구분, 정규식 사용 여부를 고릅니다." },
       { title: "치환 결과 확인", text: "바뀐 항목 수와 결과 텍스트를 확인한 뒤 복사합니다." },
     ],
-    related: ["line-break-cleaner", "ai-text-cleaner", "case-converter"],
   },
   {
     id: "case-converter",
@@ -152,7 +162,6 @@ const TOOL_DEFS = [
       { title: "형식 선택", text: "원하는 케이스 모드를 눌러 즉시 결과를 확인합니다." },
       { title: "바로 복사", text: "개발, 마케팅, 파일명 정리 작업에 바로 활용합니다." },
     ],
-    related: ["find-replace", "ai-text-cleaner", "text-diff"],
   },
   {
     id: "text-diff",
@@ -170,7 +179,6 @@ const TOOL_DEFS = [
       { title: "비교 실행", text: "줄 단위 차이를 추가, 삭제, 유지 상태로 나눠 보여줍니다." },
       { title: "검토", text: "보고서, 자막, 계약 문구, 프롬프트 수정 이력을 빠르게 확인합니다." },
     ],
-    related: ["find-replace", "case-converter", "duplicate-line-remover"],
   },
   {
     id: "qr-code-generator",
@@ -188,7 +196,6 @@ const TOOL_DEFS = [
       { title: "내용 입력", text: "QR에 넣을 값을 입력하고 크기와 오류 복원 수준을 조정합니다." },
       { title: "생성 및 저장", text: "즉시 생성된 QR을 미리 보고 SVG 파일로 저장합니다." },
     ],
-    related: ["image-resizer", "image-converter", "text-extractor"],
   },
   {
     id: "image-resizer",
@@ -206,7 +213,6 @@ const TOOL_DEFS = [
       { title: "가로세로 지정", text: "원하는 크기를 입력하고 비율 유지 여부를 고릅니다." },
       { title: "미리보기 저장", text: "결과 이미지를 확인한 뒤 저장합니다." },
     ],
-    related: ["image-converter", "image-compressor", "qr-code-generator"],
   },
   {
     id: "image-converter",
@@ -224,7 +230,6 @@ const TOOL_DEFS = [
       { title: "형식 지정", text: "대상 형식과 품질 값을 선택합니다." },
       { title: "변환 저장", text: "미리보기와 파일 크기를 확인하고 결과 파일을 저장합니다." },
     ],
-    related: ["image-resizer", "image-compressor", "image-to-pdf"],
   },
   {
     id: "image-compressor",
@@ -242,7 +247,6 @@ const TOOL_DEFS = [
       { title: "압축 수준 조정", text: "품질과 최대 너비를 조절하며 미리보기를 확인합니다." },
       { title: "결과 저장", text: "원본 대비 용량 변화를 확인하고 압축본을 저장합니다." },
     ],
-    related: ["image-resizer", "image-converter", "image-to-pdf"],
   },
   {
     id: "pdf-merge",
@@ -260,7 +264,6 @@ const TOOL_DEFS = [
       { title: "병합 실행", text: "브라우저 안에서 페이지를 복사해 하나의 PDF로 결합합니다." },
       { title: "저장", text: "완성된 병합 PDF를 바로 내려받습니다." },
     ],
-    related: ["pdf-split", "pdf-extract-pages", "image-to-pdf"],
   },
   {
     id: "pdf-split",
@@ -278,7 +281,6 @@ const TOOL_DEFS = [
       { title: "기준 입력", text: "몇 페이지마다 새 파일을 만들지 지정합니다." },
       { title: "순차 다운로드", text: "분할된 PDF가 브라우저 다운로드로 순차 저장됩니다." },
     ],
-    related: ["pdf-merge", "pdf-extract-pages", "pdf-to-image"],
   },
   {
     id: "pdf-extract-pages",
@@ -296,7 +298,6 @@ const TOOL_DEFS = [
       { title: "범위 입력", text: "예: 1-3,5,9 같은 형식으로 추출할 페이지를 입력합니다." },
       { title: "새 파일 저장", text: "선택한 페이지로 구성된 새 PDF를 저장합니다." },
     ],
-    related: ["pdf-merge", "pdf-split", "pdf-to-image"],
   },
   {
     id: "image-to-pdf",
@@ -314,7 +315,6 @@ const TOOL_DEFS = [
       { title: "순서 확인", text: "선택한 순서대로 페이지가 만들어집니다." },
       { title: "PDF 생성", text: "결과 PDF를 브라우저에서 바로 내려받습니다." },
     ],
-    related: ["pdf-merge", "image-converter", "pdf-to-image"],
   },
   {
     id: "pdf-to-image",
@@ -332,7 +332,6 @@ const TOOL_DEFS = [
       { title: "배율 조정", text: "렌더링 배율을 조정해 선명도를 맞춥니다." },
       { title: "페이지별 저장", text: "페이지마다 생성된 PNG를 원하는 것만 저장합니다." },
     ],
-    related: ["pdf-extract-pages", "image-to-pdf", "pdf-split"],
   },
   {
     id: "srt-cleaner",
@@ -350,7 +349,6 @@ const TOOL_DEFS = [
       { title: "정리 실행", text: "번호를 다시 매기고 빈 줄, 공백, 불필요한 줄바꿈을 정리합니다." },
       { title: "저장", text: "정리된 SRT를 복사하거나 파일로 저장합니다." },
     ],
-    related: ["subtitle-converter", "subtitle-timing", "find-replace"],
   },
   {
     id: "subtitle-converter",
@@ -368,7 +366,6 @@ const TOOL_DEFS = [
       { title: "대상 형식 선택", text: "SRT 또는 VTT 중 원하는 출력 형식을 고릅니다." },
       { title: "결과 저장", text: "변환된 자막을 복사하거나 내려받습니다." },
     ],
-    related: ["srt-cleaner", "subtitle-timing", "text-diff"],
   },
   {
     id: "subtitle-timing",
@@ -386,7 +383,6 @@ const TOOL_DEFS = [
       { title: "시간 이동값 설정", text: "플러스나 마이너스 초 값을 입력합니다." },
       { title: "결과 확인", text: "보정된 자막을 확인하고 파일로 저장합니다." },
     ],
-    related: ["srt-cleaner", "subtitle-converter", "text-diff"],
   },
 ];
 
@@ -397,6 +393,7 @@ const TOOL_VISUALS = {
   "ai-text-cleaner": { icon: "\u2728", tone: "violet", copy: "AI \ub2f5\ubcc0\uc758 \ubcc4\ud45c\uc640 \ub9c8\ud06c\ub2e4\uc6b4\uc744 \uc815\ub9ac\ud569\ub2c8\ub2e4." },
   "character-counter": { icon: "\uD83D\uDD22", tone: "blue", copy: "\uacf5\ubc31 \ud3ec\ud568\uacfc \uc81c\uc678 \uae00\uc790\uc218\ub97c \uacc4\uc0b0\ud569\ub2c8\ub2e4." },
   "line-break-cleaner": { icon: "\u21B5", tone: "cyan", copy: "\uc904\ubc14\uafc8\uacfc \uacf5\ubc31\uc744 \ubb38\ub2e8\uc73c\ub85c \uc815\ub9ac\ud569\ub2c8\ub2e4." },
+  "markdown-editor": { icon: "MD", tone: "indigo", copy: "\uc77c\ubc18 \ud14d\uc2a4\ud2b8\ub97c \ub9c8\ud06c\ub2e4\uc6b4 \ubb38\uc11c\ub85c \ud3b8\uc9d1\ud569\ub2c8\ub2e4." },
   "text-extractor": { icon: "@", tone: "green", copy: "\uc774\uba54\uc77c, URL, \uc804\ud654\ubc88\ud638\ub9cc \ube60\ub974\uac8c \ucd94\ucd9c\ud569\ub2c8\ub2e4." },
   "duplicate-line-remover": { icon: "\u29C9", tone: "slate", copy: "\ubaa9\ub85d\uc5d0\uc11c \uc911\ubcf5\ub41c \uc904\uc744 \uc81c\uac70\ud569\ub2c8\ub2e4." },
   "find-replace": { icon: "\uD83D\uDD0E", tone: "amber", copy: "\ubb38\uc11c \uc548\uc758 \ub2e8\uc5b4\ub97c \ud55c \ubc88\uc5d0 \ubc14\uafc9\ub2c8\ub2e4." },
@@ -475,7 +472,6 @@ const els = {
   toolOverview: document.querySelector("#toolOverview"),
   toolWorkspace: document.querySelector("#toolWorkspace"),
   toolGuideList: document.querySelector("#toolGuideList"),
-  relatedTools: document.querySelector("#relatedTools"),
   helpBtn: document.querySelector("#helpBtn"),
   helpDialog: document.querySelector("#helpDialog"),
   helpCloseBtn: document.querySelector("#helpCloseBtn"),
@@ -652,7 +648,6 @@ function renderHomePage() {
 
   bindHomeToolSearch();
   renderGuideList([]);
-  renderRelatedTools([]);
 }
 
 function renderToolPage(tool) {
@@ -676,12 +671,6 @@ function renderToolPage(tool) {
   `;
 
   renderGuideList(tool.guide);
-  renderRelatedTools(
-    tool.related.map((toolId) => ({
-      path: TOOL_MAP[toolId].path,
-      title: TOOL_MAP[toolId].title,
-    }))
-  );
 
   const renderer = TOOL_RENDERERS[tool.id];
   if (!renderer) {
@@ -766,6 +755,7 @@ function setMetaContent(selector, value) {
 }
 
 function renderGuideList(steps) {
+  if (!els.toolGuideList) return;
   if (!steps || steps.length === 0) {
     els.toolGuideList.innerHTML = "";
     return;
@@ -779,16 +769,6 @@ function renderGuideList(steps) {
         </li>
       `
     )
-    .join("");
-}
-
-function renderRelatedTools(items) {
-  if (!items || items.length === 0) {
-    els.relatedTools.innerHTML = "";
-    return;
-  }
-  els.relatedTools.innerHTML = items
-    .map((item) => `<a href="${item.path}">${escapeHtml(item.title)}</a>`)
     .join("");
 }
 
@@ -863,6 +843,7 @@ const TOOL_RENDERERS = {
   "ai-text-cleaner": renderAiTextCleaner,
   "character-counter": renderCharacterCounter,
   "line-break-cleaner": renderLineBreakCleaner,
+  "markdown-editor": renderMarkdownEditor,
   "text-extractor": renderTextExtractor,
   "duplicate-line-remover": renderDuplicateLineRemover,
   "find-replace": renderFindReplaceTool,
@@ -1478,6 +1459,7 @@ function renderLineBreakCleaner(container) {
             <label class="check-item"><input id="trimLines" type="checkbox" checked /> 줄 앞뒤 공백 제거</label>
             <label class="check-item"><input id="collapseBlank" type="checkbox" checked /> 빈 줄 2개로 정리</label>
             <label class="check-item"><input id="collapseSpaces" type="checkbox" checked /> 과한 공백 압축</label>
+            <label class="check-item"><input id="sentenceBreak" type="checkbox" /> 마침표 기준 줄바꿈</label>
           </div>
           <div class="action-row">
             <button id="cleanBtn" class="primary-action" type="button">정리하기</button>
@@ -1511,6 +1493,7 @@ function renderLineBreakCleaner(container) {
       trimLines: container.querySelector("#trimLines").checked,
       collapseBlank: container.querySelector("#collapseBlank").checked,
       collapseSpaces: container.querySelector("#collapseSpaces").checked,
+      sentenceBreak: container.querySelector("#sentenceBreak").checked,
     });
     updateMeta();
   });
@@ -1525,6 +1508,92 @@ function renderLineBreakCleaner(container) {
 
   output.addEventListener("input", updateMeta);
   updateMeta();
+}
+
+function renderMarkdownEditor(container) {
+  container.innerHTML = `
+    <div class="tool-section markdown-tool">
+      <div class="tool-grid">
+        <article class="input-card markdown-editor-card">
+          <div class="section-heading">
+            <div>
+              <h2>마크다운 입력</h2>
+              <p class="tool-note">일반 텍스트를 붙여넣고 필요한 마크다운 문법을 버튼으로 적용합니다.</p>
+            </div>
+          </div>
+          <div class="markdown-toolbar" aria-label="마크다운 서식">
+            <button type="button" data-format="h2">제목</button>
+            <button type="button" data-format="bold">굵게</button>
+            <button type="button" data-format="list">목록</button>
+            <button type="button" data-format="quote">인용</button>
+            <button type="button" data-format="code">코드</button>
+            <button type="button" data-format="link">링크</button>
+            <button type="button" data-format="table">표</button>
+          </div>
+          <textarea id="markdownInput" class="markdown-textarea" placeholder="# 제목&#10;&#10;내용을 입력하거나 일반 텍스트를 붙여넣으세요."></textarea>
+        </article>
+        <article class="result-card">
+          <div class="section-heading">
+            <div>
+              <h2>미리보기</h2>
+              <p id="markdownMeta" class="tool-note">0자</p>
+            </div>
+            <div class="action-row">
+              <button id="copyMarkdownBtn" type="button">MD 복사</button>
+              <button id="copyPlainBtn" type="button">텍스트 복사</button>
+              <button id="downloadMarkdownBtn" type="button">MD 저장</button>
+            </div>
+          </div>
+          <div id="markdownPreview" class="markdown-preview" aria-live="polite"></div>
+        </article>
+      </div>
+    </div>
+  `;
+
+  const input = container.querySelector("#markdownInput");
+  const preview = container.querySelector("#markdownPreview");
+  const meta = container.querySelector("#markdownMeta");
+
+  function render() {
+    preview.innerHTML = markdownToHtml(input.value);
+    meta.textContent = `${input.value.length.toLocaleString("ko-KR")}자`;
+  }
+
+  container.querySelectorAll(".markdown-toolbar button").forEach((button) => {
+    button.addEventListener("click", () => {
+      applyMarkdownFormat(input, button.dataset.format);
+      render();
+      input.focus();
+    });
+  });
+
+  container.querySelector("#copyMarkdownBtn").addEventListener("click", async () => {
+    if (!input.value.trim()) {
+      showToast("복사할 마크다운이 없습니다.");
+      return;
+    }
+    await safeCopy(input.value, "마크다운을 복사했습니다.");
+  });
+
+  container.querySelector("#copyPlainBtn").addEventListener("click", async () => {
+    const plainText = markdownToPlainText(input.value);
+    if (!plainText.trim()) {
+      showToast("복사할 텍스트가 없습니다.");
+      return;
+    }
+    await safeCopy(plainText, "일반 텍스트를 복사했습니다.");
+  });
+
+  container.querySelector("#downloadMarkdownBtn").addEventListener("click", () => {
+    if (!input.value.trim()) {
+      showToast("저장할 마크다운이 없습니다.");
+      return;
+    }
+    downloadText(input.value, "markdown-document.md");
+  });
+
+  input.addEventListener("input", render);
+  render();
 }
 
 function renderTextExtractor(container) {
@@ -2995,10 +3064,29 @@ function cleanLineBreaks(text, options) {
   if (options.collapseSpaces) {
     result = result.replace(/[ \t]{2,}/g, " ");
   }
+  if (options.sentenceBreak) {
+    result = breakBySentencePunctuation(result);
+  }
   if (options.collapseBlank) {
     result = result.replace(/\n{3,}/g, "\n\n");
   }
   return result.trim();
+}
+
+function breakBySentencePunctuation(text) {
+  return text
+    .split(/\n\s*\n/)
+    .map((paragraph) =>
+      paragraph
+        .replace(/([.!?。！？])\s+(?=\S)/g, "$1\n")
+        .replace(/([.!?。！？])(?=[가-힣A-Za-z])/g, "$1\n")
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .join("\n")
+    )
+    .filter(Boolean)
+    .join("\n\n");
 }
 
 function joinParagraphLines(text) {
@@ -3007,6 +3095,130 @@ function joinParagraphLines(text) {
     .map((paragraph) => paragraph.replace(/\s*\n\s*/g, " ").replace(/[ \t]{2,}/g, " ").trim())
     .filter(Boolean)
     .join("\n\n");
+}
+
+function applyMarkdownFormat(textarea, mode) {
+  const start = textarea.selectionStart;
+  const end = textarea.selectionEnd;
+  const value = textarea.value;
+  const selected = value.slice(start, end) || getMarkdownPlaceholder(mode);
+  const before = value.slice(0, start);
+  const after = value.slice(end);
+  const replacement = buildMarkdownReplacement(mode, selected);
+  textarea.value = `${before}${replacement}${after}`;
+  textarea.setSelectionRange(start, start + replacement.length);
+}
+
+function getMarkdownPlaceholder(mode) {
+  const placeholders = {
+    h2: "제목",
+    bold: "강조할 텍스트",
+    list: "목록 항목",
+    quote: "인용문",
+    code: "code",
+    link: "링크 텍스트",
+    table: "항목",
+  };
+  return placeholders[mode] || "텍스트";
+}
+
+function buildMarkdownReplacement(mode, selected) {
+  const text = selected.trim() || getMarkdownPlaceholder(mode);
+  if (mode === "h2") return `## ${text}`;
+  if (mode === "bold") return `**${text}**`;
+  if (mode === "list") {
+    return text
+      .split("\n")
+      .map((line) => `- ${line.replace(/^\s*[-*+]\s+/, "").trim() || "목록 항목"}`)
+      .join("\n");
+  }
+  if (mode === "quote") {
+    return text
+      .split("\n")
+      .map((line) => `> ${line.replace(/^\s*>\s?/, "").trim()}`)
+      .join("\n");
+  }
+  if (mode === "code") return text.includes("\n") ? `\`\`\`\n${text}\n\`\`\`` : `\`${text}\``;
+  if (mode === "link") return `[${text}](https://example.com)`;
+  if (mode === "table") return `| 항목 | 내용 |\n| --- | --- |\n| ${text} | 설명 |`;
+  return text;
+}
+
+function markdownToHtml(markdown) {
+  const blocks = normalizeNewlines(markdown).split(/\n{2,}/);
+  if (!markdown.trim()) {
+    return `<p class="tool-note">마크다운을 입력하면 미리보기가 여기에 표시됩니다.</p>`;
+  }
+  return blocks.map(renderMarkdownBlock).join("");
+}
+
+function renderMarkdownBlock(block) {
+  const lines = block.split("\n");
+  if (/^```/.test(lines[0])) {
+    const code = lines.slice(1, lines.at(-1)?.startsWith("```") ? -1 : undefined).join("\n");
+    return `<pre><code>${escapeHtml(code)}</code></pre>`;
+  }
+  if (lines.every((line) => /^\s*[-*+]\s+/.test(line))) {
+    return `<ul>${lines.map((line) => `<li>${renderMarkdownInline(line.replace(/^\s*[-*+]\s+/, ""))}</li>`).join("")}</ul>`;
+  }
+  if (lines.every((line) => /^\s*\d+\.\s+/.test(line))) {
+    return `<ol>${lines.map((line) => `<li>${renderMarkdownInline(line.replace(/^\s*\d+\.\s+/, ""))}</li>`).join("")}</ol>`;
+  }
+  if (lines.every((line) => /^\s*>\s?/.test(line))) {
+    return `<blockquote>${lines.map((line) => renderMarkdownInline(line.replace(/^\s*>\s?/, ""))).join("<br>")}</blockquote>`;
+  }
+  if (lines.length >= 2 && /\|/.test(lines[0]) && /^\s*\|?\s*:?-{3,}:?\s*\|/.test(lines[1])) {
+    return renderMarkdownTable(lines);
+  }
+  const heading = block.match(/^(#{1,6})\s+(.+)$/);
+  if (heading) {
+    const level = Math.min(heading[1].length + 1, 6);
+    return `<h${level}>${renderMarkdownInline(heading[2])}</h${level}>`;
+  }
+  return `<p>${lines.map(renderMarkdownInline).join("<br>")}</p>`;
+}
+
+function renderMarkdownTable(lines) {
+  const rows = lines
+    .filter((line, index) => index !== 1)
+    .map((line) =>
+      line
+        .trim()
+        .replace(/^\|/, "")
+        .replace(/\|$/, "")
+        .split("|")
+        .map((cell) => cell.trim())
+    );
+  if (rows.length === 0) return "";
+  const head = rows[0].map((cell) => `<th>${renderMarkdownInline(cell)}</th>`).join("");
+  const body = rows
+    .slice(1)
+    .map((row) => `<tr>${row.map((cell) => `<td>${renderMarkdownInline(cell)}</td>`).join("")}</tr>`)
+    .join("");
+  return `<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
+}
+
+function renderMarkdownInline(text) {
+  let result = escapeHtml(text);
+  result = result.replace(/`([^`]+)`/g, "<code>$1</code>");
+  result = result.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  result = result.replace(/\*([^*]+)\*/g, "<em>$1</em>");
+  result = result.replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+  return result;
+}
+
+function markdownToPlainText(markdown) {
+  return normalizeNewlines(markdown)
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/^\s*[-*+]\s+/gm, "")
+    .replace(/^\s*\d+\.\s+/gm, "")
+    .replace(/^\s*>\s?/gm, "")
+    .replace(/```[\s\S]*?```/g, (match) => match.replace(/```/g, "").trim())
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/\*\*([^*]+)\*\*/g, "$1")
+    .replace(/\*([^*]+)\*/g, "$1")
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, "$1 $2")
+    .trim();
 }
 
 function extractContacts(text) {
