@@ -458,6 +458,8 @@ const libraryCache = {};
 const appState = {
   category: "전체",
   quickOffset: 0,
+  quickMotion: "",
+  quickMotionTimerId: null,
   selectedText: "",
   lastPointer: { x: window.innerWidth / 2, y: window.innerHeight / 2 },
   selectionCheckTimerId: null,
@@ -3748,6 +3750,7 @@ function renderQuickToolDock(activeTool) {
   const maxOffset = Math.max(0, tools.length - pageSize);
   appState.quickOffset = Math.min(Math.max(appState.quickOffset, 0), maxOffset);
   const visible = tools.slice(appState.quickOffset, appState.quickOffset + pageSize);
+  const motionClass = appState.quickMotion ? ` is-sliding-${appState.quickMotion}` : "";
 
   dock.hidden = false;
   dock.innerHTML = `
@@ -3757,7 +3760,7 @@ function renderQuickToolDock(activeTool) {
     </div>
     <div class="quick-tool-strip" aria-label="다른 도구로 이동">
       <button class="quick-tool-arrow" type="button" data-shift="${-step}" aria-label="이전 도구 보기" ${appState.quickOffset === 0 ? "disabled" : ""}>‹</button>
-      <div class="quick-tool-icons">
+      <div class="quick-tool-icons${motionClass}">
         ${visible.map(renderQuickToolIcon).join("")}
       </div>
       <button class="quick-tool-arrow" type="button" data-shift="${step}" aria-label="다음 도구 보기" ${appState.quickOffset >= maxOffset ? "disabled" : ""}>›</button>
@@ -3766,10 +3769,26 @@ function renderQuickToolDock(activeTool) {
 
   dock.querySelectorAll(".quick-tool-arrow").forEach((button) => {
     button.addEventListener("click", () => {
-      appState.quickOffset = Math.min(maxOffset, Math.max(0, appState.quickOffset + Number(button.dataset.shift)));
+      const shift = Number(button.dataset.shift);
+      const nextOffset = Math.min(maxOffset, Math.max(0, appState.quickOffset + shift));
+      if (nextOffset === appState.quickOffset) return;
+      appState.quickOffset = nextOffset;
+      appState.quickMotion = shift > 0 ? "next" : "prev";
       renderQuickToolDock(activeTool);
     });
   });
+
+  if (appState.quickMotion) {
+    const icons = dock.querySelector(".quick-tool-icons");
+    const currentMotion = appState.quickMotion;
+    const clearMotion = () => {
+      icons?.classList.remove(`is-sliding-${currentMotion}`);
+      if (appState.quickMotion === currentMotion) appState.quickMotion = "";
+    };
+    window.clearTimeout(appState.quickMotionTimerId);
+    icons?.addEventListener("animationend", clearMotion, { once: true });
+    appState.quickMotionTimerId = window.setTimeout(clearMotion, 360);
+  }
 }
 
 function ensureQuickToolDock() {
