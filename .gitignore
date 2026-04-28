@@ -1,5 +1,6 @@
 .browser-profile/
 .cloudflare-dist/
+.cloudflare-dist-smoke/
 .wrangler/
 node_modules/
 *.log

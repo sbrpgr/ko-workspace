@@ -1,13 +1,13 @@
 {
-  "name": "ko-workspace",
-  "short_name": "ko-workspace",
-  "description": "브라우저에서 바로 쓰는 텍스트, 이미지, PDF, 자막, 음성 업무 도구 모음입니다.",
+  "name": "코워크스페이스",
+  "short_name": "코워크스페이스",
+  "description": "코워크스페이스 (ko-workspace)는 로그인 없이 브라우저에서 바로 실행되는 텍스트, 이미지, PDF, 자막, 음성 업무 도구 모음입니다.",
   "lang": "ko-KR",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "background_color": "#eff2e8",
-  "theme_color": "#184c49",
+  "theme_color": "#e5322d",
   "icons": [
     {
       "src": "/favicon.svg",

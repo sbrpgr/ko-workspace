@@ -1,6 +1,6 @@
-# ko-workspace
+# 코워크스페이스 (ko-workspace)
 
-`ko-workspace` is a browser-first office utility platform deployed on Cloudflare Pages.
+`코워크스페이스 (ko-workspace)` is a browser-first office utility platform deployed on Cloudflare Pages.
 
 The current product ships as a static multi-tool site focused on tasks that can run fully in the browser without a backend server, database, or private API key.
 

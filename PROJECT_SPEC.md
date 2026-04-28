@@ -1,8 +1,8 @@
-# ko-workspace Product Spec
+# 코워크스페이스 (ko-workspace) Product Spec
 
 ## Product Direction
 
-`ko-workspace` is a static office utility platform for Korean users and general browser-based work. It is designed to host many small, high-frequency tools that solve day-to-day text, image, PDF, subtitle, and voice tasks without requiring account creation or server-side storage.
+`코워크스페이스 (ko-workspace)` is a static office utility platform for Korean users and general browser-based work. It is designed to host many small, high-frequency tools that solve day-to-day text, image, PDF, subtitle, and voice tasks without requiring account creation or server-side storage.
 
 ## Current Shipping Scope
 

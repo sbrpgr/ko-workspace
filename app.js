@@ -1,6 +1,11 @@
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
 const TOOL_ORIGIN = "https://ko-workspace.com";
+const BRAND_NAME = "코워크스페이스";
+const BRAND_NAME_EN = "ko-workspace";
+const BRAND_DISPLAY_NAME = `${BRAND_NAME} (${BRAND_NAME_EN})`;
+const BRAND_DESCRIPTION =
+  "코워크스페이스(ko-workspace)는 로그인 없이 브라우저에서 바로 실행되는 텍스트, 이미지, PDF, 자막, 음성 업무 도구 모음입니다.";
 
 const TOOL_DEFS = [
   {
@@ -613,15 +618,14 @@ function renderSidebarTools() {
 function renderHomePage() {
   setPageMode("home");
   setHeroCopy(
-    "ko-workspace",
-    "ko-workspace",
+    BRAND_NAME_EN,
+    BRAND_NAME,
     "자주 쓰는 업무 도구를 한 화면에서 고르고 바로 실행하는 작업 허브입니다."
   );
 
   setDocumentMeta({
-    title: "ko-workspace | 브라우저 기반 업무 도구",
-    description:
-      "ko-workspace는 브라우저에서 바로 쓰는 업무용 도구 플랫폼입니다. 텍스트, 이미지, PDF, 자막, 음성 작업을 빠르게 처리할 수 있습니다.",
+    title: `${BRAND_NAME} | 브라우저 기반 업무 도구 (${BRAND_NAME_EN})`,
+    description: BRAND_DESCRIPTION,
     url: `${TOOL_ORIGIN}/`,
   });
 
@@ -654,7 +658,7 @@ function renderToolPage(tool) {
   setPageMode("tool");
   setHeroCopy(tool.category, tool.title, tool.summary);
   setDocumentMeta({
-    title: `${tool.seoTitle} | ko-workspace`,
+    title: `${tool.seoTitle} | ${BRAND_NAME}`,
     description: tool.seoDescription,
     url: `${TOOL_ORIGIN}${tool.path}`,
   });
@@ -804,11 +808,11 @@ function injectStructuredData(tool) {
         "@context": "https://schema.org",
         "@type": "WebSite",
         "@id": `${TOOL_ORIGIN}/#website`,
-        name: "ko-workspace",
+        name: BRAND_NAME,
+        alternateName: [BRAND_NAME_EN, BRAND_DISPLAY_NAME],
         url: `${TOOL_ORIGIN}/`,
         inLanguage: "ko-KR",
-        description:
-          "브라우저에서 바로 쓰는 텍스트, 이미지, PDF, 자막, 음성 업무 도구 모음입니다.",
+        description: BRAND_DESCRIPTION,
         hasPart: {
           "@type": "ItemList",
           itemListElement: categories,
@@ -822,7 +826,8 @@ function injectStructuredData(tool) {
       {
         "@context": "https://schema.org",
         "@type": "WebApplication",
-        name: tool.title,
+        name: `${tool.title} - ${BRAND_NAME}`,
+        alternateName: `${tool.title} - ${BRAND_NAME_EN}`,
         url: `${TOOL_ORIGIN}${tool.path}`,
         applicationCategory: "BusinessApplication",
         browserRequirements: "Requires a modern browser with JavaScript enabled",

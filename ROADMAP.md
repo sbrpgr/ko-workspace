@@ -1,10 +1,10 @@
-# ko-workspace Roadmap
+# 코워크스페이스 (ko-workspace) Roadmap
 
 Last updated: 2026-04-28
 
 ## 1. Platform Direction
 
-`ko-workspace` is planned as a Korean office utility platform. The current tool, `음성으로 텍스트 쓰기`, is the first tool in a larger collection of browser-first utilities for text, PDF, image, subtitle, and lightweight document workflows.
+`코워크스페이스 (ko-workspace)` is planned as a Korean office utility platform. The current tool, `음성으로 텍스트 쓰기`, is the first tool in a larger collection of browser-first utilities for text, PDF, image, subtitle, and lightweight document workflows.
 
 Core principles:
 
@@ -113,7 +113,7 @@ Implementation feasibility:
 
 Initial SEO page angle:
 
-- Title: `AI 복붙 서식 정리 | ChatGPT 글 마크다운 제거 - ko-workspace`
+- Title: `AI 복붙 서식 정리 | ChatGPT 글 마크다운 제거 - 코워크스페이스`
 - Primary keywords: `AI 글 서식 제거`, `ChatGPT 복사 붙여넣기 정리`, `마크다운 제거`, `별표 제거`, `AI 답변 정리`
 - Related tools: `글자수 세기`, `줄바꿈 정리`, `텍스트 중복 줄 제거`, `음성으로 텍스트 쓰기`
 
@@ -199,7 +199,7 @@ Each tool page should include:
 Recommended title pattern:
 
 ```text
-{기능명} | 무료 온라인 도구 - ko-workspace
+{기능명} | 무료 온라인 도구 - 코워크스페이스
 ```
 
 Recommended description pattern:

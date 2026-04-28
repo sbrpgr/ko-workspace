@@ -1450,6 +1450,13 @@ body.tool-mode .site-layout {
   letter-spacing: 0;
 }
 
+.brand-subname {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
 .topbar-links {
   display: flex;
   align-items: center;
