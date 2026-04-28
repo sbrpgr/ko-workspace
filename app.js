@@ -1332,6 +1332,26 @@ function renderWebcamRecorder(container) {
         </div>
       </div>
 
+      <article class="permission-card webcam-permission-card" aria-live="polite">
+        <div>
+          <p class="eyebrow">Permission</p>
+          <h3 id="cameraPermissionTitle">카메라 권한이 필요합니다</h3>
+          <p id="cameraPermissionText">아래 버튼을 누르면 브라우저의 카메라 권한 요청 창이 열립니다.</p>
+        </div>
+        <div class="permission-actions">
+          <button id="requestCameraPermissionBtn" class="primary-action" type="button">카메라 권한 요청</button>
+          <button id="permissionGuideBtn" type="button" aria-controls="cameraPermissionGuide" aria-expanded="false">직접 허용 방법</button>
+        </div>
+        <div id="cameraPermissionGuide" class="permission-guide" hidden>
+          <strong>권한 창이 뜨지 않을 때</strong>
+          <ol>
+            <li>주소창 왼쪽의 자물쇠 또는 사이트 설정 아이콘을 누릅니다.</li>
+            <li>카메라와 필요한 경우 마이크를 허용으로 변경합니다.</li>
+            <li>페이지를 새로고침한 뒤 권한 요청 버튼을 다시 누릅니다.</li>
+          </ol>
+        </div>
+      </article>
+
       <div class="webcam-grid">
         <article class="editor-card webcam-preview-card">
           <div class="section-heading">
@@ -1474,6 +1494,11 @@ function renderWebcamRecorder(container) {
     brightnessValue: container.querySelector("#brightnessValue"),
     contrastValue: container.querySelector("#contrastValue"),
     saturationValue: container.querySelector("#saturationValue"),
+    permissionTitle: container.querySelector("#cameraPermissionTitle"),
+    permissionText: container.querySelector("#cameraPermissionText"),
+    requestPermissionBtn: container.querySelector("#requestCameraPermissionBtn"),
+    permissionGuideBtn: container.querySelector("#permissionGuideBtn"),
+    permissionGuide: container.querySelector("#cameraPermissionGuide"),
   };
 
   const state = {
@@ -1491,6 +1516,8 @@ function renderWebcamRecorder(container) {
     isRecording: false,
     isPaused: false,
     lastMimeType: "video/webm",
+    cameraPermission: "unknown",
+    micPermission: "unknown",
   };
 
   const context = nodes.canvas.getContext("2d", { alpha: false });
@@ -1502,12 +1529,17 @@ function renderWebcamRecorder(container) {
   if (!mediaSupported) {
     nodes.supportStatus.textContent = "녹화 미지원";
     nodes.startCameraBtn.disabled = true;
+    nodes.requestPermissionBtn.disabled = true;
     nodes.startRecordingBtn.disabled = true;
+    nodes.permissionTitle.textContent = "이 브라우저에서는 녹화를 지원하지 않습니다";
+    nodes.permissionText.textContent = "최신 Chrome 또는 Edge에서 카메라 녹화를 사용할 수 있습니다.";
     showToast("이 브라우저에서는 웹캠 녹화를 지원하지 않습니다.");
   } else {
     nodes.supportStatus.textContent = "브라우저 녹화 준비";
   }
 
+  nodes.requestPermissionBtn.addEventListener("click", startCamera);
+  nodes.permissionGuideBtn.addEventListener("click", togglePermissionGuide);
   nodes.startCameraBtn.addEventListener("click", startCamera);
   nodes.stopCameraBtn.addEventListener("click", stopCamera);
   nodes.startRecordingBtn.addEventListener("click", startRecording);
@@ -1521,10 +1553,104 @@ function renderWebcamRecorder(container) {
   [nodes.brightnessRange, nodes.contrastRange, nodes.saturationRange].forEach((input) => {
     input.addEventListener("input", syncRangeLabels);
   });
+  nodes.includeMic.addEventListener("change", updatePermissionUi);
   window.addEventListener("beforeunload", stopAllMedia, { once: true });
 
+  initPermissionStatus();
   syncRangeLabels();
   syncRecorderButtons();
+
+  async function initPermissionStatus() {
+    if (!navigator.permissions?.query) {
+      updatePermissionUi();
+      return;
+    }
+
+    await Promise.all([watchDevicePermission("camera", "cameraPermission"), watchDevicePermission("microphone", "micPermission")]);
+    updatePermissionUi();
+  }
+
+  async function refreshPermissionStatus() {
+    if (!navigator.permissions?.query) {
+      updatePermissionUi();
+      return;
+    }
+
+    await Promise.all([readDevicePermission("camera", "cameraPermission"), readDevicePermission("microphone", "micPermission")]);
+    updatePermissionUi();
+  }
+
+  async function watchDevicePermission(permissionName, stateKey) {
+    try {
+      const permission = await navigator.permissions.query({ name: permissionName });
+      state[stateKey] = permission.state;
+      const handlePermissionChange = () => {
+        state[stateKey] = permission.state;
+        updatePermissionUi();
+        syncRecorderButtons();
+      };
+      if (typeof permission.addEventListener === "function") {
+        permission.addEventListener("change", handlePermissionChange);
+      } else {
+        permission.onchange = handlePermissionChange;
+      }
+    } catch (error) {
+      state[stateKey] = "unknown";
+    }
+  }
+
+  async function readDevicePermission(permissionName, stateKey) {
+    try {
+      const permission = await navigator.permissions.query({ name: permissionName });
+      state[stateKey] = permission.state;
+    } catch (error) {
+      state[stateKey] = "unknown";
+    }
+  }
+
+  function togglePermissionGuide() {
+    const shouldShow = nodes.permissionGuide.hidden;
+    nodes.permissionGuide.hidden = !shouldShow;
+    nodes.permissionGuideBtn.setAttribute("aria-expanded", String(shouldShow));
+  }
+
+  function updatePermissionUi() {
+    if (!mediaSupported) return;
+
+    const hasCamera = Boolean(state.stream);
+    const wantsMic = nodes.includeMic.checked;
+    const cameraLabel = formatPermissionState(state.cameraPermission);
+    const micLabel = wantsMic ? `마이크 ${formatPermissionState(state.micPermission)}` : "마이크 미포함";
+
+    if (hasCamera) {
+      nodes.permissionTitle.textContent = "카메라 권한 허용됨";
+      nodes.permissionText.textContent = `현재 카메라가 연결되어 있습니다. 카메라 ${cameraLabel}, ${micLabel}.`;
+      nodes.supportStatus.textContent = "카메라 연결됨";
+      return;
+    }
+
+    if (isPermissionBlocked()) {
+      nodes.permissionTitle.textContent = "브라우저에서 권한이 차단되어 있습니다";
+      nodes.permissionText.textContent = "권한 요청 창이 뜨지 않으면 직접 허용 방법을 눌러 사이트 설정에서 카메라 권한을 허용해 주세요.";
+      nodes.supportStatus.textContent = "권한 차단됨";
+      return;
+    }
+
+    nodes.permissionTitle.textContent = "카메라 권한이 필요합니다";
+    nodes.permissionText.textContent = `권한 요청 버튼을 누르면 브라우저 권한 창이 열립니다. 카메라 ${cameraLabel}, ${micLabel}.`;
+    nodes.supportStatus.textContent = state.cameraPermission === "granted" ? "권한 허용됨" : "권한 필요";
+  }
+
+  function isPermissionBlocked() {
+    return state.cameraPermission === "denied" || (nodes.includeMic.checked && state.micPermission === "denied");
+  }
+
+  function formatPermissionState(permissionState) {
+    if (permissionState === "granted") return "허용됨";
+    if (permissionState === "denied") return "차단됨";
+    if (permissionState === "prompt") return "요청 전";
+    return "확인 필요";
+  }
 
   async function startCamera() {
     if (!mediaSupported || state.isRecording) return;
@@ -1533,15 +1659,17 @@ function renderWebcamRecorder(container) {
     clearPreview();
 
     try {
+      nodes.requestPermissionBtn.disabled = true;
       nodes.recordStatus.textContent = "권한 요청 중";
       const constraints = buildCameraConstraints();
-      state.stream = await navigator.mediaDevices.getUserMedia(constraints);
+      state.stream = await requestCameraStream(constraints);
       nodes.sourceVideo.srcObject = state.stream;
       await nodes.sourceVideo.play();
       await populateCameraSelect();
       nodes.placeholder.hidden = true;
       nodes.supportStatus.textContent = "카메라 연결됨";
       nodes.recordStatus.textContent = "대기";
+      await refreshPermissionStatus();
       startPreviewLoop();
       syncRecorderButtons();
     } catch (error) {
@@ -1550,9 +1678,30 @@ function renderWebcamRecorder(container) {
       nodes.supportStatus.textContent = "권한 필요";
       nodes.recordStatus.textContent = "대기";
       nodes.placeholder.hidden = false;
+      await refreshPermissionStatus();
       showToast(getCameraErrorMessage(error));
       syncRecorderButtons();
     }
+  }
+
+  async function requestCameraStream(constraints) {
+    try {
+      return await navigator.mediaDevices.getUserMedia(constraints);
+    } catch (error) {
+      if (!constraints.audio || !shouldRetryWithoutMic(error)) {
+        throw error;
+      }
+
+      const videoOnlyConstraints = { ...constraints, audio: false };
+      const stream = await navigator.mediaDevices.getUserMedia(videoOnlyConstraints);
+      nodes.includeMic.checked = false;
+      showToast("마이크 권한 없이 카메라만 연결했습니다. 마이크가 필요하면 브라우저 설정에서 허용해 주세요.");
+      return stream;
+    }
+  }
+
+  function shouldRetryWithoutMic(error) {
+    return ["NotAllowedError", "SecurityError", "NotFoundError", "NotReadableError"].includes(error?.name);
   }
 
   function stopCamera() {
@@ -1567,6 +1716,7 @@ function renderWebcamRecorder(container) {
     nodes.placeholder.hidden = false;
     nodes.supportStatus.textContent = mediaSupported ? "브라우저 녹화 준비" : "녹화 미지원";
     nodes.recordStatus.textContent = "대기";
+    updatePermissionUi();
     syncRecorderButtons();
   }
 
@@ -1866,7 +2016,9 @@ function renderWebcamRecorder(container) {
   function syncRecorderButtons() {
     const hasCamera = Boolean(state.stream);
     nodes.startCameraBtn.disabled = !mediaSupported || state.isRecording;
-    nodes.startCameraBtn.textContent = hasCamera ? "카메라 다시 연결" : "카메라 켜기";
+    nodes.startCameraBtn.textContent = hasCamera ? "카메라 다시 연결" : "카메라 연결";
+    nodes.requestPermissionBtn.disabled = !mediaSupported || state.isRecording;
+    nodes.requestPermissionBtn.textContent = hasCamera ? "권한 재확인" : isPermissionBlocked() ? "권한 다시 요청" : "카메라 권한 요청";
     nodes.stopCameraBtn.disabled = !hasCamera || state.isRecording;
     nodes.startRecordingBtn.disabled = !mediaSupported || !hasCamera || state.isRecording;
     nodes.pauseRecordingBtn.disabled = !state.isRecording;
@@ -1876,6 +2028,7 @@ function renderWebcamRecorder(container) {
     nodes.recordQuality.disabled = state.isRecording;
     nodes.recordFormat.disabled = state.isRecording || formatOptions.length === 0;
     nodes.includeMic.disabled = state.isRecording;
+    updatePermissionUi();
     updateRecordingMeta();
   }
 
