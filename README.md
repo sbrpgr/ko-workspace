@@ -31,10 +31,19 @@ The current product ships as a static multi-tool site focused on tasks that can 
 The site is deployed with GitHub Actions to Cloudflare Pages.
 
 - Branch: `main`
-- Pages project: `mic-script-generator`
+- GitHub repository: `ko-workspace`
+- Cloudflare Pages internal project: `mic-script-generator` (legacy direct-upload project name)
 - Production domain: `https://ko-workspace.com/`
 
 The workflow copies root assets plus the `tools/` directory into `.cloudflare-dist/` and deploys that directory.
+
+## Managed Site Tags
+
+Google Tag Manager uses container `GTM-W3MF6BSN`.
+
+- `npm run apply:site-tags`: inserts or refreshes the GTM `<head>` snippet, `<body>` noscript iframe, and CSP allowlist entries.
+- `npm run check`: validates JavaScript and confirms all managed page tags are present.
+- GitHub Actions runs `npm run apply:site-tags` before packaging, so newly added HTML pages under `tools/` are automatically tagged during deployment.
 
 ## Security Notes
 

@@ -4,7 +4,7 @@
 
 이 앱은 정적 HTML/CSS/JS만 사용하는 브라우저 도구이므로 Firebase Hosting보다 GitHub + Cloudflare Pages 조합이 더 적합합니다.
 
-현재 Cloudflare Pages 프로젝트는 Direct Upload 방식으로 먼저 생성되어 있습니다. Cloudflare 공식 제약상 Direct Upload 프로젝트는 나중에 Git integration 프로젝트로 전환할 수 없으므로, 기존 `mic-script-generator.pages.dev`를 유지하려면 GitHub Actions가 Wrangler로 배포하는 방식이 가장 현실적입니다.
+현재 Cloudflare Pages 프로젝트는 Direct Upload 방식으로 먼저 생성되어 있습니다. Cloudflare 공식 제약상 Direct Upload 프로젝트는 나중에 Git integration 프로젝트로 전환할 수 없으므로, 기존 레거시 내부 프로젝트인 `mic-script-generator.pages.dev`를 유지하려면 GitHub Actions가 Wrangler로 배포하는 방식이 가장 현실적입니다. 공개 서비스명과 GitHub 저장소명은 `ko-workspace`를 기준으로 관리합니다.
 
 ## Cloudflare Pages를 권장하는 이유
 
@@ -26,7 +26,8 @@
 
 기존 프로젝트 유지 시:
 
-- Project name: `mic-script-generator`
+- Public project/repository name: `ko-workspace`
+- Cloudflare Pages internal project name: `mic-script-generator`
 - Production domain: `https://ko-workspace.com/`
 - Deployment method: GitHub Actions + Wrangler Direct Upload
 - Workflow: `.github/workflows/cloudflare-pages.yml`
@@ -53,6 +54,13 @@ GitHub 저장소의 `Settings > Secrets and variables > Actions > Repository sec
 - `robots.txt`: 현재 `https://ko-workspace.com/sitemap.xml` 기준
 - `sitemap.xml`: 홈과 `/tools/{slug}/` 공개 URL 기준
 - `privacy.html`: 운영자 문의처 추가
+
+## 공통 태그 자동 적용
+
+- Google Tag Manager container: `GTM-W3MF6BSN`
+- 로컬에서 새 HTML 페이지를 추가한 뒤 `npm run apply:site-tags`를 실행하면 `<head>` GTM 스크립트, `<body>` noscript iframe, `_headers` CSP 허용 항목이 자동으로 정리됩니다.
+- GitHub Actions는 배포 패키징 전에 `npm run apply:site-tags`를 실행하므로, `tools/{slug}/index.html` 형태의 새 도구 페이지도 배포 시 공통 태그가 자동 반영됩니다.
+- `npm run check`는 JavaScript 문법과 공통 태그 누락 여부를 함께 검증합니다.
 
 ## 검색 최적화 파일
 

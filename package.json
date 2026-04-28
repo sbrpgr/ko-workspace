@@ -1,6 +1,10 @@
 {
+  "name": "ko-workspace",
+  "private": true,
   "scripts": {
-    "check": "node --check app.js"
+    "apply:site-tags": "node scripts/site-tags.js",
+    "check:site-tags": "node scripts/site-tags.js --check",
+    "check": "node --check app.js && node --check scripts/site-tags.js && npm run check:site-tags"
   },
   "devDependencies": {}
 }

@@ -12,6 +12,7 @@ permissions:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  CF_PAGES_PROJECT_NAME: mic-script-generator
 
 jobs:
   deploy:
@@ -21,8 +22,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Validate JavaScript
-        run: node --check app.js
+      - name: Apply shared site tags
+        run: npm run apply:site-tags
+
+      - name: Validate project
+        run: npm run check
 
       - name: Prepare static assets
         run: |
@@ -36,7 +40,7 @@ jobs:
           CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CF_DNS_API_TOKEN: ${{ secrets.CLOUDFLARE_DNS_API_TOKEN }}
           CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          CF_PROJECT_NAME: mic-script-generator
+          CF_PROJECT_NAME: ${{ env.CF_PAGES_PROJECT_NAME }}
           CF_ZONE_NAME: ko-workspace.com
         run: |
           node <<'NODE'
@@ -162,5 +166,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy .cloudflare-dist --project-name=mic-script-generator --branch=${{ github.ref_name }}
+          command: pages deploy .cloudflare-dist --project-name=${{ env.CF_PAGES_PROJECT_NAME }} --branch=${{ github.ref_name }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
