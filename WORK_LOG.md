@@ -52,3 +52,9 @@
 - Added dynamic FAQPage structured data from the same visible FAQ content
 - Added privacy-safe GTM `dataLayer` events for tool open, run, copy, download, permission request, and FAQ opening
 - Documented analytics allowlists in `ANALYTICS.md` so no input text, file names, extracted data, or recording contents are sent
+
+### Category Landing Branch
+
+- Created `feature/category-landing-pages` as the rollback branch for category landing work
+- Added category URL shells for text, PDF, image, subtitle, and voice/video groups on the branch
+- Kept production deployment on `main`; category pages should be reviewed before merge

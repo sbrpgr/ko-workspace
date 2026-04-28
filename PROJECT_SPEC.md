@@ -91,6 +91,7 @@ Each tool page should have:
 
 - `index.html`: platform home shell
 - `tools/*/index.html`: static tool entry pages
+- `tools/{category}/index.html`: category landing pages for grouped SEO entry points
 - `styles.css`: shared platform and tool styles
 - `app.js`: tool registry, page rendering, and browser-side tool logic
 
@@ -123,7 +124,7 @@ Footer and policy pages should expose the same operator information:
 ## Remaining Work
 
 - Run manual camera and microphone checks on real Chrome/Edge devices after each media-tool change
-- Create category landing pages for text, PDF, image, subtitle, voice, and video tools on a separate rollback branch
+- Review and merge category landing pages from `feature/category-landing-pages` after visual QA
 - Tune AdSense placements after approval and keep ads outside editor/upload/drop zones
 - Monitor MediaPipe background-effect load failures and add a local fallback if CDN reliability becomes a problem
 - Request indexing for new or materially changed tool pages in Search Console

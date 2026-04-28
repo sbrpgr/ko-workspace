@@ -13,6 +13,7 @@
 | `permission_request` | 마이크/카메라 권한 요청 또는 연결 버튼을 눌렀을 때 | `tool_id`, `tool_category`, `action`, `control_id` |
 | `tool_help_open` | 사용 예시와 FAQ 접힘 영역을 열었을 때 | `tool_id`, `tool_category`, `section` |
 | `tool_error` | 향후 오류 추적이 필요한 경우 | `tool_id`, `tool_category`, `action`, `control_id` |
+| `category_open` | 카테고리 랜딩 페이지가 열렸을 때 | `category_page_id`, `category_page_title`, `tool_count` |
 
 ## Never Send
 

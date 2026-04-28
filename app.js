@@ -674,6 +674,91 @@ const HOME_CATEGORY_META = {
   },
 };
 
+const CATEGORY_PAGE_DEFS = [
+  {
+    id: "text",
+    path: "/tools/text/",
+    title: "텍스트 업무 도구",
+    eyebrow: "Text Tools",
+    description: "AI 복붙 서식 정리, 글자수 세기, 줄바꿈 정리, 추출기처럼 매일 쓰는 텍스트 작업을 브라우저에서 바로 처리합니다.",
+    metaDescription:
+      "코워크스페이스 텍스트 업무 도구 모음입니다. AI 복붙 서식 정리, 글자수 세기, 줄바꿈 정리, 이메일·URL·전화번호 추출 등을 무료로 사용할 수 있습니다.",
+    keywords: ["텍스트 정리", "글자수 세기", "AI 서식 정리", "업무 도구"],
+    categories: ["텍스트"],
+    guide: [
+      { title: "도구 선택", text: "정리, 계산, 추출, 비교처럼 필요한 텍스트 작업을 고릅니다." },
+      { title: "내용 입력", text: "텍스트를 붙여넣고 필요한 옵션을 선택합니다." },
+      { title: "결과 활용", text: "정리된 결과를 복사하거나 문서 작업에 바로 붙여넣습니다." },
+    ],
+  },
+  {
+    id: "pdf",
+    path: "/tools/pdf/",
+    title: "PDF 업무 도구",
+    eyebrow: "PDF Tools",
+    description: "PDF 합치기, 분할, 페이지 추출, 이미지 변환처럼 자주 쓰는 문서 작업을 설치 없이 처리합니다.",
+    metaDescription:
+      "코워크스페이스 PDF 업무 도구 모음입니다. PDF 합치기, PDF 분할, 페이지 추출, 이미지 PDF 변환을 브라우저에서 무료로 사용할 수 있습니다.",
+    keywords: ["PDF 합치기", "PDF 분할", "PDF 페이지 추출", "PDF 변환"],
+    categories: ["PDF"],
+    guide: [
+      { title: "파일 선택", text: "처리할 PDF나 이미지를 브라우저에서 선택합니다." },
+      { title: "옵션 설정", text: "합치기, 분할 기준, 페이지 범위, 변환 형식을 지정합니다." },
+      { title: "파일 저장", text: "완성된 결과 파일을 PC에 다운로드합니다." },
+    ],
+  },
+  {
+    id: "image",
+    path: "/tools/image/",
+    title: "이미지 업무 도구",
+    eyebrow: "Image Tools",
+    description: "이미지 크기 조절, 형식 변환, 용량 압축, QR 생성 작업을 브라우저 안에서 빠르게 처리합니다.",
+    metaDescription:
+      "코워크스페이스 이미지 업무 도구 모음입니다. 이미지 크기 조절, JPG PNG WEBP 변환, 이미지 압축, QR 코드 생성을 무료로 사용할 수 있습니다.",
+    keywords: ["이미지 크기 조절", "이미지 변환", "이미지 압축", "QR 코드"],
+    categories: ["이미지"],
+    guide: [
+      { title: "이미지 선택", text: "사진, 캡처, 웹 업로드용 이미지를 선택합니다." },
+      { title: "작업 적용", text: "크기, 형식, 품질, QR 내용을 업무 목적에 맞게 조정합니다." },
+      { title: "결과 다운로드", text: "브라우저에서 처리된 결과물을 바로 저장합니다." },
+    ],
+  },
+  {
+    id: "subtitle",
+    path: "/tools/subtitle/",
+    title: "자막 업무 도구",
+    eyebrow: "Subtitle Tools",
+    description: "SRT 자막 정리, SRT/VTT 변환, 자막 시간 보정을 영상 작업 흐름에 맞게 처리합니다.",
+    metaDescription:
+      "코워크스페이스 자막 업무 도구 모음입니다. SRT 자막 정리, SRT VTT 변환, 자막 시간 보정을 브라우저에서 무료로 사용할 수 있습니다.",
+    keywords: ["SRT 자막 정리", "SRT VTT 변환", "자막 시간 보정", "자막 싱크"],
+    categories: ["자막"],
+    guide: [
+      { title: "자막 입력", text: "SRT 또는 VTT 자막 파일이나 텍스트를 입력합니다." },
+      { title: "정리 또는 변환", text: "번호, 공백, 형식, 시간 오프셋을 목적에 맞게 조정합니다." },
+      { title: "편집툴에 적용", text: "정리된 자막을 복사하거나 파일로 저장해 영상 작업에 사용합니다." },
+    ],
+  },
+  {
+    id: "voice-video",
+    path: "/tools/voice-video/",
+    title: "음성·영상 업무 도구",
+    eyebrow: "Voice & Video Tools",
+    description: "음성으로 텍스트를 쓰고 웹캠 영상을 녹화하는 입력·녹화 작업을 브라우저에서 바로 실행합니다.",
+    metaDescription:
+      "코워크스페이스 음성·영상 업무 도구 모음입니다. 음성으로 텍스트 쓰기와 웹캠 녹화기를 로그인 없이 브라우저에서 사용할 수 있습니다.",
+    keywords: ["음성 텍스트 변환", "웹캠 녹화", "카메라 녹화", "브라우저 녹화"],
+    categories: ["음성", "영상"],
+    guide: [
+      { title: "권한 허용", text: "마이크나 카메라가 필요한 도구에서 브라우저 권한을 허용합니다." },
+      { title: "입력 또는 녹화", text: "음성을 텍스트로 받아 적거나 웹캠 영상을 녹화합니다." },
+      { title: "결과 저장", text: "작성된 텍스트나 녹화 파일을 로컬 PC에 저장합니다." },
+    ],
+  },
+];
+
+const CATEGORY_PAGE_MAP = Object.fromEntries(CATEGORY_PAGE_DEFS.map((page) => [page.id, page]));
+
 const LIBRARIES = {
   qrcode: {
     global: "qrcode",
@@ -696,6 +781,7 @@ const libraryCache = {};
 const appState = {
   category: "전체",
   activeToolId: "",
+  categoryPageId: "",
   quickOffset: 0,
   quickMotion: "",
   quickMotionTimerId: null,
@@ -726,19 +812,27 @@ function init() {
   renderSidebarTools();
 
   const activeTool = getActiveTool();
+  const activeCategoryPage = getActiveCategoryPage();
   if (activeTool) {
     renderToolPage(activeTool);
+  } else if (activeCategoryPage) {
+    renderCategoryPage(activeCategoryPage);
   } else {
     renderHomePage();
   }
 
   initAdSlots();
-  injectStructuredData(activeTool);
+  injectStructuredData(activeTool, activeCategoryPage);
 }
 
 function getActiveTool() {
   const toolId = document.body.dataset.tool;
   return TOOL_MAP[toolId] || null;
+}
+
+function getActiveCategoryPage() {
+  const categoryId = document.body.dataset.categoryPage;
+  return CATEGORY_PAGE_MAP[categoryId] || null;
 }
 
 function bindGlobalEvents() {
@@ -856,6 +950,7 @@ function renderSidebarTools() {
 
 function renderHomePage() {
   appState.activeToolId = "";
+  appState.categoryPageId = "";
   setPageMode("home");
   setHeroCopy(
     BRAND_NAME_EN,
@@ -896,8 +991,57 @@ function renderHomePage() {
   renderQuickToolDock(null);
 }
 
+function renderCategoryPage(categoryPage) {
+  appState.activeToolId = "";
+  appState.categoryPageId = categoryPage.id;
+  setPageMode("category");
+  setHeroCopy(categoryPage.eyebrow, categoryPage.title, categoryPage.description);
+  setDocumentMeta({
+    title: `${categoryPage.title} | 무료 온라인 도구 - ${BRAND_NAME}`,
+    description: categoryPage.metaDescription,
+    url: `${TOOL_ORIGIN}${categoryPage.path}`,
+  });
+
+  const tools = getCategoryPageTools(categoryPage);
+  els.toolOverview.innerHTML = `
+    <div class="category-overview">
+      <div>
+        <p class="eyebrow">${escapeHtml(categoryPage.eyebrow)}</p>
+        <h2>${escapeHtml(categoryPage.title)}</h2>
+        <p>${escapeHtml(categoryPage.description)}</p>
+      </div>
+      <div class="category-metrics" aria-label="카테고리 요약">
+        <span><strong>${tools.length}</strong><small>도구</small></span>
+        <span><strong>0</strong><small>서버 저장</small></span>
+        <span><strong>무료</strong><small>로그인 없음</small></span>
+      </div>
+    </div>
+  `;
+
+  els.toolWorkspace.innerHTML = `
+    <section class="category-tool-section" aria-label="${escapeHtml(categoryPage.title)} 목록">
+      <div class="tool-launch-grid">
+        ${tools.map((tool) => renderToolLaunchCard(tool)).join("")}
+      </div>
+    </section>
+    <section class="category-seo-panel">
+      <h2>${escapeHtml(categoryPage.title)}를 브라우저에서 바로 사용하세요</h2>
+      <p>${escapeHtml(categoryPage.metaDescription)}</p>
+      <div class="overview-meta">
+        ${categoryPage.keywords.map((keyword) => `<span class="mini-pill">${escapeHtml(keyword)}</span>`).join("")}
+      </div>
+    </section>
+  `;
+
+  renderGuideList(categoryPage.guide);
+  renderToolDetailAccordion(null);
+  renderQuickToolDock(null);
+  trackCategoryEvent("category_open", categoryPage);
+}
+
 function renderToolPage(tool) {
   appState.activeToolId = tool.id;
+  appState.categoryPageId = "";
   setPageMode("tool");
   setHeroCopy("무료 온라인 도구", tool.title, tool.summary);
   setDocumentMeta({
@@ -934,6 +1078,12 @@ function renderToolPage(tool) {
 function setPageMode(mode) {
   document.body.classList.toggle("home-mode", mode === "home");
   document.body.classList.toggle("tool-mode", mode === "tool");
+  document.body.classList.toggle("category-mode", mode === "category");
+}
+
+function getCategoryPageTools(categoryPage) {
+  const categorySet = new Set(categoryPage.categories);
+  return TOOL_DEFS.filter((tool) => categorySet.has(tool.category));
 }
 
 function renderHomeSections() {
@@ -1102,9 +1252,13 @@ function buildToolDetailContent(tool) {
   };
 }
 
-function injectStructuredData(tool) {
+function injectStructuredData(tool, categoryPage = null) {
   document.querySelectorAll('script[data-schema="dynamic"]').forEach((node) => node.remove());
   injectFaqStructuredData(tool);
+  if (categoryPage) {
+    injectCategoryStructuredData(categoryPage);
+    return;
+  }
   if (document.querySelector(tool ? 'script[data-schema="static-tool"]' : 'script[data-schema="static-site"]')) {
     return;
   }
@@ -1166,6 +1320,61 @@ function injectStructuredData(tool) {
     );
   }
 
+  document.head.appendChild(script);
+}
+
+function injectCategoryStructuredData(categoryPage) {
+  const tools = getCategoryPageTools(categoryPage);
+  const script = document.createElement("script");
+  script.type = "application/ld+json";
+  script.dataset.schema = "dynamic";
+  script.textContent = JSON.stringify(
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "CollectionPage",
+          "@id": `${TOOL_ORIGIN}${categoryPage.path}#page`,
+          name: `${categoryPage.title} - ${BRAND_NAME}`,
+          url: `${TOOL_ORIGIN}${categoryPage.path}`,
+          inLanguage: "ko-KR",
+          description: categoryPage.metaDescription,
+          isPartOf: {
+            "@id": `${TOOL_ORIGIN}/#website`,
+          },
+          mainEntity: {
+            "@type": "ItemList",
+            itemListElement: tools.map((tool, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              name: tool.title,
+              url: `${TOOL_ORIGIN}${tool.path}`,
+            })),
+          },
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": `${TOOL_ORIGIN}${categoryPage.path}#breadcrumb`,
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: BRAND_NAME,
+              item: `${TOOL_ORIGIN}/`,
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: categoryPage.title,
+              item: `${TOOL_ORIGIN}${categoryPage.path}`,
+            },
+          ],
+        },
+      ],
+    },
+    null,
+    2
+  );
   document.head.appendChild(script);
 }
 
@@ -1233,6 +1442,18 @@ function trackToolEvent(eventName, tool, params = {}) {
     control_id: sanitizeAnalyticsValue(params.control_id),
     section: sanitizeAnalyticsValue(params.section),
     output_format: sanitizeAnalyticsValue(params.output_format),
+  });
+}
+
+function trackCategoryEvent(eventName, categoryPage) {
+  if (!categoryPage || typeof window === "undefined") return;
+
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: eventName,
+    category_page_id: categoryPage.id,
+    category_page_title: categoryPage.title,
+    tool_count: getCategoryPageTools(categoryPage).length,
   });
 }
 

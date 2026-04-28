@@ -44,7 +44,7 @@ Recommended long-term structure:
 | --- | --- | --- |
 | Platform home | `/` | Tool directory, categories, latest tools, popular tools |
 | Tool pages | `/tools/{tool-slug}/` | Individual utility pages with app UI, guide, FAQ, related tools |
-| Category pages | `/tools/pdf/`, `/tools/text/`, `/tools/image/` | SEO landing pages and internal navigation |
+| Category pages | `/tools/text/`, `/tools/pdf/`, `/tools/image/`, `/tools/subtitle/`, `/tools/voice-video/` | SEO landing pages and internal navigation |
 | Blog/guide pages | `/blog/{article-slug}/` | Search-focused usage guides and comparison articles |
 | Legal pages | `/privacy`, `/terms`, `/ads.txt` | Policy and ad platform requirements |
 
@@ -52,6 +52,7 @@ Current migration note:
 
 - `https://ko-workspace.com/` now serves the platform home.
 - Individual tools are served under `/tools/{tool-slug}/`.
+- Category landing pages are developed on `feature/category-landing-pages` before merge to preserve a clean rollback point.
 - Preserve canonical URLs and sitemap entries whenever tool pages are updated.
 
 ## 3. Priority Roadmap
