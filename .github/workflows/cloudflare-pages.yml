@@ -34,23 +34,27 @@ jobs:
       - name: Ensure Cloudflare custom domains and DNS
         env:
           CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_DNS_API_TOKEN: ${{ secrets.CLOUDFLARE_DNS_API_TOKEN }}
           CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CF_PROJECT_NAME: mic-script-generator
           CF_ZONE_NAME: ko-workspace.com
         run: |
           node <<'NODE'
           const token = process.env.CF_API_TOKEN;
+          const dnsToken = process.env.CF_DNS_API_TOKEN || token;
           const accountId = process.env.CF_ACCOUNT_ID;
           const projectName = process.env.CF_PROJECT_NAME;
           const zoneName = process.env.CF_ZONE_NAME;
           const domains = ["ko-workspace.com", "www.ko-workspace.com"];
-          const headers = {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          };
+          function headersFor(authToken) {
+            return {
+              Authorization: `Bearer ${authToken}`,
+              "Content-Type": "application/json",
+            };
+          }
 
-          async function cloudflare(url, options = {}) {
-            const response = await fetch(url, { headers, ...options });
+          async function cloudflare(url, options = {}, authToken = token) {
+            const response = await fetch(url, { headers: headersFor(authToken), ...options });
             const payload = await response.json().catch(() => ({}));
             if (!response.ok || payload.success === false) {
               const detail = (payload.errors || []).map((error) => `${error.code || "error"} ${error.message}`).join("; ");
@@ -59,17 +63,21 @@ jobs:
             return payload.result;
           }
 
+          async function cloudflareDns(url, options = {}) {
+            return cloudflare(url, options, dnsToken);
+          }
+
+          const redactedDomainLog = (domain) => ({
+            name: domain.name,
+            status: domain.status,
+          });
+
           async function main() {
             const domainsUrl = `https://api.cloudflare.com/client/v4/accounts/${accountId}/pages/projects/${projectName}/domains`;
             const existing = await cloudflare(domainsUrl);
             const pageDomains = Array.isArray(existing) ? existing : [];
             const existingNames = new Set(pageDomains.map((domain) => domain.name));
-            console.log(JSON.stringify(pageDomains.map((domain) => ({
-              name: domain.name,
-              status: domain.status,
-              zone_tag: domain.zone_tag,
-              zone_id: domain.zone_id,
-            }))));
+            console.log(JSON.stringify(pageDomains.map(redactedDomainLog)));
 
             for (const name of domains) {
               if (existingNames.has(name)) {
@@ -99,7 +107,7 @@ jobs:
             let zone = pageDomainZoneId ? { id: pageDomainZoneId } : null;
 
             if (!zone) {
-              const zones = await cloudflare(`https://api.cloudflare.com/client/v4/zones?name=${encodeURIComponent(zoneName)}`);
+              const zones = await cloudflareDns(`https://api.cloudflare.com/client/v4/zones?name=${encodeURIComponent(zoneName)}`);
               zone = Array.isArray(zones) ? zones[0] : null;
             }
 
@@ -108,7 +116,7 @@ jobs:
             }
 
             const dnsUrl = `https://api.cloudflare.com/client/v4/zones/${zone.id}/dns_records`;
-            const records = await cloudflare(`${dnsUrl}?name=${encodeURIComponent(recordName)}`);
+            const records = await cloudflareDns(`${dnsUrl}?name=${encodeURIComponent(recordName)}`);
             const cname = (Array.isArray(records) ? records : []).find((record) => record.type === "CNAME");
             const payload = {
               type: "CNAME",
@@ -123,7 +131,7 @@ jobs:
               if (cname.content === target && cname.proxied === true) {
                 console.log(`${recordName} DNS already points to ${target}`);
               } else {
-                await cloudflare(`${dnsUrl}/${cname.id}`, {
+                await cloudflareDns(`${dnsUrl}/${cname.id}`, {
                   method: "PUT",
                   body: JSON.stringify(payload),
                 });
@@ -134,7 +142,7 @@ jobs:
               if (conflicting.length) {
                 throw new Error(`${recordName} has non-CNAME DNS records; please remove them before automation can manage www.`);
               }
-              await cloudflare(dnsUrl, {
+              await cloudflareDns(dnsUrl, {
                 method: "POST",
                 body: JSON.stringify(payload),
               });
