@@ -1145,6 +1145,60 @@ body.home-mode .tool-workspace {
   height: auto;
 }
 
+.qr-options-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.qr-color-field input[type="color"] {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.qr-designer-frame {
+  min-height: 380px;
+  background:
+    radial-gradient(circle at 20% 18%, rgba(229, 50, 45, 0.08), transparent 32%),
+    linear-gradient(180deg, #fbfcff 0%, #f5f8fc 100%);
+}
+
+.qr-preview-shell {
+  width: min(100%, 320px);
+  max-width: 100%;
+  border: 1px solid #e1e7f0;
+  border-radius: 18px;
+  background: #ffffff;
+  padding: 18px;
+  box-shadow: 0 18px 40px rgba(30, 41, 59, 0.1);
+}
+
+.qr-preview-shell svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 680px) {
+  .qr-options-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .qr-designer-frame {
+    min-height: 320px;
+  }
+
+  .qr-preview-shell {
+    padding: 12px;
+    border-radius: 14px;
+  }
+}
+
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -2838,6 +2892,17 @@ body.tool-mode .diff-frame,
 body.tool-mode .diff-output {
   border-color: #e4e9f1;
   background: #f9fbfe;
+}
+
+body.tool-mode .qr-designer-frame {
+  background:
+    radial-gradient(circle at 20% 18%, rgba(229, 50, 45, 0.08), transparent 32%),
+    linear-gradient(180deg, #fbfcff 0%, #f5f8fc 100%);
+}
+
+body.tool-mode .qr-preview-shell {
+  border-color: #e1e7f0;
+  background: #ffffff;
 }
 
 body.tool-mode .stat-card,

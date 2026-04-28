@@ -1217,7 +1217,9 @@ function handleAnalyticsClick(event) {
 
 function readSafeOutputFormat(controlId) {
   if (!/^download|^record|^convert|^make/.test(controlId)) return "";
-  const formatSelect = document.querySelector("#recordFormat, #outputFormat, #targetFormat, #subtitleFormat");
+  const formatSelect = document.querySelector(
+    "#recordFormat, #outputFormat, #targetFormat, #subtitleFormat, #downloadFormat"
+  );
   return formatSelect ? String(formatSelect.value || "").slice(0, 32) : "";
 }
 
@@ -3364,32 +3366,53 @@ function renderQrGenerator(container) {
             </select>
           </div>
           <div id="qrFields" class="stack"></div>
+          <div class="field">
+            <label for="qrFileName">저장 파일명</label>
+            <input id="qrFileName" type="text" placeholder="qr-code" />
+          </div>
           <div class="field-row">
             <div class="field">
               <label for="qrSize">크기</label>
-              <input id="qrSize" type="number" min="120" max="720" step="10" value="240" />
+              <input id="qrSize" type="number" min="160" max="1024" step="10" value="320" />
             </div>
             <div class="field">
-              <label for="qrLevel">오류 복원</label>
-              <select id="qrLevel">
-                <option value="L">L</option>
-                <option value="M" selected>M</option>
-                <option value="Q">Q</option>
-                <option value="H">H</option>
+              <label for="qrShape">모양</label>
+              <select id="qrShape">
+                <option value="rounded" selected>둥근 모듈</option>
+                <option value="square">기본 사각형</option>
+                <option value="dots">점형 모듈</option>
+              </select>
+            </div>
+          </div>
+          <div class="qr-options-grid">
+            <div class="field qr-color-field">
+              <label for="qrForeground">색상</label>
+              <input id="qrForeground" type="color" value="#111827" />
+            </div>
+            <div class="field qr-color-field">
+              <label for="qrBackground">배경</label>
+              <input id="qrBackground" type="color" value="#ffffff" />
+            </div>
+            <div class="field">
+              <label for="downloadFormat">저장 형식</label>
+              <select id="downloadFormat">
+                <option value="svg" selected>SVG</option>
+                <option value="png">PNG</option>
+                <option value="jpg">JPG</option>
               </select>
             </div>
           </div>
           <div class="action-row">
             <button id="makeBtn" class="primary-action" type="button">QR 만들기</button>
-            <button id="downloadBtn" type="button">SVG 저장</button>
+            <button id="downloadBtn" type="button">파일 저장</button>
           </div>
-          <p id="status" class="tool-note">라이브러리를 불러오는 동안 잠시 기다릴 수 있습니다.</p>
+          <p id="status" class="tool-note">색 대비와 여백을 유지해 QR 인식률을 우선합니다.</p>
         </aside>
         <article class="preview-card">
           <div class="section-heading">
             <div><h2>미리보기</h2></div>
           </div>
-          <div id="qrPreview" class="qr-frame">QR 생성 전입니다.</div>
+          <div id="qrPreview" class="qr-frame qr-designer-frame">QR 생성 전입니다.</div>
         </article>
       </div>
     </div>
@@ -3398,7 +3421,12 @@ function renderQrGenerator(container) {
   const fields = container.querySelector("#qrFields");
   const preview = container.querySelector("#qrPreview");
   const status = container.querySelector("#status");
-  let lastSvg = "";
+  const state = {
+    background: "#ffffff",
+    foreground: "#111827",
+    size: 320,
+    svg: "",
+  };
 
   function renderFields() {
     const mode = container.querySelector("#qrMode").value;
@@ -3434,33 +3462,195 @@ function renderQrGenerator(container) {
       status.textContent = "QR 라이브러리를 준비 중입니다.";
       await loadLibrary("qrcode");
       const mode = container.querySelector("#qrMode").value;
-      const level = container.querySelector("#qrLevel").value;
-      const size = clampNumber(Number(container.querySelector("#qrSize").value || 240), 120, 720);
+      const size = clampNumber(Number(container.querySelector("#qrSize").value || 320), 160, 1024);
+      const shape = container.querySelector("#qrShape").value;
+      const foregroundInput = container.querySelector("#qrForeground");
+      const backgroundInput = container.querySelector("#qrBackground");
+      let foreground = normalizeHexColor(foregroundInput.value, "#111827");
+      let background = normalizeHexColor(backgroundInput.value, "#ffffff");
       const payload = buildQrPayload(container, mode);
       if (!payload) {
         showToast("QR에 넣을 내용을 입력해 주세요.");
         return;
       }
 
-      const qr = qrcode(0, level);
+      if (!isStableQrColorPair(foreground, background)) {
+        foreground = "#111827";
+        background = "#ffffff";
+        foregroundInput.value = foreground;
+        backgroundInput.value = background;
+        showToast("인식 안정성을 위해 어두운 색상과 밝은 배경으로 조정했습니다.");
+      }
+
+      const qr = qrcode(0, "H");
       qr.addData(payload);
       qr.make();
-      lastSvg = qr.createSvgTag({ scalable: true, margin: 0 });
-      preview.innerHTML = `<div style="width:${size}px">${lastSvg}</div>`;
-      status.textContent = "QR 생성이 완료되었습니다.";
+      state.size = size;
+      state.foreground = foreground;
+      state.background = background;
+      state.svg = createStyledQrSvg(qr, { foreground, background, shape });
+      preview.innerHTML = `<div class="qr-preview-shell" style="width:${size}px">${state.svg}</div>`;
+      status.textContent = "QR 생성이 완료되었습니다. SVG, PNG, JPG로 저장할 수 있습니다.";
     } catch (error) {
-      status.textContent = "QR 라이브러리를 불러오지 못했습니다.";
-      showToast("QR 기능을 준비하지 못했습니다. 잠시 후 다시 시도해 주세요.");
+      status.textContent = "QR을 생성하지 못했습니다. 내용이 너무 길면 짧게 줄여 주세요.";
+      showToast("QR을 생성하지 못했습니다. 내용을 줄이거나 잠시 후 다시 시도해 주세요.");
     }
   });
 
-  container.querySelector("#downloadBtn").addEventListener("click", () => {
-    if (!lastSvg) {
+  container.querySelector("#downloadBtn").addEventListener("click", async () => {
+    if (!state.svg) {
       showToast("먼저 QR 코드를 만들어 주세요.");
       return;
     }
-    const blob = new Blob([lastSvg], { type: "image/svg+xml;charset=utf-8" });
-    downloadBlob(blob, "qr-code.svg");
+
+    const requestedName = container.querySelector("#qrFileName").value || "qr-code";
+    const format = container.querySelector("#downloadFormat").value;
+    const filename = buildQrDownloadName(requestedName, format);
+
+    try {
+      if (format === "svg") {
+        const blob = new Blob([state.svg], { type: "image/svg+xml;charset=utf-8" });
+        downloadBlob(blob, filename);
+        return;
+      }
+
+      const mimeType = format === "jpg" ? "image/jpeg" : "image/png";
+      const blob = await svgToImageBlob(state.svg, state.size, mimeType, state.background);
+      downloadBlob(blob, filename);
+    } catch (error) {
+      showToast("QR 파일을 저장하지 못했습니다. 다시 시도해 주세요.");
+    }
+  });
+}
+
+function buildQrDownloadName(name, format) {
+  const base = sanitizeFilename(name || "qr-code").replace(/\.(svg|png|jpe?g)$/i, "") || "qr-code";
+  return `${base}.${format}`;
+}
+
+function createStyledQrSvg(qr, options) {
+  const moduleCount = qr.getModuleCount();
+  const margin = 4;
+  const viewSize = moduleCount + margin * 2;
+  const foreground = options.foreground;
+  const background = options.background;
+  const shape = options.shape || "rounded";
+  const parts = [
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${viewSize} ${viewSize}" role="img" aria-label="QR code">`,
+    `<rect width="${viewSize}" height="${viewSize}" rx="1.2" fill="${background}"/>`,
+    `<g fill="${foreground}" shape-rendering="${shape === "square" ? "crispEdges" : "geometricPrecision"}">`,
+  ];
+
+  for (let row = 0; row < moduleCount; row += 1) {
+    for (let col = 0; col < moduleCount; col += 1) {
+      if (!qr.isDark(row, col) || isFinderArea(row, col, moduleCount)) continue;
+      parts.push(renderQrModule(col + margin, row + margin, shape));
+    }
+  }
+
+  parts.push("</g>");
+  parts.push(renderQrFinder(margin, margin, foreground, background));
+  parts.push(renderQrFinder(moduleCount - 7 + margin, margin, foreground, background));
+  parts.push(renderQrFinder(margin, moduleCount - 7 + margin, foreground, background));
+  parts.push("</svg>");
+  return parts.join("");
+}
+
+function renderQrModule(x, y, shape) {
+  if (shape === "dots") {
+    return `<circle cx="${x + 0.5}" cy="${y + 0.5}" r="0.42"/>`;
+  }
+
+  if (shape === "square") {
+    return `<rect x="${x}" y="${y}" width="1" height="1"/>`;
+  }
+
+  return `<rect x="${x + 0.04}" y="${y + 0.04}" width="0.92" height="0.92" rx="0.2"/>`;
+}
+
+function renderQrFinder(x, y, foreground, background) {
+  return [
+    `<g shape-rendering="crispEdges">`,
+    `<rect x="${x}" y="${y}" width="7" height="7" fill="${foreground}"/>`,
+    `<rect x="${x + 1}" y="${y + 1}" width="5" height="5" fill="${background}"/>`,
+    `<rect x="${x + 2}" y="${y + 2}" width="3" height="3" fill="${foreground}"/>`,
+    `</g>`,
+  ].join("");
+}
+
+function isFinderArea(row, col, moduleCount) {
+  const inTop = row < 7;
+  const inLeft = col < 7;
+  const inRight = col >= moduleCount - 7;
+  const inBottom = row >= moduleCount - 7;
+  return (inTop && inLeft) || (inTop && inRight) || (inBottom && inLeft);
+}
+
+function normalizeHexColor(value, fallback) {
+  const color = String(value || "").trim();
+  return /^#[0-9a-f]{6}$/i.test(color) ? color.toLowerCase() : fallback;
+}
+
+function isStableQrColorPair(foreground, background) {
+  const foregroundRgb = hexToRgb(foreground);
+  const backgroundRgb = hexToRgb(background);
+  if (!foregroundRgb || !backgroundRgb) return false;
+  const foregroundLuminance = relativeLuminance(foregroundRgb);
+  const backgroundLuminance = relativeLuminance(backgroundRgb);
+  const lighter = Math.max(foregroundLuminance, backgroundLuminance);
+  const darker = Math.min(foregroundLuminance, backgroundLuminance);
+  const contrastRatio = (lighter + 0.05) / (darker + 0.05);
+  return foregroundLuminance < backgroundLuminance && contrastRatio >= 4.5;
+}
+
+function hexToRgb(color) {
+  const match = /^#([0-9a-f]{6})$/i.exec(color);
+  if (!match) return null;
+  const value = Number.parseInt(match[1], 16);
+  return {
+    r: (value >> 16) & 255,
+    g: (value >> 8) & 255,
+    b: value & 255,
+  };
+}
+
+function relativeLuminance(rgb) {
+  const channels = [rgb.r, rgb.g, rgb.b].map((channel) => {
+    const value = channel / 255;
+    return value <= 0.03928 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+  });
+  return channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
+}
+
+function svgToImageBlob(svg, size, mimeType, background) {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    const svgBlob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
+    const objectUrl = URL.createObjectURL(svgBlob);
+
+    image.onload = async () => {
+      try {
+        const canvas = document.createElement("canvas");
+        canvas.width = size;
+        canvas.height = size;
+        const context = canvas.getContext("2d");
+        context.fillStyle = background;
+        context.fillRect(0, 0, size, size);
+        context.drawImage(image, 0, 0, size, size);
+        URL.revokeObjectURL(objectUrl);
+        resolve(await canvasToBlob(canvas, mimeType, mimeType === "image/jpeg" ? 0.92 : 1));
+      } catch (error) {
+        URL.revokeObjectURL(objectUrl);
+        reject(error);
+      }
+    };
+
+    image.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error("QR image export failed"));
+    };
+
+    image.src = objectUrl;
   });
 }
 
