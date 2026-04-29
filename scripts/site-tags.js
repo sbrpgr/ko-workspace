@@ -5,7 +5,7 @@ const childProcess = require("node:child_process");
 
 const ROOT = path.resolve(__dirname, "..");
 const GTM_ID = "GTM-W3MF6BSN";
-const GA4_ID = "G-NME2NL44SS";
+const GA4_ID = "G-8S4R46L9Q0";
 const CHECK_ONLY = process.argv.includes("--check");
 
 const GTM_SCRIPT = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
