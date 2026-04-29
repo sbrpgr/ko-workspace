@@ -3804,16 +3804,27 @@ function renderQrLinkExtractor(container) {
     <div class="tool-section qr-reader-tool">
       <div class="tool-grid">
         <aside class="action-card">
+          <div class="field">
+            <label for="qrPasteBox">스크린샷 붙여넣기</label>
+            <textarea
+              id="qrPasteBox"
+              class="qr-paste-box"
+              rows="5"
+              placeholder="Win+Shift+S로 QR 영역을 캡처한 뒤 여기에 Ctrl+V"
+              autocomplete="off"
+              spellcheck="false"
+            ></textarea>
+          </div>
           <div id="qrDropZone" class="upload-box qr-reader-drop" tabindex="0">
-            <label for="qrImageFile">QR 이미지 업로드</label>
+            <label for="qrImageFile">파일로 선택</label>
             <input id="qrImageFile" type="file" accept="image/*" />
-            <p>QR 코드가 보이는 이미지, 스크린샷, 캡처 파일을 선택하거나 이 영역에 끌어다 놓습니다.</p>
+            <p>저장된 QR 이미지나 스크린샷 파일을 선택하거나 이 영역에 끌어다 놓습니다.</p>
           </div>
           <div class="action-row">
             <button id="readQrBtn" class="primary-action" type="button">QR 읽기</button>
             <button id="clearQrBtn" type="button">초기화</button>
           </div>
-          <p id="status" class="tool-note">이미지를 선택하면 브라우저 안에서만 QR 내용을 읽습니다. Ctrl+V로 이미지 붙여넣기도 가능합니다.</p>
+          <p id="status" class="tool-note">위 붙여넣기 칸에 스크린샷 이미지를 붙여넣으면 브라우저 안에서만 QR 내용을 읽습니다.</p>
         </aside>
         <article class="preview-card">
           <div class="section-heading">
@@ -3847,6 +3858,7 @@ function renderQrLinkExtractor(container) {
     safeUrl: "",
   };
   const fileInput = container.querySelector("#qrImageFile");
+  const pasteBox = container.querySelector("#qrPasteBox");
   const dropZone = container.querySelector("#qrDropZone");
   const canvas = container.querySelector("#qrPreviewCanvas");
   const status = container.querySelector("#status");
@@ -3880,7 +3892,12 @@ function renderQrLinkExtractor(container) {
     await loadQrImage(file);
   });
 
+  pasteBox.addEventListener("paste", handleQrPaste);
+  pasteBox.addEventListener("input", () => {
+    pasteBox.value = "";
+  });
   document.addEventListener("paste", handleQrPaste);
+  window.setTimeout(() => pasteBox.focus({ preventScroll: true }), 0);
 
   container.querySelector("#readQrBtn").addEventListener("click", async () => {
     if (!state.image) {
@@ -3899,10 +3916,12 @@ function renderQrLinkExtractor(container) {
     canvas.width = 0;
     canvas.height = 0;
     resultText.value = "";
+    pasteBox.value = "";
+    pasteBox.focus({ preventScroll: true });
     resultMeta.textContent = "아직 읽은 QR이 없습니다.";
     linkBox.textContent = "URL이 감지되면 여기에 표시됩니다.";
     openLinkBtn.disabled = true;
-    status.textContent = "이미지를 선택하면 브라우저 안에서만 QR 내용을 읽습니다. Ctrl+V로 이미지 붙여넣기도 가능합니다.";
+    status.textContent = "위 붙여넣기 칸에 스크린샷 이미지를 붙여넣으면 브라우저 안에서만 QR 내용을 읽습니다.";
   });
 
   container.querySelector("#copyResultBtn").addEventListener("click", async () => {
@@ -3945,9 +3964,19 @@ function renderQrLinkExtractor(container) {
     }
 
     const file = getClipboardImageFile(event.clipboardData);
-    if (!file) return;
+    if (!file) {
+      if (event.currentTarget === pasteBox) {
+        event.preventDefault();
+        pasteBox.value = "";
+        status.textContent = "클립보드에 이미지가 없습니다. Win+Shift+S로 QR 영역을 캡처한 뒤 다시 붙여넣어 주세요.";
+        showToast("클립보드에 이미지가 없습니다.");
+      }
+      return;
+    }
 
     event.preventDefault();
+    event.stopPropagation();
+    pasteBox.value = "";
     await loadQrImage(file);
   }
 

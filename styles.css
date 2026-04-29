@@ -1263,6 +1263,28 @@ body.home-mode .tool-workspace {
   height: auto;
 }
 
+.qr-paste-box {
+  min-height: 132px;
+  border: 2px dashed #9db1c9;
+  background: #ffffff;
+  color: #1d2630;
+  font-weight: 800;
+  line-height: 1.7;
+  resize: vertical;
+  padding: 18px;
+}
+
+.qr-paste-box::placeholder {
+  color: #526173;
+  opacity: 1;
+}
+
+.qr-paste-box:focus {
+  border-color: var(--primary);
+  background: #fbfdff;
+  box-shadow: 0 0 0 4px rgba(36, 87, 214, 0.12);
+}
+
 .qr-reader-drop.is-dragging {
   border-color: var(--primary);
   background: #fff5f4;
