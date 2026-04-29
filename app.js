@@ -216,6 +216,23 @@ const TOOL_DEFS = [
     ],
   },
   {
+    id: "qr-link-extractor",
+    path: "/tools/qr-link-extractor/",
+    category: "이미지",
+    title: "QR 링크 추출기",
+    summary:
+      "QR 코드 이미지나 스크린샷을 브라우저에서 읽어 URL과 원문 텍스트를 추출합니다.",
+    seoTitle: "QR 링크 추출기 | QR 이미지 URL 읽기",
+    seoDescription:
+      "QR 코드 이미지와 스크린샷에서 URL과 텍스트를 브라우저 안에서 추출하는 무료 도구입니다.",
+    keywords: ["QR 읽기", "QR 링크", "QR 스캔", "URL 추출"],
+    guide: [
+      { title: "이미지 선택", text: "QR 코드가 보이는 이미지나 스크린샷을 업로드하거나 붙여넣습니다." },
+      { title: "브라우저에서 판독", text: "이미지를 서버에 올리지 않고 브라우저 안에서 QR 내용을 읽습니다." },
+      { title: "링크 확인", text: "URL이면 복사하거나 새 탭으로 열고, URL이 아니면 원문 텍스트로 확인합니다." },
+    ],
+  },
+  {
     id: "image-resizer",
     path: "/tools/image-resizer/",
     category: "이미지",
@@ -419,6 +436,7 @@ const TOOL_VISUALS = {
   "case-converter": { icon: "Aa", tone: "indigo", copy: "\ub300\uc18c\ubb38\uc790\uc640 camelCase \ud615\uc2dd\uc744 \ubcc0\ud658\ud569\ub2c8\ub2e4." },
   "text-diff": { icon: "\u2260", tone: "purple", copy: "\ub450 \ud14d\uc2a4\ud2b8\uc758 \ubcc0\uacbd\uc810\uc744 \ube44\uad50\ud569\ub2c8\ub2e4." },
   "qr-code-generator": { icon: "\u25A6", tone: "emerald", copy: "URL, \ud14d\uc2a4\ud2b8, Wi-Fi QR\uc744 \ub9cc\ub4ed\ub2c8\ub2e4." },
+  "qr-link-extractor": { icon: "\u25A3", tone: "teal", copy: "QR \uc774\ubbf8\uc9c0\uc5d0\uc11c \ub9c1\ud06c\uc640 \uc6d0\ubb38\uc744 \uc77d\uc2b5\ub2c8\ub2e4." },
   "image-resizer": { icon: "\u2194", tone: "orange", copy: "\uc0ac\uc9c4 \ud06c\uae30\ub97c \ud53d\uc140\uc774\ub098 \ube44\uc728\ub85c \uc870\uc808\ud569\ub2c8\ub2e4." },
   "image-converter": { icon: "\uD83D\uDDBC\uFE0F", tone: "pink", copy: "JPG, PNG, WEBP \ud615\uc2dd\uc744 \ubcc0\ud658\ud569\ub2c8\ub2e4." },
   "image-compressor": { icon: "\uD83D\uDDDC\uFE0F", tone: "yellow", copy: "\uc5c5\ub85c\ub4dc\uc6a9 \uc774\ubbf8\uc9c0 \uc6a9\ub7c9\uc744 \uc904\uc785\ub2c8\ub2e4." },
@@ -483,6 +501,11 @@ const TOOL_USE_EXAMPLES = {
     "행사 안내 URL, 설문 링크, 지도 링크를 QR 코드로 만들어 배포합니다.",
     "사무실 또는 매장 Wi-Fi 접속 정보를 QR 코드로 정리합니다.",
     "포스터, 안내문, 명함에 넣을 QR을 PNG, JPG, SVG 중 필요한 형식으로 저장합니다.",
+  ],
+  "qr-link-extractor": [
+    "QR 코드 이미지나 캡처 화면에 들어 있는 링크를 브라우저에서 바로 확인합니다.",
+    "인쇄물, 포스터, 명함에 있는 QR을 열기 전에 실제 URL을 먼저 점검합니다.",
+    "URL이 아닌 Wi-Fi, 이메일, 일반 텍스트 QR도 원문 내용으로 확인합니다.",
   ],
   "image-resizer": [
     "블로그, 쇼핑몰, 지원서 업로드 기준에 맞게 이미지 크기를 줄입니다.",
@@ -580,6 +603,10 @@ const TOOL_EXTRA_FAQS = {
   "qr-code-generator": {
     question: "QR 코드를 PNG나 JPG로 저장할 수 있나요?",
     answer: "네. URL, 일반 텍스트, Wi-Fi 정보를 QR 코드로 만들고 SVG, PNG, JPG 형식으로 저장할 수 있습니다. 인식 안정성을 위해 최소 여백과 색상 대비를 유지합니다.",
+  },
+  "qr-link-extractor": {
+    question: "QR 이미지를 서버에 업로드하나요?",
+    answer: "아니요. 선택한 이미지는 브라우저 안에서만 읽고 QR 내용도 자동으로 열지 않습니다. 추출된 링크는 사용자가 직접 복사하거나 새 탭으로 열 수 있습니다.",
   },
   "image-resizer": {
     question: "비율을 유지하면서 이미지 크기를 바꿀 수 있나요?",
@@ -720,12 +747,12 @@ const CATEGORY_PAGE_DEFS = [
     eyebrow: "Image Tools",
     description: "이미지 크기 조절, 형식 변환, 용량 압축, QR 생성 작업을 브라우저 안에서 빠르게 처리합니다.",
     metaDescription:
-      "코워크스페이스 이미지 업무 도구 모음입니다. 이미지 크기 조절, JPG PNG WEBP 변환, 이미지 압축, QR 코드 생성을 무료로 사용할 수 있습니다.",
-    keywords: ["이미지 크기 조절", "이미지 변환", "이미지 압축", "QR 코드"],
+      "코워크스페이스 이미지 업무 도구 모음입니다. 이미지 크기 조절, JPG PNG WEBP 변환, 이미지 압축, QR 코드 생성과 QR 링크 추출을 무료로 사용할 수 있습니다.",
+    keywords: ["이미지 크기 조절", "이미지 변환", "이미지 압축", "QR 코드", "QR 링크"],
     categories: ["이미지"],
     guide: [
       { title: "이미지 선택", text: "사진, 캡처, 웹 업로드용 이미지를 선택합니다." },
-      { title: "작업 적용", text: "크기, 형식, 품질, QR 내용을 업무 목적에 맞게 조정합니다." },
+      { title: "작업 적용", text: "크기, 형식, 품질, QR 생성 또는 QR 판독을 업무 목적에 맞게 처리합니다." },
       { title: "결과 다운로드", text: "브라우저에서 처리된 결과물을 바로 저장합니다." },
     ],
   },
@@ -769,6 +796,10 @@ const LIBRARIES = {
   qrcode: {
     global: "qrcode",
     src: "https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js",
+  },
+  jsqr: {
+    global: "jsQR",
+    src: "https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js",
   },
   pdfLib: {
     global: "PDFLib",
@@ -1507,6 +1538,7 @@ const TOOL_RENDERERS = {
   "case-converter": renderCaseConverter,
   "text-diff": renderTextDiffTool,
   "qr-code-generator": renderQrGenerator,
+  "qr-link-extractor": renderQrLinkExtractor,
   "image-resizer": renderImageResizer,
   "image-converter": renderImageConverter,
   "image-compressor": renderImageCompressor,
@@ -3767,6 +3799,195 @@ function renderQrGenerator(container) {
   });
 }
 
+function renderQrLinkExtractor(container) {
+  container.innerHTML = `
+    <div class="tool-section qr-reader-tool">
+      <div class="tool-grid">
+        <aside class="action-card">
+          <div id="qrDropZone" class="upload-box qr-reader-drop" tabindex="0">
+            <label for="qrImageFile">QR 이미지 업로드</label>
+            <input id="qrImageFile" type="file" accept="image/*" />
+            <p>QR 코드가 보이는 이미지, 스크린샷, 캡처 파일을 선택하거나 이 영역에 끌어다 놓습니다.</p>
+          </div>
+          <div class="action-row">
+            <button id="readQrBtn" class="primary-action" type="button">QR 읽기</button>
+            <button id="clearQrBtn" type="button">초기화</button>
+          </div>
+          <p id="status" class="tool-note">이미지를 선택하면 브라우저 안에서만 QR 내용을 읽습니다. Ctrl+V로 이미지 붙여넣기도 가능합니다.</p>
+        </aside>
+        <article class="preview-card">
+          <div class="section-heading">
+            <div><h2>이미지 미리보기</h2></div>
+          </div>
+          <div class="canvas-frame qr-reader-frame"><canvas id="qrPreviewCanvas"></canvas></div>
+        </article>
+      </div>
+      <article class="result-card">
+        <div class="section-heading">
+          <div>
+            <h2>추출 결과</h2>
+            <p id="resultMeta" class="tool-note">아직 읽은 QR이 없습니다.</p>
+          </div>
+        </div>
+        <div id="linkBox" class="qr-result-link">URL이 감지되면 여기에 표시됩니다.</div>
+        <textarea id="resultText" readonly placeholder="QR 원문이 여기에 표시됩니다."></textarea>
+        <div class="action-row">
+          <button id="copyResultBtn" class="primary-action" type="button">결과 복사</button>
+          <button id="openLinkBtn" type="button" disabled>링크 열기</button>
+        </div>
+        <p class="tool-note">안전을 위해 QR 링크는 자동으로 열지 않습니다. 주소를 확인한 뒤 직접 열어 주세요.</p>
+      </article>
+    </div>
+  `;
+
+  const state = {
+    file: null,
+    image: null,
+    resultText: "",
+    safeUrl: "",
+  };
+  const fileInput = container.querySelector("#qrImageFile");
+  const dropZone = container.querySelector("#qrDropZone");
+  const canvas = container.querySelector("#qrPreviewCanvas");
+  const status = container.querySelector("#status");
+  const resultMeta = container.querySelector("#resultMeta");
+  const resultText = container.querySelector("#resultText");
+  const linkBox = container.querySelector("#linkBox");
+  const openLinkBtn = container.querySelector("#openLinkBtn");
+
+  fileInput.addEventListener("change", async () => {
+    const file = fileInput.files[0];
+    if (file) await loadQrImage(file);
+  });
+
+  dropZone.addEventListener("dragover", (event) => {
+    event.preventDefault();
+    dropZone.classList.add("is-dragging");
+  });
+
+  dropZone.addEventListener("dragleave", () => {
+    dropZone.classList.remove("is-dragging");
+  });
+
+  dropZone.addEventListener("drop", async (event) => {
+    event.preventDefault();
+    dropZone.classList.remove("is-dragging");
+    const file = Array.from(event.dataTransfer.files).find((item) => item.type.startsWith("image/"));
+    if (!file) {
+      showToast("QR 이미지 파일을 넣어 주세요.");
+      return;
+    }
+    await loadQrImage(file);
+  });
+
+  container.addEventListener("paste", async (event) => {
+    const item = Array.from(event.clipboardData?.items || []).find((entry) => entry.type.startsWith("image/"));
+    if (!item) return;
+    event.preventDefault();
+    const file = item.getAsFile();
+    if (file) await loadQrImage(file);
+  });
+
+  container.querySelector("#readQrBtn").addEventListener("click", async () => {
+    if (!state.image) {
+      showToast("먼저 QR 이미지 파일을 선택해 주세요.");
+      return;
+    }
+    await decodeCurrentQr();
+  });
+
+  container.querySelector("#clearQrBtn").addEventListener("click", () => {
+    state.file = null;
+    state.image = null;
+    state.resultText = "";
+    state.safeUrl = "";
+    fileInput.value = "";
+    canvas.width = 0;
+    canvas.height = 0;
+    resultText.value = "";
+    resultMeta.textContent = "아직 읽은 QR이 없습니다.";
+    linkBox.textContent = "URL이 감지되면 여기에 표시됩니다.";
+    openLinkBtn.disabled = true;
+    status.textContent = "이미지를 선택하면 브라우저 안에서만 QR 내용을 읽습니다. Ctrl+V로 이미지 붙여넣기도 가능합니다.";
+  });
+
+  container.querySelector("#copyResultBtn").addEventListener("click", async () => {
+    if (!resultText.value.trim()) {
+      showToast("복사할 QR 결과가 없습니다.");
+      return;
+    }
+    await safeCopy(resultText.value, "QR 결과를 복사했습니다.");
+  });
+
+  openLinkBtn.addEventListener("click", () => {
+    if (!state.safeUrl) return;
+    window.open(state.safeUrl, "_blank", "noopener,noreferrer");
+  });
+
+  async function loadQrImage(file) {
+    if (!file.type.startsWith("image/")) {
+      showToast("이미지 파일만 읽을 수 있습니다.");
+      return;
+    }
+
+    try {
+      status.textContent = "이미지를 불러오는 중입니다.";
+      const loaded = await loadImageFromFile(file);
+      state.file = file;
+      state.image = loaded.image;
+      drawImageToCanvas(canvas, loaded.image, loaded.image.naturalWidth, loaded.image.naturalHeight);
+      status.textContent = `${file.name} · ${loaded.image.naturalWidth} x ${loaded.image.naturalHeight} · ${formatBytes(file.size)}`;
+      await decodeCurrentQr();
+    } catch (error) {
+      status.textContent = "이미지를 불러오지 못했습니다. 다른 캡처 이미지로 다시 시도해 주세요.";
+      showToast("QR 이미지를 읽지 못했습니다.");
+    }
+  }
+
+  async function decodeCurrentQr() {
+    try {
+      status.textContent = "QR 판독 라이브러리를 준비 중입니다.";
+      await loadLibrary("jsqr");
+      const decodeCanvas = document.createElement("canvas");
+      const maxSide = 1600;
+      const scale = Math.min(1, maxSide / Math.max(state.image.naturalWidth, state.image.naturalHeight));
+      const width = Math.max(1, Math.round(state.image.naturalWidth * scale));
+      const height = Math.max(1, Math.round(state.image.naturalHeight * scale));
+      drawImageToCanvas(decodeCanvas, state.image, width, height, "#ffffff");
+      const context = decodeCanvas.getContext("2d", { willReadFrequently: true });
+      const imageData = context.getImageData(0, 0, width, height);
+      const code = jsQR(imageData.data, width, height, { inversionAttempts: "attemptBoth" });
+
+      if (!code?.data) {
+        state.resultText = "";
+        state.safeUrl = "";
+        resultText.value = "";
+        linkBox.textContent = "QR 코드를 찾지 못했습니다.";
+        resultMeta.textContent = "QR 없음";
+        openLinkBtn.disabled = true;
+        status.textContent = "QR을 찾지 못했습니다. QR이 더 크게 보이는 이미지나 선명한 캡처로 다시 시도해 주세요.";
+        return;
+      }
+
+      const result = analyzeQrContent(code.data);
+      state.resultText = code.data;
+      state.safeUrl = result.safeUrl;
+      resultText.value = code.data;
+      linkBox.textContent = result.safeUrl || result.label;
+      resultMeta.textContent = `${result.type} · ${code.data.length}자`;
+      openLinkBtn.disabled = !result.safeUrl;
+      status.textContent = result.safeUrl
+        ? "QR에서 URL을 찾았습니다. 주소를 확인한 뒤 열거나 복사하세요."
+        : "QR 원문을 추출했습니다. URL이 아니므로 원문 내용을 확인해 주세요.";
+    } catch (error) {
+      state.safeUrl = "";
+      openLinkBtn.disabled = true;
+      status.textContent = "QR 판독 중 오류가 발생했습니다. 다른 이미지로 다시 시도해 주세요.";
+      showToast("QR을 읽지 못했습니다.");
+    }
+  }
+}
+
 function buildQrDownloadName(name, format) {
   const base = sanitizeFilename(name || "qr-code").replace(/\.(svg|png|jpe?g)$/i, "") || "qr-code";
   return `${base}.${format}`;
@@ -5185,6 +5406,72 @@ function buildQrPayload(container, mode) {
 
   const value = container.querySelector("#qrText").value.trim();
   return value;
+}
+
+function analyzeQrContent(value) {
+  const text = String(value || "").trim();
+  const safeUrl = extractHttpUrlFromQrText(text);
+  if (safeUrl) {
+    return { type: "URL", label: safeUrl, safeUrl };
+  }
+
+  if (/^WIFI:/i.test(text)) {
+    return { type: "Wi-Fi 정보", label: "Wi-Fi 접속 정보 QR입니다.", safeUrl: "" };
+  }
+
+  if (/^mailto:/i.test(text)) {
+    return { type: "이메일 링크", label: "이메일 링크 QR입니다.", safeUrl: "" };
+  }
+
+  if (/^tel:/i.test(text)) {
+    return { type: "전화 링크", label: "전화번호 링크 QR입니다.", safeUrl: "" };
+  }
+
+  if (/^BEGIN:VCARD/i.test(text)) {
+    return { type: "연락처", label: "연락처 정보 QR입니다.", safeUrl: "" };
+  }
+
+  return { type: "텍스트", label: "일반 텍스트 QR입니다.", safeUrl: "" };
+}
+
+function extractHttpUrlFromQrText(text) {
+  const bookmarkMatch = /^MEBKM:.*?URL:([^;]+);/is.exec(text);
+  if (bookmarkMatch) {
+    const url = normalizeHttpUrl(bookmarkMatch[1]);
+    if (url) return url;
+  }
+
+  const urlToMatch = /^URLTO:[^:]*:(https?:\/\/.+)$/is.exec(text);
+  if (urlToMatch) {
+    const url = normalizeHttpUrl(urlToMatch[1]);
+    if (url) return url;
+  }
+
+  const direct = normalizeHttpUrl(text);
+  if (direct) return direct;
+
+  const match = text.match(/https?:\/\/[^\s<>"']+/i) || text.match(/\bwww\.[^\s<>"']+/i);
+  if (!match) return "";
+
+  return normalizeHttpUrl(match[0].replace(/[),.;]+$/, "")) || "";
+}
+
+function normalizeHttpUrl(value) {
+  let text = String(value || "").trim();
+  if (!text) return "";
+
+  if (/^www\./i.test(text) || /^[a-z0-9][a-z0-9.-]+\.[a-z]{2,}([/?#].*)?$/i.test(text)) {
+    text = `https://${text}`;
+  }
+
+  if (!/^https?:\/\//i.test(text)) return "";
+
+  try {
+    const url = new URL(text);
+    return ["http:", "https:"].includes(url.protocol) ? url.href : "";
+  } catch {
+    return "";
+  }
 }
 
 function bindSubtitleFileInput(container, inputSelector, textareaSelector) {

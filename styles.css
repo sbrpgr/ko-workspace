@@ -1263,6 +1263,32 @@ body.home-mode .tool-workspace {
   height: auto;
 }
 
+.qr-reader-drop.is-dragging {
+  border-color: var(--primary);
+  background: #fff5f4;
+}
+
+.qr-reader-frame {
+  display: grid;
+  place-items: center;
+  min-height: 280px;
+}
+
+.qr-reader-frame canvas {
+  max-height: 420px;
+}
+
+.qr-result-link {
+  overflow-wrap: anywhere;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #1d2630;
+  font-weight: 800;
+  line-height: 1.6;
+  padding: 12px 14px;
+}
+
 @media (max-width: 680px) {
   .qr-options-grid {
     grid-template-columns: 1fr;
