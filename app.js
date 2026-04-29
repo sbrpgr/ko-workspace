@@ -2180,7 +2180,7 @@ function renderWebcamRecorder(container) {
                 <input id="backgroundColorInput" type="color" value="#f4f7fb" />
               </div>
             </div>
-            <div class="background-upload-row">
+            <div class="background-upload-row background-drop-zone" aria-label="배경 이미지 드래그 업로드">
               <label class="secondary-action background-file-label" for="backgroundImageFile">배경 이미지 선택</label>
               <input id="backgroundImageFile" type="file" accept="image/*" />
               <button id="clearBackgroundImageBtn" type="button" disabled>이미지 지우기</button>
@@ -2320,6 +2320,7 @@ function renderWebcamRecorder(container) {
   nodes.includeMic.addEventListener("change", restartCameraIfIdle);
   nodes.backgroundMode.addEventListener("change", handleBackgroundModeChange);
   nodes.backgroundImageFile.addEventListener("change", loadBackgroundImage);
+  bindFileDropZone(container.querySelector(".background-drop-zone"), nodes.backgroundImageFile);
   nodes.clearBackgroundImageBtn.addEventListener("click", clearBackgroundImage);
   nodes.backgroundBlurRange.addEventListener("input", syncBackgroundControls);
   nodes.backgroundColorInput.addEventListener("input", syncBackgroundControls);
@@ -4931,7 +4932,7 @@ function renderSrtCleaner(container) {
   container.innerHTML = `
     <div class="tool-section">
       <div class="tool-grid">
-        <article class="input-card">
+        <article class="input-card subtitle-drop-zone" aria-label="SRT 자막 파일 드래그 업로드">
           <div class="section-heading">
             <div><h2>원본 SRT</h2></div>
             <label class="secondary-action" for="subtitleFile">파일 열기</label>
@@ -4996,7 +4997,7 @@ function renderSubtitleConverter(container) {
   container.innerHTML = `
     <div class="tool-section">
       <div class="tool-grid">
-        <article class="input-card">
+        <article class="input-card subtitle-drop-zone" aria-label="SRT 또는 VTT 자막 파일 드래그 업로드">
           <div class="section-heading">
             <div><h2>원본 자막</h2></div>
             <label class="secondary-action" for="subtitleFile">파일 열기</label>
@@ -5079,7 +5080,7 @@ function renderSubtitleTiming(container) {
   container.innerHTML = `
     <div class="tool-section">
       <div class="tool-grid">
-        <article class="input-card">
+        <article class="input-card subtitle-drop-zone" aria-label="SRT 또는 VTT 자막 파일 드래그 업로드">
           <div class="section-heading">
             <div><h2>원본 자막</h2></div>
             <label class="secondary-action" for="subtitleFile">파일 열기</label>
@@ -5707,45 +5708,55 @@ function bindUploadBoxDrops(scope) {
   scope.querySelectorAll(".upload-box").forEach((dropZone) => {
     if (dropZone.classList.contains("qr-reader-drop") || dropZone.dataset.dropBound === "true") return;
     const fileInput = dropZone.querySelector('input[type="file"]');
-    if (!fileInput) return;
+    bindFileDropZone(dropZone, fileInput);
+  });
+}
 
-    dropZone.dataset.dropBound = "true";
+function bindFileDropZone(dropZone, fileInput) {
+  if (!dropZone || !fileInput || dropZone.dataset.dropBound === "true") return;
 
-    ["dragenter", "dragover"].forEach((eventName) => {
-      dropZone.addEventListener(eventName, (event) => {
-        event.preventDefault();
-        dropZone.classList.add("is-dragging");
-      });
-    });
+  dropZone.dataset.dropBound = "true";
 
-    dropZone.addEventListener("dragleave", (event) => {
-      if (event.relatedTarget && dropZone.contains(event.relatedTarget)) return;
-      dropZone.classList.remove("is-dragging");
-    });
-
-    dropZone.addEventListener("drop", (event) => {
+  ["dragenter", "dragover"].forEach((eventName) => {
+    dropZone.addEventListener(eventName, (event) => {
       event.preventDefault();
-      event.stopPropagation();
-      dropZone.classList.remove("is-dragging");
-
-      const files = Array.from(event.dataTransfer?.files || []);
-      const acceptedFiles = files.filter((file) => matchesFileAccept(file, fileInput.accept));
-      if (acceptedFiles.length === 0) {
-        showToast("지원하지 않는 파일 형식입니다. 파일 형식을 확인해 주세요.");
-        return;
-      }
-
-      const nextFiles = fileInput.multiple ? acceptedFiles : acceptedFiles.slice(0, 1);
-      if (typeof DataTransfer === "undefined") {
-        showToast("이 브라우저에서는 드래그 업로드를 지원하지 않습니다. 파일 선택 버튼을 사용해 주세요.");
-        return;
-      }
-      const transfer = new DataTransfer();
-      nextFiles.forEach((file) => transfer.items.add(file));
-      fileInput.files = transfer.files;
-      fileInput.dispatchEvent(new Event("change", { bubbles: true }));
+      dropZone.classList.add("is-dragging");
     });
   });
+
+  dropZone.addEventListener("dragleave", (event) => {
+    if (event.relatedTarget && dropZone.contains(event.relatedTarget)) return;
+    dropZone.classList.remove("is-dragging");
+  });
+
+  dropZone.addEventListener("drop", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    dropZone.classList.remove("is-dragging");
+
+    const files = Array.from(event.dataTransfer?.files || []);
+    const acceptedFiles = files.filter((file) => matchesFileAccept(file, fileInput.accept));
+    if (acceptedFiles.length === 0) {
+      showToast("지원하지 않는 파일 형식입니다. 파일 형식을 확인해 주세요.");
+      return;
+    }
+
+    const nextFiles = fileInput.multiple ? acceptedFiles : acceptedFiles.slice(0, 1);
+    if (!setFileInputFiles(fileInput, nextFiles)) {
+      showToast("이 브라우저에서는 드래그 업로드를 지원하지 않습니다. 파일 선택 버튼을 사용해 주세요.");
+      return;
+    }
+
+    fileInput.dispatchEvent(new Event("change", { bubbles: true }));
+  });
+}
+
+function setFileInputFiles(fileInput, files) {
+  if (typeof DataTransfer === "undefined") return false;
+  const transfer = new DataTransfer();
+  files.forEach((file) => transfer.items.add(file));
+  fileInput.files = transfer.files;
+  return true;
 }
 
 function matchesFileAccept(file, accept) {
@@ -5766,6 +5777,7 @@ function matchesFileAccept(file, accept) {
 function bindSubtitleFileInput(container, inputSelector, textareaSelector) {
   const fileInput = container.querySelector(inputSelector);
   const textarea = container.querySelector(textareaSelector);
+  bindFileDropZone(container.querySelector(".subtitle-drop-zone"), fileInput);
   fileInput.addEventListener("change", async () => {
     const file = fileInput.files[0];
     if (!file) return;

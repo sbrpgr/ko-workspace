@@ -1174,6 +1174,18 @@ body.home-mode .tool-workspace {
   box-shadow: 0 0 0 3px rgba(229, 50, 45, 0.12);
 }
 
+.subtitle-drop-zone,
+.background-drop-zone {
+  transition: border-color 0.16s ease, background-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.subtitle-drop-zone.is-dragging,
+.background-drop-zone.is-dragging {
+  border-color: var(--accent);
+  background: #fff7f3;
+  box-shadow: 0 0 0 3px rgba(229, 50, 45, 0.12);
+}
+
 .upload-box p {
   color: var(--muted);
   line-height: 1.6;
@@ -1539,6 +1551,13 @@ body.home-mode .tool-workspace {
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
+}
+
+.background-drop-zone {
+  border: 1px dashed transparent;
+  border-radius: 8px;
+  margin: -8px;
+  padding: 8px;
 }
 
 .background-upload-row input[type="file"] {

@@ -14,7 +14,7 @@ Current production baseline:
 - Production domain: `https://ko-workspace.com/`
 - Cloudflare Pages project: `mic-script-generator`
 - Latest AdSense/SEO readiness commit: `580c060 Improve AdSense SEO readiness`
-- Current static asset cache version: `20260429-23`
+- Current static asset cache version: `20260430-01`
 - Category landing pages, privacy policy updates, sitemap updates, and core FAQ copy were deployed on 2026-04-29
 
 Core constraints:

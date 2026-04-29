@@ -45,7 +45,9 @@ The workflow copies root assets plus the `tools/` directory into `.cloudflare-di
 Google Tag Manager uses container `GTM-W3MF6BSN`.
 
 - `npm run apply:site-tags`: inserts or refreshes the GTM `<head>` snippet, `<body>` noscript iframe, and CSP allowlist entries.
-- `npm run check`: validates JavaScript and confirms all managed page tags are present.
+- `npm run smoke`: runs deterministic smoke checks for core tool logic, metadata removal, security headers, and file upload UX coverage.
+- `npm run audit:deps`: runs `npm audit --omit=dev` against the lockfile.
+- `npm run check`: validates JavaScript, managed page tags, project structure, smoke checks, and dependency audit status.
 - GitHub Actions runs `npm run apply:site-tags` before packaging, so newly added HTML pages under `tools/` are automatically tagged during deployment.
 - Event names and allowed parameters are defined in `ANALYTICS.md`.
 

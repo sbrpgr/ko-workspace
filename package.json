@@ -4,8 +4,10 @@
   "scripts": {
     "apply:site-tags": "node scripts/site-tags.js",
     "audit": "node scripts/project-audit.js",
+    "audit:deps": "npm audit --omit=dev",
     "check:site-tags": "node scripts/site-tags.js --check",
-    "check": "node --check app.js && node --check scripts/site-tags.js && node --check scripts/project-audit.js && npm run check:site-tags && npm run audit"
+    "smoke": "node scripts/smoke-test.js",
+    "check": "node --check app.js && node --check scripts/site-tags.js && node --check scripts/project-audit.js && node --check scripts/smoke-test.js && npm run check:site-tags && npm run audit && npm run smoke && npm run audit:deps"
   },
   "devDependencies": {}
 }

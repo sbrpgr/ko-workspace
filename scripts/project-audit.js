@@ -27,6 +27,9 @@ function main() {
     ...auditLibraryCsp(),
     ...auditSupportContact(),
     ...auditUploadDropSupport(),
+    ...auditSecurityHeaders(),
+    ...auditClientSafety(),
+    ...auditSmokeScript(),
   ];
 
   if (problems.length) {
@@ -181,17 +184,124 @@ function auditUploadDropSupport() {
   const app = read(path.join(ROOT, "app.js"));
   const playbook = read(path.join(ROOT, "CHANGE_PLAYBOOK.md"));
 
-  if (!app.includes("function bindUploadBoxDrops") || !app.includes("bindUploadBoxDrops(els.toolWorkspace)")) {
-    problems.push("app.js: missing shared upload-box drag-and-drop binding");
+  if (
+    !app.includes("function bindUploadBoxDrops") ||
+    !app.includes("function bindFileDropZone") ||
+    !app.includes("function setFileInputFiles") ||
+    !app.includes("bindUploadBoxDrops(els.toolWorkspace)")
+  ) {
+    problems.push("app.js: missing shared file drag-and-drop binding");
   }
 
   if (!app.includes("matchesFileAccept")) {
     problems.push("app.js: missing upload drop accept validation");
   }
 
-  if (!playbook.includes("드래그 앤 드롭")) {
+  if (!app.includes("background-drop-zone") || !app.includes("subtitle-drop-zone")) {
+    problems.push("app.js: missing secondary file input drag-and-drop zones");
+  }
+
+  if (!playbook.includes("upload-box")) {
     problems.push("CHANGE_PLAYBOOK.md: missing upload drag-and-drop guidance");
   }
+
+  const expectedDropSupport = new Set([
+    "backgroundImageFile",
+    "qrImageFile",
+    "imageFile",
+    "exifImageFile",
+    "pdfFiles",
+    "pdfFile",
+    "imageFiles",
+    "subtitleFile",
+  ]);
+  const fileInputIds = new Set([...app.matchAll(/<input id="([^"]+)"[^>]*type="file"/g)].map((match) => match[1]));
+  for (const id of fileInputIds) {
+    if (!expectedDropSupport.has(id)) {
+      problems.push(`app.js: file input #${id} needs explicit drag-and-drop coverage`);
+    }
+  }
+
+  return problems;
+}
+
+function auditSecurityHeaders() {
+  const headers = read(path.join(ROOT, "_headers"));
+  const problems = [];
+
+  for (const required of [
+    "X-Content-Type-Options: nosniff",
+    "X-Frame-Options: DENY",
+    "Strict-Transport-Security:",
+    "Referrer-Policy: strict-origin-when-cross-origin",
+    "Permissions-Policy:",
+  ]) {
+    if (!headers.includes(required)) problems.push(`_headers: missing ${required}`);
+  }
+
+  const csp = readHeaderValue(headers, "Content-Security-Policy");
+  if (!csp) {
+    problems.push("_headers: Content-Security-Policy not found");
+    return problems;
+  }
+
+  for (const directive of [
+    "default-src 'self'",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'",
+    "upgrade-insecure-requests",
+  ]) {
+    if (!csp.includes(directive)) problems.push(`_headers: CSP missing ${directive}`);
+  }
+
+  const scriptSrc = readCspDirective(csp, "script-src");
+  if (scriptSrc.includes("'unsafe-inline'")) {
+    problems.push("_headers: script-src must not include unsafe-inline");
+  }
+
+  const permissions = readHeaderValue(headers, "Permissions-Policy");
+  if (!permissions.includes("camera=(self)") || !permissions.includes("microphone=(self)") || !permissions.includes("geolocation=()")) {
+    problems.push("_headers: Permissions-Policy must restrict camera, microphone, and geolocation");
+  }
+
+  return problems;
+}
+
+function auditClientSafety() {
+  const app = read(path.join(ROOT, "app.js"));
+  const problems = [];
+
+  for (const [pattern, label] of [
+    [/\beval\s*\(/, "eval"],
+    [/\bFunction\s*\(/, "Function constructor"],
+    [/document\.write\s*\(/, "document.write"],
+  ]) {
+    if (pattern.test(app)) problems.push(`app.js: avoid ${label}`);
+  }
+
+  for (const helper of ["escapeHtml", "sanitizeFilename", "sanitizeAnalyticsValue", "normalizeHttpUrl"]) {
+    if (!app.includes(`function ${helper}`)) problems.push(`app.js: missing ${helper} helper`);
+  }
+
+  if (app.includes("window.open") && !app.includes("\"noopener,noreferrer\"")) {
+    problems.push("app.js: window.open must use noopener,noreferrer");
+  }
+
+  return problems;
+}
+
+function auditSmokeScript() {
+  const problems = [];
+  const pkg = JSON.parse(read(path.join(ROOT, "package.json")));
+  const smokePath = path.join(ROOT, "scripts", "smoke-test.js");
+
+  if (!fs.existsSync(smokePath)) problems.push("scripts/smoke-test.js: missing smoke test script");
+  if (!pkg.scripts?.smoke) problems.push("package.json: missing smoke script");
+  if (!pkg.scripts?.["audit:deps"]) problems.push("package.json: missing dependency audit script");
+  if (!pkg.scripts?.check?.includes("npm run smoke")) problems.push("package.json: check script must run smoke tests");
+  if (!pkg.scripts?.check?.includes("npm run audit:deps")) problems.push("package.json: check script must run dependency audit");
 
   return problems;
 }
@@ -348,6 +458,23 @@ function isIgnoredCopy(file) {
 
 function read(file) {
   return fs.readFileSync(file, "utf8");
+}
+
+function readHeaderValue(headers, name) {
+  const line = headers
+    .split(/\r?\n/)
+    .map((item) => item.trim())
+    .find((item) => item.startsWith(`${name}:`));
+  return line ? line.replace(new RegExp(`^${name}:\\s*`), "") : "";
+}
+
+function readCspDirective(csp, name) {
+  return (
+    csp
+      .split(";")
+      .map((item) => item.trim())
+      .find((item) => item.startsWith(`${name} `)) || ""
+  );
 }
 
 function toRelative(file) {
