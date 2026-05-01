@@ -207,6 +207,7 @@ function auditLibraryCsp() {
   const libraries = parseLibraries(app);
   const csp = readHeaderValue(headers, "Content-Security-Policy");
   const scriptSrc = readCspDirective(csp, "script-src");
+  const connectSrc = readCspDirective(csp, "connect-src");
   const workerSrc = readCspDirective(csp, "worker-src");
   const problems = [];
 
@@ -223,6 +224,9 @@ function auditLibraryCsp() {
     }
     if (!scriptSrc.includes("'wasm-unsafe-eval'")) {
       problems.push("_headers: Transformers.js backend loading requires script-src 'wasm-unsafe-eval'");
+    }
+    if (!connectSrc.includes("blob:")) {
+      problems.push("_headers: browser STT needs connect-src blob: to read selected audio files");
     }
     if (!workerSrc.includes("blob:")) {
       problems.push("_headers: Transformers.js backend loading requires worker-src blob:");

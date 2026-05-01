@@ -23,6 +23,8 @@ const API_NAMES = [
   "convertSubtitle",
   "shiftSubtitleTimings",
   "parsePageRanges",
+  "getAudioTranscriberCandidates",
+  "formatAudioTranscriptionError",
   "breakAudioTranscriptSentences",
   "stripJpegMetadata",
   "stripPngMetadata",
@@ -287,6 +289,14 @@ function buildLogicTests(api) {
         "audio sentence line breaks failed"
       );
     }),
+    test("audio transcription prefers stable CPU backend by default", () => {
+      assert(api.getAudioTranscriberCandidates("auto")[0].device === "wasm", "auto mode should try wasm first");
+      assert(api.getAudioTranscriberCandidates("webgpu")[0].device === "webgpu", "webgpu mode should honor explicit choice");
+    }),
+    test("audio transcription fetch failures explain network and model loading", () => {
+      const result = api.formatAudioTranscriptionError(new Error("Failed to fetch"));
+      assert(result.includes("cdn.jsdelivr.net") && result.includes("huggingface.co"), "fetch error guidance is too vague");
+    }),
     test("text diff counts add and remove rows", () => {
       const result = api.diffLines("A\nB", "A\nC");
       assert(result.kept === 1 && result.removed === 1 && result.added === 1, "diff counts failed");
@@ -336,10 +346,12 @@ function buildSecurityTests(api, app) {
       assert(headers.includes("base-uri 'self'"), "CSP missing base-uri self");
       assert(headers.includes("frame-ancestors 'none'"), "CSP missing frame-ancestors none");
       const scriptSrc = getCspDirective(headers, "script-src");
+      const connectSrc = getCspDirective(headers, "connect-src");
       const workerSrc = getCspDirective(headers, "worker-src");
       assert(!scriptSrc.includes("'unsafe-inline'"), "script-src allows unsafe-inline");
       assert(scriptSrc.includes("blob:"), "script-src must allow blob: for browser STT backend modules");
       assert(scriptSrc.includes("'wasm-unsafe-eval'"), "script-src must allow wasm-unsafe-eval for browser STT backends");
+      assert(connectSrc.includes("blob:"), "connect-src must allow blob: for selected browser audio files");
       assert(workerSrc.includes("blob:"), "worker-src must allow blob: for browser STT backend workers");
     }),
     test("client code avoids dangerous dynamic execution", () => {

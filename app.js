@@ -1741,9 +1741,9 @@ function renderAudioFileTranscription(container) {
             <div class="field">
               <label for="audioDeviceMode">실행 방식</label>
               <select id="audioDeviceMode">
-                <option value="auto" selected>자동 선택</option>
+                <option value="wasm" selected>CPU 처리(권장)</option>
+                <option value="auto">자동 선택</option>
                 <option value="webgpu">WebGPU 우선</option>
-                <option value="wasm">CPU 처리</option>
               </select>
             </div>
           </div>
@@ -1912,7 +1912,7 @@ function renderAudioFileTranscription(container) {
       setAudioProcessing(false);
     } catch (error) {
       nodes.modelStatus.textContent = "오류";
-      nodes.runMeta.textContent = formatUserNotice(`녹음 파일 텍스트 변환에 실패했습니다. ${error?.message || ""}`.trim());
+      nodes.runMeta.textContent = formatUserNotice(formatAudioTranscriptionError(error));
       setAudioProcessing(false);
       trackToolError(TOOL_MAP["audio-file-transcription"], error, "transcribe_audio");
     } finally {
@@ -2082,9 +2082,20 @@ function getAudioTranscriberCandidates(deviceMode) {
     return [{ device: "wasm", dtype: "q8" }];
   }
   return [
-    { device: "webgpu", dtype: "fp32" },
     { device: "wasm", dtype: "q8" },
+    { device: "webgpu", dtype: "fp32" },
   ];
+}
+
+function formatAudioTranscriptionError(error) {
+  const message = String(error?.message || "").trim();
+  if (/failed to fetch|load failed|network/i.test(message)) {
+    return "녹음 파일 텍스트 변환에 실패했습니다. 브라우저가 선택한 녹음 파일이나 음성 인식 모델 파일을 가져오지 못했습니다. 새로고침 후 다시 시도하고, 회사망·보안 프로그램·광고 차단 기능이 cdn.jsdelivr.net, huggingface.co, cas-bridge.xethub.hf.co 접속을 막는지 확인해 주세요.";
+  }
+  if (/backend|webgpu|wasm|dynamically imported module/i.test(message)) {
+    return "녹음 파일 텍스트 변환에 실패했습니다. 브라우저 음성 인식 백엔드를 준비하지 못했습니다. 실행 방식을 CPU 처리로 두고 다시 시도해 주세요.";
+  }
+  return `녹음 파일 텍스트 변환에 실패했습니다. ${message}`.trim();
 }
 
 function formatModelProgress(progress) {
