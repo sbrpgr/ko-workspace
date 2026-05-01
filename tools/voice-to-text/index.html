@@ -123,7 +123,7 @@ gtag('config', 'G-8S4R46L9Q0');</script>
                 <span class="status-pill">로그인 없음</span>
                 <span class="status-pill">100% 브라우저 처리</span>
                 <span class="status-pill">서버 저장 없음</span>
-                <span class="status-pill">개인정보 수집 없음</span>
+                <span class="status-pill">입력 데이터 저장 없음</span>
               </div>
               <button id="helpBtn" class="secondary-action" type="button" aria-label="서비스 원칙 보기">?</button>
             </div>
@@ -166,8 +166,37 @@ gtag('config', 'G-8S4R46L9Q0');</script>
               </section>
             </section>
           </section>
+          <!-- static-content:start -->
+          <section class="panel static-content-panel" aria-labelledby="staticContentTitle-voice-to-text">
+            <div class="static-content-heading">
+              <p class="eyebrow">Practical Guide</p>
+              <h2 id="staticContentTitle-voice-to-text">회의와 말하기를 바로 문서 초안으로 바꾸는 받아쓰기 도구</h2>
+              <p>음성으로 텍스트 쓰기는 말로 떠오른 내용을 놓치지 않고 글로 옮기기 위한 도구입니다. 회의 중 결정사항을 빠르게 남기거나, 강의와 발표 내용을 대본 초안으로 정리하거나, 영상 기획자가 먼저 말로 풀어낸 아이디어를 문장으로 바꾸는 상황에 맞췄습니다.</p>
+            </div>
+            <div class="static-story-grid">
+              <article>
+                <h3>회의가 끝나기 전에 초안 확보</h3>
+                <p>회의록을 처음부터 완성하려고 하면 발언을 놓치기 쉽습니다. 이 도구로 핵심 발언을 먼저 받아 적고, 회의가 끝난 뒤 제목과 문단을 다듬는 방식으로 시간을 줄일 수 있습니다.</p>
+              </article>
+              <article>
+                <h3>영상 대본의 첫 문장 만들기</h3>
+                <p>유튜브, 숏폼, 발표 자료는 빈 문서에서 시작하면 오래 걸립니다. 먼저 말로 설명하고 텍스트로 받은 뒤, 도구 안에서 대본 형식에 맞게 정리하면 초안 작성 부담이 줄어듭니다.</p>
+              </article>
+              <article>
+                <h3>브라우저 권한 기반 입력</h3>
+                <p>마이크 사용은 브라우저 권한을 통해 시작됩니다. 사용자가 권한을 허용한 동안에만 입력을 진행하고, 생성된 텍스트는 직접 복사하거나 파일로 저장합니다.</p>
+              </article>
+            </div>
+            <p class="static-content-value">코워크스페이스의 음성 도구는 완성형 회의록 작성 서비스가 아니라, 사용자가 직접 검토할 수 있는 빠른 초안을 만드는 데 초점을 둡니다. 음성 인식 결과는 환경에 따라 다를 수 있으므로, 중요한 문서는 반드시 사람이 최종 확인하는 흐름을 전제로 합니다.</p>
+            <ul class="static-note-list">
+              <li>한국어 받아쓰기와 대본 초안 작성에 맞춘 옵션을 제공합니다.</li>
+              <li>회의, 강의, 발표, 영상 기획처럼 말에서 글로 넘어가는 작업에 적합합니다.</li>
+              <li>입력 내용은 코워크스페이스 자체 서버에 저장하지 않는 방향으로 설계했습니다.</li>
+            </ul>
+          </section>
+          <!-- static-content:end -->
 
-          <footer class="site-footer">
+<footer class="site-footer">
             <span class="footer-brand">제작사 데이웨이</span>
             <a href="https://dayway.web.app" target="_blank" rel="noopener noreferrer">dayway.web.app</a>
             <span class="footer-contact">광고·협업·제휴 문의는 이메일로 연락해 주세요.</span>
@@ -199,15 +228,15 @@ gtag('config', 'G-8S4R46L9Q0');</script>
           </li>
           <li>
             <strong>브라우저 처리</strong>
-            <span>초기 도구는 서버 API 없이 브라우저 안에서 텍스트와 파일을 직접 처리합니다.</span>
+            <span>도구는 가능한 한 서버 API 없이 브라우저 안에서 텍스트와 파일을 직접 처리합니다.</span>
           </li>
           <li>
             <strong>보안 우선</strong>
-            <span>입력 텍스트·파일·녹화 데이터는 자체 서버에 저장하지 않고 100% 브라우저 안에서 처리합니다. 개인정보 수집 기능도 두지 않습니다.</span>
+            <span>입력 텍스트·파일·녹화 데이터는 자체 서버에 저장하지 않고 100% 브라우저 안에서 처리합니다. 입력 데이터 저장 기능을 두지 않으며 회원 계정을 요구하지 않습니다.</span>
           </li>
           <li>
             <strong>광고 분리</strong>
-            <span>작업 UI와 광고 슬롯을 분리해 나중에 AdSense를 넣어도 사용 흐름이 깨지지 않도록 구성합니다.</span>
+            <span>작업 UI와 광고 영역을 분리해 도구 사용 흐름이 광고 때문에 흔들리지 않도록 구성합니다.</span>
           </li>
         </ol>
       </article>

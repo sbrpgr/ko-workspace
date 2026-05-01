@@ -118,7 +118,7 @@ gtag('config', 'G-8S4R46L9Q0');</script>
                 <span class="status-pill">로그인 없음</span>
                 <span class="status-pill">100% 브라우저 처리</span>
                 <span class="status-pill">서버 저장 없음</span>
-                <span class="status-pill">개인정보 수집 없음</span>
+                <span class="status-pill">입력 데이터 저장 없음</span>
               </div>
               <button id="helpBtn" class="secondary-action" type="button" aria-label="서비스 원칙 보기">?</button>
             </div>
@@ -161,8 +161,37 @@ gtag('config', 'G-8S4R46L9Q0');</script>
               </section>
             </section>
           </section>
+          <!-- static-content:start -->
+          <section class="panel static-content-panel" aria-labelledby="staticContentTitle-exif-metadata-remover">
+            <div class="static-content-heading">
+              <p class="eyebrow">Practical Guide</p>
+              <h2 id="staticContentTitle-exif-metadata-remover">사진 공유 전 위치정보와 숨은 메타데이터를 정리합니다</h2>
+              <p>EXIF 메타데이터 제거는 사진 파일에 남아 있는 GPS 위치, 촬영 기기, 편집 프로그램, 설명 같은 숨은 정보를 지우기 위한 도구입니다. 블로그, 메신저, 업무 제출 자료로 이미지를 공유하기 전 개인정보성 정보를 확인하고 줄일 수 있습니다.</p>
+            </div>
+            <div class="static-story-grid">
+              <article>
+                <h3>스마트폰 사진 공유 전</h3>
+                <p>스마트폰 사진에는 촬영 위치와 기기 정보가 남을 수 있습니다. 외부에 올리기 전 메타데이터를 제거하면 불필요한 정보 노출을 줄일 수 있습니다.</p>
+              </article>
+              <article>
+                <h3>업무 제출 이미지 정리</h3>
+                <p>편집 프로그램, 작성자, 설명 같은 정보가 이미지 내부에 남아 있을 수 있습니다. 제출용 파일에서 이런 항목을 정리해 깔끔한 결과물을 만듭니다.</p>
+              </article>
+              <article>
+                <h3>형식별 메타데이터 확인</h3>
+                <p>JPG뿐 아니라 PNG와 WEBP 안의 텍스트성 메타데이터도 확인하고 제거하도록 설계했습니다.</p>
+              </article>
+            </div>
+            <p class="static-content-value">이 도구는 보안 제품을 대신하지는 않지만, 공유 전 기본 점검 단계로 유용합니다. 이미지는 브라우저에서 읽고 결과 파일을 다시 만들며, 코워크스페이스 자체 서버에 원본을 저장하지 않는 흐름을 유지합니다.</p>
+            <ul class="static-note-list">
+              <li>JPG EXIF, PNG 텍스트 청크, WEBP EXIF/XMP 제거에 대응합니다.</li>
+              <li>감지된 메타데이터 항목을 확인할 수 있습니다.</li>
+              <li>개인 사진과 업무 이미지를 외부 공유하기 전 점검에 적합합니다.</li>
+            </ul>
+          </section>
+          <!-- static-content:end -->
 
-          <footer class="site-footer">
+<footer class="site-footer">
             <span class="footer-brand">제작자 데이웨이</span>
             <a href="https://dayway.web.app" target="_blank" rel="noopener noreferrer">dayway.web.app</a>
             <span class="footer-contact">광고·작업·제휴 문의는 이메일로 연락해 주세요.</span>
@@ -194,7 +223,7 @@ gtag('config', 'G-8S4R46L9Q0');</script>
           </li>
           <li>
             <strong>브라우저 처리</strong>
-            <span>초기 도구들은 서버 API 없이 브라우저 안에서 텍스트와 파일을 직접 처리합니다.</span>
+            <span>도구는 가능한 한 서버 API 없이 브라우저 안에서 텍스트와 파일을 직접 처리합니다.</span>
           </li>
           <li>
             <strong>보안 우선</strong>

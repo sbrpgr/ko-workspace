@@ -123,7 +123,7 @@ gtag('config', 'G-8S4R46L9Q0');</script>
                 <span class="status-pill">로그인 없음</span>
                 <span class="status-pill">100% 브라우저 처리</span>
                 <span class="status-pill">서버 저장 없음</span>
-                <span class="status-pill">개인정보 수집 없음</span>
+                <span class="status-pill">입력 데이터 저장 없음</span>
               </div>
               <button id="helpBtn" class="secondary-action" type="button" aria-label="서비스 원칙 보기">?</button>
             </div>
@@ -166,8 +166,37 @@ gtag('config', 'G-8S4R46L9Q0');</script>
               </section>
             </section>
           </section>
+          <!-- static-content:start -->
+          <section class="panel static-content-panel" aria-labelledby="staticContentTitle-markdown-editor">
+            <div class="static-content-heading">
+              <p class="eyebrow">Practical Guide</p>
+              <h2 id="staticContentTitle-markdown-editor">초안 텍스트를 마크다운 문서로 빠르게 정리합니다</h2>
+              <p>마크다운 편집기는 README, 업무 메모, 블로그 초안, 기술 문서처럼 가벼운 구조가 필요한 글을 작성하기 위한 도구입니다. 제목, 굵게, 목록, 인용, 코드, 표 같은 기본 문법을 버튼으로 넣고 미리보기를 확인하며 문서를 다듬을 수 있습니다.</p>
+            </div>
+            <div class="static-story-grid">
+              <article>
+                <h3>README와 작업 메모 작성</h3>
+                <p>개발 프로젝트 설명이나 작업 기록을 마크다운으로 정리하면 GitHub, 문서 도구, 협업 채널에 그대로 옮기기 쉽습니다.</p>
+              </article>
+              <article>
+                <h3>블로그 초안 구조 잡기</h3>
+                <p>서식 없는 글을 제목, 소제목, 목록으로 나누고 미리보기로 흐름을 확인하면 게시 전 편집 방향을 잡기 좋습니다.</p>
+              </article>
+              <article>
+                <h3>코드와 표가 섞인 문서</h3>
+                <p>코드블록, 인라인 코드, 표를 버튼으로 삽입해 기술 설명이나 업무 가이드를 빠르게 구성할 수 있습니다.</p>
+              </article>
+            </div>
+            <p class="static-content-value">이 도구는 무거운 문서 편집기가 아니라 브라우저에서 바로 열어 초안을 만들고 확인하는 편집 공간입니다. 작성한 내용은 사용자가 직접 복사하거나 파일로 저장하며, 코워크스페이스 자체 서버에 문서를 보관하지 않는 흐름을 유지합니다.</p>
+            <ul class="static-note-list">
+              <li>마크다운 입력과 미리보기를 같은 화면에서 확인합니다.</li>
+              <li>기본 문법 버튼으로 반복 입력을 줄입니다.</li>
+              <li>MD 파일 저장과 복사를 지원합니다.</li>
+            </ul>
+          </section>
+          <!-- static-content:end -->
 
-          <footer class="site-footer">
+<footer class="site-footer">
             <span class="footer-brand">제작사 데이웨이</span>
             <a href="https://dayway.web.app" target="_blank" rel="noopener noreferrer">dayway.web.app</a>
             <span class="footer-contact">광고·협업·제휴 문의는 이메일로 연락해 주세요.</span>
@@ -199,15 +228,15 @@ gtag('config', 'G-8S4R46L9Q0');</script>
           </li>
           <li>
             <strong>브라우저 처리</strong>
-            <span>초기 도구는 서버 API 없이 브라우저 안에서 텍스트와 파일을 직접 처리합니다.</span>
+            <span>도구는 가능한 한 서버 API 없이 브라우저 안에서 텍스트와 파일을 직접 처리합니다.</span>
           </li>
           <li>
             <strong>보안 우선</strong>
-            <span>입력 텍스트·파일·녹화 데이터는 자체 서버에 저장하지 않고 100% 브라우저 안에서 처리합니다. 개인정보 수집 기능도 두지 않습니다.</span>
+            <span>입력 텍스트·파일·녹화 데이터는 자체 서버에 저장하지 않고 100% 브라우저 안에서 처리합니다. 입력 데이터 저장 기능을 두지 않으며 회원 계정을 요구하지 않습니다.</span>
           </li>
           <li>
             <strong>광고 분리</strong>
-            <span>작업 UI와 광고 슬롯을 분리해 나중에 AdSense를 넣어도 사용 흐름이 깨지지 않도록 구성합니다.</span>
+            <span>작업 UI와 광고 영역을 분리해 도구 사용 흐름이 광고 때문에 흔들리지 않도록 구성합니다.</span>
           </li>
         </ol>
       </article>

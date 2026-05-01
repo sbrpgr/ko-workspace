@@ -24,6 +24,7 @@ function main() {
     ...auditAssetVersion(),
     ...auditToolPages(),
     ...auditCategoryPages(),
+    ...auditStaticReviewContent(),
     ...auditLibraryCsp(),
     ...auditSupportContact(),
     ...auditUploadDropSupport(),
@@ -138,6 +139,62 @@ function auditCategoryPages() {
     if (!html.includes(`data-category-page="${page.id}"`)) problems.push(`${relative}: missing data-category-page="${page.id}"`);
     if (!html.includes(`<link rel="canonical" href="${url}"`)) problems.push(`${relative}: missing canonical ${url}`);
     if (!sitemap.includes(`<loc>${url}</loc>`)) problems.push(`sitemap.xml: missing ${url}`);
+  }
+
+  return problems;
+}
+
+function auditStaticReviewContent() {
+  const problems = [];
+  const app = read(path.join(ROOT, "app.js"));
+  const pages = [
+    { label: "index.html", file: path.join(ROOT, "index.html") },
+    ...parseRegistry(app, "TOOL_DEFS").map((tool) => ({
+      label: `${tool.id} page`,
+      file: path.join(ROOT, tool.path, "index.html"),
+    })),
+    ...parseRegistry(app, "CATEGORY_PAGE_DEFS").map((page) => ({
+      label: `${page.id} category page`,
+      file: path.join(ROOT, page.path, "index.html"),
+    })),
+  ];
+
+  for (const page of pages) {
+    if (!fs.existsSync(page.file)) {
+      problems.push(`${page.label}: missing static content target`);
+      continue;
+    }
+
+    const html = read(page.file);
+    const relative = toRelative(page.file);
+    if (!html.includes("static-content:start") || !html.includes("static-content-panel")) {
+      problems.push(`${relative}: missing static review content panel`);
+    }
+
+    const visible = html
+      .replace(/<script[\s\S]*?<\/script>/gi, " ")
+      .replace(/<style[\s\S]*?<\/style>/gi, " ")
+      .replace(/<[^>]+>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (visible.length < 1000) {
+      problems.push(`${relative}: static visible content is too thin (${visible.length} chars)`);
+    }
+  }
+
+  const banned = ["초기 도구", "나중에 AdSense", "개인정보 수집 없음", "개인정보 걱정"];
+  for (const file of collectFiles([".html", ".js"])) {
+    const relative = toRelative(file);
+    if (relative.startsWith("scripts/")) continue;
+    const text = read(file);
+    for (const phrase of banned) {
+      if (text.includes(phrase)) problems.push(`${relative}: avoid pre-review wording "${phrase}"`);
+    }
+  }
+
+  const privacy = read(path.join(ROOT, "privacy.html"));
+  for (const required of ["policies.google.com/technologies/ads", "adssettings.google.com", "aboutads.info/choices"]) {
+    if (!privacy.includes(required)) problems.push(`privacy.html: missing ${required} disclosure link`);
   }
 
   return problems;

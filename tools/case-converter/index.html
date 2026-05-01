@@ -123,7 +123,7 @@ gtag('config', 'G-8S4R46L9Q0');</script>
                 <span class="status-pill">로그인 없음</span>
                 <span class="status-pill">100% 브라우저 처리</span>
                 <span class="status-pill">서버 저장 없음</span>
-                <span class="status-pill">개인정보 수집 없음</span>
+                <span class="status-pill">입력 데이터 저장 없음</span>
               </div>
               <button id="helpBtn" class="secondary-action" type="button" aria-label="서비스 원칙 보기">?</button>
             </div>
@@ -166,8 +166,37 @@ gtag('config', 'G-8S4R46L9Q0');</script>
               </section>
             </section>
           </section>
+          <!-- static-content:start -->
+          <section class="panel static-content-panel" aria-labelledby="staticContentTitle-case-converter">
+            <div class="static-content-heading">
+              <p class="eyebrow">Practical Guide</p>
+              <h2 id="staticContentTitle-case-converter">영문 문장과 이름을 필요한 케이스 형식으로 바꿉니다</h2>
+              <p>대소문자 변환은 파일명, 변수명, 태그, 제목, 슬러그처럼 같은 단어를 다른 형식으로 바꿔야 할 때 쓰는 도구입니다. 개발과 마케팅, 콘텐츠 운영에서는 camelCase, snake_case, kebab-case, Title Case 같은 형식을 반복해서 맞춰야 합니다.</p>
+            </div>
+            <div class="static-story-grid">
+              <article>
+                <h3>개발 변수명과 파일명 정리</h3>
+                <p>기획 문서에 적힌 영문 명칭을 camelCase나 snake_case로 바꾸면 코드와 설정 파일에 붙여넣기 쉽습니다.</p>
+              </article>
+              <article>
+                <h3>콘텐츠 제목과 태그 가공</h3>
+                <p>영문 제목을 모두 대문자나 제목형으로 맞추고, URL 슬러그용 문장은 kebab-case로 바꿔 게시 흐름을 정리합니다.</p>
+              </article>
+              <article>
+                <h3>일관된 표기 기준 유지</h3>
+                <p>여러 사람이 작성한 문자열의 대소문자 규칙을 맞추면 문서와 데이터 목록의 품질이 좋아집니다.</p>
+              </article>
+            </div>
+            <p class="static-content-value">이 도구는 작은 문자열 가공에 시간을 쓰지 않도록 만든 보조 도구입니다. 영문 중심 변환에 초점을 맞추며, 결과는 바로 복사해 코드, 문서, CMS 입력란에 사용할 수 있습니다.</p>
+            <ul class="static-note-list">
+              <li>lowercase, UPPERCASE, Title Case, camelCase, snake_case, kebab-case를 제공합니다.</li>
+              <li>파일명, 변수명, 태그, URL 슬러그 정리에 적합합니다.</li>
+              <li>입력한 문자열은 브라우저에서 즉시 변환됩니다.</li>
+            </ul>
+          </section>
+          <!-- static-content:end -->
 
-          <footer class="site-footer">
+<footer class="site-footer">
             <span class="footer-brand">제작사 데이웨이</span>
             <a href="https://dayway.web.app" target="_blank" rel="noopener noreferrer">dayway.web.app</a>
             <span class="footer-contact">광고·협업·제휴 문의는 이메일로 연락해 주세요.</span>
@@ -199,15 +228,15 @@ gtag('config', 'G-8S4R46L9Q0');</script>
           </li>
           <li>
             <strong>브라우저 처리</strong>
-            <span>초기 도구는 서버 API 없이 브라우저 안에서 텍스트와 파일을 직접 처리합니다.</span>
+            <span>도구는 가능한 한 서버 API 없이 브라우저 안에서 텍스트와 파일을 직접 처리합니다.</span>
           </li>
           <li>
             <strong>보안 우선</strong>
-            <span>입력 텍스트·파일·녹화 데이터는 자체 서버에 저장하지 않고 100% 브라우저 안에서 처리합니다. 개인정보 수집 기능도 두지 않습니다.</span>
+            <span>입력 텍스트·파일·녹화 데이터는 자체 서버에 저장하지 않고 100% 브라우저 안에서 처리합니다. 입력 데이터 저장 기능을 두지 않으며 회원 계정을 요구하지 않습니다.</span>
           </li>
           <li>
             <strong>광고 분리</strong>
-            <span>작업 UI와 광고 슬롯을 분리해 나중에 AdSense를 넣어도 사용 흐름이 깨지지 않도록 구성합니다.</span>
+            <span>작업 UI와 광고 영역을 분리해 도구 사용 흐름이 광고 때문에 흔들리지 않도록 구성합니다.</span>
           </li>
         </ol>
       </article>

@@ -1076,7 +1076,7 @@ function renderHomePage() {
   setHeroCopy(
     BRAND_NAME_EN,
     BRAND_NAME,
-    "효율적인 작업을 위한 도구. 이제 개인정보 걱정없이 무료로 사용하세요."
+    "반복 업무를 브라우저에서 처리하고 필요한 결과만 직접 저장하세요."
   );
 
   setDocumentMeta({
@@ -1399,7 +1399,7 @@ function buildToolDetailContent(tool) {
       },
       {
         question: `${tool.title}에서 입력한 내용은 저장되나요?`,
-        answer: "아니요. 현재 도구는 작업 데이터를 코워크스페이스 자체 서버에 저장하지 않고 브라우저 안에서 처리하도록 설계되어 있습니다.",
+        answer: "아니요. 도구의 작업 데이터는 코워크스페이스 자체 서버에 저장하지 않고 브라우저 안에서 처리하도록 설계되어 있습니다. 단, Google Analytics와 AdSense 같은 외부 서비스는 정책에 따라 쿠키나 광고 식별자를 사용할 수 있습니다.",
       },
       extraFaq,
       {

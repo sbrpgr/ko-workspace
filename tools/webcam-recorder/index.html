@@ -123,7 +123,7 @@ gtag('config', 'G-8S4R46L9Q0');</script>
                 <span class="status-pill">로그인 없음</span>
                 <span class="status-pill">100% 브라우저 처리</span>
                 <span class="status-pill">서버 저장 없음</span>
-                <span class="status-pill">개인정보 수집 없음</span>
+                <span class="status-pill">입력 데이터 저장 없음</span>
               </div>
               <button id="helpBtn" class="secondary-action" type="button" aria-label="서비스 원칙 보기">?</button>
             </div>
@@ -166,8 +166,37 @@ gtag('config', 'G-8S4R46L9Q0');</script>
               </section>
             </section>
           </section>
+          <!-- static-content:start -->
+          <section class="panel static-content-panel" aria-labelledby="staticContentTitle-webcam-recorder">
+            <div class="static-content-heading">
+              <p class="eyebrow">Practical Guide</p>
+              <h2 id="staticContentTitle-webcam-recorder">설치 없이 웹캠 발표와 짧은 제출 영상을 녹화합니다</h2>
+              <p>웹캠 녹화기는 별도 프로그램 설치 없이 카메라와 마이크를 연결해 짧은 영상을 만드는 도구입니다. 자기소개 영상, 온라인 과제, 수업 안내, 제품 설명처럼 빠르게 촬영하고 바로 확인해야 하는 상황에서 사용하기 좋습니다.</p>
+            </div>
+            <div class="static-story-grid">
+              <article>
+                <h3>제출 전 리허설과 실제 녹화</h3>
+                <p>면접 답변이나 발표 영상을 여러 번 연습하고, 마음에 드는 결과만 내려받을 수 있습니다. 녹화 전 화면 좌우반전, 밝기, 대비, 필터를 확인해 어색한 구도를 줄입니다.</p>
+              </article>
+              <article>
+                <h3>간단한 배경 정리</h3>
+                <p>작업 공간이 그대로 보이는 것이 부담스러울 때 배경 흐림이나 사용자 배경 이미지를 적용할 수 있습니다. 전문 스튜디오 수준이 아니어도 제출용 영상의 기본 정돈감을 높입니다.</p>
+              </article>
+              <article>
+                <h3>브라우저에서 결과 확인</h3>
+                <p>녹화가 끝나면 파일을 내려받기 전에 재생해 확인합니다. 다시 촬영해야 할 때는 파일을 업로드하거나 계정에 저장하는 단계 없이 바로 새 녹화를 시작할 수 있습니다.</p>
+              </article>
+            </div>
+            <p class="static-content-value">이 도구는 긴 방송 제작보다 짧고 실용적인 웹캠 기록에 맞춰져 있습니다. 카메라와 마이크 권한은 사용자의 브라우저가 관리하며, 코워크스페이스는 녹화 원본을 자체 서버에 저장하지 않는 흐름을 유지합니다.</p>
+            <ul class="static-note-list">
+              <li>WebM 저장을 기본으로 하며 브라우저 지원 상황에 따라 형식 옵션이 달라질 수 있습니다.</li>
+              <li>카메라 선택, 마이크 선택, 화면 효과를 한 화면에서 조정합니다.</li>
+              <li>녹화 파일은 사용자가 직접 확인하고 저장합니다.</li>
+            </ul>
+          </section>
+          <!-- static-content:end -->
 
-          <footer class="site-footer">
+<footer class="site-footer">
             <span class="footer-brand">제작사 데이웨이</span>
             <a href="https://dayway.web.app" target="_blank" rel="noopener noreferrer">dayway.web.app</a>
             <span class="footer-contact">광고·협업·제휴 문의는 이메일로 연락해 주세요.</span>
@@ -199,15 +228,15 @@ gtag('config', 'G-8S4R46L9Q0');</script>
           </li>
           <li>
             <strong>브라우저 처리</strong>
-            <span>초기 도구는 서버 API 없이 브라우저 안에서 텍스트와 파일을 직접 처리합니다.</span>
+            <span>도구는 가능한 한 서버 API 없이 브라우저 안에서 텍스트와 파일을 직접 처리합니다.</span>
           </li>
           <li>
             <strong>보안 우선</strong>
-            <span>입력 텍스트·파일·녹화 데이터는 자체 서버에 저장하지 않고 100% 브라우저 안에서 처리합니다. 개인정보 수집 기능도 두지 않습니다.</span>
+            <span>입력 텍스트·파일·녹화 데이터는 자체 서버에 저장하지 않고 100% 브라우저 안에서 처리합니다. 입력 데이터 저장 기능을 두지 않으며 회원 계정을 요구하지 않습니다.</span>
           </li>
           <li>
             <strong>광고 분리</strong>
-            <span>작업 UI와 광고 슬롯을 분리해 나중에 AdSense를 넣어도 사용 흐름이 깨지지 않도록 구성합니다.</span>
+            <span>작업 UI와 광고 영역을 분리해 도구 사용 흐름이 광고 때문에 흔들리지 않도록 구성합니다.</span>
           </li>
         </ol>
       </article>

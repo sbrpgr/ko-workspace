@@ -2758,6 +2758,74 @@ body.home-mode .hero-copy h1 {
   line-height: 1.68;
 }
 
+.static-content-panel {
+  display: grid;
+  gap: 18px;
+  padding: 22px;
+  background: #ffffff;
+  box-shadow: none;
+}
+
+.static-content-heading {
+  display: grid;
+  gap: 10px;
+}
+
+.static-content-heading h2 {
+  color: #20242d;
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+  line-height: 1.32;
+}
+
+.static-content-heading p,
+.static-content-value {
+  color: #535d6b;
+  line-height: 1.76;
+}
+
+.static-story-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.static-story-grid article {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  border: 1px solid #e7ebf2;
+  border-radius: 8px;
+  background: #fbfcfe;
+  padding: 14px;
+}
+
+.static-story-grid h3 {
+  color: #252b35;
+  font-size: 0.98rem;
+  line-height: 1.4;
+}
+
+.static-story-grid p {
+  color: #5d6674;
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
+.static-note-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 20px;
+  color: #4d5664;
+  line-height: 1.68;
+}
+
+@media (max-width: 900px) {
+  .static-story-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .seo-keywords {
   display: flex;
   flex-wrap: wrap;

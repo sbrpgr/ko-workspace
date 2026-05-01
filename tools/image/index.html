@@ -69,7 +69,7 @@ gtag('config', 'G-8S4R46L9Q0');</script>
                 <span class="status-pill">로그인 없음</span>
                 <span class="status-pill">100% 브라우저 처리</span>
                 <span class="status-pill">서버 저장 없음</span>
-                <span class="status-pill">개인정보 수집 없음</span>
+                <span class="status-pill">입력 데이터 저장 없음</span>
               </div>
               <button id="helpBtn" class="secondary-action" type="button" aria-label="서비스 원칙 보기">?</button>
             </div>
@@ -88,8 +88,37 @@ gtag('config', 'G-8S4R46L9Q0');</script>
               <section class="info-grid"><article class="panel guide-panel"><div class="section-heading"><div><p class="eyebrow">Quick Flow</p><h2>사용 흐름</h2></div></div><ol id="toolGuideList" class="guide-list"></ol></article></section>
             </section>
           </section>
+          <!-- static-content:start -->
+          <section class="panel static-content-panel" aria-labelledby="staticContentTitle-image">
+            <div class="static-content-heading">
+              <p class="eyebrow">Category Guide</p>
+              <h2 id="staticContentTitle-image">업로드 기준, 공유 기준, 개인정보 기준에 맞춰 이미지를 정리합니다</h2>
+              <p>이미지 작업은 디자인 프로그램을 켜야 할 만큼 크지 않은 경우가 많습니다. 첨부 용량을 줄이고, 웹 업로드 기준에 맞게 크기를 바꾸고, 공유 전 위치정보를 지우는 일은 빠르게 끝나야 합니다. 코워크스페이스 이미지 도구는 이런 실무형 이미지 처리를 브라우저 안에서 바로 수행합니다.</p>
+            </div>
+            <div class="static-story-grid">
+              <article>
+                <h3>업로드 실패를 줄이는 압축</h3>
+                <p>쇼핑몰, 블로그, 공공기관 제출 페이지는 파일 크기 제한이 다릅니다. 품질과 최대 너비를 조정해 제한에 맞는 이미지를 준비할 수 있습니다.</p>
+              </article>
+              <article>
+                <h3>공유 전 메타데이터 정리</h3>
+                <p>스마트폰 사진에는 위치, 촬영 기기, 편집 정보가 남을 수 있습니다. 외부 공유 전 EXIF, XMP, IPTC 같은 숨은 정보를 확인하고 제거합니다.</p>
+              </article>
+              <article>
+                <h3>QR을 만들고 확인하는 흐름</h3>
+                <p>행사 안내 링크를 QR로 만들거나, 받은 QR 이미지가 어디로 연결되는지 열기 전에 원문 URL을 확인할 수 있습니다.</p>
+              </article>
+            </div>
+            <p class="static-content-value">이미지 도구는 원본을 서버에 업로드해 맡기는 방식보다 사용자의 브라우저에서 직접 변환하고 저장하는 흐름을 우선합니다. 결과를 확인한 뒤 필요한 파일만 내려받는 방식이라 개인 사진과 업무 이미지를 다룰 때 부담을 줄입니다.</p>
+            <ul class="static-note-list">
+              <li>크기 조절, 형식 변환, 압축, 메타데이터 제거, QR 작업을 연결합니다.</li>
+              <li>업로드용 기준과 공유 전 점검을 함께 고려했습니다.</li>
+              <li>결과 파일은 사용자가 직접 저장합니다.</li>
+            </ul>
+          </section>
+          <!-- static-content:end -->
 
-          <footer class="site-footer">
+<footer class="site-footer">
             <span class="footer-brand">제작사 데이웨이</span>
             <a href="https://dayway.web.app" target="_blank" rel="noopener noreferrer">dayway.web.app</a>
             <span class="footer-contact">광고·협업·제휴 문의는 이메일로 연락해 주세요.</span>
@@ -103,7 +132,7 @@ gtag('config', 'G-8S4R46L9Q0');</script>
       <aside class="ad-slot ad-rail ad-rail-right" data-ad-placement="right-rail" aria-label="광고 영역"></aside>
     </div>
     <button id="selectionCopyBtn" class="selection-copy" type="button" hidden>선택 복사</button>
-    <dialog id="helpDialog" class="help-dialog" aria-labelledby="helpTitle"><article class="help-card"><header class="help-header"><div><p class="eyebrow">Service Principles</p><h2 id="helpTitle">서비스 원칙</h2></div><button id="helpCloseBtn" class="help-close" type="button" aria-label="닫기" title="닫기">×</button></header><ol class="help-steps"><li><strong>즉시 실행</strong><span>회원가입이나 로그인 없이 곧바로 도구를 열고 결과를 만들 수 있습니다.</span></li><li><strong>브라우저 처리</strong><span>초기 도구는 서버 API 없이 브라우저 안에서 텍스트와 파일을 직접 처리합니다.</span></li><li><strong>보안 우선</strong><span>입력 텍스트와 파일은 자체 서버에 저장하지 않습니다.</span></li></ol></article></dialog>
+    <dialog id="helpDialog" class="help-dialog" aria-labelledby="helpTitle"><article class="help-card"><header class="help-header"><div><p class="eyebrow">Service Principles</p><h2 id="helpTitle">서비스 원칙</h2></div><button id="helpCloseBtn" class="help-close" type="button" aria-label="닫기" title="닫기">×</button></header><ol class="help-steps"><li><strong>즉시 실행</strong><span>회원가입이나 로그인 없이 곧바로 도구를 열고 결과를 만들 수 있습니다.</span></li><li><strong>브라우저 처리</strong><span>도구는 가능한 한 서버 API 없이 브라우저 안에서 텍스트와 파일을 직접 처리합니다.</span></li><li><strong>보안 우선</strong><span>입력 텍스트와 파일은 자체 서버에 저장하지 않습니다.</span></li></ol></article></dialog>
     <script src="/app.js?v=20260430-03"></script>
   </body>
 </html>

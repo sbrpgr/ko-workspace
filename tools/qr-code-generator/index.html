@@ -123,7 +123,7 @@ gtag('config', 'G-8S4R46L9Q0');</script>
                 <span class="status-pill">로그인 없음</span>
                 <span class="status-pill">100% 브라우저 처리</span>
                 <span class="status-pill">서버 저장 없음</span>
-                <span class="status-pill">개인정보 수집 없음</span>
+                <span class="status-pill">입력 데이터 저장 없음</span>
               </div>
               <button id="helpBtn" class="secondary-action" type="button" aria-label="서비스 원칙 보기">?</button>
             </div>
@@ -166,8 +166,37 @@ gtag('config', 'G-8S4R46L9Q0');</script>
               </section>
             </section>
           </section>
+          <!-- static-content:start -->
+          <section class="panel static-content-panel" aria-labelledby="staticContentTitle-qr-code-generator">
+            <div class="static-content-heading">
+              <p class="eyebrow">Practical Guide</p>
+              <h2 id="staticContentTitle-qr-code-generator">공유해야 할 링크와 정보를 QR 코드로 만듭니다</h2>
+              <p>QR 코드 생성기는 URL, 일반 텍스트, Wi-Fi 접속 정보를 QR 이미지로 바꾸는 도구입니다. 행사 안내문, 매장 안내, 설문 링크, 명함, 프레젠테이션 자료처럼 손으로 주소를 입력하기 번거로운 상황에서 QR은 가장 빠른 연결 방식이 됩니다.</p>
+            </div>
+            <div class="static-story-grid">
+              <article>
+                <h3>행사와 설문 링크 배포</h3>
+                <p>참석자가 긴 URL을 직접 입력하지 않아도 되도록 설문지, 지도, 접수 페이지 링크를 QR로 만들어 포스터나 안내문에 넣을 수 있습니다.</p>
+              </article>
+              <article>
+                <h3>사무실과 매장 Wi-Fi 안내</h3>
+                <p>방문자가 SSID와 비밀번호를 직접 입력하지 않도록 Wi-Fi 정보를 QR로 정리해 안내판에 붙일 수 있습니다.</p>
+              </article>
+              <article>
+                <h3>출력물에 맞춘 저장 형식</h3>
+                <p>웹에 올릴 때는 PNG나 JPG를, 편집 프로그램에서 다룰 때는 SVG를 선택하는 식으로 목적에 맞게 저장합니다.</p>
+              </article>
+            </div>
+            <p class="static-content-value">코워크스페이스의 QR 도구는 색상과 크기를 조정하되 인식 안정성을 해치지 않도록 기본 여백과 대비를 중요하게 봅니다. 생성된 QR은 브라우저에서 만들어지고 사용자가 직접 저장합니다.</p>
+            <ul class="static-note-list">
+              <li>URL, 텍스트, Wi-Fi QR 생성을 지원합니다.</li>
+              <li>SVG, PNG, JPG 저장 형식을 제공합니다.</li>
+              <li>포스터, 명함, 안내문, 발표 자료에 활용할 수 있습니다.</li>
+            </ul>
+          </section>
+          <!-- static-content:end -->
 
-          <footer class="site-footer">
+<footer class="site-footer">
             <span class="footer-brand">제작사 데이웨이</span>
             <a href="https://dayway.web.app" target="_blank" rel="noopener noreferrer">dayway.web.app</a>
             <span class="footer-contact">광고·협업·제휴 문의는 이메일로 연락해 주세요.</span>
@@ -199,15 +228,15 @@ gtag('config', 'G-8S4R46L9Q0');</script>
           </li>
           <li>
             <strong>브라우저 처리</strong>
-            <span>초기 도구는 서버 API 없이 브라우저 안에서 텍스트와 파일을 직접 처리합니다.</span>
+            <span>도구는 가능한 한 서버 API 없이 브라우저 안에서 텍스트와 파일을 직접 처리합니다.</span>
           </li>
           <li>
             <strong>보안 우선</strong>
-            <span>입력 텍스트·파일·녹화 데이터는 자체 서버에 저장하지 않고 100% 브라우저 안에서 처리합니다. 개인정보 수집 기능도 두지 않습니다.</span>
+            <span>입력 텍스트·파일·녹화 데이터는 자체 서버에 저장하지 않고 100% 브라우저 안에서 처리합니다. 입력 데이터 저장 기능을 두지 않으며 회원 계정을 요구하지 않습니다.</span>
           </li>
           <li>
             <strong>광고 분리</strong>
-            <span>작업 UI와 광고 슬롯을 분리해 나중에 AdSense를 넣어도 사용 흐름이 깨지지 않도록 구성합니다.</span>
+            <span>작업 UI와 광고 영역을 분리해 도구 사용 흐름이 광고 때문에 흔들리지 않도록 구성합니다.</span>
           </li>
         </ol>
       </article>

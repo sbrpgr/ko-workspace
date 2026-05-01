@@ -123,7 +123,7 @@ gtag('config', 'G-8S4R46L9Q0');</script>
                 <span class="status-pill">로그인 없음</span>
                 <span class="status-pill">100% 브라우저 처리</span>
                 <span class="status-pill">서버 저장 없음</span>
-                <span class="status-pill">개인정보 수집 없음</span>
+                <span class="status-pill">입력 데이터 저장 없음</span>
               </div>
               <button id="helpBtn" class="secondary-action" type="button" aria-label="서비스 원칙 보기">?</button>
             </div>
@@ -166,8 +166,37 @@ gtag('config', 'G-8S4R46L9Q0');</script>
               </section>
             </section>
           </section>
+          <!-- static-content:start -->
+          <section class="panel static-content-panel" aria-labelledby="staticContentTitle-subtitle-timing">
+            <div class="static-content-heading">
+              <p class="eyebrow">Practical Guide</p>
+              <h2 id="staticContentTitle-subtitle-timing">영상과 맞지 않는 자막 싱크를 초 단위로 일괄 보정합니다</h2>
+              <p>자막 시간 보정은 SRT와 VTT 자막의 전체 시간을 앞이나 뒤로 이동하는 도구입니다. 영상 앞부분이 잘리거나 광고 구간이 빠지거나 인코딩 후 시작점이 달라지면 자막 전체가 일정하게 밀릴 수 있습니다.</p>
+            </div>
+            <div class="static-story-grid">
+              <article>
+                <h3>전체 자막이 늦게 나올 때</h3>
+                <p>자막이 영상보다 1.5초 늦게 보인다면 음수 값을 입력해 전체 시간을 앞당길 수 있습니다.</p>
+              </article>
+              <article>
+                <h3>오프닝 컷 편집 후</h3>
+                <p>영상 앞부분을 잘라낸 뒤 자막 시작점이 달라졌다면 컷 길이만큼 시간을 조정해 다시 맞춥니다.</p>
+              </article>
+              <article>
+                <h3>SRT와 VTT 모두 점검</h3>
+                <p>자막 형식을 자동으로 감지하거나 직접 선택해 시간 보정 결과를 확인하고 파일로 저장합니다.</p>
+              </article>
+            </div>
+            <p class="static-content-value">이 도구는 자막 한 줄씩 미세 조정하는 편집기가 아니라, 전체 싱크가 일정하게 밀린 경우 빠르게 보정하는 도구입니다. 일부 구간만 어긋난 자막은 전문 편집툴에서 세부 조정하는 것이 좋습니다.</p>
+            <ul class="static-note-list">
+              <li>초 단위 오프셋을 적용해 전체 시간을 이동합니다.</li>
+              <li>SRT와 VTT 형식에 대응합니다.</li>
+              <li>영상 편집 후 업로드 전 싱크 확인에 적합합니다.</li>
+            </ul>
+          </section>
+          <!-- static-content:end -->
 
-          <footer class="site-footer">
+<footer class="site-footer">
             <span class="footer-brand">제작사 데이웨이</span>
             <a href="https://dayway.web.app" target="_blank" rel="noopener noreferrer">dayway.web.app</a>
             <span class="footer-contact">광고·협업·제휴 문의는 이메일로 연락해 주세요.</span>
@@ -199,15 +228,15 @@ gtag('config', 'G-8S4R46L9Q0');</script>
           </li>
           <li>
             <strong>브라우저 처리</strong>
-            <span>초기 도구는 서버 API 없이 브라우저 안에서 텍스트와 파일을 직접 처리합니다.</span>
+            <span>도구는 가능한 한 서버 API 없이 브라우저 안에서 텍스트와 파일을 직접 처리합니다.</span>
           </li>
           <li>
             <strong>보안 우선</strong>
-            <span>입력 텍스트·파일·녹화 데이터는 자체 서버에 저장하지 않고 100% 브라우저 안에서 처리합니다. 개인정보 수집 기능도 두지 않습니다.</span>
+            <span>입력 텍스트·파일·녹화 데이터는 자체 서버에 저장하지 않고 100% 브라우저 안에서 처리합니다. 입력 데이터 저장 기능을 두지 않으며 회원 계정을 요구하지 않습니다.</span>
           </li>
           <li>
             <strong>광고 분리</strong>
-            <span>작업 UI와 광고 슬롯을 분리해 나중에 AdSense를 넣어도 사용 흐름이 깨지지 않도록 구성합니다.</span>
+            <span>작업 UI와 광고 영역을 분리해 도구 사용 흐름이 광고 때문에 흔들리지 않도록 구성합니다.</span>
           </li>
         </ol>
       </article>

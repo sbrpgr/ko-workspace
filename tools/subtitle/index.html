@@ -69,7 +69,7 @@ gtag('config', 'G-8S4R46L9Q0');</script>
                 <span class="status-pill">로그인 없음</span>
                 <span class="status-pill">100% 브라우저 처리</span>
                 <span class="status-pill">서버 저장 없음</span>
-                <span class="status-pill">개인정보 수집 없음</span>
+                <span class="status-pill">입력 데이터 저장 없음</span>
               </div>
               <button id="helpBtn" class="secondary-action" type="button" aria-label="서비스 원칙 보기">?</button>
             </div>
@@ -88,8 +88,37 @@ gtag('config', 'G-8S4R46L9Q0');</script>
               <section class="info-grid"><article class="panel guide-panel"><div class="section-heading"><div><p class="eyebrow">Quick Flow</p><h2>사용 흐름</h2></div></div><ol id="toolGuideList" class="guide-list"></ol></article></section>
             </section>
           </section>
+          <!-- static-content:start -->
+          <section class="panel static-content-panel" aria-labelledby="staticContentTitle-subtitle">
+            <div class="static-content-heading">
+              <p class="eyebrow">Category Guide</p>
+              <h2 id="staticContentTitle-subtitle">영상 편집 전후의 자막 파일을 안정적인 형식으로 맞춥니다</h2>
+              <p>자막 파일은 작은 형식 오류만 있어도 업로드나 재생에서 문제가 생깁니다. 번호가 꼬이거나, SRT와 VTT 형식이 맞지 않거나, 영상과 자막 시간이 몇 초씩 밀리는 상황은 편집 흐름을 멈추게 합니다. 코워크스페이스 자막 도구는 자막 텍스트를 정리하고 변환하고 시간대를 보정하는 기본 흐름에 집중합니다.</p>
+            </div>
+            <div class="static-story-grid">
+              <article>
+                <h3>자막 번호와 공백 정리</h3>
+                <p>자동 생성 자막이나 여러 번 편집한 SRT는 번호, 빈 줄, 문장 줄바꿈이 흐트러질 수 있습니다. 업로드 전 구조를 다시 맞추면 오류 가능성을 낮출 수 있습니다.</p>
+              </article>
+              <article>
+                <h3>플랫폼별 포맷 변환</h3>
+                <p>일부 플레이어는 VTT를 요구하고, 편집툴이나 기존 자막 자료는 SRT로 남아 있습니다. 형식을 바꿔도 시간과 본문이 유지되도록 변환합니다.</p>
+              </article>
+              <article>
+                <h3>전체 싱크 보정</h3>
+                <p>영상 앞부분 컷이 바뀌거나 인코딩 후 자막이 몇 초 밀렸다면 전체 시간을 한 번에 앞당기거나 늦춰 다시 맞출 수 있습니다.</p>
+              </article>
+            </div>
+            <p class="static-content-value">자막 도구는 전문 편집툴을 대체하기보다 업로드 전 점검과 후처리 시간을 줄이는 보조 도구입니다. 텍스트 기반 자막을 브라우저에서 읽고 결과를 저장하므로 짧은 수정 작업에 적합합니다.</p>
+            <ul class="static-note-list">
+              <li>SRT 정리, SRT/VTT 변환, 시간 보정을 분리했습니다.</li>
+              <li>업로드 전 구조 확인에 초점을 맞췄습니다.</li>
+              <li>자막 원문은 작업 중 브라우저 안에서 처리합니다.</li>
+            </ul>
+          </section>
+          <!-- static-content:end -->
 
-          <footer class="site-footer">
+<footer class="site-footer">
             <span class="footer-brand">제작사 데이웨이</span>
             <a href="https://dayway.web.app" target="_blank" rel="noopener noreferrer">dayway.web.app</a>
             <span class="footer-contact">광고·협업·제휴 문의는 이메일로 연락해 주세요.</span>
@@ -103,7 +132,7 @@ gtag('config', 'G-8S4R46L9Q0');</script>
       <aside class="ad-slot ad-rail ad-rail-right" data-ad-placement="right-rail" aria-label="광고 영역"></aside>
     </div>
     <button id="selectionCopyBtn" class="selection-copy" type="button" hidden>선택 복사</button>
-    <dialog id="helpDialog" class="help-dialog" aria-labelledby="helpTitle"><article class="help-card"><header class="help-header"><div><p class="eyebrow">Service Principles</p><h2 id="helpTitle">서비스 원칙</h2></div><button id="helpCloseBtn" class="help-close" type="button" aria-label="닫기" title="닫기">×</button></header><ol class="help-steps"><li><strong>즉시 실행</strong><span>회원가입이나 로그인 없이 곧바로 도구를 열고 결과를 만들 수 있습니다.</span></li><li><strong>브라우저 처리</strong><span>초기 도구는 서버 API 없이 브라우저 안에서 텍스트와 파일을 직접 처리합니다.</span></li><li><strong>보안 우선</strong><span>입력 텍스트와 파일은 자체 서버에 저장하지 않습니다.</span></li></ol></article></dialog>
+    <dialog id="helpDialog" class="help-dialog" aria-labelledby="helpTitle"><article class="help-card"><header class="help-header"><div><p class="eyebrow">Service Principles</p><h2 id="helpTitle">서비스 원칙</h2></div><button id="helpCloseBtn" class="help-close" type="button" aria-label="닫기" title="닫기">×</button></header><ol class="help-steps"><li><strong>즉시 실행</strong><span>회원가입이나 로그인 없이 곧바로 도구를 열고 결과를 만들 수 있습니다.</span></li><li><strong>브라우저 처리</strong><span>도구는 가능한 한 서버 API 없이 브라우저 안에서 텍스트와 파일을 직접 처리합니다.</span></li><li><strong>보안 우선</strong><span>입력 텍스트와 파일은 자체 서버에 저장하지 않습니다.</span></li></ol></article></dialog>
     <script src="/app.js?v=20260430-03"></script>
   </body>
 </html>

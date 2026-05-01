@@ -69,7 +69,7 @@ gtag('config', 'G-8S4R46L9Q0');</script>
                 <span class="status-pill">로그인 없음</span>
                 <span class="status-pill">100% 브라우저 처리</span>
                 <span class="status-pill">서버 저장 없음</span>
-                <span class="status-pill">개인정보 수집 없음</span>
+                <span class="status-pill">입력 데이터 저장 없음</span>
               </div>
               <button id="helpBtn" class="secondary-action" type="button" aria-label="서비스 원칙 보기">?</button>
             </div>
@@ -88,8 +88,37 @@ gtag('config', 'G-8S4R46L9Q0');</script>
               <section class="info-grid"><article class="panel guide-panel"><div class="section-heading"><div><p class="eyebrow">Quick Flow</p><h2>사용 흐름</h2></div></div><ol id="toolGuideList" class="guide-list"></ol></article></section>
             </section>
           </section>
+          <!-- static-content:start -->
+          <section class="panel static-content-panel" aria-labelledby="staticContentTitle-voice-video">
+            <div class="static-content-heading">
+              <p class="eyebrow">Category Guide</p>
+              <h2 id="staticContentTitle-voice-video">말과 화면을 빠르게 기록해 초안과 제출 파일로 바꿉니다</h2>
+              <p>음성·영상 작업은 별도 프로그램 설정이 길어질수록 시작이 늦어집니다. 회의 내용을 받아 적거나, 짧은 자기소개 영상을 녹화하거나, 발표 연습을 기록하는 일은 브라우저에서 바로 시작할 수 있어야 합니다. 코워크스페이스 음성·영상 도구는 권한 허용 후 곧바로 입력과 녹화를 진행하는 흐름으로 구성했습니다.</p>
+            </div>
+            <div class="static-story-grid">
+              <article>
+                <h3>회의와 강의 초안 만들기</h3>
+                <p>말한 내용을 실시간으로 받아 적고, 이후 회의록이나 영상 대본 형태로 정리할 수 있습니다. 처음부터 완벽한 문서보다 빠른 초안이 필요한 상황에 맞습니다.</p>
+              </article>
+              <article>
+                <h3>웹캠 제출 영상 준비</h3>
+                <p>면접 연습, 교육 안내, 짧은 설명 영상을 카메라와 마이크로 녹화하고 결과 파일을 바로 확인합니다.</p>
+              </article>
+              <article>
+                <h3>브라우저 권한을 직접 관리</h3>
+                <p>마이크와 카메라 권한은 사용자의 브라우저가 관리합니다. 차단했거나 다시 허용해야 할 때도 브라우저 설정에서 직접 조정할 수 있습니다.</p>
+              </article>
+            </div>
+            <p class="static-content-value">음성과 영상은 민감한 입력이 될 수 있으므로, 코워크스페이스는 녹음·녹화 원본을 자체 서버에 저장하지 않는 방향을 유지합니다. 사용자는 브라우저에서 결과를 확인하고 필요한 파일만 직접 저장합니다.</p>
+            <ul class="static-note-list">
+              <li>마이크와 카메라 권한을 명확히 분리합니다.</li>
+              <li>녹화와 대본 생성의 시작 단계를 가볍게 만들었습니다.</li>
+              <li>결과 저장은 사용자가 직접 선택합니다.</li>
+            </ul>
+          </section>
+          <!-- static-content:end -->
 
-          <footer class="site-footer">
+<footer class="site-footer">
             <span class="footer-brand">제작사 데이웨이</span>
             <a href="https://dayway.web.app" target="_blank" rel="noopener noreferrer">dayway.web.app</a>
             <span class="footer-contact">광고·협업·제휴 문의는 이메일로 연락해 주세요.</span>
@@ -103,7 +132,7 @@ gtag('config', 'G-8S4R46L9Q0');</script>
       <aside class="ad-slot ad-rail ad-rail-right" data-ad-placement="right-rail" aria-label="광고 영역"></aside>
     </div>
     <button id="selectionCopyBtn" class="selection-copy" type="button" hidden>선택 복사</button>
-    <dialog id="helpDialog" class="help-dialog" aria-labelledby="helpTitle"><article class="help-card"><header class="help-header"><div><p class="eyebrow">Service Principles</p><h2 id="helpTitle">서비스 원칙</h2></div><button id="helpCloseBtn" class="help-close" type="button" aria-label="닫기" title="닫기">×</button></header><ol class="help-steps"><li><strong>즉시 실행</strong><span>회원가입이나 로그인 없이 곧바로 도구를 열고 결과를 만들 수 있습니다.</span></li><li><strong>브라우저 처리</strong><span>초기 도구는 서버 API 없이 브라우저 안에서 텍스트와 파일을 직접 처리합니다.</span></li><li><strong>보안 우선</strong><span>입력 텍스트와 파일은 자체 서버에 저장하지 않습니다.</span></li></ol></article></dialog>
+    <dialog id="helpDialog" class="help-dialog" aria-labelledby="helpTitle"><article class="help-card"><header class="help-header"><div><p class="eyebrow">Service Principles</p><h2 id="helpTitle">서비스 원칙</h2></div><button id="helpCloseBtn" class="help-close" type="button" aria-label="닫기" title="닫기">×</button></header><ol class="help-steps"><li><strong>즉시 실행</strong><span>회원가입이나 로그인 없이 곧바로 도구를 열고 결과를 만들 수 있습니다.</span></li><li><strong>브라우저 처리</strong><span>도구는 가능한 한 서버 API 없이 브라우저 안에서 텍스트와 파일을 직접 처리합니다.</span></li><li><strong>보안 우선</strong><span>입력 텍스트와 파일은 자체 서버에 저장하지 않습니다.</span></li></ol></article></dialog>
     <script src="/app.js?v=20260430-03"></script>
   </body>
 </html>

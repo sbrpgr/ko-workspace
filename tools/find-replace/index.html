@@ -123,7 +123,7 @@ gtag('config', 'G-8S4R46L9Q0');</script>
                 <span class="status-pill">로그인 없음</span>
                 <span class="status-pill">100% 브라우저 처리</span>
                 <span class="status-pill">서버 저장 없음</span>
-                <span class="status-pill">개인정보 수집 없음</span>
+                <span class="status-pill">입력 데이터 저장 없음</span>
               </div>
               <button id="helpBtn" class="secondary-action" type="button" aria-label="서비스 원칙 보기">?</button>
             </div>
@@ -166,8 +166,37 @@ gtag('config', 'G-8S4R46L9Q0');</script>
               </section>
             </section>
           </section>
+          <!-- static-content:start -->
+          <section class="panel static-content-panel" aria-labelledby="staticContentTitle-find-replace">
+            <div class="static-content-heading">
+              <p class="eyebrow">Practical Guide</p>
+              <h2 id="staticContentTitle-find-replace">긴 문서의 반복 표현을 한 번에 찾아 바꿉니다</h2>
+              <p>찾기 및 바꾸기는 문서, 메일, 자막, 안내문, 목록에서 반복되는 표현을 일괄 수정하는 도구입니다. 제품명, 날짜, 담당자명, 오타처럼 여러 번 등장하는 문자열을 수동으로 고치면 누락이 생기기 쉬워 한 번에 점검하는 흐름이 필요합니다.</p>
+            </div>
+            <div class="static-story-grid">
+              <article>
+                <h3>브랜드명과 담당자명 변경</h3>
+                <p>제안서나 안내문에서 이전 명칭을 새 명칭으로 바꾸거나, 담당자 이름과 연락처를 최신 정보로 맞출 때 유용합니다.</p>
+              </article>
+              <article>
+                <h3>자막과 대본 오타 수정</h3>
+                <p>영상 자막이나 대본에서 반복된 오타를 찾고 바꿔 전체 파일의 표현을 빠르게 통일할 수 있습니다.</p>
+              </article>
+              <article>
+                <h3>정규식 기반 정리</h3>
+                <p>단순 단어뿐 아니라 일정한 패턴을 가진 문자열을 정리해야 할 때 정규식 옵션을 사용해 더 넓은 범위를 다룰 수 있습니다.</p>
+              </article>
+            </div>
+            <p class="static-content-value">코워크스페이스의 찾기 및 바꾸기는 변경 횟수와 결과를 바로 확인하도록 구성되어 있습니다. 중요한 문서에서는 결과를 복사하기 전 바뀐 내용이 의도와 맞는지 다시 읽는 것을 권장합니다.</p>
+            <ul class="static-note-list">
+              <li>일반 문자열과 정규식 기반 치환을 지원합니다.</li>
+              <li>대소문자 구분과 전체 단어 기준을 선택할 수 있습니다.</li>
+              <li>문서, 자막, 메모, 목록 수정에 적합합니다.</li>
+            </ul>
+          </section>
+          <!-- static-content:end -->
 
-          <footer class="site-footer">
+<footer class="site-footer">
             <span class="footer-brand">제작사 데이웨이</span>
             <a href="https://dayway.web.app" target="_blank" rel="noopener noreferrer">dayway.web.app</a>
             <span class="footer-contact">광고·협업·제휴 문의는 이메일로 연락해 주세요.</span>
@@ -199,15 +228,15 @@ gtag('config', 'G-8S4R46L9Q0');</script>
           </li>
           <li>
             <strong>브라우저 처리</strong>
-            <span>초기 도구는 서버 API 없이 브라우저 안에서 텍스트와 파일을 직접 처리합니다.</span>
+            <span>도구는 가능한 한 서버 API 없이 브라우저 안에서 텍스트와 파일을 직접 처리합니다.</span>
           </li>
           <li>
             <strong>보안 우선</strong>
-            <span>입력 텍스트·파일·녹화 데이터는 자체 서버에 저장하지 않고 100% 브라우저 안에서 처리합니다. 개인정보 수집 기능도 두지 않습니다.</span>
+            <span>입력 텍스트·파일·녹화 데이터는 자체 서버에 저장하지 않고 100% 브라우저 안에서 처리합니다. 입력 데이터 저장 기능을 두지 않으며 회원 계정을 요구하지 않습니다.</span>
           </li>
           <li>
             <strong>광고 분리</strong>
-            <span>작업 UI와 광고 슬롯을 분리해 나중에 AdSense를 넣어도 사용 흐름이 깨지지 않도록 구성합니다.</span>
+            <span>작업 UI와 광고 영역을 분리해 도구 사용 흐름이 광고 때문에 흔들리지 않도록 구성합니다.</span>
           </li>
         </ol>
       </article>
