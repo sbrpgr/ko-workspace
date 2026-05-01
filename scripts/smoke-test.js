@@ -29,6 +29,7 @@ const API_NAMES = [
   "getAudioModelProfile",
   "getAudioTranscriberCandidates",
   "formatAudioTranscriptionError",
+  "cleanAudioTranscriptDraft",
   "breakAudioTranscriptSentences",
   "stripJpegMetadata",
   "stripPngMetadata",
@@ -308,15 +309,22 @@ function buildLogicTests(api) {
       assert(lightweightCandidates[0].dtype.decoder_model_merged === "fp16", "lightweight mode should keep mixed precision first");
       assert(lightweightCandidates.length === 1, "lightweight mode should not try heavier fp32 by default");
     }),
-    test("audio transcription exposes quality and fast model profiles", () => {
-      assert(api.AUDIO_TRANSCRIPTION_DEFAULT_PROFILE === "quality", "quality model should be the default profile");
-      assert(api.AUDIO_TRANSCRIPTION_MODEL_PROFILES.quality.model === "onnx-community/whisper-base", "quality profile should use whisper-base");
-      assert(api.AUDIO_TRANSCRIPTION_MODEL_PROFILES.fast.model === "onnx-community/whisper-tiny", "fast profile should use whisper-tiny");
-      assert(api.getAudioModelProfile("missing").id === "quality", "missing model profile should fall back to quality");
+    test("audio transcription defaults retired profiles to stable model", () => {
+      assert(api.AUDIO_TRANSCRIPTION_DEFAULT_PROFILE === "stable", "stable model should be the default profile");
+      assert(api.AUDIO_TRANSCRIPTION_MODEL_PROFILES.stable.model === "onnx-community/whisper-tiny", "stable profile should use whisper-tiny");
+      assert(api.getAudioModelProfile("quality").id === "stable", "retired quality profile should fall back to stable");
+      assert(api.getAudioModelProfile("missing").id === "stable", "missing model profile should fall back to stable");
     }),
     test("beta tool title attaches beta label without a whitespace break", () => {
       const title = api.renderToolTitle({ title: "녹음 파일 텍스트 변환", beta: true });
-      assert(title === '녹음 파일 텍스트 변환<span class="tool-beta-label">(베타)</span>', "beta label should be attached without leading whitespace");
+      assert(
+        title === '<span class="tool-title-with-beta">녹음 파일 텍스트 변환<span class="tool-beta-label">(베타)</span></span>',
+        "beta label should be attached without leading whitespace"
+      );
+    }),
+    test("audio transcript cleaner removes consecutive repeated hallucination sentences", () => {
+      const result = api.cleanAudioTranscriptDraft("너 말고 누굴 밀었다는거에요? 정중국은? 정중국은? 정중국은? 일단 알았다.");
+      assert(result === "너 말고 누굴 밀었다는거에요? 정중국은? 일단 알았다.", "audio repeated sentence cleanup failed");
     }),
     test("audio transcription fetch failures explain network and model loading", () => {
       const result = api.formatAudioTranscriptionError(new Error("Failed to fetch"));

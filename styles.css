@@ -1209,6 +1209,11 @@ body.home-mode .tool-workspace {
   margin-top: 6px;
 }
 
+.tool-title-with-beta {
+  display: inline-block;
+  white-space: nowrap;
+}
+
 .tool-beta-label {
   color: #e5322d;
   display: inline;
@@ -1219,6 +1224,8 @@ body.home-mode .tool-workspace {
 }
 
 .tool-launch-card .tool-beta-label {
+  color: #e5322d;
+  display: inline;
   font-size: 0.78em;
 }
 
@@ -3256,6 +3263,19 @@ body.home-mode .overview-panel {
   color: #20242d;
   font-size: 1rem;
   line-height: 1.35;
+}
+
+.tool-launch-body .tool-title-with-beta {
+  display: inline-block;
+  overflow: visible;
+  color: #20242d;
+  white-space: nowrap;
+  -webkit-box-orient: initial;
+  -webkit-line-clamp: unset;
+}
+
+.tool-launch-body .tool-title-with-beta .tool-beta-label {
+  color: #e5322d;
 }
 
 .tool-launch-body span {

@@ -14,7 +14,7 @@ Current production baseline:
 - Production domain: `https://ko-workspace.com/`
 - Cloudflare Pages project: `mic-script-generator`
 - Latest AdSense/SEO readiness commit: `580c060 Improve AdSense SEO readiness`
-- Current static asset cache version: `20260501-10`
+- Current static asset cache version: `20260501-11`
 - Category landing pages, privacy policy updates, sitemap updates, and core FAQ copy were deployed on 2026-04-29
 
 Core constraints:
@@ -42,13 +42,14 @@ Core constraints:
 - `녹음 파일 텍스트 변환`
   - Browser-side audio-file transcription beta tool
   - Uses Transformers.js with on-demand Whisper model downloads
-  - Defaults to `onnx-community/whisper-base` for the quality-first profile and keeps `onnx-community/whisper-tiny` as a fast/light fallback
-  - Uses a quality-first runtime path (`WebGPU fp32 -> CPU mixed precision`) with an explicit CPU fp32 option for users who want to test heavier local inference
+  - Defaults to the tested `onnx-community/whisper-tiny` stable profile after the larger browser model produced repeated hallucinated phrases on real recordings
+  - Uses an automatic runtime path with a CPU compatibility option; unstable high-quality device/model choices are not exposed in the UI
   - Supports short local audio files such as m4a, mp3, wav, aac, webm, and ogg
   - Keeps the selected recording file in the browser; no application-server upload
   - Treats output as a lightweight human-review text draft, not a stored transcript manager or guaranteed final transcript, and warns that non-storage browser processing may be less accurate than server STT
   - Shows an explicit in-progress indicator while model loading or transcription is running
   - Applies conservative Whisper generation options to reduce repeated hallucinated phrases in noisy or non-speech segments
+  - Removes consecutive repeated short transcription sentences before rendering the draft
   - Supports optional sentence-ending line breaks after `.`, `?`, `!`, and Korean/Japanese full-width equivalents
 
 ### Video
