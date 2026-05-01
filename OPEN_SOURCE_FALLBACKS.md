@@ -43,6 +43,7 @@ When a feature fails functional testing:
 | QR generation | Keep a small browser QR library; replace only if SVG/download/customization fails. | qrcode-generator or EasyQRCodeJS: https://github.com/ushelp/EasyQRCodeJS |
 | Subtitle parsing | Keep custom parser while tests pass; replace if SRT/VTT edge cases fail. | `subtitle` package: https://www.npmjs.com/package/subtitle |
 | Image resize/compress | Prefer browser APIs first. Use a library only if EXIF/orientation/quality handling fails. | Canvas/File API first; evaluate browser-side libraries case by case. |
+| Browser speech recognition models | Use only on-demand browser-side models, with clear performance and privacy limits. | Transformers.js: https://huggingface.co/docs/transformers.js |
 
 ## Current Baseline
 
@@ -51,6 +52,7 @@ Current browser-side dependencies:
 - `pdf-lib` for PDF merge, split, page extraction, and image-to-PDF workflows.
 - `PDF.js` for PDF-to-image rendering.
 - `qrcode-generator` for QR output.
+- `Transformers.js` for the browser-only recording-file transcription beta.
 
 Current custom code that should be replaced if tests fail repeatedly:
 

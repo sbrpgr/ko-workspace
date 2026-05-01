@@ -14,7 +14,7 @@ Current production baseline:
 - Production domain: `https://ko-workspace.com/`
 - Cloudflare Pages project: `mic-script-generator`
 - Latest AdSense/SEO readiness commit: `580c060 Improve AdSense SEO readiness`
-- Current static asset cache version: `20260501-01`
+- Current static asset cache version: `20260501-03`
 - Category landing pages, privacy policy updates, sitemap updates, and core FAQ copy were deployed on 2026-04-29
 
 Core constraints:
@@ -39,6 +39,14 @@ Core constraints:
   - Transcript cleanup
   - Script generation for general, YouTube, presentation, and meeting formats
   - Copy and TXT export
+- `녹음 파일 텍스트 변환`
+  - Browser-side audio-file transcription beta tool
+  - Uses Transformers.js with an on-demand Whisper model download
+  - Supports short local audio files such as m4a, mp3, wav, aac, webm, and ogg
+  - Keeps the selected recording file in the browser; no application-server upload
+  - Treats output as a lightweight human-review text draft, not a stored transcript manager or guaranteed final transcript
+  - Shows an explicit in-progress indicator while model loading or transcription is running
+  - Supports optional sentence-ending line breaks after `.`, `?`, `!`, and Korean/Japanese full-width equivalents
 
 ### Video
 
@@ -138,6 +146,7 @@ Important frontend implementation notes:
 - When `app.js` or `styles.css` changes, bump the query-string cache version in every HTML entry and `site.webmanifest`.
 - Run `npm.cmd run apply:site-tags` after adding or changing HTML pages so GTM tags and CSP hashes remain managed.
 - File upload tools should support both direct file selection and drag-and-drop on `.upload-box` where browser APIs allow it.
+- Heavy browser-side model tools must load models only on demand and must explain model download, device performance, and local-file processing limits in the UI.
 
 ## Deployment Model
 

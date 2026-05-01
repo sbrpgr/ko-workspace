@@ -6,7 +6,7 @@ The current product ships as a static multi-tool site focused on tasks that can 
 
 ## Current Tool Categories
 
-- Voice/Video: `음성으로 텍스트 쓰기`, `웹캠 녹화기`
+- Voice/Video: `음성으로 텍스트 쓰기`, `녹음 파일 텍스트 변환`, `웹캠 녹화기`
 - Text: `AI 복붙 서식 정리`, `글자수 세기`, `줄바꿈·공백 정리`, `이메일·URL·전화번호 추출기`, `중복 줄 제거`, `찾기 및 바꾸기`, `대소문자 변환`, `텍스트 비교기`
 - Image: `QR 코드 생성기`, `이미지 크기 조절`, `이미지 형식 변환`, `이미지 용량 압축`
 - PDF: `PDF 합치기`, `PDF 분할`, `PDF 페이지 추출`, `이미지 PDF 변환`, `PDF 이미지 변환`
@@ -59,6 +59,7 @@ Google Tag Manager uses container `GTM-W3MF6BSN`.
 - Initial tools do not upload text or files to an application server.
 - Webcam background blur and custom background images are processed locally in the browser; user-selected background files are not uploaded.
 - Work data is intended to stay 100% inside the user's browser for the current static-tool scope.
+- The recording-file transcription beta loads Transformers.js and a Whisper model only on demand; the selected recording file remains local to the browser. It is a lightweight draft-text converter with an optional sentence-ending line break cleanup step, not a stored transcript manager.
 
 ## Related Docs
 

@@ -46,6 +46,24 @@ const TOOL_DEFS = [
     ],
   },
   {
+    id: "audio-file-transcription",
+    path: "/tools/audio-file-transcription/",
+    category: "\uC74C\uC131",
+    title: "녹음 파일 텍스트 변환",
+    summary:
+      "휴대폰 녹음 파일을 브라우저 안에서 불러와 Whisper 기반 모델로 저장 없는 검토용 텍스트 초안을 만듭니다.",
+    seoTitle: "녹음 파일 텍스트 변환 | 휴대폰 녹음 STT 도구",
+    seoDescription:
+      "휴대폰 녹음 파일을 서버 업로드 없이 브라우저에서 텍스트 초안으로 변환하는 도구입니다. 짧은 한국어 녹음 파일을 검토용으로 받아 적습니다.",
+    keywords: ["녹음 파일", "STT", "휴대폰 녹음", "Whisper"],
+    guide: [
+      { title: "파일 선택", text: "m4a, mp3, wav 같은 짧은 녹음 파일을 선택하거나 업로드 영역에 끌어다 놓습니다." },
+      { title: "모델 준비", text: "브라우저가 Transformers.js와 Whisper 모델을 처음 한 번 내려받아 로컬 캐시에 준비합니다." },
+      { title: "텍스트 변환", text: "파일은 서버로 보내지 않고 브라우저 안에서 구간별로 분석해 검토용 초안을 만듭니다." },
+      { title: "결과 확인", text: "변환된 텍스트를 사람이 다시 읽고, 문장 끝 기준 줄바꿈을 적용한 뒤 복사하거나 TXT 파일로 저장합니다." },
+    ],
+  },
+  {
     id: "webcam-recorder",
     path: "/tools/webcam-recorder/",
     category: "영상",
@@ -462,6 +480,7 @@ const TOOL_MAP = Object.fromEntries(TOOL_DEFS.map((tool) => [tool.id, tool]));
 const CATEGORY_ORDER = ["\uC804\uCCB4", "\uC74C\uC131", "영상", "\uD14D\uC2A4\uD2B8", "\uC774\uBBF8\uC9C0", "PDF", "\uC790\uB9C9"];
 const TOOL_VISUALS = {
   "voice-to-text": { icon: "\uD83C\uDFA4", tone: "red", copy: "\ub9d0\ud558\uba74 \ubc14\ub85c \ud14d\uc2a4\ud2b8\ub85c \ubc1b\uc544 \uc801\uc2b5\ub2c8\ub2e4." },
+  "audio-file-transcription": { icon: "\uD83C\uDF99\uFE0F", tone: "red", copy: "\ud734\ub300\ud3f0 \ub179\uc74c \ud30c\uc77c\uc744 \ud14d\uc2a4\ud2b8 \ucd08\uc548\uc73c\ub85c \ubcc0\ud658\ud569\ub2c8\ub2e4." },
   "webcam-recorder": { icon: "\uD83C\uDFA5", tone: "orange", copy: "\uc6f9\ucea0\uacfc \ub9c8\uc774\ud06c\ub97c \ud544\ud130\ub97c \uc801\uc6a9\ud574 \ub179\ud654\ud569\ub2c8\ub2e4." },
   "ai-text-cleaner": { icon: "\u2728", tone: "violet", copy: "AI \ub2f5\ubcc0\uc758 \ubcc4\ud45c\uc640 \ub9c8\ud06c\ub2e4\uc6b4\uc744 \uc815\ub9ac\ud569\ub2c8\ub2e4." },
   "character-counter": { icon: "\uD83D\uDD22", tone: "blue", copy: "\uacf5\ubc31 \ud3ec\ud568\uacfc \uc81c\uc678 \uae00\uc790\uc218\ub97c \uacc4\uc0b0\ud569\ub2c8\ub2e4." },
@@ -492,6 +511,11 @@ const TOOL_USE_EXAMPLES = {
   "voice-to-text": [
     "회의 중 말한 내용을 바로 받아 적고 회의록 초안으로 정리합니다.",
     "강의, 발표, 유튜브 영상의 대본 초안을 빠르게 작성합니다.",
+  ],
+  "audio-file-transcription": [
+    "휴대폰으로 녹음한 회의, 강의, 인터뷰 파일을 검토용 텍스트 초안으로 변환합니다.",
+    "m4a, mp3, wav 같은 짧은 녹음 파일을 서버 업로드 없이 브라우저 안에서 처리합니다.",
+    "변환 결과를 복사하거나 TXT 파일로 저장한 뒤 사람이 다시 읽으며 회의록이나 콘텐츠 초안으로 다듬습니다.",
   ],
   "webcam-recorder": [
     "웹캠 발표 영상이나 교육 안내 영상을 브라우저에서 바로 녹화합니다.",
@@ -603,6 +627,10 @@ const TOOL_EXTRA_FAQS = {
     question: "음성 인식이 계속 끊길 때는 어떻게 하나요?",
     answer: "Chrome 또는 Edge에서 HTTPS 주소로 접속하고, 브라우저의 마이크 권한이 허용되어 있는지 확인하세요. 브라우저가 음성 인식을 중단하면 도구가 재연결을 시도합니다.",
   },
+  "audio-file-transcription": {
+    question: "녹음 파일이 서버로 업로드되나요?",
+    answer: "아니요. 선택한 녹음 파일은 브라우저 안에서 처리합니다. 다만 처음 사용할 때 Transformers.js와 Whisper 모델 파일을 외부 CDN과 Hugging Face에서 내려받을 수 있으며, 긴 파일은 기기 성능에 따라 오래 걸릴 수 있습니다.",
+  },
   "webcam-recorder": {
     question: "녹화 파일은 어떤 형식으로 저장되나요?",
     answer: "기본은 WebM이며, 브라우저가 지원하는 환경에서는 MP4 옵션도 선택할 수 있습니다. 배경 효과와 사용자 배경 이미지는 브라우저에서 처리됩니다.",
@@ -703,6 +731,7 @@ const TOOL_EXTRA_FAQS = {
 
 const ANALYTICS_CONTROL_EVENTS = {
   startBtn: { event: "permission_request", action: "voice_start" },
+  transcribeAudioBtn: { event: "tool_run", action: "transcribe_audio" },
   requestCameraPermissionBtn: { event: "permission_request", action: "camera_permission" },
   startCameraBtn: { event: "permission_request", action: "camera_start" },
   startRecordingBtn: { event: "tool_run", action: "record_start" },
@@ -721,6 +750,7 @@ const ANALYTICS_CONTROL_EVENTS = {
   copyMarkdownBtn: { event: "result_copy", action: "copy_markdown" },
   copyPlainBtn: { event: "result_copy", action: "copy_plain" },
   downloadBtn: { event: "file_download", action: "download" },
+  downloadTranscriptBtn: { event: "file_download", action: "download_transcript" },
   downloadAllBtn: { event: "file_download", action: "download_all" },
   downloadVideoBtn: { event: "file_download", action: "download_video" },
   downloadMarkdownBtn: { event: "file_download", action: "download_markdown" },
@@ -824,14 +854,14 @@ const CATEGORY_PAGE_DEFS = [
     path: "/tools/voice-video/",
     title: "음성·영상 업무 도구",
     eyebrow: "Voice & Video Tools",
-    description: "음성으로 텍스트를 쓰고 웹캠 영상을 녹화하는 입력·녹화 작업을 브라우저에서 바로 실행합니다.",
+    description: "실시간 받아쓰기, 녹음 파일 텍스트 변환, 웹캠 녹화를 브라우저에서 바로 실행합니다.",
     metaDescription:
-      "코워크스페이스 음성·영상 업무 도구 모음입니다. 음성으로 텍스트 쓰기와 웹캠 녹화기를 로그인 없이 브라우저에서 사용할 수 있습니다.",
-    keywords: ["음성 텍스트 변환", "웹캠 녹화", "카메라 녹화", "브라우저 녹화"],
+      "코워크스페이스 음성·영상 업무 도구 모음입니다. 음성으로 텍스트 쓰기, 녹음 파일 텍스트 변환, 웹캠 녹화기를 로그인 없이 브라우저에서 사용할 수 있습니다.",
+    keywords: ["음성 텍스트 변환", "녹음 파일 텍스트 변환", "웹캠 녹화", "브라우저 녹화"],
     categories: ["음성", "영상"],
     guide: [
       { title: "권한 허용", text: "마이크나 카메라가 필요한 도구에서 브라우저 권한을 허용합니다." },
-      { title: "입력 또는 녹화", text: "음성을 텍스트로 받아 적거나 웹캠 영상을 녹화합니다." },
+      { title: "입력 또는 녹화", text: "음성을 실시간으로 받아 적거나 녹음 파일을 변환하고, 필요한 경우 웹캠 영상을 녹화합니다." },
       { title: "결과 저장", text: "작성된 텍스트나 녹화 파일을 로컬 PC에 저장합니다." },
     ],
   },
@@ -857,6 +887,11 @@ const LIBRARIES = {
     type: "module",
     src: "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs",
     worker: "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs",
+  },
+  transformers: {
+    global: "TransformersJS",
+    type: "module",
+    src: "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.1.0",
   },
 };
 
@@ -1631,6 +1666,7 @@ function trackToolError(tool, error, action = "unknown") {
 
 const TOOL_RENDERERS = {
   "voice-to-text": renderVoiceTool,
+  "audio-file-transcription": renderAudioFileTranscription,
   "webcam-recorder": renderWebcamRecorder,
   "ai-text-cleaner": renderAiTextCleaner,
   "character-counter": renderCharacterCounter,
@@ -1656,6 +1692,443 @@ const TOOL_RENDERERS = {
   "subtitle-converter": renderSubtitleConverter,
   "subtitle-timing": renderSubtitleTiming,
 };
+
+const AUDIO_TRANSCRIPTION_MODEL = "onnx-community/whisper-tiny";
+const AUDIO_TRANSCRIPTION_MAX_SECONDS = 5 * 60;
+const AUDIO_TRANSCRIPTION_MAX_BYTES = 80 * 1024 * 1024;
+const audioTranscriberCache = new Map();
+
+function renderAudioFileTranscription(container) {
+  container.innerHTML = `
+    <div class="tool-section audio-file-tool">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Local Audio STT</p>
+          <h2>녹음 파일 텍스트 변환</h2>
+          <p class="tool-note audio-tool-intro">녹음 파일을 저장하지 않는 경량 변환 기능입니다. 화자 구분, 요약, 장기 보관 없이 검토용 단순 텍스트 초안만 만듭니다.</p>
+        </div>
+        <div class="status-group" aria-live="polite">
+          <span id="audioModelStatus" class="status-pill">모델 대기</span>
+          <span id="audioFileStatus" class="status-pill">파일 없음</span>
+        </div>
+      </div>
+
+      <div class="upload-box audio-upload-box">
+        <label for="audioFile">휴대폰 녹음 파일 선택</label>
+        <input id="audioFile" type="file" accept="audio/*,.m4a,.mp3,.wav,.aac,.webm,.ogg" />
+        <p>m4a, mp3, wav, aac, webm, ogg 형식을 지원합니다. 파일은 코워크스페이스 서버로 업로드하지 않고 브라우저 안에서 처리합니다.</p>
+      </div>
+
+      <div class="tool-grid">
+        <article class="editor-card">
+          <div class="section-heading">
+            <div>
+              <h2>파일 확인</h2>
+              <p id="audioFileMeta" class="tool-note">5분 이하의 짧은 녹음 파일부터 테스트해 주세요.</p>
+            </div>
+          </div>
+          <audio id="audioPreview" class="audio-preview" controls hidden></audio>
+          <div class="field-grid compact-grid">
+            <div class="field">
+              <label for="audioLanguage">인식 언어</label>
+              <select id="audioLanguage">
+                <option value="korean" selected>한국어 우선</option>
+                <option value="">자동 감지</option>
+                <option value="english">영어</option>
+                <option value="japanese">일본어</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="audioDeviceMode">실행 방식</label>
+              <select id="audioDeviceMode">
+                <option value="auto" selected>자동 선택</option>
+                <option value="webgpu">WebGPU 우선</option>
+                <option value="wasm">CPU 처리</option>
+              </select>
+            </div>
+          </div>
+          <div class="action-row">
+            <button id="transcribeAudioBtn" class="primary-action" type="button" disabled>텍스트 변환</button>
+            <button id="clearAudioBtn" type="button">초기화</button>
+          </div>
+          <label class="check-item audio-break-option">
+            <input id="audioSentenceBreaks" type="checkbox" checked />
+            문장 끝 기준 줄바꿈
+          </label>
+          <div id="audioProcessingIndicator" class="audio-processing-indicator" hidden aria-live="polite">
+            <span class="audio-processing-spinner" aria-hidden="true"></span>
+            <span id="audioProcessingText">변환 준비 중입니다.</span>
+          </div>
+          <p id="audioRunMeta" class="tool-note">처음 실행할 때 모델 파일을 내려받기 때문에 시간이 걸릴 수 있습니다. 모바일에서는 PC보다 느릴 수 있습니다.</p>
+        </article>
+
+        <article class="result-card">
+          <div class="section-heading">
+            <div>
+              <h2>변환 결과</h2>
+              <p id="audioOutputMeta" class="tool-note">0자</p>
+            </div>
+            <div class="action-row">
+              <button id="copyBtn" type="button">복사</button>
+              <button id="downloadTranscriptBtn" type="button">TXT 저장</button>
+            </div>
+          </div>
+          <textarea id="audioTranscriptOutput" placeholder="변환된 텍스트 초안이 여기에 표시됩니다. 중요한 내용은 반드시 사람이 다시 확인해 주세요."></textarea>
+        </article>
+      </div>
+
+      <article class="notice-card">
+        <strong>브라우저 안에서 처리하는 베타 도구입니다.</strong>
+        <span>녹음 내용은 서버로 업로드하지 않지만, 모델 파일은 외부 CDN과 Hugging Face에서 내려받습니다. 통화녹음이나 민감한 녹음은 관련 법과 상대방 동의 여부를 확인한 뒤 사용해 주세요.</span>
+      </article>
+    </div>
+  `;
+
+  const state = {
+    file: null,
+    metadata: null,
+    previewUrl: "",
+    rawTranscript: "",
+    isRunning: false,
+  };
+
+  const nodes = {
+    modelStatus: container.querySelector("#audioModelStatus"),
+    fileStatus: container.querySelector("#audioFileStatus"),
+    fileInput: container.querySelector("#audioFile"),
+    fileMeta: container.querySelector("#audioFileMeta"),
+    audioPreview: container.querySelector("#audioPreview"),
+    language: container.querySelector("#audioLanguage"),
+    deviceMode: container.querySelector("#audioDeviceMode"),
+    sentenceBreaks: container.querySelector("#audioSentenceBreaks"),
+    transcribeBtn: container.querySelector("#transcribeAudioBtn"),
+    clearBtn: container.querySelector("#clearAudioBtn"),
+    processingIndicator: container.querySelector("#audioProcessingIndicator"),
+    processingText: container.querySelector("#audioProcessingText"),
+    runMeta: container.querySelector("#audioRunMeta"),
+    output: container.querySelector("#audioTranscriptOutput"),
+    outputMeta: container.querySelector("#audioOutputMeta"),
+    copyBtn: container.querySelector("#copyBtn"),
+    downloadBtn: container.querySelector("#downloadTranscriptBtn"),
+  };
+
+  nodes.fileInput.addEventListener("change", () => handleAudioFileSelection());
+  nodes.transcribeBtn.addEventListener("click", transcribeAudioFile);
+  nodes.clearBtn.addEventListener("click", clearAudioTool);
+  nodes.sentenceBreaks.addEventListener("change", renderAudioTranscriptOutput);
+  nodes.output.addEventListener("input", () => {
+    state.rawTranscript = nodes.output.value;
+    updateOutputMeta();
+  });
+  nodes.copyBtn.addEventListener("click", async () => {
+    const text = nodes.output.value.trim();
+    if (!text) {
+      showToast("복사할 변환 결과가 없습니다.");
+      return;
+    }
+    await safeCopy(text, "변환 결과를 복사했습니다.");
+  });
+  nodes.downloadBtn.addEventListener("click", () => {
+    const text = nodes.output.value.trim();
+    if (!text) {
+      showToast("저장할 변환 결과가 없습니다.");
+      return;
+    }
+    downloadText(text, `녹음-텍스트-변환-${new Date().toISOString().slice(0, 10)}.txt`);
+  });
+
+  syncAudioButtons();
+  updateOutputMeta();
+
+  async function handleAudioFileSelection() {
+    const file = nodes.fileInput.files?.[0];
+    if (!file) {
+      clearSelectedFile();
+      return;
+    }
+
+    state.file = file;
+    nodes.fileStatus.textContent = "파일 확인 중";
+    nodes.fileMeta.textContent = "녹음 파일 정보를 확인하고 있습니다.";
+    state.rawTranscript = "";
+    nodes.output.value = "";
+    updateOutputMeta();
+
+    if (state.previewUrl) URL.revokeObjectURL(state.previewUrl);
+    state.previewUrl = URL.createObjectURL(file);
+    nodes.audioPreview.src = state.previewUrl;
+    nodes.audioPreview.hidden = false;
+
+    const metadata = await readAudioMetadata(file);
+    state.metadata = metadata;
+    nodes.fileStatus.textContent = "파일 준비";
+    nodes.fileMeta.textContent = describeAudioFile(file, metadata);
+    syncAudioButtons();
+  }
+
+  async function transcribeAudioFile() {
+    if (!state.file || state.isRunning) return;
+    const validation = validateAudioFile(state.file, state.metadata);
+    if (validation) {
+      showToast(validation);
+      return;
+    }
+
+    state.isRunning = true;
+    syncAudioButtons();
+    nodes.modelStatus.textContent = "모델 준비 중";
+    nodes.runMeta.textContent = "모델과 음성 인식 파이프라인을 준비하고 있습니다.";
+    setAudioProcessing(true, "모델 파일과 음성 인식 파이프라인을 준비하고 있습니다.");
+    state.rawTranscript = "";
+    nodes.output.value = "";
+    updateOutputMeta();
+
+    const objectUrl = URL.createObjectURL(state.file);
+    try {
+      const transcriber = await getAudioTranscriber(nodes.deviceMode.value, (progress) => {
+        const label = formatModelProgress(progress);
+        if (label) {
+          nodes.modelStatus.textContent = label;
+          setAudioProcessing(true, `${label} · 처음 실행이면 다운로드 시간이 걸릴 수 있습니다.`);
+        }
+      });
+
+      nodes.modelStatus.textContent = "변환 중";
+      nodes.runMeta.textContent = "브라우저 안에서 녹음 파일을 분석하고 있습니다. 창을 닫지 말아 주세요.";
+      setAudioProcessing(true, "녹음 파일을 텍스트로 변환 중입니다. 창을 닫지 말아 주세요.");
+      const options = {
+        task: "transcribe",
+        chunk_length_s: 30,
+        stride_length_s: 5,
+        return_timestamps: false,
+      };
+      if (nodes.language.value) options.language = nodes.language.value;
+
+      const result = await transcriber(objectUrl, options);
+      state.rawTranscript = formatAudioTranscriptionResult(result, false);
+      renderAudioTranscriptOutput();
+      nodes.modelStatus.textContent = "완료";
+      nodes.runMeta.textContent = "변환이 끝났습니다. 결과는 검토용 초안이므로 중요한 내용은 다시 확인해 주세요.";
+      setAudioProcessing(false);
+    } catch (error) {
+      nodes.modelStatus.textContent = "오류";
+      nodes.runMeta.textContent = formatUserNotice(`녹음 파일 텍스트 변환에 실패했습니다. ${error?.message || ""}`.trim());
+      setAudioProcessing(false);
+      trackToolError(TOOL_MAP["audio-file-transcription"], error, "transcribe_audio");
+    } finally {
+      URL.revokeObjectURL(objectUrl);
+      state.isRunning = false;
+      syncAudioButtons();
+    }
+  }
+
+  function clearAudioTool() {
+    nodes.fileInput.value = "";
+    state.rawTranscript = "";
+    nodes.output.value = "";
+    clearSelectedFile();
+    nodes.modelStatus.textContent = "모델 대기";
+    setAudioProcessing(false);
+    nodes.runMeta.textContent = "처음 실행할 때 모델 파일을 내려받기 때문에 시간이 걸릴 수 있습니다. 모바일에서는 PC보다 느릴 수 있습니다.";
+    updateOutputMeta();
+  }
+
+  function clearSelectedFile() {
+    state.file = null;
+    state.metadata = null;
+    if (state.previewUrl) {
+      URL.revokeObjectURL(state.previewUrl);
+      state.previewUrl = "";
+    }
+    nodes.audioPreview.removeAttribute("src");
+    nodes.audioPreview.hidden = true;
+    nodes.fileStatus.textContent = "파일 없음";
+    nodes.fileMeta.textContent = "5분 이하의 짧은 녹음 파일부터 테스트해 주세요.";
+    syncAudioButtons();
+  }
+
+  function syncAudioButtons() {
+    nodes.transcribeBtn.disabled = !state.file || state.isRunning;
+    nodes.transcribeBtn.textContent = state.isRunning ? "변환 중..." : "텍스트 변환";
+    nodes.clearBtn.disabled = state.isRunning;
+    nodes.fileInput.disabled = state.isRunning;
+    nodes.sentenceBreaks.disabled = state.isRunning;
+  }
+
+  function setAudioProcessing(active, text = "") {
+    nodes.processingIndicator.hidden = !active;
+    if (text) nodes.processingText.textContent = text;
+  }
+
+  function renderAudioTranscriptOutput() {
+    nodes.output.value = nodes.sentenceBreaks.checked
+      ? breakAudioTranscriptSentences(state.rawTranscript)
+      : state.rawTranscript;
+    updateOutputMeta();
+  }
+
+  function updateOutputMeta() {
+    const chars = nodes.output.value.trim().length;
+    nodes.outputMeta.textContent = `${chars.toLocaleString("ko-KR")}자`;
+  }
+}
+
+function readAudioMetadata(file) {
+  return new Promise((resolve) => {
+    const audio = document.createElement("audio");
+    const url = URL.createObjectURL(file);
+    let settled = false;
+
+    const finish = (metadata) => {
+      if (settled) return;
+      settled = true;
+      URL.revokeObjectURL(url);
+      resolve(metadata);
+    };
+
+    audio.preload = "metadata";
+    audio.onloadedmetadata = () => {
+      finish({
+        duration: Number.isFinite(audio.duration) ? audio.duration : 0,
+      });
+    };
+    audio.onerror = () => finish({ duration: 0 });
+    window.setTimeout(() => finish({ duration: 0 }), 7000);
+    audio.src = url;
+  });
+}
+
+function describeAudioFile(file, metadata) {
+  const parts = [`크기 ${formatBytes(file.size)}`];
+  if (metadata?.duration) {
+    parts.unshift(`길이 ${formatDuration(metadata.duration)}`);
+  } else {
+    parts.unshift("길이 확인 불가");
+  }
+  if (file.type) parts.push(`형식 ${file.type}`);
+  return `${parts.join(" · ")} · 서버 업로드 없이 브라우저에서 처리합니다.`;
+}
+
+function validateAudioFile(file, metadata) {
+  if (!matchesFileAccept(file, "audio/*,.m4a,.mp3,.wav,.aac,.webm,.ogg")) {
+    return "지원하지 않는 녹음 파일 형식입니다.";
+  }
+  if (file.size > AUDIO_TRANSCRIPTION_MAX_BYTES) {
+    return `현재 베타 버전은 ${formatBytes(AUDIO_TRANSCRIPTION_MAX_BYTES)} 이하 파일부터 권장합니다.`;
+  }
+  if (metadata?.duration && metadata.duration > AUDIO_TRANSCRIPTION_MAX_SECONDS) {
+    return `현재 베타 버전은 ${formatDuration(AUDIO_TRANSCRIPTION_MAX_SECONDS)} 이하 녹음 파일부터 지원합니다.`;
+  }
+  return "";
+}
+
+function formatDuration(seconds) {
+  if (!Number.isFinite(seconds) || seconds <= 0) return "0:00";
+  const total = Math.round(seconds);
+  const hours = Math.floor(total / 3600);
+  const minutes = Math.floor((total % 3600) / 60);
+  const remain = total % 60;
+  if (hours > 0) {
+    return `${hours}:${String(minutes).padStart(2, "0")}:${String(remain).padStart(2, "0")}`;
+  }
+  return `${minutes}:${String(remain).padStart(2, "0")}`;
+}
+
+async function getAudioTranscriber(deviceMode, progressCallback) {
+  const transformers = await loadLibrary("transformers");
+  if (!transformers?.pipeline) {
+    throw new Error("Transformers.js 파이프라인을 불러오지 못했습니다.");
+  }
+
+  let lastError = null;
+  for (const candidate of getAudioTranscriberCandidates(deviceMode)) {
+    const key = `${AUDIO_TRANSCRIPTION_MODEL}:${candidate.device}:${candidate.dtype}`;
+    if (!audioTranscriberCache.has(key)) {
+      audioTranscriberCache.set(
+        key,
+        transformers
+          .pipeline("automatic-speech-recognition", AUDIO_TRANSCRIPTION_MODEL, {
+            device: candidate.device,
+            dtype: candidate.dtype,
+            progress_callback: progressCallback,
+          })
+          .catch((error) => {
+            audioTranscriberCache.delete(key);
+            throw error;
+          })
+      );
+    }
+
+    try {
+      return await audioTranscriberCache.get(key);
+    } catch (error) {
+      lastError = error;
+      if (deviceMode !== "auto" && candidate.device !== "webgpu") break;
+    }
+  }
+
+  throw lastError || new Error("음성 인식 모델을 준비하지 못했습니다.");
+}
+
+function getAudioTranscriberCandidates(deviceMode) {
+  const canUseWebGpu = Boolean(navigator.gpu);
+  if (deviceMode === "webgpu") {
+    return [
+      { device: "webgpu", dtype: "fp32" },
+      { device: "wasm", dtype: "q8" },
+    ];
+  }
+  if (deviceMode === "wasm" || !canUseWebGpu) {
+    return [{ device: "wasm", dtype: "q8" }];
+  }
+  return [
+    { device: "webgpu", dtype: "fp32" },
+    { device: "wasm", dtype: "q8" },
+  ];
+}
+
+function formatModelProgress(progress) {
+  if (!progress || typeof progress !== "object") return "";
+  const value = Number(progress.progress);
+  if (Number.isFinite(value)) return `모델 ${Math.max(0, Math.min(100, Math.round(value)))}%`;
+  if (progress.status === "ready") return "모델 준비 완료";
+  if (progress.status === "initiate") return "모델 다운로드";
+  if (progress.status === "download") return "모델 다운로드";
+  if (progress.status === "progress") return "모델 준비 중";
+  return "";
+}
+
+function formatAudioTranscriptionResult(result, includeTimestamps) {
+  const output = Array.isArray(result) ? result[0] : result;
+  if (!output) return "";
+  if (includeTimestamps && Array.isArray(output.chunks) && output.chunks.length > 0) {
+    return output.chunks
+      .map((chunk) => {
+        const label = formatAudioChunkTimestamp(chunk.timestamp);
+        const text = String(chunk.text || "").trim();
+        return label ? `${label} ${text}` : text;
+      })
+      .filter(Boolean)
+      .join("\n")
+      .trim();
+  }
+  return String(output.text || "").replace(/\s+/g, " ").trim();
+}
+
+function breakAudioTranscriptSentences(text) {
+  return String(text || "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/(^|[^\d])([.?!。？！])\s*(?=\S)/g, "$1$2\n");
+}
+
+function formatAudioChunkTimestamp(timestamp) {
+  if (!Array.isArray(timestamp) || timestamp.length < 1) return "";
+  const start = Number(timestamp[0]);
+  const end = Number(timestamp[1]);
+  if (!Number.isFinite(start)) return "";
+  return Number.isFinite(end) ? `[${formatDuration(start)}-${formatDuration(end)}]` : `[${formatDuration(start)}]`;
+}
 
 function renderVoiceTool(container) {
   container.innerHTML = `
@@ -6075,7 +6548,9 @@ async function loadLibrary(name) {
   if (!libraryCache[name]) {
     if (info.type === "module") {
       libraryCache[name] = import(info.src).then((module) => {
-        module.GlobalWorkerOptions.workerSrc = info.worker;
+        if (info.worker && module.GlobalWorkerOptions) {
+          module.GlobalWorkerOptions.workerSrc = info.worker;
+        }
         window[info.global] = module;
         return module;
       });

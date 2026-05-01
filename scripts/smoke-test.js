@@ -23,6 +23,7 @@ const API_NAMES = [
   "convertSubtitle",
   "shiftSubtitleTimings",
   "parsePageRanges",
+  "breakAudioTranscriptSentences",
   "stripJpegMetadata",
   "stripPngMetadata",
   "stripWebpMetadata",
@@ -279,6 +280,13 @@ function buildLogicTests(api) {
     test("PDF page range parser removes duplicates and out-of-range pages", () => {
       assert(api.parsePageRanges("1-3,2,5,99", 5).join(",") === "0,1,2,4", "page range parsing failed");
     }),
+    test("audio transcript sentence breaker splits sentence endings", () => {
+      const result = api.breakAudioTranscriptSentences("첫 문장입니다. 다음 문장인가요?마지막 문장입니다. 버전 1.2입니다");
+      assert(
+        result === "첫 문장입니다.\n다음 문장인가요?\n마지막 문장입니다.\n버전 1.2입니다",
+        "audio sentence line breaks failed"
+      );
+    }),
     test("text diff counts add and remove rows", () => {
       const result = api.diffLines("A\nB", "A\nC");
       assert(result.kept === 1 && result.removed === 1 && result.added === 1, "diff counts failed");
@@ -348,6 +356,7 @@ function buildUploadUxTests(app) {
       const ids = new Set([...app.matchAll(/<input id="([^"]+)"[^>]*type="file"/g)].map((match) => match[1]));
       const supportedIds = new Set([
         "backgroundImageFile",
+        "audioFile",
         "qrImageFile",
         "imageFile",
         "exifImageFile",

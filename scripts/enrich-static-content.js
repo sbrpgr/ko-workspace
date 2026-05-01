@@ -29,7 +29,7 @@ const CATEGORY_CONTENT = {
   pdf: makeCategoryContent("PDF 업무 도구", "계약서, 견적서, 스캔본, 증빙 자료를 제출하거나 공유하기 전에 파일 형태를 맞추는 상황", "병합, 분할, 페이지 추출, 이미지 변환처럼 문서 내용보다 파일 구조를 정리하는 기준", "민감할 수 있는 문서를 자체 서버에 맡기지 않고 브라우저에서 처리하는 흐름에"),
   image: makeCategoryContent("이미지 업무 도구", "사진과 캡처 이미지를 업로드 기준, 공유 기준, 개인정보 기준에 맞춰 다듬는 상황", "크기, 용량, 형식, 메타데이터, QR처럼 실제 제출과 게시 과정에서 자주 걸리는 기준", "원본을 다시 업로드하는 부담을 줄이고 결과를 직접 확인하는 흐름에"),
   subtitle: makeCategoryContent("자막 업무 도구", "SRT와 VTT 자막을 영상 플랫폼이나 편집 흐름에 맞게 다시 정리하는 상황", "번호, 공백, 포맷, 시간 싱크처럼 작은 오류가 업로드 실패로 이어질 수 있는 기준", "자막 내용을 새로 쓰기보다 구조와 시간을 안정적으로 맞추는 데"),
-  "voice-video": makeCategoryContent("음성·영상 업무 도구", "말한 내용을 초안으로 옮기거나 웹캠 영상을 짧게 녹화해야 하는 상황", "마이크와 카메라 권한, 녹화 확인, 대본 초안, 저장 형식처럼 시작 전에 번거로워지는 기준", "별도 프로그램을 준비하지 않고 브라우저에서 바로 기록을 시작하는 데"),
+  "voice-video": makeCategoryContent("음성·영상 업무 도구", "말한 내용을 초안으로 옮기거나, 휴대폰 녹음 파일을 텍스트로 바꾸거나, 웹캠 영상을 짧게 녹화해야 하는 상황", "마이크와 카메라 권한, 녹음 파일 형식, 모델 준비, 녹화 확인, 대본 초안, 저장 형식처럼 시작 전에 번거로워지는 기준", "별도 프로그램을 준비하지 않고 브라우저에서 바로 기록과 변환을 시작하는 데"),
 };
 
 const TOOL_CONTENT = {
@@ -42,6 +42,16 @@ const TOOL_CONTENT = {
     strength: "말을 글로 옮기는 첫 단계를 가볍게 만들고, 완성본이 아니라 사람이 다시 확인하기 좋은 초안을 만드는 데 집중한 점",
     result: "정리된 텍스트를 바로 복사하거나 TXT 파일로 내려받아 회의록, 발표문, 콘텐츠 초안의 재료로 사용할 수 있습니다",
     caution: "브라우저 음성 인식은 주변 소음, 발음, 기기 상태에 따라 결과가 달라질 수 있으므로 중요한 문서는 반드시 사람이 다시 확인해야 합니다",
+  }),
+  "audio-file-transcription": makeToolContent({
+    name: "녹음 파일 텍스트 변환",
+    moment: "휴대폰으로 저장한 회의, 강의, 인터뷰 녹음 파일을 다시 들으며 받아 적기 전에 초안이 필요할 때",
+    scene: "m4a나 mp3로 남은 짧은 회의 녹음이 있고, 핵심 내용을 회의록이나 블로그 초안으로 옮겨야 하는 상황",
+    pain: "녹음을 처음부터 끝까지 다시 들으며 받아 적으면 시간이 오래 걸리고, 중간에 놓친 표현을 찾으려고 되감기를 반복하게 됩니다",
+    actions: "녹음 파일을 선택하고 브라우저 안에서 모델을 준비한 뒤, 한국어 우선 또는 자동 감지 방식으로 텍스트 초안을 만듭니다",
+    strength: "녹음 파일을 서버에 맡기지 않고 브라우저 안에서 처리하며, 완성 문서가 아니라 사람이 검토하기 좋은 초안을 만드는 데 집중한 점",
+    result: "변환된 텍스트를 복사하거나 TXT 파일로 저장해 회의록, 인터뷰 정리, 강의 노트, 콘텐츠 초안의 재료로 사용할 수 있습니다",
+    caution: "로컬 모델 기반 인식은 녹음 품질, 배경 소음, 말하는 속도, 기기 성능에 따라 결과가 달라지므로 중요한 녹음은 반드시 사람이 다시 확인해야 합니다",
   }),
   "webcam-recorder": makeToolContent({
     name: "웹캠 녹화기",
@@ -286,11 +296,14 @@ const TOOL_CONTENT = {
 };
 
 function makeToolContent(item) {
+  const objectName = `${item.name}${objectParticle(item.name)}`;
+  const topicName = `${item.name}${topicParticle(item.name)}`;
+
   return {
     eyebrow: "실제 사용 시나리오",
     heading: `${item.name} 시나리오`,
     paragraphs: [
-      `${item.name}를 쓰게 되는 순간은 대개 ${item.moment}입니다. 이런 작업은 처음에는 사소해 보이지만, 막상 마감이나 공유 직전에 걸리면 생각보다 시간을 많이 잡아먹습니다. 코워크스페이스는 이런 작은 불편을 별도 프로그램 설치나 회원가입 없이 브라우저에서 바로 처리할 수 있도록 도구의 흐름을 짧게 잡았습니다.`,
+      `${objectName} 쓰게 되는 순간은 대개 ${item.moment}입니다. 이런 작업은 처음에는 사소해 보이지만, 막상 마감이나 공유 직전에 걸리면 생각보다 시간을 많이 잡아먹습니다. 코워크스페이스는 이런 작은 불편을 별도 프로그램 설치나 회원가입 없이 브라우저에서 바로 처리할 수 있도록 도구의 흐름을 짧게 잡았습니다.`,
       `예를 들어 ${item.scene}을 떠올려 보겠습니다. ${item.pain}. 그래서 이 단계에서 필요한 것은 거창한 자동화보다, 사용자가 가진 원본을 안전하게 확인하면서 필요한 형태로 바꾸는 일입니다. 작업을 시작하기 위해 새 계정을 만들거나 파일을 여러 곳에 올리는 과정이 길어지면, 원래 하려던 일보다 도구를 준비하는 일이 더 커질 수 있습니다.`,
       `코워크스페이스의 ${item.name} 도구는 이 중간 단계를 처리하기 위해 만들어졌습니다. 사용자는 ${item.actions}. 결과가 만들어지는 동안 도구는 입력 영역과 결과 영역을 분리해 현재 무엇을 넣었고 무엇이 바뀌었는지 확인하기 쉽게 구성합니다. 무조건 한 가지 방식으로 밀어붙이는 대신, 실제 업무에서 자주 갈리는 선택지를 옵션으로 나누어 둔 것이 특징입니다.`,
       `우리 기능에서 특히 신경 쓴 부분은 ${item.strength}입니다. 많은 온라인 도구가 빠른 결과를 강조하지만, 실제 업무에서는 결과를 눈으로 확인하고 다시 복사하거나 저장하는 마지막 단계가 더 중요할 때가 많습니다. 그래서 코워크스페이스는 버튼을 누르는 순간보다, 결과를 확인하고 다음 문서나 제출 화면으로 옮기는 순간까지 이어지는 흐름을 더 중요하게 봅니다. 이런 설계 덕분에 사용자는 도구를 오래 붙잡고 있기보다 필요한 처리만 마치고 원래 작업으로 돌아갈 수 있습니다.`,
@@ -298,11 +311,28 @@ function makeToolContent(item) {
       `다만 ${item.caution}. 이 도구는 사용자의 판단을 대신하기보다, 반복되는 정리 단계를 줄여 주는 보조 도구에 가깝습니다. 중요한 제출물이나 외부에 공개되는 자료라면 결과를 그대로 넘기기보다 마지막으로 한 번 더 읽어 보는 것이 좋습니다. 코워크스페이스가 맡는 역할은 그 확인 전까지 남아 있는 번거로운 형식 정리와 변환 과정을 덜어 주는 일입니다.`,
     ],
     notes: [
-      `${item.name}는 실제 업무 중간에 생기는 작은 처리 단계를 줄이기 위해 만들었습니다.`,
+      `${topicName} 실제 업무 중간에 생기는 작은 처리 단계를 줄이기 위해 만들었습니다.`,
       "입력한 작업 데이터는 코워크스페이스 자체 서버에 저장하지 않는 흐름을 우선합니다.",
       "결과는 사용자가 눈으로 확인한 뒤 직접 복사하거나 내려받는 방식을 기준으로 합니다.",
     ],
   };
+}
+
+function objectParticle(text) {
+  return hasFinalConsonant(text) ? "을" : "를";
+}
+
+function topicParticle(text) {
+  return hasFinalConsonant(text) ? "은" : "는";
+}
+
+function hasFinalConsonant(text) {
+  const letters = Array.from(String(text).trim());
+  const last = letters[letters.length - 1];
+  if (!last) return false;
+  const code = last.charCodeAt(0);
+  if (code < 0xac00 || code > 0xd7a3) return false;
+  return (code - 0xac00) % 28 !== 0;
 }
 
 function makeCategoryContent(name, situation, criteria, focus) {
@@ -416,23 +446,26 @@ function renderPanel(content) {
   const id = `staticContentTitle-${content.id}`;
   return `          ${START}
           <section class="panel static-content-panel" aria-labelledby="${escapeAttr(id)}">
-            <article class="static-content-article">
-              <div class="section-heading static-content-heading">
+            <details class="static-content-details">
+              <summary>
                 <div>
                   <p class="eyebrow">${escapeHtml(content.eyebrow)}</p>
                   <h2 id="${escapeAttr(id)}">${escapeHtml(content.heading)}</h2>
                 </div>
-              </div>
-              <div class="static-content-body">
+                <span class="static-content-toggle">자세히 보기</span>
+              </summary>
+              <article class="static-content-article">
+                <div class="static-content-body">
 ${content.paragraphs.map(renderParagraph).join("\n")}
-              </div>
-              <aside class="static-content-notes" aria-label="핵심 정리">
-                <h3>이 도구에서 특히 신경 쓴 부분</h3>
-                <ul>
+                </div>
+                <aside class="static-content-notes" aria-label="핵심 정리">
+                  <h3>이 도구에서 특히 신경 쓴 부분</h3>
+                  <ul>
 ${content.notes.map((note) => `                  <li>${escapeHtml(note)}</li>`).join("\n")}
-                </ul>
-              </aside>
-            </article>
+                  </ul>
+                </aside>
+              </article>
+            </details>
           </section>
           ${END}`;
 }
