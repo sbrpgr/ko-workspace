@@ -1715,19 +1715,8 @@ const AUDIO_TRANSCRIPTION_MODEL_PROFILES = Object.freeze({
     hint:
       "정확도 우선은 더 큰 브라우저 모델을 사용해 ARS 안내, 공식 문구, 작은 발화를 더 잘 살리도록 시도합니다. 처음 실행할 때 모델 다운로드가 더 오래 걸릴 수 있습니다.",
   }),
-  stable: Object.freeze({
-    id: "stable",
-    model: "onnx-community/whisper-tiny",
-    label: "빠른 변환",
-    beamCount: 3,
-    runtimeMode: "lightweight",
-    hint:
-      "빠른 변환은 작은 브라우저 모델을 사용해 속도와 호환성을 우선합니다. 한국어 고유명사나 ARS 문구는 정확도 우선보다 더 많이 틀릴 수 있습니다.",
-  }),
 });
-const AUDIO_TRANSCRIPTION_MODEL_PROFILE_ALIASES = Object.freeze({
-  fast: "stable",
-});
+const AUDIO_TRANSCRIPTION_MODEL_PROFILE_ALIASES = Object.freeze({});
 const AUDIO_TRANSCRIPTION_DEFAULT_PROFILE = "quality";
 const AUDIO_TRANSCRIPTION_WASM_BALANCED_DTYPE = Object.freeze({
   encoder_model: "q8",
@@ -1786,13 +1775,6 @@ function renderAudioFileTranscription(container) {
                 <option value="ja">일본어</option>
               </select>
             </div>
-            <div class="field">
-              <label for="audioDeviceMode">변환 품질</label>
-              <select id="audioDeviceMode">
-                <option value="quality" selected>정확도 우선(권장, 느림)</option>
-                <option value="stable">빠른 변환(가벼움)</option>
-              </select>
-            </div>
           </div>
           <div class="action-row">
             <button id="transcribeAudioBtn" class="primary-action" type="button" disabled>텍스트 변환</button>
@@ -1846,7 +1828,6 @@ function renderAudioFileTranscription(container) {
     fileMeta: container.querySelector("#audioFileMeta"),
     audioPreview: container.querySelector("#audioPreview"),
     language: container.querySelector("#audioLanguage"),
-    deviceMode: container.querySelector("#audioDeviceMode"),
     sentenceBreaks: container.querySelector("#audioSentenceBreaks"),
     transcribeBtn: container.querySelector("#transcribeAudioBtn"),
     clearBtn: container.querySelector("#clearAudioBtn"),
@@ -1862,7 +1843,6 @@ function renderAudioFileTranscription(container) {
   nodes.fileInput.addEventListener("change", () => handleAudioFileSelection());
   nodes.transcribeBtn.addEventListener("click", transcribeAudioFile);
   nodes.clearBtn.addEventListener("click", clearAudioTool);
-  nodes.deviceMode.addEventListener("change", updateAudioModelHint);
   nodes.sentenceBreaks.addEventListener("change", renderAudioTranscriptOutput);
   nodes.output.addEventListener("input", () => {
     state.rawTranscript = nodes.output.value;
@@ -1924,7 +1904,7 @@ function renderAudioFileTranscription(container) {
     }
 
     state.isRunning = true;
-    const profile = getAudioModelProfile(nodes.deviceMode.value || AUDIO_TRANSCRIPTION_DEFAULT_PROFILE);
+    const profile = getAudioModelProfile(AUDIO_TRANSCRIPTION_DEFAULT_PROFILE);
     const runtimeMode = profile.runtimeMode || "lightweight";
     syncAudioButtons();
     nodes.modelStatus.textContent = "모델 준비 중";
@@ -2017,7 +1997,6 @@ function renderAudioFileTranscription(container) {
     nodes.transcribeBtn.textContent = state.isRunning ? "변환 중..." : "텍스트 변환";
     nodes.clearBtn.disabled = state.isRunning;
     nodes.fileInput.disabled = state.isRunning;
-    nodes.deviceMode.disabled = state.isRunning;
     nodes.sentenceBreaks.disabled = state.isRunning;
   }
 
@@ -2040,7 +2019,7 @@ function renderAudioFileTranscription(container) {
 
   function updateAudioModelHint() {
     if (state.isRunning) return;
-    const profile = getAudioModelProfile(nodes.deviceMode.value || AUDIO_TRANSCRIPTION_DEFAULT_PROFILE);
+    const profile = getAudioModelProfile(AUDIO_TRANSCRIPTION_DEFAULT_PROFILE);
     nodes.runMeta.textContent = describeAudioProfile(profile);
   }
 }

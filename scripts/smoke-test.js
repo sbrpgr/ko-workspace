@@ -312,12 +312,12 @@ function buildLogicTests(api) {
       assert(lightweightCandidates[0].dtype.decoder_model_merged === "fp16", "lightweight mode should keep mixed precision first");
       assert(lightweightCandidates.length === 1, "lightweight mode should not try heavier fp32 by default");
     }),
-    test("audio transcription defaults to quality profile and keeps fast fallback", () => {
+    test("audio transcription exposes only quality profile", () => {
       assert(api.AUDIO_TRANSCRIPTION_DEFAULT_PROFILE === "quality", "quality model should be the default profile");
       assert(api.AUDIO_TRANSCRIPTION_MODEL_PROFILES.quality.model === "onnx-community/whisper-base", "quality profile should use whisper-base");
       assert(api.AUDIO_TRANSCRIPTION_MODEL_PROFILES.quality.runtimeMode === "lightweight", "quality profile should use the compatible wasm path");
-      assert(api.AUDIO_TRANSCRIPTION_MODEL_PROFILES.stable.model === "onnx-community/whisper-tiny", "fast fallback should use whisper-tiny");
-      assert(api.getAudioModelProfile("fast").id === "stable", "fast profile alias should use the stable fallback");
+      assert(!api.AUDIO_TRANSCRIPTION_MODEL_PROFILES.stable, "whisper-tiny fallback profile should not be exposed");
+      assert(api.getAudioModelProfile("fast").id === "quality", "retired fast profile should fall back to quality");
       assert(api.getAudioModelProfile("missing").id === "quality", "missing model profile should fall back to the default quality profile");
     }),
     test("beta tool title attaches beta label without a whitespace break", () => {

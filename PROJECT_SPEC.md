@@ -14,7 +14,7 @@ Current production baseline:
 - Production domain: `https://ko-workspace.com/`
 - Cloudflare Pages project: `mic-script-generator`
 - Latest AdSense/SEO readiness commit: `580c060 Improve AdSense SEO readiness`
-- Current static asset cache version: `20260501-15`
+- Current static asset cache version: `20260501-16`
 - Category landing pages, privacy policy updates, sitemap updates, and core FAQ copy were deployed on 2026-04-29
 
 Core constraints:
@@ -43,8 +43,8 @@ Core constraints:
   - Browser-side audio-file transcription beta tool
   - Uses Transformers.js with on-demand Whisper model downloads
   - Defaults to the tested `onnx-community/whisper-base` quality profile after `whisper-tiny` underperformed on Korean ARS and formal announcement audio
-  - Keeps `onnx-community/whisper-tiny` as a fast fallback profile for users who prefer speed and lighter downloads
-  - Runs the heavier quality profile through the compatible WASM mixed-precision path instead of exposing unstable high-quality device choices
+  - Removes the `whisper-tiny` fast fallback from the user-facing tool because the quality floor was too low for this feature
+  - Runs the quality profile through the compatible WASM mixed-precision path instead of exposing unstable high-quality device choices
   - Supports short local audio files such as m4a, mp3, wav, aac, webm, and ogg
   - Keeps the selected recording file in the browser; no application-server upload
   - Treats output as a lightweight human-review text draft, not a stored transcript manager or guaranteed final transcript, and warns that non-storage browser processing may be less accurate than server STT

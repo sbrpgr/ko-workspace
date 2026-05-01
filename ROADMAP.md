@@ -55,7 +55,7 @@ Current migration note:
 - Category landing pages are now live at `/tools/text/`, `/tools/pdf/`, `/tools/image/`, `/tools/subtitle/`, and `/tools/voice-video/`.
 - Category pages reuse the shared app shell and are rendered from `CATEGORY_PAGE_DEFS` in `app.js`; do not fork tool logic into category HTML files.
 - Preserve canonical URLs and sitemap entries whenever tool pages are updated.
-- Current static asset cache version is `20260501-15`; bump this version whenever `app.js` or `styles.css` changes.
+- Current static asset cache version is `20260501-16`; bump this version whenever `app.js` or `styles.css` changes.
 
 ## 2A. Current SEO And AdSense Baseline
 
@@ -82,7 +82,7 @@ Operational reminders:
 | Tool | URL | SEO Keywords | Difficulty | Notes |
 | --- | --- | --- | --- | --- |
 | 음성으로 텍스트 쓰기 | `/tools/voice-to-text/` | 음성으로 텍스트 쓰기, 음성 텍스트 변환, 한국어 받아쓰기, 마이크 텍스트 입력, 회의록 받아쓰기 | M | Current tool. Improve reliability, add FAQ, preserve root URL strategy. |
-| 녹음 파일 텍스트 변환 | `/tools/audio-file-transcription/` | 녹음 파일 텍스트 변환, 휴대폰 녹음 텍스트 추출, 음성 파일 STT, m4a 텍스트 변환 | L | Browser-only beta. Defaults to the tested `whisper-base` quality profile for Korean ARS/formal audio, keeps `whisper-tiny` as a faster fallback, hides unstable device choices from the UI, applies conversation-preserving edge-silence and quiet-speech preprocessing, and must keep file length limits, non-storage quality warnings, in-progress feedback, repetition cleanup, and sentence-ending line break option visible. |
+| 녹음 파일 텍스트 변환 | `/tools/audio-file-transcription/` | 녹음 파일 텍스트 변환, 휴대폰 녹음 텍스트 추출, 음성 파일 STT, m4a 텍스트 변환 | L | Browser-only beta. Uses the tested `whisper-base` quality profile for Korean ARS/formal audio, removes the underperforming `whisper-tiny` fast fallback from the UI, hides unstable device choices, applies conversation-preserving edge-silence and quiet-speech preprocessing, and must keep file length limits, non-storage quality warnings, in-progress feedback, repetition cleanup, and sentence-ending line break option visible. |
 | 웹캠 녹화기 | `/tools/webcam-recorder/` | 웹캠 녹화기, 카메라 녹화, 배경 흐림, 배경 바꾸기, WebM 녹화 | L | Shipped. Keep testing camera permission, background effects, and browser compatibility on real devices. |
 | 음성 텍스트 대본 정리 | `/tools/voice-script-maker/` | 유튜브 대본 만들기, 회의록 정리, 발표문 초안, 음성 대본 변환 | M | Could become a mode inside voice-to-text first, then separate if search demand grows. |
 
