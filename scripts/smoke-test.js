@@ -411,11 +411,13 @@ function buildSecurityTests(api, app) {
       assert(headers.includes("frame-ancestors 'none'"), "CSP missing frame-ancestors none");
       const scriptSrc = getCspDirective(headers, "script-src");
       const connectSrc = getCspDirective(headers, "connect-src");
+      const mediaSrc = getCspDirective(headers, "media-src");
       const workerSrc = getCspDirective(headers, "worker-src");
       assert(!scriptSrc.includes("'unsafe-inline'"), "script-src allows unsafe-inline");
       assert(scriptSrc.includes("blob:"), "script-src must allow blob: for browser STT backend modules");
       assert(scriptSrc.includes("'wasm-unsafe-eval'"), "script-src must allow wasm-unsafe-eval for browser STT backends");
       assert(connectSrc.includes("blob:"), "connect-src must allow blob: for selected browser audio files");
+      assert(mediaSrc.includes("blob:"), "media-src must allow blob: for selected browser audio playback");
       assert(workerSrc.includes("blob:"), "worker-src must allow blob: for browser STT backend workers");
     }),
     test("client code avoids dangerous dynamic execution", () => {

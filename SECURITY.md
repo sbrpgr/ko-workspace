@@ -24,7 +24,7 @@
 
 - 현재 PDF 렌더링, QR 생성, 녹음 파일 텍스트 변환은 브라우저에서 로드되는 외부 라이브러리를 사용합니다.
 - 허용 도메인은 `_headers`의 CSP에 최소 범위로만 추가합니다.
-- Transformers.js 기반 브라우저 음성 인식은 백엔드 모듈과 워커를 `blob:` URL로 준비하고, 선택한 녹음 파일도 브라우저 내부 `blob:` URL로 읽습니다. `script-src blob:`, `connect-src blob:`, `worker-src blob:`, `'wasm-unsafe-eval'`을 유지합니다.
+- Transformers.js 기반 브라우저 음성 인식은 백엔드 모듈과 워커를 `blob:` URL로 준비하고, 선택한 녹음 파일도 브라우저 내부 `blob:` URL로 읽고 재생합니다. `script-src blob:`, `connect-src blob:`, `media-src blob:`, `worker-src blob:`, `'wasm-unsafe-eval'`을 유지합니다.
 - 새 라이브러리를 넣을 때는 서버/API 의존성이 없는지 먼저 확인합니다.
 - 클라이언트 코드에 유료 서비스 키나 비밀 토큰을 넣지 않습니다.
 
