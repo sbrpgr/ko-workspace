@@ -205,12 +205,27 @@ function auditLibraryCsp() {
   const app = read(path.join(ROOT, "app.js"));
   const headers = read(path.join(ROOT, "_headers"));
   const libraries = parseLibraries(app);
+  const csp = readHeaderValue(headers, "Content-Security-Policy");
+  const scriptSrc = readCspDirective(csp, "script-src");
+  const workerSrc = readCspDirective(csp, "worker-src");
   const problems = [];
 
   for (const src of libraries) {
     const origin = new URL(src).origin;
     if (!headers.includes(origin)) {
       problems.push(`_headers: CSP does not allow ${origin}`);
+    }
+  }
+
+  if (app.includes("@huggingface/transformers")) {
+    if (!scriptSrc.includes("blob:")) {
+      problems.push("_headers: Transformers.js backend loading requires script-src blob:");
+    }
+    if (!scriptSrc.includes("'wasm-unsafe-eval'")) {
+      problems.push("_headers: Transformers.js backend loading requires script-src 'wasm-unsafe-eval'");
+    }
+    if (!workerSrc.includes("blob:")) {
+      problems.push("_headers: Transformers.js backend loading requires worker-src blob:");
     }
   }
 

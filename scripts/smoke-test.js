@@ -336,7 +336,11 @@ function buildSecurityTests(api, app) {
       assert(headers.includes("base-uri 'self'"), "CSP missing base-uri self");
       assert(headers.includes("frame-ancestors 'none'"), "CSP missing frame-ancestors none");
       const scriptSrc = getCspDirective(headers, "script-src");
+      const workerSrc = getCspDirective(headers, "worker-src");
       assert(!scriptSrc.includes("'unsafe-inline'"), "script-src allows unsafe-inline");
+      assert(scriptSrc.includes("blob:"), "script-src must allow blob: for browser STT backend modules");
+      assert(scriptSrc.includes("'wasm-unsafe-eval'"), "script-src must allow wasm-unsafe-eval for browser STT backends");
+      assert(workerSrc.includes("blob:"), "worker-src must allow blob: for browser STT backend workers");
     }),
     test("client code avoids dangerous dynamic execution", () => {
       assert(!/\beval\s*\(/.test(app), "eval is present");
