@@ -1730,6 +1730,10 @@ const AUDIO_TRANSCRIPTION_HIGH_QUALITY_DTYPE = Object.freeze({
 });
 const AUDIO_TRANSCRIPTION_MAX_SECONDS = 5 * 60;
 const AUDIO_TRANSCRIPTION_MAX_BYTES = 80 * 1024 * 1024;
+const AUDIO_PREPROCESS_TARGET_SAMPLE_RATE = 16000;
+const AUDIO_PREPROCESS_FRAME_SECONDS = 0.08;
+const AUDIO_PREPROCESS_PADDING_SECONDS = 0.2;
+const AUDIO_PREPROCESS_MAX_SILENCE_SECONDS = 0.35;
 const audioTranscriberCache = new Map();
 
 function renderAudioFileTranscription(container) {
@@ -1739,7 +1743,7 @@ function renderAudioFileTranscription(container) {
         <div>
           <p class="eyebrow">Local Audio STT</p>
           <h2>${renderBetaToolTitle("녹음 파일 텍스트 변환")}</h2>
-          <p class="tool-note audio-tool-intro">녹음 파일을 저장하지 않는 브라우저 변환 기능입니다. 반복 문장과 과한 추정을 줄이기 위해 안정 변환을 기본으로 사용합니다.</p>
+          <p class="tool-note audio-tool-intro">녹음 파일을 저장하지 않는 브라우저 변환 기능입니다. 변환 전에 긴 무음과 작은 볼륨을 정리해 반복 문장과 과한 추정을 줄입니다.</p>
         </div>
         <div class="status-group" aria-live="polite">
           <span id="audioModelStatus" class="status-pill">모델 대기</span>
@@ -1812,7 +1816,7 @@ function renderAudioFileTranscription(container) {
 
       <article class="notice-card">
         <strong>비저장 브라우저 변환 베타입니다.</strong>
-        <span>녹음 내용은 서버로 업로드하지 않지만, 모델 파일은 외부 CDN과 Hugging Face에서 내려받습니다. 이 방식은 개인 녹음 파일을 플랫폼 서버에 남기지 않는 대신 브라우저에서 실행 가능한 안정 모델만 사용하므로, 긴 회의나 통화 녹음에서는 누락·오인식이 생길 수 있습니다. 중요한 내용은 반드시 사람이 다시 확인해 주세요.</span>
+        <span>녹음 내용은 서버로 업로드하지 않지만, 모델 파일은 외부 CDN과 Hugging Face에서 내려받습니다. 이 방식은 개인 녹음 파일을 플랫폼 서버에 남기지 않는 대신 브라우저에서 실행 가능한 안정 모델과 로컬 전처리만 사용하므로, 긴 회의나 통화 녹음에서는 누락·오인식이 생길 수 있습니다. 중요한 내용은 반드시 사람이 다시 확인해 주세요.</span>
       </article>
     </div>
   `;
@@ -1920,8 +1924,16 @@ function renderAudioFileTranscription(container) {
     nodes.output.value = "";
     updateOutputMeta();
 
-    const objectUrl = URL.createObjectURL(state.file);
+    let preparedAudio = null;
     try {
+      nodes.modelStatus.textContent = "전처리 중";
+      nodes.runMeta.textContent = "녹음 파일의 긴 무음과 볼륨을 브라우저 안에서 정리하고 있습니다.";
+      setAudioProcessing(true, "녹음 파일의 긴 무음과 볼륨을 정리하고 있습니다.");
+      preparedAudio = await prepareAudioInputForTranscription(state.file);
+
+      nodes.modelStatus.textContent = "모델 준비 중";
+      nodes.runMeta.textContent = preparedAudio.summary;
+      setAudioProcessing(true, `${preparedAudio.summary} 모델을 준비하고 있습니다.`);
       const transcriber = await getAudioTranscriber(profile.id, deviceMode, (progress) => {
         const label = formatModelProgress(progress);
         if (label) {
@@ -1947,11 +1959,11 @@ function renderAudioFileTranscription(container) {
       };
       if (nodes.language.value) options.language = nodes.language.value;
 
-      const result = await transcriber(objectUrl, options);
+      const result = await transcriber(preparedAudio.url, options);
       state.rawTranscript = cleanAudioTranscriptDraft(formatAudioTranscriptionResult(result, false));
       renderAudioTranscriptOutput();
       nodes.modelStatus.textContent = "완료";
-      nodes.runMeta.textContent = "변환이 끝났습니다. 결과는 검토용 초안이므로 중요한 내용은 다시 확인해 주세요.";
+      nodes.runMeta.textContent = `변환이 끝났습니다. ${preparedAudio.summary} 결과는 검토용 초안이므로 중요한 내용은 다시 확인해 주세요.`;
       setAudioProcessing(false);
     } catch (error) {
       nodes.modelStatus.textContent = "오류";
@@ -1959,7 +1971,7 @@ function renderAudioFileTranscription(container) {
       setAudioProcessing(false);
       trackToolError(TOOL_MAP["audio-file-transcription"], error, "transcribe_audio");
     } finally {
-      URL.revokeObjectURL(objectUrl);
+      preparedAudio?.cleanup?.();
       state.isRunning = false;
       syncAudioButtons();
     }
@@ -2057,6 +2069,234 @@ function describeAudioFile(file, metadata) {
   }
   if (file.type) parts.push(`형식 ${file.type}`);
   return `${parts.join(" · ")} · 서버 업로드 없이 브라우저에서 처리합니다.`;
+}
+
+async function prepareAudioInputForTranscription(file) {
+  const fallback = () => {
+    const url = URL.createObjectURL(file);
+    return {
+      url,
+      stats: null,
+      summary: "전처리를 건너뛰고 원본 녹음 파일을 분석합니다.",
+      cleanup: () => URL.revokeObjectURL(url),
+    };
+  };
+
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass) return fallback();
+
+  let context = null;
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    context = new AudioContextClass();
+    const audioBuffer = await context.decodeAudioData(arrayBuffer.slice(0));
+    const mono = extractMonoAudioPcm(audioBuffer);
+    const processed = preprocessAudioPcm(mono, audioBuffer.sampleRate);
+    if (!processed.samples.length) return fallback();
+
+    const wav = encodePcm16Wav(processed.samples, processed.sampleRate);
+    const blob = new Blob([wav], { type: "audio/wav" });
+    const url = URL.createObjectURL(blob);
+    return {
+      url,
+      stats: processed.stats,
+      summary: formatAudioPreprocessSummary(processed.stats),
+      cleanup: () => URL.revokeObjectURL(url),
+    };
+  } catch {
+    return fallback();
+  } finally {
+    if (context?.close) {
+      context.close().catch(() => {});
+    }
+  }
+}
+
+function extractMonoAudioPcm(audioBuffer) {
+  const length = audioBuffer.length;
+  const channels = Math.max(1, audioBuffer.numberOfChannels || 1);
+  const mono = new Float32Array(length);
+  for (let channel = 0; channel < channels; channel += 1) {
+    const data = audioBuffer.getChannelData(channel);
+    for (let index = 0; index < length; index += 1) {
+      mono[index] += data[index] / channels;
+    }
+  }
+  return mono;
+}
+
+function preprocessAudioPcm(samples, sampleRate) {
+  const source = samples instanceof Float32Array ? samples : new Float32Array(samples || []);
+  const safeSampleRate = Number.isFinite(sampleRate) && sampleRate > 0 ? sampleRate : AUDIO_PREPROCESS_TARGET_SAMPLE_RATE;
+  if (!source.length) {
+    return {
+      samples: new Float32Array(0),
+      sampleRate: AUDIO_PREPROCESS_TARGET_SAMPLE_RATE,
+      stats: { originalSeconds: 0, processedSeconds: 0, removedSeconds: 0, gain: 1, changed: false },
+    };
+  }
+
+  const mono = resampleAudioPcm(source, safeSampleRate, AUDIO_PREPROCESS_TARGET_SAMPLE_RATE);
+  const frameSize = Math.max(160, Math.round(AUDIO_PREPROCESS_TARGET_SAMPLE_RATE * AUDIO_PREPROCESS_FRAME_SECONDS));
+  const frameCount = Math.ceil(mono.length / frameSize);
+  const frameRms = [];
+  let maxRms = 0;
+
+  for (let frame = 0; frame < frameCount; frame += 1) {
+    const start = frame * frameSize;
+    const end = Math.min(mono.length, start + frameSize);
+    let sumSquares = 0;
+    for (let index = start; index < end; index += 1) {
+      const value = mono[index];
+      sumSquares += value * value;
+    }
+    const rms = Math.sqrt(sumSquares / Math.max(1, end - start));
+    frameRms.push(rms);
+    maxRms = Math.max(maxRms, rms);
+  }
+
+  const sortedRms = [...frameRms].sort((a, b) => a - b);
+  const noiseFloor = sortedRms[Math.floor(sortedRms.length * 0.25)] || 0;
+  const threshold = Math.max(noiseFloor * 2.8, maxRms * 0.08, 0.004);
+  const activeFrames = frameRms.map((rms) => rms >= threshold);
+  const activeCount = activeFrames.filter(Boolean).length;
+  const activeRatio = activeFrames.length ? activeCount / activeFrames.length : 0;
+
+  const keepFrames = new Array(frameCount).fill(false);
+  const paddingFrames = Math.max(1, Math.round(AUDIO_PREPROCESS_PADDING_SECONDS / AUDIO_PREPROCESS_FRAME_SECONDS));
+  const maxSilenceFrames = Math.max(1, Math.round(AUDIO_PREPROCESS_MAX_SILENCE_SECONDS / AUDIO_PREPROCESS_FRAME_SECONDS));
+
+  if (activeCount > 0 && activeRatio >= 0.015) {
+    activeFrames.forEach((active, frame) => {
+      if (!active) return;
+      const from = Math.max(0, frame - paddingFrames);
+      const to = Math.min(frameCount - 1, frame + paddingFrames);
+      for (let keep = from; keep <= to; keep += 1) {
+        keepFrames[keep] = true;
+      }
+    });
+
+    let silentRun = 0;
+    for (let frame = 0; frame < frameCount; frame += 1) {
+      if (keepFrames[frame]) {
+        silentRun = 0;
+      } else {
+        silentRun += 1;
+        if (silentRun <= maxSilenceFrames) keepFrames[frame] = true;
+      }
+    }
+  } else {
+    keepFrames.fill(true);
+  }
+
+  const keptChunks = [];
+  let processedLength = 0;
+  keepFrames.forEach((keep, frame) => {
+    if (!keep) return;
+    const start = frame * frameSize;
+    const end = Math.min(mono.length, start + frameSize);
+    if (end <= start) return;
+    const chunk = mono.slice(start, end);
+    keptChunks.push(chunk);
+    processedLength += chunk.length;
+  });
+
+  const compacted = new Float32Array(processedLength || mono.length);
+  if (keptChunks.length) {
+    let offset = 0;
+    keptChunks.forEach((chunk) => {
+      compacted.set(chunk, offset);
+      offset += chunk.length;
+    });
+  } else {
+    compacted.set(mono);
+  }
+
+  let peak = 0;
+  for (let index = 0; index < compacted.length; index += 1) {
+    peak = Math.max(peak, Math.abs(compacted[index]));
+  }
+  const gain = peak > 0 ? Math.min(8, 0.9 / peak) : 1;
+  const normalized = new Float32Array(compacted.length);
+  for (let index = 0; index < compacted.length; index += 1) {
+    normalized[index] = Math.max(-1, Math.min(1, compacted[index] * gain));
+  }
+
+  const originalSeconds = mono.length / AUDIO_PREPROCESS_TARGET_SAMPLE_RATE;
+  const processedSeconds = normalized.length / AUDIO_PREPROCESS_TARGET_SAMPLE_RATE;
+  return {
+    samples: normalized,
+    sampleRate: AUDIO_PREPROCESS_TARGET_SAMPLE_RATE,
+    stats: {
+      originalSeconds,
+      processedSeconds,
+      removedSeconds: Math.max(0, originalSeconds - processedSeconds),
+      activeRatio,
+      gain,
+      changed: Math.abs(processedSeconds - originalSeconds) > 0.1 || Math.abs(gain - 1) > 0.05,
+    },
+  };
+}
+
+function resampleAudioPcm(samples, sourceRate, targetRate) {
+  if (Math.round(sourceRate) === Math.round(targetRate)) return new Float32Array(samples);
+  const ratio = sourceRate / targetRate;
+  const length = Math.max(1, Math.round(samples.length / ratio));
+  const output = new Float32Array(length);
+  for (let index = 0; index < length; index += 1) {
+    const sourceIndex = index * ratio;
+    const before = Math.floor(sourceIndex);
+    const after = Math.min(samples.length - 1, before + 1);
+    const weight = sourceIndex - before;
+    output[index] = samples[before] * (1 - weight) + samples[after] * weight;
+  }
+  return output;
+}
+
+function encodePcm16Wav(samples, sampleRate) {
+  const dataLength = samples.length * 2;
+  const buffer = new ArrayBuffer(44 + dataLength);
+  const view = new DataView(buffer);
+  writeAscii(view, 0, "RIFF");
+  view.setUint32(4, 36 + dataLength, true);
+  writeAscii(view, 8, "WAVE");
+  writeAscii(view, 12, "fmt ");
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);
+  view.setUint16(22, 1, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * 2, true);
+  view.setUint16(32, 2, true);
+  view.setUint16(34, 16, true);
+  writeAscii(view, 36, "data");
+  view.setUint32(40, dataLength, true);
+  let offset = 44;
+  for (let index = 0; index < samples.length; index += 1) {
+    const value = Math.max(-1, Math.min(1, samples[index]));
+    view.setInt16(offset, value < 0 ? value * 0x8000 : value * 0x7fff, true);
+    offset += 2;
+  }
+  return buffer;
+}
+
+function writeAscii(view, offset, text) {
+  for (let index = 0; index < text.length; index += 1) {
+    view.setUint8(offset + index, text.charCodeAt(index));
+  }
+}
+
+function formatAudioPreprocessSummary(stats) {
+  if (!stats) return "전처리를 건너뛰고 원본 녹음 파일을 분석합니다.";
+  const parts = [];
+  if (stats.removedSeconds >= 0.3) {
+    parts.push(`긴 무음 ${formatDuration(stats.removedSeconds)} 줄임`);
+  }
+  if (stats.gain > 1.15) {
+    parts.push(`볼륨 ${stats.gain.toFixed(1)}배 보정`);
+  }
+  return parts.length
+    ? `전처리 완료: ${parts.join(" · ")}.`
+    : "전처리 완료: 원본 흐름을 유지하고 볼륨만 확인했습니다.";
 }
 
 function validateAudioFile(file, metadata) {

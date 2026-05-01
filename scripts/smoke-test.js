@@ -29,6 +29,9 @@ const API_NAMES = [
   "getAudioModelProfile",
   "getAudioTranscriberCandidates",
   "formatAudioTranscriptionError",
+  "preprocessAudioPcm",
+  "encodePcm16Wav",
+  "formatAudioPreprocessSummary",
   "cleanAudioTranscriptDraft",
   "breakAudioTranscriptSentences",
   "stripJpegMetadata",
@@ -325,6 +328,21 @@ function buildLogicTests(api) {
     test("audio transcript cleaner removes consecutive repeated hallucination sentences", () => {
       const result = api.cleanAudioTranscriptDraft("너 말고 누굴 밀었다는거에요? 정중국은? 정중국은? 정중국은? 일단 알았다.");
       assert(result === "너 말고 누굴 밀었다는거에요? 정중국은? 일단 알았다.", "audio repeated sentence cleanup failed");
+    }),
+    test("audio preprocessing trims long silence and normalizes quiet speech", () => {
+      const sampleRate = 16000;
+      const samples = new Float32Array(sampleRate * 3);
+      for (let index = sampleRate; index < sampleRate * 2; index += 1) {
+        samples[index] = Math.sin((index / sampleRate) * Math.PI * 2 * 440) * 0.08;
+      }
+      const result = api.preprocessAudioPcm(samples, sampleRate);
+      assert(result.sampleRate === 16000, "audio preprocessing should output 16kHz PCM");
+      assert(result.samples.length < samples.length, "audio preprocessing should shorten long silence");
+      assert(result.stats.removedSeconds > 0.5, "audio preprocessing should report removed silence");
+      assert(result.stats.gain > 1, "audio preprocessing should amplify quiet speech");
+      const wav = api.encodePcm16Wav(result.samples, result.sampleRate);
+      assert(wav.byteLength === 44 + result.samples.length * 2, "wav encoding size is invalid");
+      assert(api.formatAudioPreprocessSummary(result.stats).includes("전처리 완료"), "preprocess summary missing");
     }),
     test("audio transcription fetch failures explain network and model loading", () => {
       const result = api.formatAudioTranscriptionError(new Error("Failed to fetch"));

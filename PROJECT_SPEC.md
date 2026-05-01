@@ -14,7 +14,7 @@ Current production baseline:
 - Production domain: `https://ko-workspace.com/`
 - Cloudflare Pages project: `mic-script-generator`
 - Latest AdSense/SEO readiness commit: `580c060 Improve AdSense SEO readiness`
-- Current static asset cache version: `20260501-11`
+- Current static asset cache version: `20260501-12`
 - Category landing pages, privacy policy updates, sitemap updates, and core FAQ copy were deployed on 2026-04-29
 
 Core constraints:
@@ -47,6 +47,7 @@ Core constraints:
   - Supports short local audio files such as m4a, mp3, wav, aac, webm, and ogg
   - Keeps the selected recording file in the browser; no application-server upload
   - Treats output as a lightweight human-review text draft, not a stored transcript manager or guaranteed final transcript, and warns that non-storage browser processing may be less accurate than server STT
+  - Applies browser-side audio preprocessing before transcription: mono conversion, 16 kHz WAV preparation, long-silence compaction, and volume normalization
   - Shows an explicit in-progress indicator while model loading or transcription is running
   - Applies conservative Whisper generation options to reduce repeated hallucinated phrases in noisy or non-speech segments
   - Removes consecutive repeated short transcription sentences before rendering the draft
