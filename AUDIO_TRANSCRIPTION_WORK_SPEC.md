@@ -7,18 +7,20 @@
 - 사용자가 선택한 m4a, mp3, wav, aac, webm, ogg 녹음 파일을 서버 업로드 없이 브라우저 안에서 텍스트로 변환한다.
 - 결과는 최종 회의록이나 법적 기록이 아니라 사람이 다시 확인해야 하는 초안으로 취급한다.
 - 저장하지 않는 가벼운 도구라는 장점을 분명히 보여 주되, 서버형 대형 STT보다 품질이 낮을 수 있다는 한계도 UI에 명확히 표시한다.
-- 짧은 한국어 휴대폰 녹음 파일에서 반복 환각을 줄이기 위해 검증된 `안정 변환` 모델을 기본값으로 둔다.
+- 한국어 ARS, 안내 문구, 휴대폰 녹음 파일에서 `whisper-tiny` 품질이 부족한 경우가 확인되어 `정확도 우선` 모델을 기본값으로 둔다.
 
 ## 현재 구현 기준
 
 - 렌더러: `app.js`의 `renderAudioFileTranscription`
 - 도구 정의: `app.js`의 `TOOL_DEFS` 중 `audio-file-transcription`
 - 모델 프로필:
-  - `stable`: `onnx-community/whisper-tiny`, 기본값, `안정 변환`
-  - 예전 `quality`와 `fast` 프로필 값은 `stable`로 되돌린다.
+  - `quality`: `onnx-community/whisper-base`, 기본값, `정확도 우선`
+  - `stable`: `onnx-community/whisper-tiny`, 빠른 변환 fallback
+  - `fast` 프로필 값은 `stable`로 되돌린다.
 - 실행 방식:
-  - `auto`: 가능한 경우 브라우저 가속을 쓰고, 맞지 않으면 CPU 호환 경로로 낮춘다.
-  - `lightweight`: CPU mixed precision만 사용한다.
+  - UI에는 `변환 품질` 선택만 노출한다.
+  - `정확도 우선`은 더 큰 모델을 쓰므로 첫 실행 다운로드와 처리 시간이 길 수 있다.
+  - 기본 품질 경로는 호환성이 검증된 WASM mixed precision을 사용한다.
   - WebGPU 고품질, CPU 고품질 같은 불안정한 명시 옵션은 UI에 노출하지 않는다.
 - 입력 제한:
   - 최대 5분 권장
@@ -50,12 +52,13 @@
 - 브라우저 안에서 처리하는 한 서버형 STT와 같은 품질을 보장할 수 없다.
 - 품질이 낮다는 피드백이 있으면 우선 확인할 항목은 다음 순서다.
   - 실제 운영 페이지가 최신 `app.js` 캐시 버전을 쓰는지
-  - 기본 모델이 `stable`인지
-  - `onnx-community/whisper-tiny` 세션이 실제로 준비되는지
+  - 기본 모델이 `quality`인지
+  - `onnx-community/whisper-base` 세션이 실제로 준비되는지
+  - 빠른 변환 fallback인 `onnx-community/whisper-tiny`가 여전히 준비되는지
   - WebGPU 사용 가능 여부와 CPU fallback 여부
   - 음성 파일의 잡음, 발화 거리, 통화 압축, 다중 화자 여부
 - 더 큰 품질 개선이 필요하면 브라우저-only 원칙을 유지할지, 선택형 서버 STT를 별도 기능으로 둘지 먼저 사용자에게 확인해야 한다.
-- `onnx-community/whisper-base`는 실제 녹음에서 하지 않은 말이 반복되는 문제가 있었으므로 충분한 실제 파일 테스트 없이 기본값이나 노출 옵션으로 복귀시키지 않는다.
+- `onnx-community/whisper-base`는 전처리와 반복 제거 옵션을 보강한 뒤 실제 휴대폰 녹음에서 `whisper-tiny`보다 문맥을 더 잘 살리는 것이 확인되어 기본 `정확도 우선` 모델로 복귀했다.
 
 ## 보안과 개인정보
 
@@ -75,9 +78,10 @@
 
 ## 최근 작업 상태
 
-- `whisper-base` 품질 프로필은 실제 녹음에서 반복 환각이 확인되어 UI 노출과 기본값에서 제외했다.
-- `whisper-tiny` 안정 프로필을 기본값으로 되돌렸다.
+- `whisper-base` 품질 프로필은 전처리와 반복 제거를 보강한 뒤 실제 녹음 재검증에서 `whisper-tiny`보다 문맥을 더 잘 살려 기본값으로 복귀했다.
+- `whisper-tiny`는 빠른 변환 fallback으로 유지한다.
 - 녹음 파일 변환 기능의 베타 표시와 비저장 품질 한계 안내를 UI에 추가했다.
 - 연속 반복 문장 제거 후처리를 추가했다.
 - 1순위 개선안으로 16 kHz WAV 준비, 앞뒤 빈 구간 정리, 작은 목소리 보정 전처리를 추가했다.
 - 실제 휴대폰 녹음에서 작은 발화가 누락되는 문제가 확인되어 내부 무음 압축은 기본 전처리에서 제거하고 대화 흐름 보존을 우선한다.
+- 한국어 ARS/안내 음성에서 `whisper-tiny` 품질이 현저히 부족해 `whisper-base`를 정확도 우선 기본 모델로 올리고, `whisper-tiny`는 빠른 변환 fallback으로 유지한다.

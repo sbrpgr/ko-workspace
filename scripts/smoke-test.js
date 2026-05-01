@@ -297,7 +297,7 @@ function buildLogicTests(api) {
         "audio sentence line breaks failed"
       );
     }),
-    test("audio transcription prefers high-quality backend by default", () => {
+    test("audio transcription keeps browser-compatible backend candidates", () => {
       const autoCandidates = api.getAudioTranscriberCandidates("auto");
       const webGpuCandidates = api.getAudioTranscriberCandidates("webgpu", true);
       const unavailableWebGpuCandidates = api.getAudioTranscriberCandidates("webgpu", false);
@@ -312,11 +312,13 @@ function buildLogicTests(api) {
       assert(lightweightCandidates[0].dtype.decoder_model_merged === "fp16", "lightweight mode should keep mixed precision first");
       assert(lightweightCandidates.length === 1, "lightweight mode should not try heavier fp32 by default");
     }),
-    test("audio transcription defaults retired profiles to stable model", () => {
-      assert(api.AUDIO_TRANSCRIPTION_DEFAULT_PROFILE === "stable", "stable model should be the default profile");
-      assert(api.AUDIO_TRANSCRIPTION_MODEL_PROFILES.stable.model === "onnx-community/whisper-tiny", "stable profile should use whisper-tiny");
-      assert(api.getAudioModelProfile("quality").id === "stable", "retired quality profile should fall back to stable");
-      assert(api.getAudioModelProfile("missing").id === "stable", "missing model profile should fall back to stable");
+    test("audio transcription defaults to quality profile and keeps fast fallback", () => {
+      assert(api.AUDIO_TRANSCRIPTION_DEFAULT_PROFILE === "quality", "quality model should be the default profile");
+      assert(api.AUDIO_TRANSCRIPTION_MODEL_PROFILES.quality.model === "onnx-community/whisper-base", "quality profile should use whisper-base");
+      assert(api.AUDIO_TRANSCRIPTION_MODEL_PROFILES.quality.runtimeMode === "lightweight", "quality profile should use the compatible wasm path");
+      assert(api.AUDIO_TRANSCRIPTION_MODEL_PROFILES.stable.model === "onnx-community/whisper-tiny", "fast fallback should use whisper-tiny");
+      assert(api.getAudioModelProfile("fast").id === "stable", "fast profile alias should use the stable fallback");
+      assert(api.getAudioModelProfile("missing").id === "quality", "missing model profile should fall back to the default quality profile");
     }),
     test("beta tool title attaches beta label without a whitespace break", () => {
       const title = api.renderToolTitle({ title: "녹음 파일 텍스트 변환", beta: true });
