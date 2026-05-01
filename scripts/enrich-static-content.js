@@ -7,7 +7,7 @@ const END = "<!-- static-content:end -->";
 
 const HOME_CONTENT = {
   eyebrow: "실제 사용 시나리오",
-  heading: "코워크스페이스 시나리오다.",
+  heading: "코워크스페이스 시나리오",
   paragraphs: [
     "코워크스페이스는 큰 프로그램을 설치하기에는 애매하지만, 그냥 넘기기에는 계속 손이 가는 작은 업무들을 모아 둔 작업 공간입니다. 글자수를 확인하고, PDF를 합치고, 이미지 용량을 줄이고, 자막 시간을 맞추는 일은 하나하나 보면 작아 보입니다. 하지만 마감 직전에는 이런 작은 작업이 오히려 시간을 가장 많이 잡아먹습니다.",
     "예를 들어 제출용 문서를 준비하는 상황을 생각해 보겠습니다. 자기소개서 분량을 맞추고, 증빙 이미지를 줄이고, 스캔본을 PDF로 묶고, 마지막으로 안내 메일 문구를 다듬어야 할 때가 있습니다. 각각의 작업을 다른 사이트와 프로그램에서 처리하면 파일을 여러 번 올리고 내려받아야 합니다. 코워크스페이스는 이런 중간 과정을 브라우저 안에서 이어서 처리할 수 있도록 설계했습니다.",
@@ -288,7 +288,7 @@ const TOOL_CONTENT = {
 function makeToolContent(item) {
   return {
     eyebrow: "실제 사용 시나리오",
-    heading: `${item.name} 시나리오다.`,
+    heading: `${item.name} 시나리오`,
     paragraphs: [
       `${item.name}를 쓰게 되는 순간은 대개 ${item.moment}입니다. 이런 작업은 처음에는 사소해 보이지만, 막상 마감이나 공유 직전에 걸리면 생각보다 시간을 많이 잡아먹습니다. 코워크스페이스는 이런 작은 불편을 별도 프로그램 설치나 회원가입 없이 브라우저에서 바로 처리할 수 있도록 도구의 흐름을 짧게 잡았습니다.`,
       `예를 들어 ${item.scene}을 떠올려 보겠습니다. ${item.pain}. 그래서 이 단계에서 필요한 것은 거창한 자동화보다, 사용자가 가진 원본을 안전하게 확인하면서 필요한 형태로 바꾸는 일입니다. 작업을 시작하기 위해 새 계정을 만들거나 파일을 여러 곳에 올리는 과정이 길어지면, 원래 하려던 일보다 도구를 준비하는 일이 더 커질 수 있습니다.`,
@@ -308,7 +308,7 @@ function makeToolContent(item) {
 function makeCategoryContent(name, situation, criteria, focus) {
   return {
     eyebrow: "업무 활용 시나리오",
-    heading: `${name} 시나리오다.`,
+    heading: `${name} 시나리오`,
     paragraphs: [
       `${name}는 하나의 거대한 작업보다, 업무 중간에 반복해서 생기는 작은 정리 과정을 다루기 위해 묶어 둔 도구 모음입니다. 사용자는 대개 ${situation}에 이 페이지를 열게 됩니다. 이런 작업은 짧게 끝나야 다음 업무가 밀리지 않습니다.`,
       `실제 상황에서는 ${criteria}이 계속 문제가 됩니다. 사람이 하나씩 확인해도 되지만, 반복될수록 빠뜨리는 부분이 생기고 결과를 다시 옮기는 시간이 늘어납니다. 코워크스페이스는 이런 기준을 도구별로 나누어 두고, 사용자가 필요한 흐름으로 바로 이동할 수 있게 구성했습니다.`,
@@ -417,8 +417,12 @@ function renderPanel(content) {
   return `          ${START}
           <section class="panel static-content-panel" aria-labelledby="${escapeAttr(id)}">
             <article class="static-content-article">
-              <p class="eyebrow">${escapeHtml(content.eyebrow)}</p>
-              <h2 id="${escapeAttr(id)}">${escapeHtml(content.heading)}</h2>
+              <div class="section-heading static-content-heading">
+                <div>
+                  <p class="eyebrow">${escapeHtml(content.eyebrow)}</p>
+                  <h2 id="${escapeAttr(id)}">${escapeHtml(content.heading)}</h2>
+                </div>
+              </div>
               <div class="static-content-body">
 ${content.paragraphs.map(renderParagraph).join("\n")}
               </div>
@@ -442,7 +446,7 @@ ${sentences.map((sentence) => `                  <span>${escapeHtml(sentence)}</
 
 function splitSentences(text) {
   return String(text)
-    .split(/(?<=다\.|요\.|니다\.|습니다\.|됩니다\.|입니다\.)\s+/)
+    .split(/(?<=\.)\s+/)
     .map((item) => item.trim())
     .filter(Boolean);
 }

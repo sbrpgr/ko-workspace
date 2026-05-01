@@ -55,7 +55,7 @@ Current migration note:
 - Category landing pages are now live at `/tools/text/`, `/tools/pdf/`, `/tools/image/`, `/tools/subtitle/`, and `/tools/voice-video/`.
 - Category pages reuse the shared app shell and are rendered from `CATEGORY_PAGE_DEFS` in `app.js`; do not fork tool logic into category HTML files.
 - Preserve canonical URLs and sitemap entries whenever tool pages are updated.
-- Current static asset cache version is `20260430-03`; bump this version whenever `app.js` or `styles.css` changes.
+- Current static asset cache version is `20260501-01`; bump this version whenever `app.js` or `styles.css` changes.
 
 ## 2A. Current SEO And AdSense Baseline
 
