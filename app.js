@@ -1698,7 +1698,7 @@ const AUDIO_TRANSCRIPTION_WASM_BALANCED_DTYPE = Object.freeze({
   encoder_model: "q8",
   decoder_model_merged: "fp16",
 });
-const AUDIO_TRANSCRIPTION_WEBGPU_DTYPE = Object.freeze({
+const AUDIO_TRANSCRIPTION_HIGH_QUALITY_DTYPE = Object.freeze({
   encoder_model: "fp32",
   decoder_model_merged: "fp32",
 });
@@ -1713,7 +1713,7 @@ function renderAudioFileTranscription(container) {
         <div>
           <p class="eyebrow">Local Audio STT</p>
           <h2>녹음 파일 텍스트 변환</h2>
-          <p class="tool-note audio-tool-intro">녹음 파일을 저장하지 않는 경량 변환 기능입니다. 화자 구분, 요약, 장기 보관 없이 검토용 단순 텍스트 초안만 만듭니다.</p>
+          <p class="tool-note audio-tool-intro">녹음 파일을 저장하지 않는 브라우저 변환 기능입니다. 품질 우선으로 먼저 시도하고, 기기와 맞지 않으면 CPU 경량/호환 모드로 낮출 수 있습니다.</p>
         </div>
         <div class="status-group" aria-live="polite">
           <span id="audioModelStatus" class="status-pill">모델 대기</span>
@@ -1740,18 +1740,19 @@ function renderAudioFileTranscription(container) {
             <div class="field">
               <label for="audioLanguage">인식 언어</label>
               <select id="audioLanguage">
-                <option value="korean" selected>한국어 우선</option>
+                <option value="ko" selected>한국어 우선</option>
                 <option value="">자동 감지</option>
-                <option value="english">영어</option>
-                <option value="japanese">일본어</option>
+                <option value="en">영어</option>
+                <option value="ja">일본어</option>
               </select>
             </div>
             <div class="field">
               <label for="audioDeviceMode">실행 방식</label>
               <select id="audioDeviceMode">
-                <option value="wasm" selected>CPU 처리(권장)</option>
-                <option value="auto">자동 선택</option>
-                <option value="webgpu">WebGPU 우선</option>
+                <option value="auto" selected>품질 우선(권장)</option>
+                <option value="webgpu">WebGPU 고품질</option>
+                <option value="wasm">CPU 고품질</option>
+                <option value="lightweight">CPU 경량/호환</option>
               </select>
             </div>
           </div>
@@ -1767,7 +1768,7 @@ function renderAudioFileTranscription(container) {
             <span class="audio-processing-spinner" aria-hidden="true"></span>
             <span id="audioProcessingText">변환 준비 중입니다.</span>
           </div>
-          <p id="audioRunMeta" class="tool-note">처음 실행할 때 모델 파일을 내려받기 때문에 시간이 걸릴 수 있습니다. 모바일에서는 PC보다 느릴 수 있습니다.</p>
+          <p id="audioRunMeta" class="tool-note">품질 우선 모드는 처음 실행할 때 더 큰 모델 파일을 내려받을 수 있습니다. 모바일에서는 CPU 경량/호환 모드가 더 안정적일 수 있습니다.</p>
         </article>
 
         <article class="result-card">
@@ -1787,7 +1788,7 @@ function renderAudioFileTranscription(container) {
 
       <article class="notice-card">
         <strong>브라우저 안에서 처리하는 베타 도구입니다.</strong>
-        <span>녹음 내용은 서버로 업로드하지 않지만, 모델 파일은 외부 CDN과 Hugging Face에서 내려받습니다. 통화녹음이나 민감한 녹음은 관련 법과 상대방 동의 여부를 확인한 뒤 사용해 주세요.</span>
+        <span>녹음 내용은 서버로 업로드하지 않지만, 모델 파일은 외부 CDN과 Hugging Face에서 내려받습니다. 품질 우선 모드는 더 큰 모델 파일을 사용할 수 있습니다. 통화녹음이나 민감한 녹음은 관련 법과 상대방 동의 여부를 확인한 뒤 사용해 주세요.</span>
       </article>
     </div>
   `;
@@ -1909,6 +1910,12 @@ function renderAudioFileTranscription(container) {
         chunk_length_s: 30,
         stride_length_s: 5,
         return_timestamps: false,
+        temperature: 0,
+        condition_on_prev_tokens: false,
+        compression_ratio_threshold: 2.4,
+        logprob_threshold: -1,
+        no_speech_threshold: 0.6,
+        num_beams: nodes.deviceMode.value === "lightweight" ? 1 : 3,
       };
       if (nodes.language.value) options.language = nodes.language.value;
 
@@ -1937,7 +1944,7 @@ function renderAudioFileTranscription(container) {
     clearSelectedFile();
     nodes.modelStatus.textContent = "모델 대기";
     setAudioProcessing(false);
-    nodes.runMeta.textContent = "처음 실행할 때 모델 파일을 내려받기 때문에 시간이 걸릴 수 있습니다. 모바일에서는 PC보다 느릴 수 있습니다.";
+    nodes.runMeta.textContent = "품질 우선 모드는 처음 실행할 때 더 큰 모델 파일을 내려받을 수 있습니다. 모바일에서는 CPU 경량/호환 모드가 더 안정적일 수 있습니다.";
     updateOutputMeta();
   }
 
@@ -2081,21 +2088,27 @@ function getAudioTranscriberCandidates(deviceMode) {
   const canUseWebGpu = Boolean(navigator.gpu);
   if (deviceMode === "webgpu") {
     return [
-      { device: "webgpu", dtype: AUDIO_TRANSCRIPTION_WEBGPU_DTYPE },
+      { device: "webgpu", dtype: AUDIO_TRANSCRIPTION_HIGH_QUALITY_DTYPE },
+      { device: "wasm", dtype: "fp32" },
+      { device: "wasm", dtype: AUDIO_TRANSCRIPTION_WASM_BALANCED_DTYPE },
+    ];
+  }
+  if (deviceMode === "lightweight") {
+    return [
       { device: "wasm", dtype: AUDIO_TRANSCRIPTION_WASM_BALANCED_DTYPE },
       { device: "wasm", dtype: "fp32" },
     ];
   }
   if (deviceMode === "wasm" || !canUseWebGpu) {
     return [
-      { device: "wasm", dtype: AUDIO_TRANSCRIPTION_WASM_BALANCED_DTYPE },
       { device: "wasm", dtype: "fp32" },
+      { device: "wasm", dtype: AUDIO_TRANSCRIPTION_WASM_BALANCED_DTYPE },
     ];
   }
   return [
-    { device: "wasm", dtype: AUDIO_TRANSCRIPTION_WASM_BALANCED_DTYPE },
-    { device: "webgpu", dtype: AUDIO_TRANSCRIPTION_WEBGPU_DTYPE },
+    { device: "webgpu", dtype: AUDIO_TRANSCRIPTION_HIGH_QUALITY_DTYPE },
     { device: "wasm", dtype: "fp32" },
+    { device: "wasm", dtype: AUDIO_TRANSCRIPTION_WASM_BALANCED_DTYPE },
   ];
 }
 
@@ -2110,13 +2123,13 @@ function formatAudioDtypeKey(dtype) {
 function formatAudioTranscriptionError(error) {
   const message = String(error?.message || "").trim();
   if (/can't create a session|TransposeDQWeights|Missing required scale|qdq_actions/i.test(message)) {
-    return "녹음 파일 텍스트 변환에 실패했습니다. 브라우저 음성 인식 모델의 정밀도 조합이 현재 실행 환경과 맞지 않습니다. 새로고침 후 CPU 처리(권장)로 다시 시도해 주세요.";
+    return "녹음 파일 텍스트 변환에 실패했습니다. 브라우저 음성 인식 모델의 정밀도 조합이 현재 실행 환경과 맞지 않습니다. 새로고침 후 CPU 경량/호환으로 다시 시도해 주세요.";
   }
   if (/failed to fetch|load failed|network/i.test(message)) {
     return "녹음 파일 텍스트 변환에 실패했습니다. 브라우저가 선택한 녹음 파일이나 음성 인식 모델 파일을 가져오지 못했습니다. 새로고침 후 다시 시도하고, 회사망·보안 프로그램·광고 차단 기능이 cdn.jsdelivr.net, huggingface.co, cas-bridge.xethub.hf.co 접속을 막는지 확인해 주세요.";
   }
   if (/backend|webgpu|wasm|dynamically imported module/i.test(message)) {
-    return "녹음 파일 텍스트 변환에 실패했습니다. 브라우저 음성 인식 백엔드를 준비하지 못했습니다. 실행 방식을 CPU 처리로 두고 다시 시도해 주세요.";
+    return "녹음 파일 텍스트 변환에 실패했습니다. 브라우저 음성 인식 백엔드를 준비하지 못했습니다. 실행 방식을 CPU 경량/호환으로 두고 다시 시도해 주세요.";
   }
   return `녹음 파일 텍스트 변환에 실패했습니다. ${message}`.trim();
 }

@@ -289,13 +289,16 @@ function buildLogicTests(api) {
         "audio sentence line breaks failed"
       );
     }),
-    test("audio transcription prefers stable CPU backend by default", () => {
+    test("audio transcription prefers high-quality backend by default", () => {
       const autoCandidates = api.getAudioTranscriberCandidates("auto");
       const webGpuCandidates = api.getAudioTranscriberCandidates("webgpu");
+      const lightweightCandidates = api.getAudioTranscriberCandidates("lightweight");
       assert(autoCandidates[0].device === "wasm", "auto mode should try wasm first");
-      assert(autoCandidates[0].dtype.decoder_model_merged === "fp16", "wasm mode should avoid q8 decoder sessions");
-      assert(autoCandidates.some((candidate) => candidate.dtype === "fp32"), "auto mode should include fp32 fallback");
+      assert(autoCandidates[0].dtype === "fp32", "auto mode without WebGPU should prefer fp32 quality");
+      assert(autoCandidates.some((candidate) => candidate.dtype.decoder_model_merged === "fp16"), "auto mode should include stable mixed fallback");
       assert(webGpuCandidates[0].device === "webgpu", "webgpu mode should honor explicit choice");
+      assert(webGpuCandidates[0].dtype.decoder_model_merged === "fp32", "webgpu mode should use fp32 decoder first");
+      assert(lightweightCandidates[0].dtype.decoder_model_merged === "fp16", "lightweight mode should keep mixed precision first");
     }),
     test("audio transcription fetch failures explain network and model loading", () => {
       const result = api.formatAudioTranscriptionError(new Error("Failed to fetch"));
@@ -303,7 +306,7 @@ function buildLogicTests(api) {
     }),
     test("audio transcription session failures explain dtype compatibility", () => {
       const result = api.formatAudioTranscriptionError(new Error("Missing required scale"));
-      assert(result.includes("정밀도") && result.includes("CPU 처리"), "session error guidance is too vague");
+      assert(result.includes("정밀도") && result.includes("CPU 경량/호환"), "session error guidance is too vague");
     }),
     test("text diff counts add and remove rows", () => {
       const result = api.diffLines("A\nB", "A\nC");
