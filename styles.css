@@ -2759,70 +2759,88 @@ body.home-mode .hero-copy h1 {
 }
 
 .static-content-panel {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 34px 0 6px;
+}
+
+.static-content-article {
+  max-width: 920px;
+  margin: 0 auto;
+  border-top: 1px solid #dfe5ee;
+  border-bottom: 1px solid #dfe5ee;
+  padding: 30px 8px 34px;
+}
+
+.static-content-article > .eyebrow {
+  margin-bottom: 10px;
+}
+
+.static-content-article h2 {
+  color: #20242d;
+  font-size: clamp(1.42rem, 2.3vw, 1.95rem);
+  line-height: 1.34;
+  margin-bottom: 18px;
+  letter-spacing: 0;
+}
+
+.static-content-body {
   display: grid;
   gap: 18px;
-  padding: 22px;
-  background: #ffffff;
-  box-shadow: none;
 }
 
-.static-content-heading {
+.static-content-body p {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  color: #424b59;
+  font-size: 1rem;
+  line-height: 1.78;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.static-content-body span {
+  display: block;
+}
+
+.static-content-notes {
   display: grid;
   gap: 10px;
-}
-
-.static-content-heading h2 {
-  color: #20242d;
-  font-size: clamp(1.2rem, 2vw, 1.55rem);
-  line-height: 1.32;
-}
-
-.static-content-heading p,
-.static-content-value {
-  color: #535d6b;
-  line-height: 1.76;
-}
-
-.static-story-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.static-story-grid article {
-  display: grid;
-  align-content: start;
-  gap: 8px;
-  border: 1px solid #e7ebf2;
-  border-radius: 8px;
+  margin-top: 26px;
+  border-left: 3px solid #d33b35;
   background: #fbfcfe;
-  padding: 14px;
+  padding: 16px 18px;
 }
 
-.static-story-grid h3 {
+.static-content-notes h3 {
   color: #252b35;
-  font-size: 0.98rem;
-  line-height: 1.4;
+  font-size: 1rem;
+  line-height: 1.42;
 }
 
-.static-story-grid p {
-  color: #5d6674;
-  font-size: 0.92rem;
-  line-height: 1.7;
-}
-
-.static-note-list {
+.static-content-notes ul {
   display: grid;
-  gap: 8px;
+  gap: 7px;
   margin: 0;
   padding-left: 20px;
-  color: #4d5664;
+  color: #515b69;
   line-height: 1.68;
 }
 
-@media (max-width: 900px) {
-  .static-story-grid {
-    grid-template-columns: 1fr;
+@media (max-width: 760px) {
+  .static-content-panel {
+    padding-top: 26px;
+  }
+
+  .static-content-article {
+    padding: 24px 2px 28px;
+  }
+
+  .static-content-body p {
+    font-size: 0.96rem;
+    line-height: 1.74;
   }
 }
 

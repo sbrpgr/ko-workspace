@@ -177,8 +177,9 @@ function auditStaticReviewContent() {
       .replace(/<[^>]+>/g, " ")
       .replace(/\s+/g, " ")
       .trim();
-    if (visible.length < 1000) {
-      problems.push(`${relative}: static visible content is too thin (${visible.length} chars)`);
+    const minimumLength = 1500;
+    if (visible.length < minimumLength) {
+      problems.push(`${relative}: static visible content is too thin (${visible.length} chars, expected ${minimumLength}+)`);
     }
   }
 
