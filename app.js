@@ -960,7 +960,10 @@ function getActiveCategoryPage() {
 
 function bindGlobalEvents() {
   ensureBookmarkPromptButton();
-  els.toolSearch.addEventListener("input", renderSidebarTools);
+  els.toolSearch.addEventListener("input", () => {
+    renderSidebarTools();
+    filterHomeToolCards();
+  });
   els.helpBtn.addEventListener("click", openHelpDialog);
   els.helpCloseBtn.addEventListener("click", closeHelpDialog);
   els.helpDialog.addEventListener("click", closeHelpDialogFromBackdrop);
@@ -1133,16 +1136,7 @@ function renderHomePage() {
   setPageTitleReloadState(null);
 
   els.toolOverview.innerHTML = `
-    <section class="home-toolbar" aria-label="도구 검색">
-      <div class="home-toolbar-copy">
-        <strong>무엇을 처리할까요?</strong>
-        <span>${TOOL_DEFS.length}개 업무 도구를 바로 실행합니다.</span>
-      </div>
-      <label class="home-search" for="homeToolSearch">
-        <span>도구 검색</span>
-        <input id="homeToolSearch" type="search" placeholder="글자수, PDF, QR, 자막" autocomplete="off" />
-      </label>
-    </section>
+    <div class="home-divider" aria-hidden="true"></div>
     ${renderHomeCategoryLinks()}
   `;
 
@@ -1154,7 +1148,7 @@ function renderHomePage() {
     </section>
   `;
 
-  bindHomeToolSearch();
+  filterHomeToolCards();
   renderGuideList([]);
   renderToolDetailAccordion(null);
   renderQuickToolDock(null);
@@ -1314,16 +1308,11 @@ function renderBetaToolTitle(title) {
   return `<span class="tool-title-with-beta">${escapeHtml(title)}<span class="tool-beta-label">(베타)</span></span>`;
 }
 
-function bindHomeToolSearch() {
-  const searchInput = document.querySelector("#homeToolSearch");
-  if (!searchInput) return;
-
-  searchInput.addEventListener("input", () => {
-    const query = searchInput.value.trim().toLowerCase();
-    document.querySelectorAll(".home-directory .tool-launch-card").forEach((card) => {
-      const text = (card.dataset.search || card.textContent || "").toLowerCase();
-      card.hidden = query.length > 0 && !text.includes(query);
-    });
+function filterHomeToolCards() {
+  const query = (els.toolSearch?.value || "").trim().toLowerCase();
+  document.querySelectorAll(".home-directory .tool-launch-card").forEach((card) => {
+    const text = (card.dataset.search || card.textContent || "").toLowerCase();
+    card.hidden = query.length > 0 && !text.includes(query);
   });
 }
 

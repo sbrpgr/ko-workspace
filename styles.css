@@ -3268,56 +3268,11 @@ body.home-mode .overview-panel {
   margin-top: 6px;
 }
 
-.home-toolbar {
-  display: grid;
-  grid-template-columns: minmax(220px, 1fr) minmax(260px, 420px);
-  align-items: end;
-  justify-content: space-between;
-  gap: 18px 24px;
+.home-divider {
   width: 100%;
   max-width: 1500px;
-  border: 1px solid #e6e9ef;
-  border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0 14px 32px rgba(23, 27, 38, 0.06);
-  padding: 18px;
-  text-align: left;
-}
-
-.home-toolbar-copy {
-  display: grid;
-  gap: 4px;
-}
-
-.home-toolbar strong {
-  color: #20242d;
-  font-size: 1.16rem;
-  line-height: 1.25;
-}
-
-.home-toolbar span {
-  color: var(--muted);
-  font-size: 0.94rem;
-}
-
-.home-search {
-  display: grid;
-  gap: 7px;
-}
-
-.home-search span {
-  color: #4f5663;
-  font-size: 0.82rem;
-  font-weight: 900;
-}
-
-.home-search input {
-  min-height: 46px;
-  border-color: #dfe4ee;
-  background: #f8fafc;
-  color: #20242d;
-  font-size: 0.95rem;
-  padding: 0 14px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, #cfd8e5 16%, #cfd8e5 84%, transparent 100%);
 }
 
 .home-category-links {
@@ -3535,13 +3490,6 @@ body[data-page="home"] .hero-copy p:last-child {
 
 body.tool-mode .hero-copy .eyebrow {
   color: #6b7280;
-}
-
-@media (max-width: 860px) {
-  .home-toolbar {
-    grid-template-columns: 1fr;
-    align-items: stretch;
-  }
 }
 
 @media (max-width: 560px) {
