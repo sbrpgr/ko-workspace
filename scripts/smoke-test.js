@@ -291,13 +291,15 @@ function buildLogicTests(api) {
     }),
     test("audio transcription prefers high-quality backend by default", () => {
       const autoCandidates = api.getAudioTranscriberCandidates("auto");
-      const webGpuCandidates = api.getAudioTranscriberCandidates("webgpu");
+      const webGpuCandidates = api.getAudioTranscriberCandidates("webgpu", true);
+      const unavailableWebGpuCandidates = api.getAudioTranscriberCandidates("webgpu", false);
       const cpuQualityCandidates = api.getAudioTranscriberCandidates("wasm");
       const lightweightCandidates = api.getAudioTranscriberCandidates("lightweight");
       assert(autoCandidates[0].device === "wasm", "auto mode should try wasm first");
       assert(autoCandidates[0].dtype.decoder_model_merged === "fp16", "auto mode without WebGPU should use stable mixed precision");
       assert(webGpuCandidates[0].device === "webgpu", "webgpu mode should honor explicit choice");
       assert(webGpuCandidates[0].dtype.decoder_model_merged === "fp32", "webgpu mode should use fp32 decoder first");
+      assert(unavailableWebGpuCandidates[0].device === "wasm", "webgpu mode should fall back when no adapter is available");
       assert(cpuQualityCandidates[0].dtype === "fp32", "CPU quality mode should opt into fp32 first");
       assert(lightweightCandidates[0].dtype.decoder_model_merged === "fp16", "lightweight mode should keep mixed precision first");
       assert(lightweightCandidates.length === 1, "lightweight mode should not try heavier fp32 by default");

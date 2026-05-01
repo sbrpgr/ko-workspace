@@ -2056,7 +2056,8 @@ async function getAudioTranscriber(deviceMode, progressCallback) {
   }
 
   let lastError = null;
-  for (const candidate of getAudioTranscriberCandidates(deviceMode)) {
+  const canUseWebGpu = await canUseAudioWebGpu();
+  for (const candidate of getAudioTranscriberCandidates(deviceMode, canUseWebGpu)) {
     const key = `${AUDIO_TRANSCRIPTION_MODEL}:${candidate.device}:${formatAudioDtypeKey(candidate.dtype)}`;
     if (!audioTranscriberCache.has(key)) {
       audioTranscriberCache.set(
@@ -2084,9 +2085,20 @@ async function getAudioTranscriber(deviceMode, progressCallback) {
   throw lastError || new Error("음성 인식 모델을 준비하지 못했습니다.");
 }
 
-function getAudioTranscriberCandidates(deviceMode) {
-  const canUseWebGpu = Boolean(navigator.gpu);
+async function canUseAudioWebGpu() {
+  if (!navigator.gpu?.requestAdapter) return false;
+  try {
+    return Boolean(await navigator.gpu.requestAdapter());
+  } catch {
+    return false;
+  }
+}
+
+function getAudioTranscriberCandidates(deviceMode, canUseWebGpu = Boolean(navigator.gpu)) {
   if (deviceMode === "webgpu") {
+    if (!canUseWebGpu) {
+      return [{ device: "wasm", dtype: AUDIO_TRANSCRIPTION_WASM_BALANCED_DTYPE }];
+    }
     return [
       { device: "webgpu", dtype: AUDIO_TRANSCRIPTION_HIGH_QUALITY_DTYPE },
       { device: "wasm", dtype: AUDIO_TRANSCRIPTION_WASM_BALANCED_DTYPE },
