@@ -59,7 +59,7 @@ Google Tag Manager uses container `GTM-W3MF6BSN`.
 - Initial tools do not upload text or files to an application server.
 - Webcam background blur and custom background images are processed locally in the browser; user-selected background files are not uploaded.
 - Work data is intended to stay 100% inside the user's browser for the current static-tool scope.
-- The recording-file transcription beta loads Transformers.js and a Whisper model only on demand; the selected recording file remains local to the browser. It now prefers fp32 quality paths first and falls back to a mixed precision compatibility path, remaining a lightweight draft-text converter with an optional sentence-ending line break cleanup step, not a stored transcript manager.
+- The recording-file transcription beta loads Transformers.js and a Whisper model only on demand; the selected recording file remains local to the browser. It now prefers WebGPU fp32 when available, keeps CPU mixed precision as the stable fallback, and remains a lightweight draft-text converter with an optional sentence-ending line break cleanup step, not a stored transcript manager.
 
 ## Related Docs
 

@@ -2089,26 +2089,26 @@ function getAudioTranscriberCandidates(deviceMode) {
   if (deviceMode === "webgpu") {
     return [
       { device: "webgpu", dtype: AUDIO_TRANSCRIPTION_HIGH_QUALITY_DTYPE },
-      { device: "wasm", dtype: "fp32" },
       { device: "wasm", dtype: AUDIO_TRANSCRIPTION_WASM_BALANCED_DTYPE },
+      { device: "wasm", dtype: "fp32" },
     ];
   }
   if (deviceMode === "lightweight") {
+    return [{ device: "wasm", dtype: AUDIO_TRANSCRIPTION_WASM_BALANCED_DTYPE }];
+  }
+  if (deviceMode === "wasm") {
     return [
-      { device: "wasm", dtype: AUDIO_TRANSCRIPTION_WASM_BALANCED_DTYPE },
       { device: "wasm", dtype: "fp32" },
+      { device: "wasm", dtype: AUDIO_TRANSCRIPTION_WASM_BALANCED_DTYPE },
     ];
   }
-  if (deviceMode === "wasm" || !canUseWebGpu) {
-    return [
-      { device: "wasm", dtype: "fp32" },
-      { device: "wasm", dtype: AUDIO_TRANSCRIPTION_WASM_BALANCED_DTYPE },
-    ];
+  if (!canUseWebGpu) {
+    return [{ device: "wasm", dtype: AUDIO_TRANSCRIPTION_WASM_BALANCED_DTYPE }];
   }
   return [
     { device: "webgpu", dtype: AUDIO_TRANSCRIPTION_HIGH_QUALITY_DTYPE },
-    { device: "wasm", dtype: "fp32" },
     { device: "wasm", dtype: AUDIO_TRANSCRIPTION_WASM_BALANCED_DTYPE },
+    { device: "wasm", dtype: "fp32" },
   ];
 }
 
