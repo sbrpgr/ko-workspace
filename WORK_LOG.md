@@ -96,3 +96,18 @@
 - Added centered document-page/document-panel styling for `/privacy` and `/terms`
 - Improved policy page readability with constrained width, card surface, section spacing, and mobile padding
 - Bumped shared asset cache version to `20260429-14`
+
+## 2026-05-02
+
+### AI Table Paste Converter
+
+- Added `AI 표 복붙 변환기` at `/tools/ai-table-converter/`
+- Parses Markdown, pipe, TSV, and CSV tables from AI answers even when surrounding explanation text is included
+- Supports optional cell-format cleanup for Markdown emphasis, links, inline code, list markers, HTML, empty rows, and empty columns
+- Added document-copy HTML, spreadsheet TSV copy, CSV copy, and CSV download outputs
+- Kept all pasted AI answer and table data browser-side with no application-server upload or content analytics parameters
+- Updated text category copy, sitemap, home structured data, `PROJECT_SPEC.md`, `ROADMAP.md`, and `README.md`
+- Bumped shared asset cache version to `20260502-07`
+- Validated with `npm.cmd run check` and `git diff --check`
+- Deployed commit `c0b3691 Add AI table paste converter` through GitHub Actions / Cloudflare Pages
+- Verified production `https://ko-workspace.com/tools/ai-table-converter/` returned `200` and contained `app.js?v=20260502-07`
