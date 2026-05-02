@@ -101,6 +101,24 @@ const TOOL_DEFS = [
     ],
   },
   {
+    id: "ai-table-converter",
+    path: "/tools/ai-table-converter/",
+    category: "텍스트",
+    title: "AI 표 복붙 변환기",
+    summary:
+      "AI 답변에 섞인 마크다운 표를 찾아 Word, 한글, Google Docs, Excel, Sheets에 붙여넣기 좋은 표로 변환합니다.",
+    seoTitle: "AI 표 복붙 변환기 | ChatGPT 표 엑셀·워드 붙여넣기",
+    seoDescription:
+      "ChatGPT, Claude, Gemini가 만든 마크다운 표를 브라우저에서 문서용 표, 엑셀용 TSV, CSV로 변환하는 무료 도구입니다.",
+    keywords: ["ChatGPT 표", "마크다운 표", "엑셀 붙여넣기", "문서 표"],
+    guide: [
+      { title: "AI 답변 붙여넣기", text: "표 앞뒤 설명 문구가 포함된 ChatGPT, Claude, Gemini 답변을 그대로 넣습니다." },
+      { title: "표 인식", text: "마크다운 표, 파이프 표, TSV, CSV 형태를 찾아 표 데이터만 분리합니다." },
+      { title: "서식 제거 선택", text: "셀 안의 별표, 링크, 코드, HTML 같은 마크다운 흔적을 제거할지 고릅니다." },
+      { title: "붙여넣기", text: "문서용 표 복사, 엑셀용 복사, CSV 복사 또는 다운로드 중 필요한 방식을 선택합니다." },
+    ],
+  },
+  {
     id: "character-counter",
     path: "/tools/character-counter/",
     category: "텍스트",
@@ -484,6 +502,7 @@ const TOOL_VISUALS = {
   "audio-file-transcription": { icon: "\uD83C\uDF99\uFE0F", tone: "red", copy: "\ud734\ub300\ud3f0 \ub179\uc74c \ud30c\uc77c\uc744 \ud14d\uc2a4\ud2b8 \ucd08\uc548\uc73c\ub85c \ubcc0\ud658\ud569\ub2c8\ub2e4." },
   "webcam-recorder": { icon: "\uD83C\uDFA5", tone: "orange", copy: "\uc6f9\ucea0\uacfc \ub9c8\uc774\ud06c\ub97c \ud544\ud130\ub97c \uc801\uc6a9\ud574 \ub179\ud654\ud569\ub2c8\ub2e4." },
   "ai-text-cleaner": { icon: "\u2728", tone: "violet", copy: "AI \ub2f5\ubcc0\uc758 \ubcc4\ud45c\uc640 \ub9c8\ud06c\ub2e4\uc6b4\uc744 \uc815\ub9ac\ud569\ub2c8\ub2e4." },
+  "ai-table-converter": { icon: "\u25A4", tone: "green", copy: "AI \ud45c\ub97c \ubb38\uc11c\uc640 \uc5d1\uc140\uc5d0 \ubd99\uc5ec\ub123\uae30 \uc88b\uac8c \ubcc0\ud658\ud569\ub2c8\ub2e4." },
   "character-counter": { icon: "\uD83D\uDD22", tone: "blue", copy: "\uacf5\ubc31 \ud3ec\ud568\uacfc \uc81c\uc678 \uae00\uc790\uc218\ub97c \uacc4\uc0b0\ud569\ub2c8\ub2e4." },
   "line-break-cleaner": { icon: "\u21B5", tone: "cyan", copy: "\uc904\ubc14\uafc8\uacfc \uacf5\ubc31\uc744 \ubb38\ub2e8\uc73c\ub85c \uc815\ub9ac\ud569\ub2c8\ub2e4." },
   "markdown-editor": { icon: "MD", tone: "indigo", copy: "\uc77c\ubc18 \ud14d\uc2a4\ud2b8\ub97c \ub9c8\ud06c\ub2e4\uc6b4 \ubb38\uc11c\ub85c \ud3b8\uc9d1\ud569\ub2c8\ub2e4." },
@@ -526,6 +545,11 @@ const TOOL_USE_EXAMPLES = {
     "AI 답변을 메일이나 한글 문서에 붙여넣기 전에 별표와 마크다운을 정리합니다.",
     "블로그 초안, 보고서 초안, 메신저 공유용 텍스트를 깔끔하게 바꿉니다.",
     "표 형태의 마크다운을 스프레드시트에 붙여넣기 좋은 형태로 정리합니다.",
+  ],
+  "ai-table-converter": [
+    "AI 답변 앞뒤 설명 문구까지 그대로 붙여넣고 표 데이터만 자동으로 골라냅니다.",
+    "마크다운 표를 Word, 한글, Google Docs에 붙는 문서용 표로 복사합니다.",
+    "Excel과 Google Sheets에 셀 단위로 붙여넣기 좋은 TSV와 CSV를 함께 만듭니다.",
   ],
   "character-counter": [
     "자기소개서, 과제, 블로그 원고의 공백 포함/제외 글자수를 확인합니다.",
@@ -639,6 +663,10 @@ const TOOL_EXTRA_FAQS = {
   "ai-text-cleaner": {
     question: "AI 답변의 별표나 제목 표시를 제거할 수 있나요?",
     answer: "네. `**굵게**`, `### 제목`, 코드블록, 링크 표기, 과한 빈 줄을 목적에 맞게 정리할 수 있습니다. 원문을 직접 서버에 저장하지 않고 브라우저 안에서 처리합니다.",
+  },
+  "ai-table-converter": {
+    question: "표 앞뒤 설명 문구가 있어도 표만 변환할 수 있나요?",
+    answer: "네. AI 답변 전체를 붙여넣어도 마크다운 표, 파이프 표, TSV, CSV 형태를 찾아 표 데이터만 분리합니다. 셀 안의 별표, 링크, 코드 같은 서식 흔적 제거 여부도 선택할 수 있습니다.",
   },
   "character-counter": {
     question: "공백 제외 글자수도 계산되나요?",
@@ -791,10 +819,10 @@ const CATEGORY_PAGE_DEFS = [
     title: "텍스트 업무 도구",
     eyebrow: "Text Tools",
     description:
-      "AI 복붙 서식 정리, 글자수 세기, 줄바꿈 정리, 추출기처럼 매일 쓰는 텍스트 작업을 브라우저에서 바로 처리합니다.",
+      "AI 표 복붙 변환, AI 서식 정리, 글자수 세기, 줄바꿈 정리, 추출기처럼 매일 쓰는 텍스트 작업을 브라우저에서 바로 처리합니다.",
     metaDescription:
-      "코워크스페이스 텍스트 업무 도구 모음입니다. AI 복붙 서식 정리, 글자수 세기, 줄바꿈 정리, 이메일·URL·전화번호 추출 등을 무료로 사용할 수 있습니다.",
-    keywords: ["텍스트 정리", "글자수 세기", "AI 서식 정리", "이메일 추출"],
+      "코워크스페이스 텍스트 업무 도구 모음입니다. AI 표 복붙 변환, AI 복붙 서식 정리, 글자수 세기, 줄바꿈 정리, 이메일·URL·전화번호 추출 등을 무료로 사용할 수 있습니다.",
+    keywords: ["AI 표 변환", "텍스트 정리", "글자수 세기", "AI 서식 정리"],
     categories: ["텍스트"],
     guide: [
       { title: "도구 선택", text: "정리, 계산, 추출, 비교처럼 필요한 텍스트 작업을 고릅니다." },
@@ -1676,6 +1704,7 @@ const TOOL_RENDERERS = {
   "audio-file-transcription": renderAudioFileTranscription,
   "webcam-recorder": renderWebcamRecorder,
   "ai-text-cleaner": renderAiTextCleaner,
+  "ai-table-converter": renderAiTableConverter,
   "character-counter": renderCharacterCounter,
   "line-break-cleaner": renderLineBreakCleaner,
   "markdown-editor": renderMarkdownEditor,
@@ -4335,6 +4364,232 @@ function renderAiTextCleaner(container) {
 
   resultText.addEventListener("input", updateMeta);
   updateMeta();
+}
+
+function renderAiTableConverter(container) {
+  container.innerHTML = `
+    <div class="tool-section ai-table-tool">
+      <div class="tool-grid">
+        <article class="input-card">
+          <div class="section-heading">
+            <div>
+              <h2>AI 답변 원문</h2>
+              <p class="tool-note">표 앞뒤 설명 문구까지 그대로 붙여넣으면 표 영역만 찾아 변환합니다.</p>
+            </div>
+            <button id="sampleTableBtn" type="button">예시 넣기</button>
+          </div>
+          <textarea id="tableSource" placeholder="예: 아래는 비교표입니다.\n\n| 항목 | 장점 | 단점 |\n| --- | --- | --- |\n| A안 | 빠름 | 비용 높음 |\n| B안 | 저렴 | 시간이 걸림 |\n\n필요하면 이 표를 문서에 붙여넣어 주세요."></textarea>
+        </article>
+        <aside class="action-card">
+          <div class="field">
+            <label for="detectedTableSelect">인식한 표</label>
+            <select id="detectedTableSelect" disabled>
+              <option>표 만들기 전입니다</option>
+            </select>
+          </div>
+          <div class="check-row">
+            <label class="check-item"><input id="stripCellFormatting" type="checkbox" checked /> 셀 안 마크다운 서식 제거</label>
+            <label class="check-item"><input id="linksAsText" type="checkbox" checked /> 링크는 텍스트만 남기기</label>
+            <label class="check-item"><input id="collapseCellWhitespace" type="checkbox" checked /> 셀 안 줄바꿈·공백 정리</label>
+            <label class="check-item"><input id="removeEmptyRows" type="checkbox" checked /> 빈 행 제거</label>
+            <label class="check-item"><input id="removeEmptyColumns" type="checkbox" checked /> 빈 열 제거</label>
+          </div>
+          <div class="action-row">
+            <button id="convertTableBtn" class="primary-action" type="button">표 만들기</button>
+          </div>
+          <p class="tool-note">입력 내용은 브라우저 안에서만 파싱합니다. 문서용 복사는 가능한 경우 HTML 표와 텍스트 표를 함께 클립보드에 넣습니다.</p>
+        </aside>
+      </div>
+
+      <section class="stat-grid" id="tableStats" aria-live="polite"></section>
+
+      <article class="result-card ai-table-preview-card">
+        <div class="section-heading">
+          <div>
+            <h2>표 미리보기</h2>
+            <p id="tableMeta" class="tool-note">아직 인식한 표가 없습니다.</p>
+          </div>
+          <div class="action-row ai-table-copy-actions">
+            <button id="copyDocumentTableBtn" type="button">문서용 표 복사</button>
+            <button id="copySpreadsheetTableBtn" type="button">엑셀용 복사</button>
+            <button id="copyCsvTableBtn" type="button">CSV 복사</button>
+            <button id="downloadCsvTableBtn" type="button">CSV 다운로드</button>
+          </div>
+        </div>
+        <div id="tablePreview" class="ai-table-preview markdown-preview" aria-live="polite">
+          <p class="tool-note">AI 답변을 붙여넣고 표 만들기를 누르면 미리보기가 표시됩니다.</p>
+        </div>
+      </article>
+
+      <div class="tool-grid ai-table-outputs">
+        <article class="result-card">
+          <div class="section-heading">
+            <div>
+              <h2>엑셀용 TSV</h2>
+              <p class="tool-note">Excel, Google Sheets에 셀 단위로 붙여넣기 좋습니다.</p>
+            </div>
+          </div>
+          <textarea id="tsvOutput" readonly placeholder="엑셀용 복사 결과"></textarea>
+        </article>
+        <article class="result-card">
+          <div class="section-heading">
+            <div>
+              <h2>CSV</h2>
+              <p class="tool-note">쉼표 구분 파일이나 다른 도구로 옮길 때 사용합니다.</p>
+            </div>
+          </div>
+          <textarea id="csvOutput" readonly placeholder="CSV 결과"></textarea>
+        </article>
+      </div>
+    </div>
+  `;
+
+  const source = container.querySelector("#tableSource");
+  const tableSelect = container.querySelector("#detectedTableSelect");
+  const preview = container.querySelector("#tablePreview");
+  const meta = container.querySelector("#tableMeta");
+  const stats = container.querySelector("#tableStats");
+  const tsvOutput = container.querySelector("#tsvOutput");
+  const csvOutput = container.querySelector("#csvOutput");
+  const state = {
+    tables: [],
+    selectedIndex: 0,
+  };
+
+  function getOptions() {
+    return {
+      stripCellFormatting: container.querySelector("#stripCellFormatting").checked,
+      linksAsText: container.querySelector("#linksAsText").checked,
+      collapseCellWhitespace: container.querySelector("#collapseCellWhitespace").checked,
+      removeEmptyRows: container.querySelector("#removeEmptyRows").checked,
+      removeEmptyColumns: container.querySelector("#removeEmptyColumns").checked,
+    };
+  }
+
+  function runConversion() {
+    const result = convertAiTableInput(source.value, getOptions());
+    state.tables = result.tables;
+    state.selectedIndex = 0;
+    renderTableSelect();
+    renderSelectedTable();
+    if (!state.tables.length) {
+      showToast("표 형식을 확인해 주세요.");
+    }
+  }
+
+  function renderTableSelect() {
+    if (!state.tables.length) {
+      tableSelect.innerHTML = `<option>인식한 표 없음</option>`;
+      tableSelect.disabled = true;
+      return;
+    }
+    tableSelect.disabled = state.tables.length < 2;
+    tableSelect.innerHTML = state.tables
+      .map((table, index) => {
+        const label = `표 ${index + 1} · ${table.rows.length.toLocaleString("ko-KR")}행 · ${table.headers.length.toLocaleString("ko-KR")}열`;
+        return `<option value="${index}">${escapeHtml(label)}</option>`;
+      })
+      .join("");
+  }
+
+  function renderSelectedTable() {
+    const table = getSelectedTable();
+    if (!table) {
+      preview.innerHTML = `<p class="tool-note">마크다운 표, 파이프 표, TSV, CSV 형태를 찾지 못했습니다.</p>`;
+      meta.textContent = "표 없음";
+      stats.innerHTML = "";
+      tsvOutput.value = "";
+      csvOutput.value = "";
+      return;
+    }
+
+    preview.innerHTML = renderAiTablePreview(table);
+    meta.textContent = `${table.sourceLabel} · ${table.rows.length.toLocaleString("ko-KR")}행 · ${table.headers.length.toLocaleString("ko-KR")}열`;
+    stats.innerHTML = [
+      ["인식한 표", `${state.tables.length.toLocaleString("ko-KR")}개`],
+      ["현재 표", `${state.selectedIndex + 1}번째`],
+      ["행", `${table.rows.length.toLocaleString("ko-KR")}개`],
+      ["열", `${table.headers.length.toLocaleString("ko-KR")}개`],
+    ]
+      .map(
+        ([label, value]) => `
+          <article class="stat-card">
+            <span>${label}</span>
+            <strong>${value}</strong>
+          </article>
+        `
+      )
+      .join("");
+    tsvOutput.value = tableToTsv(table);
+    csvOutput.value = tableToCsv(table);
+  }
+
+  function getSelectedTable() {
+    return state.tables[state.selectedIndex] || null;
+  }
+
+  tableSelect.addEventListener("change", () => {
+    state.selectedIndex = Number(tableSelect.value) || 0;
+    renderSelectedTable();
+  });
+
+  container.querySelector("#convertTableBtn").addEventListener("click", runConversion);
+  container.querySelector("#sampleTableBtn").addEventListener("click", () => {
+    source.value = [
+      "아래는 AI가 정리한 후보 비교표입니다. 이 문장까지 함께 복사해도 표만 인식되어야 합니다.",
+      "",
+      "| 구분 | 추천 상황 | 주의할 점 |",
+      "| --- | --- | --- |",
+      "| A안 | **빠르게 시작**해야 할 때 | 비용 검토 필요 |",
+      "| B안 | [문서 공유](https://example.com)가 많을 때 | 초기 정리 시간이 필요 |",
+      "| C안 | 장기 운영 기준이 중요할 때 | 담당자 확인 필요 |",
+      "",
+      "표 아래 설명 문구가 붙어 있어도 변환 결과에는 표 데이터만 남깁니다.",
+    ].join("\n");
+    runConversion();
+  });
+
+  container.querySelector("#copyDocumentTableBtn").addEventListener("click", async () => {
+    const table = getSelectedTable();
+    if (!table) {
+      showToast("먼저 표를 만들어 주세요.");
+      return;
+    }
+    try {
+      await copyTableAsDocument(table);
+      showToast("문서용 표를 복사했습니다.");
+    } catch (error) {
+      await safeCopy(tableToTsv(table), "문서용 복사가 제한되어 엑셀용 표를 복사했습니다.");
+    }
+  });
+
+  container.querySelector("#copySpreadsheetTableBtn").addEventListener("click", async () => {
+    const table = getSelectedTable();
+    if (!table) {
+      showToast("먼저 표를 만들어 주세요.");
+      return;
+    }
+    await safeCopy(tableToTsv(table), "엑셀용 표를 복사했습니다.");
+  });
+
+  container.querySelector("#copyCsvTableBtn").addEventListener("click", async () => {
+    const table = getSelectedTable();
+    if (!table) {
+      showToast("먼저 표를 만들어 주세요.");
+      return;
+    }
+    await safeCopy(tableToCsv(table), "CSV를 복사했습니다.");
+  });
+
+  container.querySelector("#downloadCsvTableBtn").addEventListener("click", () => {
+    const table = getSelectedTable();
+    if (!table) {
+      showToast("먼저 표를 만들어 주세요.");
+      return;
+    }
+    const csv = `\ufeff${tableToCsv(table)}`;
+    downloadBlob(new Blob([csv], { type: "text/csv;charset=utf-8" }), "ai-table-converted.csv");
+  });
 }
 
 function renderCharacterCounter(container) {
@@ -7471,24 +7726,356 @@ function getExtensionForMime(type) {
 }
 
 function convertMarkdownTableToTsv(text) {
-  const lines = normalizeNewlines(text)
+  const result = convertAiTableInput(text, {
+    stripCellFormatting: true,
+    linksAsText: true,
+    collapseCellWhitespace: true,
+    removeEmptyRows: true,
+    removeEmptyColumns: true,
+  });
+  return result.tables[0] ? tableToTsv(result.tables[0]) : "";
+}
+
+function convertAiTableInput(text, options = {}) {
+  const normalized = normalizeNewlines(text);
+  const parseOptions = {
+    stripCellFormatting: options.stripCellFormatting !== false,
+    linksAsText: options.linksAsText !== false,
+    collapseCellWhitespace: options.collapseCellWhitespace !== false,
+    removeEmptyRows: options.removeEmptyRows !== false,
+    removeEmptyColumns: options.removeEmptyColumns !== false,
+  };
+  const tables = [
+    ...extractMarkdownTables(normalized, parseOptions),
+    ...extractLoosePipeTables(normalized, parseOptions),
+    ...extractDelimitedTables(normalized, parseOptions),
+  ];
+  const seen = new Set();
+  const uniqueTables = [];
+
+  for (const table of tables) {
+    const key = tableToTsv(table);
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    uniqueTables.push(table);
+  }
+
+  return { tables: uniqueTables };
+}
+
+function extractMarkdownTables(text, options) {
+  const lines = stripFenceOnlyLines(text).split("\n");
+  const tables = [];
+  let index = 0;
+
+  while (index < lines.length - 1) {
+    const header = splitMarkdownTableRow(lines[index]);
+    const separator = splitMarkdownTableRow(lines[index + 1]);
+    if (!isUsableTableRow(header) || !isMarkdownSeparatorRow(separator)) {
+      index += 1;
+      continue;
+    }
+
+    const rawRows = [header];
+    index += 2;
+    while (index < lines.length) {
+      const cells = splitMarkdownTableRow(lines[index]);
+      if (!isUsableTableRow(cells)) break;
+      rawRows.push(cells);
+      index += 1;
+    }
+
+    const table = normalizeAiTableRows(rawRows, "마크다운 표", options);
+    if (table) tables.push(table);
+  }
+
+  return tables;
+}
+
+function extractLoosePipeTables(text, options) {
+  const lines = stripFenceOnlyLines(text).split("\n");
+  const tables = [];
+  let block = [];
+  let skippingMarkdownRows = false;
+
+  for (const line of lines) {
+    const cells = splitMarkdownTableRow(line);
+    const isSeparator = isMarkdownSeparatorRow(cells);
+    if (isSeparator) {
+      flush();
+      skippingMarkdownRows = true;
+      continue;
+    }
+    if (isUsableTableRow(cells) && !isSeparator) {
+      if (skippingMarkdownRows) continue;
+      block.push(cells);
+      continue;
+    }
+    skippingMarkdownRows = false;
+    flush();
+  }
+  flush();
+
+  return tables;
+
+  function flush() {
+    if (block.length >= 2) {
+      const table = normalizeAiTableRows(block, "파이프 표", options);
+      if (table) tables.push(table);
+    }
+    block = [];
+  }
+}
+
+function extractDelimitedTables(text, options) {
+  const lines = stripFenceOnlyLines(text)
     .split("\n")
     .map((line) => line.trim())
     .filter(Boolean);
-  if (lines.length < 2 || !lines.every((line) => line.includes("|"))) return "";
+  const tables = [];
 
-  const rows = lines
-    .filter((line, index) => !(index === 1 && /^[:|\-\s]+$/.test(line)))
-    .map((line) =>
-      line
-        .replace(/^\|/, "")
-        .replace(/\|$/, "")
-        .split("|")
-        .map((cell) => cell.trim())
-        .join("\t")
-    );
+  for (const delimiter of ["\t", ","]) {
+    let block = [];
+    const flushBlock = () => {
+      if (block.length >= 2 && hasConsistentColumnCount(block)) {
+        const sourceLabel = delimiter === "\t" ? "TSV 표" : "CSV 표";
+        const table = normalizeAiTableRows(block, sourceLabel, options);
+        if (table) tables.push(table);
+      }
+      block = [];
+    };
 
-  return rows.join("\n");
+    for (const line of lines) {
+      const cells = delimiter === "\t" ? line.split("\t").map((cell) => cell.trim()) : splitCsvLine(line);
+      if (isUsableTableRow(cells)) {
+        block.push(cells);
+        continue;
+      }
+      flushBlock();
+    }
+    flushBlock();
+  }
+
+  return tables;
+}
+
+function hasConsistentColumnCount(rows) {
+  if (!rows.length) return false;
+  const counts = rows.map((row) => row.length);
+  const first = counts[0];
+  return first >= 2 && counts.every((count) => count === first);
+}
+
+function stripFenceOnlyLines(text) {
+  return normalizeNewlines(text).replace(/^\s*```[\w-]*\s*$/gm, "");
+}
+
+function splitMarkdownTableRow(line) {
+  const source = String(line || "").trim();
+  if (!source.includes("|")) return [];
+
+  const cells = [];
+  let cell = "";
+  for (let index = 0; index < source.length; index += 1) {
+    const char = source[index];
+    if (char === "\\") {
+      if (source[index + 1] === "|") {
+        cell += "|";
+        index += 1;
+      } else {
+        cell += char;
+      }
+      continue;
+    }
+    if (char === "|") {
+      cells.push(cell.trim());
+      cell = "";
+      continue;
+    }
+    cell += char;
+  }
+  cells.push(cell.trim());
+
+  if (source.startsWith("|") && cells[0] === "") cells.shift();
+  if (source.endsWith("|") && cells[cells.length - 1] === "") cells.pop();
+  return cells;
+}
+
+function isUsableTableRow(cells) {
+  return cells.length >= 2 && cells.some((cell) => String(cell || "").trim());
+}
+
+function isMarkdownSeparatorRow(cells) {
+  return (
+    cells.length >= 2 &&
+    cells.every((cell) => {
+      const compact = String(cell || "").replace(/\s/g, "");
+      return /^:?-{3,}:?$/.test(compact);
+    })
+  );
+}
+
+function splitCsvLine(line) {
+  const cells = [];
+  let cell = "";
+  let quoted = false;
+  const source = String(line || "");
+
+  for (let index = 0; index < source.length; index += 1) {
+    const char = source[index];
+    if (char === "\"") {
+      if (quoted && source[index + 1] === "\"") {
+        cell += "\"";
+        index += 1;
+      } else {
+        quoted = !quoted;
+      }
+      continue;
+    }
+    if (char === "," && !quoted) {
+      cells.push(cell.trim());
+      cell = "";
+      continue;
+    }
+    cell += char;
+  }
+
+  cells.push(cell.trim());
+  return cells.length >= 2 ? cells : [];
+}
+
+function normalizeAiTableRows(rawRows, sourceLabel, options) {
+  if (!Array.isArray(rawRows) || rawRows.length < 2) return null;
+  const width = rawRows.reduce((max, row) => Math.max(max, row.length), 0);
+  if (width < 2) return null;
+
+  let rows = rawRows.map((row) =>
+    Array.from({ length: width }, (_, index) => cleanAiTableCell(row[index] || "", options))
+  );
+
+  if (options.removeEmptyRows) {
+    rows = rows.filter((row) => row.some((cell) => cell.trim()));
+  }
+  if (rows.length < 2) return null;
+
+  if (options.removeEmptyColumns) {
+    const keepIndexes = [];
+    for (let column = 0; column < width; column += 1) {
+      if (rows.some((row) => row[column]?.trim())) keepIndexes.push(column);
+    }
+    rows = rows.map((row) => keepIndexes.map((column) => row[column] || ""));
+  }
+  if (!rows[0] || rows[0].length < 2 || rows.length < 2) return null;
+
+  const headers = rows[0].map((cell, index) => cell || `열 ${index + 1}`);
+  return {
+    sourceLabel,
+    headers,
+    rows: rows.slice(1),
+  };
+}
+
+function cleanAiTableCell(value, options) {
+  let cell = normalizeNewlines(value)
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/p>/gi, "\n")
+    .trim();
+
+  if (options.stripCellFormatting) {
+    cell = cell
+      .replace(/<[^>]+>/g, "")
+      .replace(/!\[([^\]]*)\]\([^)]+\)/g, "$1")
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, options.linksAsText ? "$1" : "$1 - $2")
+      .replace(/`{3,}[\w-]*\n?/g, "")
+      .replace(/`([^`]+)`/g, "$1")
+      .replace(/^#{1,6}\s+/g, "")
+      .replace(/^\s*[-*+]\s+/g, "")
+      .replace(/^\s*\d+\.\s+/g, "")
+      .replace(/\*\*([^*]+)\*\*/g, "$1")
+      .replace(/__([^_]+)__/g, "$1")
+      .replace(/\*([^*]+)\*/g, "$1")
+      .replace(/_([^_]+)_/g, "$1")
+      .replace(/~~([^~]+)~~/g, "$1");
+  }
+
+  if (options.collapseCellWhitespace) {
+    cell = cell.replace(/\s+/g, " ");
+  }
+
+  return cell.trim();
+}
+
+function renderAiTablePreview(table) {
+  return `
+    <table>
+      <thead>
+        <tr>${table.headers.map((cell) => `<th>${escapeHtml(cell)}</th>`).join("")}</tr>
+      </thead>
+      <tbody>
+        ${table.rows
+          .map((row) => `<tr>${table.headers.map((_, index) => `<td>${escapeHtml(row[index] || "")}</td>`).join("")}</tr>`)
+          .join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+function tableToTsv(table) {
+  return tableToMatrix(table)
+    .map((row) => row.map(formatDelimitedCell).join("\t"))
+    .join("\n");
+}
+
+function tableToCsv(table) {
+  return tableToMatrix(table)
+    .map((row) => row.map(formatCsvCell).join(","))
+    .join("\n");
+}
+
+function tableToMatrix(table) {
+  if (!table) return [];
+  return [table.headers, ...table.rows].map((row) => table.headers.map((_, index) => row[index] || ""));
+}
+
+function formatDelimitedCell(cell) {
+  return String(cell || "").replace(/[\t\r\n]+/g, " ").trim();
+}
+
+function formatCsvCell(cell) {
+  const value = formatDelimitedCell(cell);
+  return /[",\n]/.test(value) ? `"${value.replace(/"/g, "\"\"")}"` : value;
+}
+
+async function copyTableAsDocument(table) {
+  const html = buildDocumentTableHtml(table);
+  const plain = tableToTsv(table);
+  if (navigator.clipboard?.write && window.ClipboardItem && window.isSecureContext) {
+    await navigator.clipboard.write([
+      new window.ClipboardItem({
+        "text/html": new Blob([html], { type: "text/html" }),
+        "text/plain": new Blob([plain], { type: "text/plain" }),
+      }),
+    ]);
+    return;
+  }
+  await writeClipboard(plain);
+}
+
+function buildDocumentTableHtml(table) {
+  const cellBase = "border:1px solid #cfd7e3;padding:6px 8px;text-align:left;vertical-align:top;";
+  const headerStyle = `${cellBase}background:#f6f8fb;font-weight:700;`;
+  const bodyStyle = `${cellBase}background:#ffffff;`;
+  const headerHtml = table.headers.map((cell) => `<th style="${headerStyle}">${escapeHtml(cell)}</th>`).join("");
+  const bodyHtml = table.rows
+    .map((row) => `<tr>${table.headers.map((_, index) => `<td style="${bodyStyle}">${escapeHtml(row[index] || "")}</td>`).join("")}</tr>`)
+    .join("");
+  return [
+    "<!doctype html><html><head><meta charset=\"utf-8\"></head><body>",
+    "<table style=\"border-collapse:collapse;width:100%;font-family:'Malgun Gothic',Arial,sans-serif;font-size:14px;\">",
+    `<thead><tr>${headerHtml}</tr></thead>`,
+    `<tbody>${bodyHtml}</tbody>`,
+    "</table></body></html>",
+  ].join("");
 }
 
 function normalizeNewlines(text) {

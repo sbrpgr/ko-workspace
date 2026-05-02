@@ -55,7 +55,7 @@ Current migration note:
 - Category landing pages are now live at `/tools/text/`, `/tools/pdf/`, `/tools/image/`, `/tools/subtitle/`, and `/tools/voice-video/`.
 - Category pages reuse the shared app shell and are rendered from `CATEGORY_PAGE_DEFS` in `app.js`; do not fork tool logic into category HTML files.
 - Preserve canonical URLs and sitemap entries whenever tool pages are updated.
-- Current static asset cache version is `20260502-06`; bump this version whenever `app.js` or `styles.css` changes.
+- Current static asset cache version is `20260502-07`; bump this version whenever `app.js` or `styles.css` changes.
 
 ## 2A. Current SEO And AdSense Baseline
 
@@ -92,6 +92,7 @@ These should be built early because they are fast to implement, safe for browser
 
 | Tool | URL | SEO Keywords | Difficulty | Notes |
 | --- | --- | --- | --- | --- |
+| AI 표 복붙 변환기 | `/tools/ai-table-converter/` | ChatGPT 표 엑셀 붙여넣기, 마크다운 표 변환, 문서 표 복사 | S | Shipped. Extracts Markdown/pipe/TSV/CSV tables from AI answers with surrounding copy and creates document-copy HTML, spreadsheet TSV, and CSV in the browser. |
 | 글자수 세기 | `/tools/character-counter/` | 글자수 세기, 공백 제외 글자수, 바이트 수 계산, 원고지 분량 계산 | S | Very low risk. Strong evergreen search demand. |
 | AI 복붙 서식 정리 | `/tools/ai-text-cleaner/` | AI 글 서식 제거, ChatGPT 복사 붙여넣기 정리, 마크다운 제거, 별표 제거, 글 정리 | S | Removes common AI/Markdown artifacts such as `**`, `###`, code fences, excessive bullets, and awkward spacing. Browser-side only. |
 | 줄바꿈 정리 | `/tools/line-break-cleaner/` | 줄바꿈 제거, 문단 정리, 공백 제거, 텍스트 정리 | S | Good companion to voice-to-text output cleanup. |

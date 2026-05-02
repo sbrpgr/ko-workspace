@@ -14,7 +14,7 @@ Current production baseline:
 - Production domain: `https://ko-workspace.com/`
 - Cloudflare Pages project: `mic-script-generator`
 - Latest AdSense/SEO readiness commit: `580c060 Improve AdSense SEO readiness`
-- Current static asset cache version: `20260502-06`
+- Current static asset cache version: `20260502-07`
 - Category landing pages, privacy policy updates, sitemap updates, and core FAQ copy were deployed on 2026-04-29
 
 Core constraints:
@@ -68,6 +68,11 @@ Core constraints:
 ### Text
 
 - `AI 복붙 서식 정리`
+- `AI 표 복붙 변환기`
+  - Finds Markdown, pipe, TSV, and CSV tables inside AI answers that may include surrounding explanation text
+  - Converts the selected table to document-copy HTML, spreadsheet TSV, and CSV
+  - Lets users choose whether to remove Markdown-style cell formatting such as emphasis, links, inline code, list markers, and HTML
+  - Keeps pasted AI answers and converted table data in the browser; no application-server upload or analytics content parameters
 - `글자수 세기`
 - `줄바꿈·공백 정리`
 - `이메일·URL·전화번호 추출기`
@@ -194,6 +199,7 @@ Do not:
 Core tool FAQ/usage copy was expanded for AdSense/SEO readiness on these tools:
 
 - `AI 복붙 서식 정리`
+- `AI 표 복붙 변환기`
 - `글자수 세기`
 - `QR 코드 생성기`
 - `이미지 용량 압축`

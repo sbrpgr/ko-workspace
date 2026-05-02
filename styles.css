@@ -3982,7 +3982,8 @@ body.tool-mode #makeScriptBtn::before {
 }
 
 body.tool-mode #applyBtn::before,
-body.tool-mode #convertBtn::before {
+body.tool-mode #convertBtn::before,
+body.tool-mode #convertTableBtn::before {
   content: "↗";
 }
 
@@ -4152,6 +4153,41 @@ body.tool-mode .info-grid {
 
 .markdown-preview th {
   background: #f6f8fb;
+}
+
+.ai-table-preview {
+  min-height: 180px;
+  max-height: 460px;
+  overflow: auto;
+}
+
+.ai-table-preview table {
+  min-width: 560px;
+}
+
+.ai-table-copy-actions {
+  justify-content: flex-end;
+}
+
+.ai-table-copy-actions button {
+  min-width: 0;
+  white-space: normal;
+}
+
+.ai-table-outputs textarea {
+  min-height: 180px !important;
+  font-family: Consolas, "Malgun Gothic", monospace;
+  white-space: pre;
+}
+
+body.tool-mode #copyDocumentTableBtn::before,
+body.tool-mode #copySpreadsheetTableBtn::before,
+body.tool-mode #copyCsvTableBtn::before {
+  content: "⧉";
+}
+
+body.tool-mode #downloadCsvTableBtn::before {
+  content: "↓";
 }
 
 body.tool-mode #copyMarkdownBtn::before,

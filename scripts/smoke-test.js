@@ -10,6 +10,9 @@ const API_NAMES = [
   "TOOL_DEFS",
   "CATEGORY_PAGE_DEFS",
   "cleanAiText",
+  "convertAiTableInput",
+  "tableToTsv",
+  "tableToCsv",
   "countTextStats",
   "cleanLineBreaks",
   "extractContacts",
@@ -280,6 +283,38 @@ function buildLogicTests(api, app) {
         trimBlankLines: true,
       });
       assert(!result.includes("##") && !result.includes("**") && result.includes("Title"), "AI cleanup failed");
+    }),
+    test("AI table converter extracts markdown table from surrounding text", () => {
+      const input = [
+        "아래 표를 문서에 넣어 주세요.",
+        "",
+        "| 항목 | 설명 | 링크 |",
+        "| --- | --- | --- |",
+        "| A안 | **빠름** | [보기](https://example.com) |",
+        "| B안 | 느림 | 일반 |",
+        "",
+        "위 표를 기준으로 검토합니다.",
+      ].join("\n");
+      const result = api.convertAiTableInput(input, {
+        stripCellFormatting: true,
+        linksAsText: true,
+        collapseCellWhitespace: true,
+        removeEmptyRows: true,
+        removeEmptyColumns: true,
+      });
+      assert(result.tables.length === 1, "AI table converter should find one table");
+      assert(api.tableToTsv(result.tables[0]) === "항목\t설명\t링크\nA안\t빠름\t보기\nB안\t느림\t일반", "AI table TSV conversion failed");
+    }),
+    test("AI table converter handles escaped pipes and CSV output", () => {
+      const result = api.convertAiTableInput("| 항목 | 값 |\n| --- | --- |\n| A\\|B | 1,000원 |", {
+        stripCellFormatting: true,
+        linksAsText: true,
+        collapseCellWhitespace: true,
+        removeEmptyRows: true,
+        removeEmptyColumns: true,
+      });
+      assert(result.tables[0].rows[0][0] === "A|B", "escaped pipe parsing failed");
+      assert(api.tableToCsv(result.tables[0]) === "항목,값\nA|B,\"1,000원\"", "AI table CSV escaping failed");
     }),
     test("subtitle conversion and timing shift work", () => {
       const vtt = api.convertSubtitle(srt, "srt", "vtt");

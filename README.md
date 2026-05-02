@@ -7,7 +7,7 @@ The current product ships as a static multi-tool site focused on tasks that can 
 ## Current Tool Categories
 
 - Voice/Video: `음성으로 텍스트 쓰기`, `녹음 파일 텍스트 변환`, `웹캠 녹화기`
-- Text: `AI 복붙 서식 정리`, `글자수 세기`, `줄바꿈·공백 정리`, `이메일·URL·전화번호 추출기`, `중복 줄 제거`, `찾기 및 바꾸기`, `대소문자 변환`, `텍스트 비교기`
+- Text: `AI 복붙 서식 정리`, `AI 표 복붙 변환기`, `글자수 세기`, `줄바꿈·공백 정리`, `이메일·URL·전화번호 추출기`, `중복 줄 제거`, `찾기 및 바꾸기`, `대소문자 변환`, `텍스트 비교기`
 - Image: `QR 코드 생성기`, `이미지 크기 조절`, `이미지 형식 변환`, `이미지 용량 압축`
 - PDF: `PDF 합치기`, `PDF 분할`, `PDF 페이지 추출`, `이미지 PDF 변환`, `PDF 이미지 변환`
 - Subtitle: `SRT 자막 정리`, `SRT ↔ VTT 변환`, `자막 시간 보정`
