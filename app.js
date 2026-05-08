@@ -2288,6 +2288,7 @@ function renderAudioEditor(container) {
   nodes.redoBtn.addEventListener("click", redoAudioEdit);
   nodes.downloadBtn.addEventListener("click", downloadEditedAudio);
   nodes.resetBtn.addEventListener("click", resetAudioEditor);
+  document.addEventListener("keydown", handleAudioEditorKeyboard);
   window.addEventListener("resize", drawAudioEditorWaveform);
 
   async function loadAudioEditorFile(file) {
@@ -2510,6 +2511,37 @@ function renderAudioEditor(container) {
     updateAudioEditorUi();
   }
 
+  function handleAudioEditorKeyboard(event) {
+    if (!state.samples?.length || !isAudioEditorSpaceKey(event) || shouldIgnoreAudioEditorShortcut(event)) return;
+    event.preventDefault();
+    if (state.isPlaying) {
+      stopAudioEditorPlayback();
+      return;
+    }
+
+    const range = getCurrentAudioSelectionRange();
+    if (range) {
+      playAudioEditorRange(range.startSample / state.sampleRate, range.endSample / state.sampleRate);
+      return;
+    }
+
+    const duration = getAudioEditorDuration();
+    const start = state.playheadSeconds >= duration - 0.05 ? 0 : state.playheadSeconds;
+    playAudioEditorRange(start, duration);
+  }
+
+  function isAudioEditorSpaceKey(event) {
+    return !event.repeat && (event.key === " " || event.key === "Spacebar" || event.code === "Space");
+  }
+
+  function shouldIgnoreAudioEditorShortcut(event) {
+    if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey) return true;
+    const target = event.target;
+    if (!target || target === document.body) return false;
+    if (target.closest?.("button, input, select, textarea, a, [contenteditable='true'], #pageTitle")) return true;
+    return !container.contains(target) && target !== document.documentElement;
+  }
+
   function tickAudioEditorPlayback() {
     if (!state.isPlaying || !state.playbackContext) return;
     state.playheadSeconds = clampNumber(state.playbackContext.currentTime - state.playbackStartedAt, 0, state.playbackEndSeconds);
@@ -2519,6 +2551,9 @@ function renderAudioEditor(container) {
   }
 
   function stopAudioEditorPlayback() {
+    if (state.isPlaying && state.playbackContext) {
+      state.playheadSeconds = clampNumber(state.playbackContext.currentTime - state.playbackStartedAt, 0, state.playbackEndSeconds);
+    }
     if (state.source) {
       const source = state.source;
       state.source = null;
