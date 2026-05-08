@@ -65,6 +65,24 @@ const TOOL_DEFS = [
     ],
   },
   {
+    id: "audio-editor",
+    path: "/tools/audio-editor/",
+    category: "\uC74C\uC131",
+    title: "녹음 파일 간편 편집기",
+    summary:
+      "휴대폰 녹음 파일을 브라우저에서 열어 파형을 보며 선택 구간을 자르고, 붙이고, 음량을 조절해 WAV 파일로 저장합니다.",
+    seoTitle: "녹음 파일 자르기·붙이기 | 휴대폰 녹음 편집 도구",
+    seoDescription:
+      "휴대폰 녹음 파일을 서버 업로드 없이 브라우저에서 열어 파형을 보며 구간 삭제, 붙이기, 음량 조절, 실행 취소 후 WAV로 저장하는 무료 오디오 편집 도구입니다.",
+    keywords: ["녹음 파일 편집", "오디오 자르기", "m4a 자르기", "휴대폰 녹음"],
+    guide: [
+      { title: "녹음 파일 선택", text: "iPhone 음성 메모나 Android 녹음 앱에서 저장한 m4a, aac, mp3, wav 파일을 선택합니다." },
+      { title: "파형에서 구간 선택", text: "파형을 드래그해 삭제하거나 복사할 구간을 지정하고, 클릭으로 붙여넣을 위치를 잡습니다." },
+      { title: "간단 편집", text: "선택 구간 삭제, 선택만 남기기, 복사한 구간 붙이기, 선택 또는 전체 음량 조절을 적용합니다." },
+      { title: "WAV 저장", text: "편집 결과를 브라우저에서 WAV 파일로 만들어 다운로드합니다. 원본 파일은 서버로 업로드하지 않습니다." },
+    ],
+  },
+  {
     id: "webcam-recorder",
     path: "/tools/webcam-recorder/",
     category: "영상",
@@ -518,6 +536,7 @@ const CATEGORY_ORDER = ["\uC804\uCCB4", "\uC74C\uC131", "영상", "\uD14D\uC2A4\
 const TOOL_VISUALS = {
   "voice-to-text": { icon: "\uD83C\uDFA4", tone: "red", copy: "\ub9d0\ud558\uba74 \ubc14\ub85c \ud14d\uc2a4\ud2b8\ub85c \ubc1b\uc544 \uc801\uc2b5\ub2c8\ub2e4." },
   "audio-file-transcription": { icon: "\uD83C\uDF99\uFE0F", tone: "red", copy: "\ud734\ub300\ud3f0 \ub179\uc74c \ud30c\uc77c\uc744 \ud14d\uc2a4\ud2b8 \ucd08\uc548\uc73c\ub85c \ubcc0\ud658\ud569\ub2c8\ub2e4." },
+  "audio-editor": { icon: "\u2702", tone: "cyan", copy: "\ud734\ub300\ud3f0 \ub179\uc74c \ud30c\uc77c\uc744 \ud30c\ud615\uc744 \ubcf4\uba70 \uc790\ub974\uace0 \ubd99\uc785\ub2c8\ub2e4." },
   "webcam-recorder": { icon: "\uD83C\uDFA5", tone: "orange", copy: "\uc6f9\ucea0\uacfc \ub9c8\uc774\ud06c\ub97c \ud544\ud130\ub97c \uc801\uc6a9\ud574 \ub179\ud654\ud569\ub2c8\ub2e4." },
   "ai-text-cleaner": { icon: "\u2728", tone: "violet", copy: "AI \ub2f5\ubcc0\uc758 \ubcc4\ud45c\uc640 \ub9c8\ud06c\ub2e4\uc6b4\uc744 \uc815\ub9ac\ud569\ub2c8\ub2e4." },
   "ai-table-converter": { icon: "\u25A4", tone: "green", copy: "AI \ud45c\ub97c \ubb38\uc11c\uc640 \uc5d1\uc140\uc5d0 \ubd99\uc5ec\ub123\uae30 \uc88b\uac8c \ubcc0\ud658\ud569\ub2c8\ub2e4." },
@@ -555,6 +574,11 @@ const TOOL_USE_EXAMPLES = {
     "휴대폰으로 녹음한 회의, 강의, 인터뷰 파일을 검토용 텍스트 초안으로 변환합니다.",
     "m4a, mp3, wav 같은 짧은 녹음 파일을 서버 업로드 없이 브라우저 안에서 처리합니다.",
     "변환 결과를 복사하거나 TXT 파일로 저장한 뒤 사람이 다시 읽으며 회의록이나 콘텐츠 초안으로 다듬습니다.",
+  ],
+  "audio-editor": [
+    "휴대폰 음성 메모나 Android 녹음 파일에서 앞뒤 불필요한 구간을 잘라냅니다.",
+    "파형을 보며 필요한 구간을 복사해 다른 위치에 붙이고, 실수하면 실행 취소로 되돌립니다.",
+    "작게 녹음된 구간만 선택해 음량을 올린 뒤 WAV 파일로 저장합니다.",
   ],
   "webcam-recorder": [
     "웹캠 발표 영상이나 교육 안내 영상을 브라우저에서 바로 녹화합니다.",
@@ -679,6 +703,10 @@ const TOOL_EXTRA_FAQS = {
   "audio-file-transcription": {
     question: "녹음 파일이 서버로 업로드되나요?",
     answer: "아니요. 선택한 녹음 파일은 브라우저 안에서 처리합니다. 다만 처음 사용할 때 Transformers.js와 Whisper 모델 파일을 외부 CDN과 Hugging Face에서 내려받을 수 있으며, 긴 파일은 기기 성능에 따라 오래 걸릴 수 있습니다.",
+  },
+  "audio-editor": {
+    question: "휴대폰 녹음 파일을 그대로 편집할 수 있나요?",
+    answer: "iPhone 음성 메모와 Android 녹음 앱에서 흔한 m4a, aac, mp3, wav 파일을 브라우저가 읽을 수 있으면 서버 업로드 없이 파형 편집을 할 수 있습니다. 편집 결과는 호환성이 안정적인 WAV 파일로 저장합니다.",
   },
   "webcam-recorder": {
     question: "녹화 파일은 어떤 형식으로 저장되나요?",
@@ -913,15 +941,15 @@ const CATEGORY_PAGE_DEFS = [
     path: "/tools/voice-video/",
     title: "음성·영상 업무 도구",
     eyebrow: "Voice & Video Tools",
-    description: "실시간 받아쓰기, 녹음 파일 텍스트 변환, 웹캠 녹화를 브라우저에서 바로 실행합니다.",
+    description: "실시간 받아쓰기, 녹음 파일 텍스트 변환, 녹음 파일 간편 편집, 웹캠 녹화를 브라우저에서 바로 실행합니다.",
     metaDescription:
-      "코워크스페이스 음성·영상 업무 도구 모음입니다. 음성으로 텍스트 쓰기, 녹음 파일 텍스트 변환, 웹캠 녹화기를 로그인 없이 브라우저에서 사용할 수 있습니다.",
-    keywords: ["음성 텍스트 변환", "녹음 파일 텍스트 변환", "웹캠 녹화", "브라우저 녹화"],
+      "코워크스페이스 음성·영상 업무 도구 모음입니다. 음성으로 텍스트 쓰기, 녹음 파일 텍스트 변환, 녹음 파일 간편 편집, 웹캠 녹화기를 로그인 없이 브라우저에서 사용할 수 있습니다.",
+    keywords: ["음성 텍스트 변환", "녹음 파일 텍스트 변환", "녹음 파일 편집", "웹캠 녹화", "브라우저 녹화"],
     categories: ["음성", "영상"],
     guide: [
       { title: "권한 허용", text: "마이크나 카메라가 필요한 도구에서 브라우저 권한을 허용합니다." },
-      { title: "입력 또는 녹화", text: "음성을 실시간으로 받아 적거나 녹음 파일을 변환하고, 필요한 경우 웹캠 영상을 녹화합니다." },
-      { title: "결과 저장", text: "작성된 텍스트나 녹화 파일을 로컬 PC에 저장합니다." },
+      { title: "입력 또는 편집", text: "음성을 실시간으로 받아 적거나 녹음 파일을 변환·편집하고, 필요한 경우 웹캠 영상을 녹화합니다." },
+      { title: "결과 저장", text: "작성된 텍스트, 편집된 오디오, 녹화 파일을 로컬 PC에 저장합니다." },
     ],
   },
 ];
@@ -1741,6 +1769,7 @@ function trackToolError(tool, error, action = "unknown") {
 const TOOL_RENDERERS = {
   "voice-to-text": renderVoiceTool,
   "audio-file-transcription": renderAudioFileTranscription,
+  "audio-editor": renderAudioEditor,
   "webcam-recorder": renderWebcamRecorder,
   "ai-text-cleaner": renderAiTextCleaner,
   "ai-table-converter": renderAiTableConverter,
@@ -1798,6 +1827,10 @@ const AUDIO_PREPROCESS_EDGE_PADDING_SECONDS = 0.65;
 const AUDIO_PREPROCESS_TARGET_RMS = 0.16;
 const AUDIO_PREPROCESS_MAX_GAIN = 12;
 const AUDIO_TRANSFORMERS_MODULE_URL = "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.1.0";
+const AUDIO_EDITOR_MAX_BYTES = 180 * 1024 * 1024;
+const AUDIO_EDITOR_UNDO_LIMIT = 10;
+const AUDIO_EDITOR_WAVEFORM_POINTS = 1800;
+const AUDIO_EDITOR_MIN_SELECTION_SECONDS = 0.03;
 let audioTranscriptionWorker = null;
 let audioTranscriptionWorkerUrl = "";
 let audioTranscriptionWorkerRequestId = 0;
@@ -2096,6 +2129,550 @@ function renderAudioFileTranscription(container) {
     if (state.isRunning) return;
     const profile = getAudioModelProfile(AUDIO_TRANSCRIPTION_DEFAULT_PROFILE);
     nodes.runMeta.textContent = describeAudioProfile(profile);
+  }
+}
+
+function renderAudioEditor(container) {
+  container.innerHTML = `
+    <div class="tool-section audio-editor-tool">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Local Audio Editor</p>
+          <h2>녹음 파일 간편 편집기</h2>
+          <p class="tool-note audio-tool-intro">휴대폰 녹음 파일을 서버 업로드 없이 브라우저에서 열고, 파형을 보며 구간을 자르고 붙인 뒤 WAV 파일로 저장합니다.</p>
+        </div>
+        <div class="status-group" aria-live="polite">
+          <span id="audioEditFileStatus" class="status-pill">파일 없음</span>
+          <span id="audioEditSelectionStatus" class="status-pill">선택 없음</span>
+          <span class="status-pill">WAV 저장</span>
+        </div>
+      </div>
+
+      <div class="upload-box audio-editor-upload-box">
+        <label for="audioEditFile">휴대폰 녹음 파일 선택</label>
+        <input id="audioEditFile" type="file" accept=".m4a,.aac,.mp3,.wav" />
+        <p>iPhone 음성 메모와 Android 녹음 앱에서 흔한 m4a, aac, mp3, wav 파일을 우선 지원합니다. 파일은 코워크스페이스 서버로 업로드하지 않고, 브라우저가 읽을 수 있는 경우에만 편집합니다.</p>
+      </div>
+
+      <div class="tool-grid audio-editor-grid">
+        <article class="editor-card audio-waveform-card">
+          <div class="section-heading">
+            <div>
+              <h2>파형 편집</h2>
+              <p id="audioEditMeta" class="tool-note">파일을 선택하면 파형이 표시됩니다. 파형을 드래그해 구간을 선택하고, 클릭하면 붙여넣을 위치가 이동합니다.</p>
+            </div>
+          </div>
+          <div class="audio-waveform-frame">
+            <canvas id="audioEditWaveform" class="audio-waveform-canvas" width="960" height="240" aria-label="녹음 파일 파형"></canvas>
+          </div>
+          <div class="audio-editor-readout" aria-live="polite">
+            <span id="audioEditPlayhead">재생 위치 0:00</span>
+            <span id="audioEditSelectionMeta">선택 구간 없음</span>
+          </div>
+          <div class="action-row">
+            <button id="audioEditPlayAllBtn" class="primary-action" type="button" disabled>전체 재생</button>
+            <button id="audioEditPlaySelectionBtn" type="button" disabled>선택 재생</button>
+            <button id="audioEditStopBtn" type="button" disabled>정지</button>
+          </div>
+        </article>
+
+        <article class="editor-card audio-edit-actions-card">
+          <div class="section-heading">
+            <div>
+              <h2>간편 편집</h2>
+              <p id="audioEditStatus" class="tool-note">선택 구간을 만들면 삭제, 복사, 음량 조절을 적용할 수 있습니다.</p>
+            </div>
+          </div>
+
+          <div class="action-row">
+            <button id="audioEditDeleteBtn" type="button" disabled>선택 삭제</button>
+            <button id="audioEditKeepBtn" type="button" disabled>선택만 남기기</button>
+            <button id="audioEditCopyBtn" type="button" disabled>선택 복사</button>
+            <button id="audioEditPasteBtn" type="button" disabled>붙이기</button>
+          </div>
+
+          <div class="field">
+            <label for="audioEditVolume">음량 조절 <span id="audioEditVolumeLabel">100%</span></label>
+            <input id="audioEditVolume" type="range" min="0" max="2" step="0.05" value="1" />
+            <p class="tool-note">선택 구간이 있으면 선택 구간에만, 없으면 전체 녹음에 적용합니다.</p>
+          </div>
+
+          <div class="action-row">
+            <button id="audioEditVolumeBtn" type="button" disabled>음량 적용</button>
+            <button id="audioEditUndoBtn" type="button" disabled>실행 취소</button>
+            <button id="audioEditRedoBtn" type="button" disabled>다시 실행</button>
+          </div>
+
+          <article class="notice-card">
+            <strong>브라우저 기반 간편 편집입니다.</strong>
+            <span>편집 중 원본 녹음과 결과 파일은 서버로 보내지지 않습니다. 다만 긴 휴대폰 녹음은 기기 메모리와 브라우저 코덱 지원에 따라 열리지 않을 수 있고, 결과 저장은 호환성이 안정적인 WAV 형식으로 제공합니다.</span>
+          </article>
+
+          <div class="action-row">
+            <button id="audioEditDownloadBtn" class="primary-action" type="button" disabled>WAV 저장</button>
+            <button id="audioEditResetBtn" type="button" disabled>처음 상태로</button>
+          </div>
+        </article>
+      </div>
+    </div>
+  `;
+
+  const state = {
+    samples: null,
+    originalSamples: null,
+    sampleRate: 44100,
+    peaks: null,
+    selection: null,
+    clipboard: null,
+    playheadSeconds: 0,
+    isPlaying: false,
+    playbackStartedAt: 0,
+    playbackEndSeconds: 0,
+    source: null,
+    playbackContext: null,
+    animationId: 0,
+    pointerStartSample: 0,
+    undoStack: [],
+    redoStack: [],
+  };
+
+  const nodes = {
+    fileInput: container.querySelector("#audioEditFile"),
+    fileStatus: container.querySelector("#audioEditFileStatus"),
+    selectionStatus: container.querySelector("#audioEditSelectionStatus"),
+    meta: container.querySelector("#audioEditMeta"),
+    canvas: container.querySelector("#audioEditWaveform"),
+    playhead: container.querySelector("#audioEditPlayhead"),
+    selectionMeta: container.querySelector("#audioEditSelectionMeta"),
+    status: container.querySelector("#audioEditStatus"),
+    playAllBtn: container.querySelector("#audioEditPlayAllBtn"),
+    playSelectionBtn: container.querySelector("#audioEditPlaySelectionBtn"),
+    stopBtn: container.querySelector("#audioEditStopBtn"),
+    deleteBtn: container.querySelector("#audioEditDeleteBtn"),
+    keepBtn: container.querySelector("#audioEditKeepBtn"),
+    copyBtn: container.querySelector("#audioEditCopyBtn"),
+    pasteBtn: container.querySelector("#audioEditPasteBtn"),
+    volumeInput: container.querySelector("#audioEditVolume"),
+    volumeLabel: container.querySelector("#audioEditVolumeLabel"),
+    volumeBtn: container.querySelector("#audioEditVolumeBtn"),
+    undoBtn: container.querySelector("#audioEditUndoBtn"),
+    redoBtn: container.querySelector("#audioEditRedoBtn"),
+    downloadBtn: container.querySelector("#audioEditDownloadBtn"),
+    resetBtn: container.querySelector("#audioEditResetBtn"),
+  };
+
+  drawAudioEditorWaveform();
+  updateAudioEditorUi();
+
+  nodes.fileInput.addEventListener("change", async () => {
+    const file = nodes.fileInput.files?.[0];
+    if (!file) return;
+    await loadAudioEditorFile(file);
+  });
+
+  nodes.canvas.addEventListener("pointerdown", handleWaveformPointerDown);
+  nodes.playAllBtn.addEventListener("click", () => playAudioEditorRange(0, getAudioEditorDuration()));
+  nodes.playSelectionBtn.addEventListener("click", () => {
+    const range = getCurrentAudioSelectionRange();
+    if (!range) return;
+    playAudioEditorRange(range.startSample / state.sampleRate, range.endSample / state.sampleRate);
+  });
+  nodes.stopBtn.addEventListener("click", () => stopAudioEditorPlayback());
+  nodes.deleteBtn.addEventListener("click", deleteSelectedAudio);
+  nodes.keepBtn.addEventListener("click", keepSelectedAudio);
+  nodes.copyBtn.addEventListener("click", copySelectedAudio);
+  nodes.pasteBtn.addEventListener("click", pasteCopiedAudio);
+  nodes.volumeInput.addEventListener("input", updateVolumeLabel);
+  nodes.volumeBtn.addEventListener("click", applyAudioEditorVolume);
+  nodes.undoBtn.addEventListener("click", undoAudioEdit);
+  nodes.redoBtn.addEventListener("click", redoAudioEdit);
+  nodes.downloadBtn.addEventListener("click", downloadEditedAudio);
+  nodes.resetBtn.addEventListener("click", resetAudioEditor);
+  window.addEventListener("resize", drawAudioEditorWaveform);
+
+  async function loadAudioEditorFile(file) {
+    stopAudioEditorPlayback();
+    nodes.fileStatus.textContent = "파일 읽는 중";
+    nodes.status.textContent = "휴대폰 녹음 파일을 브라우저에서 디코딩하고 있습니다.";
+    try {
+      const decoded = await decodeAudioFileForEditor(file);
+      state.samples = decoded.samples;
+      state.originalSamples = new Float32Array(decoded.samples);
+      state.sampleRate = decoded.sampleRate;
+      state.peaks = buildAudioWaveformPeaks(state.samples, AUDIO_EDITOR_WAVEFORM_POINTS);
+      state.selection = null;
+      state.clipboard = null;
+      state.playheadSeconds = 0;
+      state.undoStack = [];
+      state.redoStack = [];
+      nodes.meta.textContent = `${formatDuration(getAudioEditorDuration())} · ${formatBytes(file.size)} · ${decoded.channelCount}채널 녹음을 모노 편집 파형으로 준비했습니다.`;
+      nodes.fileStatus.textContent = "편집 준비";
+      nodes.status.textContent = "파형을 드래그해 구간을 선택하거나, 클릭해 붙여넣을 위치를 지정하세요.";
+      drawAudioEditorWaveform();
+      updateAudioEditorUi();
+    } catch (error) {
+      state.samples = null;
+      state.originalSamples = null;
+      state.peaks = null;
+      state.selection = null;
+      nodes.fileStatus.textContent = "읽기 실패";
+      nodes.meta.textContent =
+        "브라우저가 이 휴대폰 녹음 형식을 읽지 못했습니다. m4a, aac, mp3, wav 형식이더라도 기기와 코덱에 따라 Chrome 또는 Edge에서 다시 시도해야 할 수 있습니다.";
+      nodes.status.textContent = error?.message || "녹음 파일을 읽지 못했습니다.";
+      trackToolError(TOOL_MAP["audio-editor"], error, "load_audio_editor");
+      drawAudioEditorWaveform();
+      updateAudioEditorUi();
+    }
+  }
+
+  function handleWaveformPointerDown(event) {
+    if (!state.samples?.length) return;
+    event.preventDefault();
+    nodes.canvas.setPointerCapture?.(event.pointerId);
+    const sample = getAudioEditorSampleFromPointer(event);
+    state.pointerStartSample = sample;
+    state.selection = { startSample: sample, endSample: sample };
+    state.playheadSeconds = sample / state.sampleRate;
+    drawAudioEditorWaveform();
+    updateAudioEditorUi();
+
+    const handlePointerMove = (moveEvent) => {
+      const nextSample = getAudioEditorSampleFromPointer(moveEvent);
+      state.selection = { startSample: state.pointerStartSample, endSample: nextSample };
+      state.playheadSeconds = nextSample / state.sampleRate;
+      drawAudioEditorWaveform();
+      updateAudioEditorUi();
+    };
+
+    const handlePointerUp = (upEvent) => {
+      nodes.canvas.releasePointerCapture?.(event.pointerId);
+      nodes.canvas.removeEventListener("pointermove", handlePointerMove);
+      nodes.canvas.removeEventListener("pointerup", handlePointerUp);
+      nodes.canvas.removeEventListener("pointercancel", handlePointerUp);
+      const endSample = getAudioEditorSampleFromPointer(upEvent);
+      if (Math.abs(endSample - state.pointerStartSample) < Math.max(4, state.sampleRate * AUDIO_EDITOR_MIN_SELECTION_SECONDS)) {
+        state.selection = null;
+        state.playheadSeconds = endSample / state.sampleRate;
+      } else {
+        state.selection = { startSample: state.pointerStartSample, endSample };
+      }
+      drawAudioEditorWaveform();
+      updateAudioEditorUi();
+    };
+
+    nodes.canvas.addEventListener("pointermove", handlePointerMove);
+    nodes.canvas.addEventListener("pointerup", handlePointerUp);
+    nodes.canvas.addEventListener("pointercancel", handlePointerUp);
+  }
+
+  function getAudioEditorSampleFromPointer(event) {
+    const rect = nodes.canvas.getBoundingClientRect();
+    const ratio = rect.width > 0 ? clampNumber((event.clientX - rect.left) / rect.width, 0, 1) : 0;
+    return Math.round(ratio * (state.samples?.length || 0));
+  }
+
+  function getCurrentAudioSelectionRange() {
+    return normalizeAudioEditRange(state.samples?.length || 0, state.selection?.startSample, state.selection?.endSample, state.sampleRate);
+  }
+
+  function deleteSelectedAudio() {
+    const range = getCurrentAudioSelectionRange();
+    if (!range) return;
+    pushAudioEditorUndo();
+    setAudioEditorSamples(deleteAudioRange(state.samples, range.startSample, range.endSample));
+    state.selection = null;
+    state.playheadSeconds = range.startSample / state.sampleRate;
+    nodes.status.textContent = "선택 구간을 삭제했습니다.";
+  }
+
+  function keepSelectedAudio() {
+    const range = getCurrentAudioSelectionRange();
+    if (!range) return;
+    pushAudioEditorUndo();
+    setAudioEditorSamples(keepAudioRange(state.samples, range.startSample, range.endSample));
+    state.selection = null;
+    state.playheadSeconds = 0;
+    nodes.status.textContent = "선택 구간만 남겼습니다.";
+  }
+
+  function copySelectedAudio() {
+    const range = getCurrentAudioSelectionRange();
+    if (!range) return;
+    state.clipboard = state.samples.slice(range.startSample, range.endSample);
+    nodes.status.textContent = `선택 구간 ${formatDuration(state.clipboard.length / state.sampleRate)}을 편집 조각으로 복사했습니다.`;
+    updateAudioEditorUi();
+  }
+
+  function pasteCopiedAudio() {
+    if (!state.samples?.length || !state.clipboard?.length) return;
+    const range = getCurrentAudioSelectionRange();
+    const insertSample = range ? range.startSample : Math.round(clampNumber(state.playheadSeconds, 0, getAudioEditorDuration()) * state.sampleRate);
+    pushAudioEditorUndo();
+    setAudioEditorSamples(insertAudioSegment(state.samples, insertSample, state.clipboard));
+    state.selection = { startSample: insertSample, endSample: insertSample + state.clipboard.length };
+    state.playheadSeconds = insertSample / state.sampleRate;
+    nodes.status.textContent = "복사한 구간을 붙였습니다.";
+  }
+
+  function applyAudioEditorVolume() {
+    if (!state.samples?.length) return;
+    const gain = Number(nodes.volumeInput.value || 1);
+    const range = getCurrentAudioSelectionRange() || {
+      startSample: 0,
+      endSample: state.samples.length,
+    };
+    pushAudioEditorUndo();
+    setAudioEditorSamples(applyAudioGainRange(state.samples, range.startSample, range.endSample, gain));
+    nodes.status.textContent = `${getCurrentAudioSelectionRange() ? "선택 구간" : "전체 녹음"} 음량을 ${Math.round(gain * 100)}%로 조절했습니다.`;
+  }
+
+  function undoAudioEdit() {
+    if (!state.undoStack.length || !state.samples) return;
+    stopAudioEditorPlayback();
+    state.redoStack.push(state.samples);
+    setAudioEditorSamples(state.undoStack.pop());
+    state.selection = null;
+    nodes.status.textContent = "이전 편집 상태로 되돌렸습니다.";
+  }
+
+  function redoAudioEdit() {
+    if (!state.redoStack.length || !state.samples) return;
+    stopAudioEditorPlayback();
+    state.undoStack.push(state.samples);
+    setAudioEditorSamples(state.redoStack.pop());
+    state.selection = null;
+    nodes.status.textContent = "되돌린 편집을 다시 적용했습니다.";
+  }
+
+  function resetAudioEditor() {
+    if (!state.originalSamples?.length) return;
+    stopAudioEditorPlayback();
+    pushAudioEditorUndo();
+    setAudioEditorSamples(new Float32Array(state.originalSamples));
+    state.selection = null;
+    state.playheadSeconds = 0;
+    nodes.status.textContent = "처음 불러온 상태로 되돌렸습니다.";
+  }
+
+  function pushAudioEditorUndo() {
+    if (!state.samples?.length) return;
+    state.undoStack.push(state.samples);
+    if (state.undoStack.length > AUDIO_EDITOR_UNDO_LIMIT) state.undoStack.shift();
+    state.redoStack = [];
+  }
+
+  function setAudioEditorSamples(samples) {
+    stopAudioEditorPlayback();
+    state.samples = samples;
+    state.peaks = buildAudioWaveformPeaks(samples, AUDIO_EDITOR_WAVEFORM_POINTS);
+    state.playheadSeconds = clampNumber(state.playheadSeconds, 0, getAudioEditorDuration());
+    drawAudioEditorWaveform();
+    updateAudioEditorUi();
+  }
+
+  async function playAudioEditorRange(startSeconds, endSeconds) {
+    if (!state.samples?.length) return;
+    stopAudioEditorPlayback();
+    const start = clampNumber(startSeconds, 0, getAudioEditorDuration());
+    const end = clampNumber(endSeconds, start, getAudioEditorDuration());
+    if (end - start <= 0.01) return;
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) {
+      showToast("현재 브라우저는 오디오 재생 편집을 지원하지 않습니다.");
+      return;
+    }
+    state.playbackContext = state.playbackContext || new AudioContextClass();
+    if (state.playbackContext.state === "suspended") {
+      await state.playbackContext.resume();
+    }
+    const buffer = state.playbackContext.createBuffer(1, state.samples.length, state.sampleRate);
+    buffer.copyToChannel(state.samples, 0);
+    const source = state.playbackContext.createBufferSource();
+    source.buffer = buffer;
+    source.connect(state.playbackContext.destination);
+    state.source = source;
+    state.isPlaying = true;
+    state.playbackStartedAt = state.playbackContext.currentTime - start;
+    state.playbackEndSeconds = end;
+    state.playheadSeconds = start;
+    source.onended = () => {
+      if (state.source === source) {
+        state.source = null;
+        state.isPlaying = false;
+        state.playheadSeconds = Math.min(state.playbackEndSeconds, getAudioEditorDuration());
+        cancelAnimationFrame(state.animationId);
+        drawAudioEditorWaveform();
+        updateAudioEditorUi();
+      }
+    };
+    source.start(0, start, end - start);
+    tickAudioEditorPlayback();
+    updateAudioEditorUi();
+  }
+
+  function tickAudioEditorPlayback() {
+    if (!state.isPlaying || !state.playbackContext) return;
+    state.playheadSeconds = clampNumber(state.playbackContext.currentTime - state.playbackStartedAt, 0, state.playbackEndSeconds);
+    drawAudioEditorWaveform();
+    updateAudioEditorUi();
+    state.animationId = requestAnimationFrame(tickAudioEditorPlayback);
+  }
+
+  function stopAudioEditorPlayback() {
+    if (state.source) {
+      const source = state.source;
+      state.source = null;
+      source.onended = null;
+      try {
+        source.stop();
+      } catch {}
+    }
+    state.isPlaying = false;
+    cancelAnimationFrame(state.animationId);
+    drawAudioEditorWaveform();
+    updateAudioEditorUi();
+  }
+
+  function downloadEditedAudio() {
+    if (!state.samples?.length) return;
+    const wav = encodePcm16Wav(state.samples, state.sampleRate);
+    const timestamp = new Date().toISOString().slice(0, 19).replace(/[-:T]/g, "");
+    downloadBlob(new Blob([wav], { type: "audio/wav" }), sanitizeFilename(`edited-recording-${timestamp}.wav`));
+    nodes.status.textContent = "편집 결과를 WAV 파일로 저장했습니다.";
+  }
+
+  function updateVolumeLabel() {
+    nodes.volumeLabel.textContent = `${Math.round(Number(nodes.volumeInput.value || 1) * 100)}%`;
+  }
+
+  function updateAudioEditorUi() {
+    const hasAudio = Boolean(state.samples?.length);
+    const range = getCurrentAudioSelectionRange();
+    const duration = getAudioEditorDuration();
+    nodes.playhead.textContent = `재생 위치 ${formatDuration(state.playheadSeconds)}`;
+    nodes.selectionStatus.textContent = range ? "구간 선택됨" : "선택 없음";
+    nodes.selectionMeta.textContent = range
+      ? `선택 ${formatDuration(range.startSample / state.sampleRate)} - ${formatDuration(range.endSample / state.sampleRate)} (${formatDuration((range.endSample - range.startSample) / state.sampleRate)})`
+      : `선택 구간 없음 · 전체 ${formatDuration(duration)}`;
+    nodes.playAllBtn.disabled = !hasAudio || state.isPlaying;
+    nodes.playSelectionBtn.disabled = !hasAudio || !range || state.isPlaying;
+    nodes.stopBtn.disabled = !state.isPlaying;
+    nodes.deleteBtn.disabled = !hasAudio || !range;
+    nodes.keepBtn.disabled = !hasAudio || !range;
+    nodes.copyBtn.disabled = !hasAudio || !range;
+    nodes.pasteBtn.disabled = !hasAudio || !state.clipboard?.length;
+    nodes.volumeBtn.disabled = !hasAudio;
+    nodes.undoBtn.disabled = state.undoStack.length === 0;
+    nodes.redoBtn.disabled = state.redoStack.length === 0;
+    nodes.downloadBtn.disabled = !hasAudio;
+    nodes.resetBtn.disabled = !hasAudio || !state.originalSamples?.length;
+    updateVolumeLabel();
+  }
+
+  function getAudioEditorDuration() {
+    return state.samples?.length ? state.samples.length / state.sampleRate : 0;
+  }
+
+  function drawAudioEditorWaveform() {
+    const canvas = nodes.canvas;
+    const context = canvas.getContext("2d");
+    const width = Math.max(320, Math.floor(canvas.clientWidth || canvas.width || 960));
+    const height = Math.max(160, Math.floor(canvas.clientHeight || 240));
+    const ratio = window.devicePixelRatio || 1;
+    if (canvas.width !== Math.round(width * ratio) || canvas.height !== Math.round(height * ratio)) {
+      canvas.width = Math.round(width * ratio);
+      canvas.height = Math.round(height * ratio);
+    }
+    context.setTransform(ratio, 0, 0, ratio, 0, 0);
+    context.clearRect(0, 0, width, height);
+    context.fillStyle = "#f8fbff";
+    context.fillRect(0, 0, width, height);
+    context.strokeStyle = "#d8e2ef";
+    context.lineWidth = 1;
+    context.beginPath();
+    context.moveTo(0, height / 2);
+    context.lineTo(width, height / 2);
+    context.stroke();
+
+    if (!state.peaks?.length) {
+      context.fillStyle = "#647084";
+      context.font = "700 14px Malgun Gothic, sans-serif";
+      context.textAlign = "center";
+      context.fillText("녹음 파일을 선택하면 파형이 표시됩니다.", width / 2, height / 2 - 14);
+      return;
+    }
+
+    const range = getCurrentAudioSelectionRange();
+    if (range) {
+      const startX = (range.startSample / state.samples.length) * width;
+      const endX = (range.endSample / state.samples.length) * width;
+      context.fillStyle = "rgba(36, 87, 214, 0.16)";
+      context.fillRect(startX, 0, Math.max(1, endX - startX), height);
+    }
+
+    context.strokeStyle = "#2457d6";
+    context.lineWidth = 1.5;
+    context.beginPath();
+    const pointCount = state.peaks.length / 2;
+    for (let x = 0; x < width; x += 1) {
+      const peakIndex = Math.min(pointCount - 1, Math.floor((x / Math.max(1, width - 1)) * pointCount));
+      const min = state.peaks[peakIndex * 2];
+      const max = state.peaks[peakIndex * 2 + 1];
+      const y1 = height / 2 - max * (height * 0.42);
+      const y2 = height / 2 - min * (height * 0.42);
+      context.moveTo(x + 0.5, y1);
+      context.lineTo(x + 0.5, y2);
+    }
+    context.stroke();
+
+    const playheadX = durationToCanvasX(state.playheadSeconds, width);
+    context.strokeStyle = "#d46d2f";
+    context.lineWidth = 2;
+    context.beginPath();
+    context.moveTo(playheadX, 0);
+    context.lineTo(playheadX, height);
+    context.stroke();
+  }
+
+  function durationToCanvasX(seconds, width) {
+    const duration = getAudioEditorDuration();
+    return duration > 0 ? clampNumber(seconds / duration, 0, 1) * width : 0;
+  }
+}
+
+async function decodeAudioFileForEditor(file) {
+  if (!file) {
+    throw new Error("편집할 녹음 파일을 선택해 주세요.");
+  }
+  if (file.size > AUDIO_EDITOR_MAX_BYTES) {
+    throw new Error(`파일이 너무 큽니다. ${formatBytes(AUDIO_EDITOR_MAX_BYTES)} 이하의 휴대폰 녹음 파일로 다시 시도해 주세요.`);
+  }
+
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass) {
+    throw new Error("현재 브라우저는 녹음 파일 편집에 필요한 오디오 디코딩을 지원하지 않습니다.");
+  }
+
+  let context = null;
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    context = new AudioContextClass();
+    const audioBuffer = await context.decodeAudioData(arrayBuffer.slice(0));
+    if (!audioBuffer.length) {
+      throw new Error("녹음 파일에서 편집할 수 있는 오디오 데이터를 찾지 못했습니다.");
+    }
+    return {
+      samples: extractMonoAudioPcm(audioBuffer),
+      sampleRate: audioBuffer.sampleRate,
+      channelCount: audioBuffer.numberOfChannels || 1,
+      duration: audioBuffer.duration,
+    };
+  } catch (error) {
+    throw new Error(error?.message || "브라우저가 이 녹음 파일을 편집용 파형으로 변환하지 못했습니다.");
+  } finally {
+    if (context?.close) {
+      context.close().catch(() => {});
+    }
   }
 }
 
@@ -2482,6 +3059,83 @@ function encodePcm16Wav(samples, sampleRate) {
     offset += 2;
   }
   return buffer;
+}
+
+function buildAudioWaveformPeaks(samples, pointCount = AUDIO_EDITOR_WAVEFORM_POINTS) {
+  const source = samples instanceof Float32Array ? samples : new Float32Array(samples || []);
+  const safePointCount = Math.max(1, Math.min(Math.round(pointCount) || 1, Math.max(1, source.length)));
+  const peaks = new Float32Array(safePointCount * 2);
+  if (!source.length) return peaks;
+
+  const bucketSize = Math.max(1, Math.ceil(source.length / safePointCount));
+  for (let point = 0; point < safePointCount; point += 1) {
+    const start = point * bucketSize;
+    const end = Math.min(source.length, start + bucketSize);
+    let min = 0;
+    let max = 0;
+    for (let index = start; index < end; index += 1) {
+      const value = source[index];
+      if (value < min) min = value;
+      if (value > max) max = value;
+    }
+    peaks[point * 2] = min;
+    peaks[point * 2 + 1] = max;
+  }
+  return peaks;
+}
+
+function normalizeAudioEditRange(length, startSample, endSample, sampleRate = 44100) {
+  const safeLength = Math.max(0, Math.floor(length || 0));
+  const safeRate = Number.isFinite(sampleRate) && sampleRate > 0 ? sampleRate : 44100;
+  if (!safeLength) return null;
+  const start = clampNumber(Math.round(Number(startSample) || 0), 0, safeLength);
+  const end = clampNumber(Math.round(Number(endSample) || 0), 0, safeLength);
+  const min = Math.min(start, end);
+  const max = Math.max(start, end);
+  if (max - min < safeRate * AUDIO_EDITOR_MIN_SELECTION_SECONDS) return null;
+  return { startSample: min, endSample: max };
+}
+
+function deleteAudioRange(samples, startSample, endSample) {
+  const source = samples instanceof Float32Array ? samples : new Float32Array(samples || []);
+  const range = normalizeAudioEditRange(source.length, startSample, endSample);
+  if (!range) return new Float32Array(source);
+  const output = new Float32Array(source.length - (range.endSample - range.startSample));
+  output.set(source.slice(0, range.startSample), 0);
+  output.set(source.slice(range.endSample), range.startSample);
+  return output;
+}
+
+function keepAudioRange(samples, startSample, endSample) {
+  const source = samples instanceof Float32Array ? samples : new Float32Array(samples || []);
+  const range = normalizeAudioEditRange(source.length, startSample, endSample);
+  return range ? source.slice(range.startSample, range.endSample) : new Float32Array(source);
+}
+
+function insertAudioSegment(samples, insertSample, segment) {
+  const source = samples instanceof Float32Array ? samples : new Float32Array(samples || []);
+  const clip = segment instanceof Float32Array ? segment : new Float32Array(segment || []);
+  if (!clip.length) return new Float32Array(source);
+  const index = clampNumber(Math.round(Number(insertSample) || 0), 0, source.length);
+  const output = new Float32Array(source.length + clip.length);
+  output.set(source.slice(0, index), 0);
+  output.set(clip, index);
+  output.set(source.slice(index), index + clip.length);
+  return output;
+}
+
+function applyAudioGainRange(samples, startSample, endSample, gain) {
+  const source = samples instanceof Float32Array ? samples : new Float32Array(samples || []);
+  const output = new Float32Array(source);
+  const safeGain = Number.isFinite(gain) ? Math.max(0, Math.min(4, gain)) : 1;
+  const range = normalizeAudioEditRange(output.length, startSample, endSample) || {
+    startSample: 0,
+    endSample: output.length,
+  };
+  for (let index = range.startSample; index < range.endSample; index += 1) {
+    output[index] = limitAudioSample(output[index] * safeGain);
+  }
+  return output;
 }
 
 function writeAscii(view, offset, text) {

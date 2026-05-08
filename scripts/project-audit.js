@@ -306,6 +306,7 @@ function auditUploadDropSupport() {
   const expectedDropSupport = new Set([
     "backgroundImageFile",
     "audioFile",
+    "audioEditFile",
     "qrImageFile",
     "imageFile",
     "exifImageFile",

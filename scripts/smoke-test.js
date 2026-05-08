@@ -37,6 +37,11 @@ const API_NAMES = [
   "formatAudioTranscriptionError",
   "preprocessAudioPcm",
   "encodePcm16Wav",
+  "deleteAudioRange",
+  "keepAudioRange",
+  "insertAudioSegment",
+  "applyAudioGainRange",
+  "buildAudioWaveformPeaks",
   "formatAudioPreprocessSummary",
   "cleanAudioTranscriptDraft",
   "breakAudioTranscriptSentences",
@@ -371,6 +376,25 @@ function buildLogicTests(api, app) {
       assert(app.includes("transcriber(message.audioData"), "worker should receive decoded waveform data instead of loading a blob URL");
       assert(app.includes("백그라운드에서 텍스트로 변환 중입니다"), "worker progress copy is missing");
     }),
+    test("audio editor trims, inserts, gains, and builds waveform peaks", () => {
+      const samples = new Float32Array(5000);
+      samples[500] = 0.2;
+      samples[1500] = -0.4;
+      samples[3200] = 0.6;
+      const kept = api.keepAudioRange(samples, 1000, 3200);
+      assert(kept.length === 2200 && Math.abs(kept[500] + 0.4) < 0.0001, "audio editor keep range failed");
+      const deleted = api.deleteAudioRange(samples, 1000, 3200);
+      assert(deleted.length === 2800 && Math.abs(deleted[1000] - 0.6) < 0.0001, "audio editor delete range failed");
+      const inserted = api.insertAudioSegment(deleted, 1000, kept);
+      assert(inserted.length === samples.length && Math.abs(inserted[1500] + 0.4) < 0.0001, "audio editor insert segment failed");
+      const gained = api.applyAudioGainRange(samples, 0, 2200, 2);
+      assert(
+        Math.abs(gained[500] - 0.4) < 0.0001 && Math.abs(gained[1500] + 0.8) < 0.0001 && Math.abs(gained[3200] - 0.6) < 0.0001,
+        "audio editor gain range failed"
+      );
+      const peaks = api.buildAudioWaveformPeaks(samples, 20);
+      assert(peaks.length === 40 && peaks.some((value) => value !== 0), "audio editor waveform peaks failed");
+    }),
     test("beta tool title attaches beta label without a whitespace break", () => {
       const title = api.renderToolTitle({ title: "녹음 파일 텍스트 변환", beta: true });
       assert(
@@ -512,6 +536,7 @@ function buildUploadUxTests(app) {
       const supportedIds = new Set([
         "backgroundImageFile",
         "audioFile",
+        "audioEditFile",
         "qrImageFile",
         "imageFile",
         "exifImageFile",

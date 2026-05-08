@@ -1361,6 +1361,45 @@ body.home-mode .tool-workspace {
   grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
 }
 
+.audio-editor-grid {
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+  align-items: start;
+}
+
+.audio-waveform-card,
+.audio-edit-actions-card {
+  align-content: start;
+}
+
+.audio-waveform-frame {
+  overflow: hidden;
+  border: 1px solid #d8e2ef;
+  border-radius: 8px;
+  background: #f8fbff;
+}
+
+.audio-waveform-canvas {
+  display: block;
+  width: 100%;
+  height: 240px;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.audio-editor-readout {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  color: #4f5a69;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.audio-edit-actions-card .notice-card {
+  margin-top: 2px;
+}
+
 .audio-break-option {
   margin-top: 2px;
 }
@@ -3290,6 +3329,10 @@ body.home-mode .hero-copy h1 {
   .home-category-links {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+
+  .audio-editor-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 760px) {
@@ -3320,6 +3363,10 @@ body.home-mode .hero-copy h1 {
 
   .category-overview {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .audio-waveform-canvas {
+    height: 190px;
   }
 
 }

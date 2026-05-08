@@ -61,6 +61,7 @@ Google Tag Manager uses container `GTM-W3MF6BSN`.
 - Webcam background blur and custom background images are processed locally in the browser; user-selected background files are not uploaded.
 - Work data is intended to stay 100% inside the user's browser for the current static-tool scope.
 - The recording-file transcription beta loads Transformers.js and a Whisper model only on demand; the selected recording file remains local to the browser. It now uses a `whisper-base` quality profile for Korean ARS and formal announcement audio, removes the underperforming `whisper-tiny` fallback from the UI, decodes recordings to 16 kHz waveform data before running heavier transcription in a Web Worker, preserves the conversation flow while trimming only edge silence and lifting quiet speech, and keeps repetition cleanup plus optional sentence-ending line breaks for draft review.
+- The audio editor opens common phone recordings in the browser, draws a canvas waveform, supports range delete/keep/copy/paste, undo/redo, and volume adjustment, and exports edited results as WAV without uploading the recording or output to the application server.
 
 ## Related Docs
 
