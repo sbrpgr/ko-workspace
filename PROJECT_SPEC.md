@@ -231,6 +231,7 @@ Footer and policy pages should expose the same operator information:
 ## Remaining Work
 
 - Run manual camera and microphone checks on real Chrome/Edge devices after each media-tool change
+- Run manual iPhone/Android recording-file checks for the audio editor after each audio-editor change, especially m4a, aac, mp3, and wav files
 - Manually scan generated QR samples on real mobile devices after QR design changes, especially colored or rounded styles
 - Monitor category landing pages in Search Console and expand category copy if pages are indexed with weak impressions
 - Request indexing for the five category landing pages after deployment:
