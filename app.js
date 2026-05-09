@@ -624,10 +624,10 @@ const UI_TEXT = {
 const TOOL_DEFS_EN_OVERRIDES = {
   "voice-to-text": {
     title: "Speech to Text",
-    summary: "Dictate Korean speech in your browser and turn it into draft scripts, meeting notes, or presentation text.",
-    seoTitle: "Speech to Text | Korean Dictation Tool",
-    seoDescription: "Use your browser microphone to dictate Korean speech and organize the transcript without installing software.",
-    keywords: ["speech to text", "Korean dictation", "meeting notes", "script"],
+    summary: "Dictate English speech in your browser and turn it into draft scripts, meeting notes, or presentation text.",
+    seoTitle: "Speech to Text | English Dictation Tool",
+    seoDescription: "Use your browser microphone to dictate English speech and organize the transcript without installing software.",
+    keywords: ["speech to text", "English dictation", "meeting notes", "script"],
     guide: [
       { title: "Allow microphone", text: "Grant microphone permission when your browser asks." },
       { title: "Start dictation", text: "Your speech appears in the transcript area as you talk." },

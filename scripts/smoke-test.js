@@ -495,6 +495,13 @@ function buildEnglishLocaleTests(api) {
       assert(copy.recognitionLang === "en-US", `expected en-US, got ${copy.recognitionLang}`);
       assert(copy.ready === "English recognition ready", "English readiness label mismatch");
     }),
+    test("English voice page SEO targets English dictation", () => {
+      const html = read(path.join(ROOT, "en", "tools", "voice-to-text", "index.html"));
+      assert(html.includes("Speech to Text | English Dictation Tool"), "English voice SEO title mismatch");
+      assert(html.includes("dictate English speech"), "English voice SEO description mismatch");
+      assert(!html.includes("Korean Dictation"), "Korean dictation SEO leaked into English page");
+      assert(!html.includes("Korean speech"), "Korean speech copy leaked into English page");
+    }),
     test("English voice script cleanup removes English filler words", () => {
       const cleaned = api.cleanTranscript("um this is actually a useful note.", true);
       assert(cleaned === "this is a useful note.", `unexpected English cleanup result: ${cleaned}`);
