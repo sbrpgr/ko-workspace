@@ -21,6 +21,15 @@
 - 외부 라이브러리를 쓰면 CDN 접근성, CSP, 개인정보 영향을 확인한다.
 - Search Console에서 새 URL 색인 요청이 필요한지 기록한다.
 
+## 영어 버전 또는 다국어 SEO 변경
+
+- 영어판은 `/en/` 하위 정적 페이지로 유지하고, 기존 한국어 URL과 기능을 대체하지 않는다.
+- `app.js`의 영어 override를 바꿨으면 `node scripts/generate-english-pages.js`로 영어 정적 페이지를 다시 생성한다.
+- 영어/한국어 대응 URL의 canonical, `hreflang="ko"`, `hreflang="en"`, `hreflang="x-default"`를 확인한다.
+- `sitemap.xml`에 새 영어 URL과 대응 한국어 URL이 모두 남아 있는지 확인한다.
+- 영어 title, description, 구조화 데이터가 실제 영어판 기능과 언어를 설명하는지 확인한다.
+- Search Console에서 sitemap 제출 상태, URL 검사, 색인 생성 요청 대상 URL을 완료 보고에 남긴다.
+
 ## 도구 삭제 또는 경로 변경
 
 - `TOOL_DEFS`, 렌더러, 시각 요소, 활용 예시, FAQ에서 제거한다.

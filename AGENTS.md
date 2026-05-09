@@ -7,6 +7,7 @@
 - `AGENT_OPERATING_SPEC.md`: 전체 에이전트 운영 기준
 - `CHANGE_PLAYBOOK.md`: 기능, 광고, 분석, SEO 변경 체크리스트
 - `PROJECT_SPEC.md`: 현재 제품 범위와 구현 상태
+- `ENGLISH_SITE_SEO_WORK_SPEC.md`: 영어 버전(`/en/`)과 SEO/Search Console 작업 명세
 - `AUDIO_TRANSCRIPTION_WORK_SPEC.md`: 녹음 파일 텍스트 변환 베타 기능의 상세 작업 명세
 - `AUDIO_EDITOR_WORK_SPEC.md`: 녹음 파일 간편 편집기의 상세 작업 명세
 
@@ -18,6 +19,8 @@
 - 사용자 입력, 파일명, 변환 결과, 녹음 내용은 분석 이벤트나 외부 API로 보내지 않는다.
 - 광고 영역은 입력, 업로드, 변환, 결과 UI 안에 넣지 않는다.
 - 기능 변경 후에는 `npm.cmd run check`를 실행한다.
+- 영어 버전 작업은 `/en/` 경로, 영어 override, 영어 locale 분기 안에서 처리하고 기존 한국어 경로와 기능을 보존한다.
+- Search Console 색인 요청과 sitemap 제출 상태 확인은 자동화할 수 없는 수동 작업으로 완료 보고에 남긴다.
 
 ## 녹음 파일 텍스트 변환 주의사항
 

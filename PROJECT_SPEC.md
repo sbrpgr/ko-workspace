@@ -14,7 +14,9 @@ Current production baseline:
 - Production domain: `https://ko-workspace.com/`
 - Cloudflare Pages project: `mic-script-generator`
 - Latest AdSense/SEO readiness commit: `580c060 Improve AdSense SEO readiness`
+- Latest English SEO polish commit: `0385e6d Polish English SEO copy`
 - Current static asset cache version: `20260509-06`
+- English version deployed under `/en/` on the same domain, with Korean routes preserved
 - Category landing pages, privacy policy updates, sitemap updates, and core FAQ copy were deployed on 2026-04-29
 
 Core constraints:
@@ -132,12 +134,17 @@ Core constraints:
 - Tool pages: `/tools/{slug}/`
 - Category landing pages: `/tools/text/`, `/tools/pdf/`, `/tools/image/`, `/tools/subtitle/`, `/tools/voice-video/`
 - Policy pages: `/privacy`, `/terms`
+- English home: `/en/`
+- English tool pages: `/en/tools/{slug}/`
+- English category landing pages: `/en/tools/text/`, `/en/tools/pdf/`, `/en/tools/image/`, `/en/tools/subtitle/`, `/en/tools/voice-video/`
+- English policy pages: `/en/privacy/`, `/en/terms/`
 
 Each tool page should have:
 
 - Unique title
 - Unique meta description
 - Canonical URL
+- Korean/English hreflang alternates where a corresponding language page exists
 - Dedicated Open Graph URL
 - Browser-side app shell driven by `app.js`
 - Collapsed usage examples and FAQ below Quick Flow for SEO and user help
@@ -165,6 +172,8 @@ Important frontend implementation notes:
 
 - `TOOL_DEFS` in `app.js` is the source of truth for individual tools.
 - `CATEGORY_PAGE_DEFS` in `app.js` is the source of truth for category landing pages.
+- `TOOL_DEFS_EN_OVERRIDES` and `CATEGORY_PAGE_DEFS_EN` provide the English `/en/` presentation without replacing the Korean defaults.
+- `scripts/generate-english-pages.js` regenerates English static pages from the active English registry.
 - `renderCategoryPage()` renders category landing pages.
 - `renderHomeCategoryLinks()` adds the compact category links on the home screen.
 - `injectCategoryStructuredData()` injects `CollectionPage`, `ItemList`, and `BreadcrumbList` schema for category pages.
@@ -172,6 +181,7 @@ Important frontend implementation notes:
 - The current category pages intentionally hide the left tool sidebar and show a wider category tool grid.
 - When `app.js` or `styles.css` changes, bump the query-string cache version in every HTML entry and `site.webmanifest`.
 - Run `npm.cmd run apply:site-tags` after adding or changing HTML pages so GTM tags and CSP hashes remain managed.
+- For English SEO changes, confirm English static pages do not keep Korean-only phrases such as `Korean Dictation` unless the tool is intentionally about Korean.
 - File upload tools should support both direct file selection and drag-and-drop on `.upload-box` where browser APIs allow it.
 - Heavy browser-side model tools must load models only on demand and must explain model download, device performance, and local-file processing limits in the UI.
 
@@ -180,6 +190,7 @@ Important frontend implementation notes:
 - GitHub Actions prepares `.cloudflare-dist/`
 - Root files are copied into `.cloudflare-dist/`
 - The `tools/` directory is copied recursively into `.cloudflare-dist/`
+- The `en/` directory is copied recursively into `.cloudflare-dist/`
 - Cloudflare Pages deploys `.cloudflare-dist/`
 
 ## Security Rules
@@ -234,6 +245,16 @@ Footer and policy pages should expose the same operator information:
 - Run manual iPhone/Android recording-file checks for the audio editor after each audio-editor change, especially m4a, aac, mp3, and wav files
 - Manually scan generated QR samples on real mobile devices after QR design changes, especially colored or rounded styles
 - Monitor category landing pages in Search Console and expand category copy if pages are indexed with weak impressions
+- Monitor English `/en/` pages in Search Console and expand English FAQ/use-case copy if impressions are weak or queries do not match intent
+- Submit or recheck `https://ko-workspace.com/sitemap.xml` in Search Console after English SEO/page changes
+- Use Search Console URL inspection for the priority English URLs:
+  - `https://ko-workspace.com/en/`
+  - `https://ko-workspace.com/en/tools/voice-to-text/`
+  - `https://ko-workspace.com/en/tools/audio-editor/`
+  - `https://ko-workspace.com/en/tools/audio-file-transcription/`
+  - `https://ko-workspace.com/en/tools/text/`
+  - `https://ko-workspace.com/en/tools/pdf/`
+  - `https://ko-workspace.com/en/tools/image/`
 - Request indexing for the five category landing pages after deployment:
   - `https://ko-workspace.com/tools/text/`
   - `https://ko-workspace.com/tools/pdf/`
@@ -253,8 +274,10 @@ Before committing or deploying broad platform changes:
 - Confirm all HTML pages use the latest cache version for `/app.js`, `/styles.css`, `/favicon.svg`, and `/site.webmanifest`
 - For new HTML pages, confirm these IDs exist: `heroEyebrow`, `pageTitle`, `pageDescription`, `toolSearch`, `categoryFilters`, `toolList`, `toolOverview`, `toolWorkspace`, `toolGuideList`, `helpBtn`, `helpDialog`, `helpCloseBtn`, `selectionCopyBtn`
 - Confirm `sitemap.xml` includes new indexable URLs
+- For English pages, confirm canonical, `hreflang="ko"`, `hreflang="en"`, and `hreflang="x-default"` are present and point to the intended URLs
 - After push, verify GitHub Actions / Cloudflare Pages success
 - For category pages, verify each production URL returns `200` and contains `data-category-page`
+- For English SEO changes, verify the production `/en/` URL or changed `/en/tools/{slug}/` URL returns `200` and contains the updated title/meta copy
 - For privacy changes, verify production `/privacy` contains the updated Google advertising/cookie language
 
 ## Open Source Fallback Rule

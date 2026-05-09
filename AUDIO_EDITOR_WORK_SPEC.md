@@ -16,7 +16,8 @@
 - 렌더러: `app.js`의 `renderAudioEditor`
 - 도구 정의: `app.js`의 `TOOL_DEFS` 중 `audio-editor`
 - 페이지 파일: `tools/audio-editor/index.html`
-- 현재 정적 리소스 캐시 버전: `20260509-02`
+- 영어 페이지 파일: `en/tools/audio-editor/index.html`
+- 현재 정적 리소스 캐시 버전: `20260509-06`
 
 ## 지원 형식 기준
 
@@ -66,6 +67,7 @@
 
 - `36e8cad Add browser audio editor`에서 새 브라우저 기반 파형 편집 도구를 배포했다.
 - `14cd537 Add audio editor spacebar playback`에서 스페이스바 재생/멈춤 토글을 추가했다.
-- 운영 URL `https://ko-workspace.com/tools/audio-editor/`에서 200 응답과 `app.js?v=20260509-02` 반영을 확인했다.
+- `5bf4287 Use English dictation for English site` 이후 영어 버전 `/en/tools/audio-editor/`도 같은 도구 로직을 영어 정적 페이지에서 사용한다.
+- 운영 URL `https://ko-workspace.com/tools/audio-editor/`와 `https://ko-workspace.com/en/tools/audio-editor/`는 최신 전역 캐시 버전을 따라야 한다.
 - 일반 지원 형식은 `.m4a`, `.aac`, `.mp3`, `.wav`로 제한했다.
 - 아직 실제 iPhone/Android 녹음 파일의 실기기 조합별 수동 검증은 남아 있다.
