@@ -1965,6 +1965,7 @@ function ensureBookmarkPromptButton() {
 function showBookmarkPrompt() {
   const isAppleDevice = /Mac|iPhone|iPad|iPod/i.test(navigator.platform || "");
   const shortcut = isAppleDevice ? "Cmd+D" : "Ctrl+D";
+  trackBookmarkPromptOpen();
   showToast(t("bookmarkToast", shortcut));
 }
 
@@ -2617,6 +2618,30 @@ function trackCategoryEvent(eventName, categoryPage) {
     category_page_title: categoryPage.title,
     tool_count: getCategoryPageTools(categoryPage).length,
   });
+}
+
+function trackBookmarkPromptOpen() {
+  if (typeof window === "undefined") return;
+
+  const tool = TOOL_MAP[appState.activeToolId] || getActiveTool();
+  const categoryPage = CATEGORY_PAGE_MAP[appState.categoryPageId] || getActiveCategoryPage();
+
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push(buildBookmarkPromptEvent(tool, categoryPage));
+}
+
+function buildBookmarkPromptEvent(tool = null, categoryPage = null) {
+  const pageType = tool ? "tool" : categoryPage ? "category" : "home";
+  return {
+    event: "bookmark_prompt_open",
+    page_locale: APP_LOCALE,
+    page_type: pageType,
+    tool_id: sanitizeAnalyticsValue(tool?.id),
+    tool_category: sanitizeAnalyticsValue(tool?.category),
+    category_page_id: sanitizeAnalyticsValue(categoryPage?.id),
+    action: "open_prompt",
+    control_id: "topbar_favorite",
+  };
 }
 
 function sanitizeAnalyticsValue(value) {

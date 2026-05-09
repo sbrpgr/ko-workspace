@@ -53,6 +53,7 @@ const API_NAMES = [
   "stripWebpMetadata",
   "escapeHtml",
   "sanitizeFilename",
+  "buildBookmarkPromptEvent",
 ];
 
 function main() {
@@ -480,6 +481,16 @@ function buildLogicTests(api, app) {
     test("HTML and filename helpers are safe", () => {
       assert(api.escapeHtml("<script>") === "&lt;script&gt;", "escapeHtml failed");
       assert(api.sanitizeFilename("a/b:c*.txt") === "a_b_c_.txt", "sanitizeFilename failed");
+    }),
+    test("bookmark prompt analytics event is privacy safe", () => {
+      const tool = api.TOOL_DEFS.find((item) => item.id === "audio-editor");
+      const event = api.buildBookmarkPromptEvent(tool);
+      assert(event.event === "bookmark_prompt_open", "bookmark event name mismatch");
+      assert(event.page_locale === "ko", "bookmark event locale mismatch");
+      assert(event.page_type === "tool", "bookmark event page type mismatch");
+      assert(event.tool_id === "audio-editor", "bookmark event tool id mismatch");
+      assert(event.control_id === "topbar_favorite", "bookmark event control id mismatch");
+      assert(!("text" in event) && !("file_name" in event) && !("content" in event), "bookmark event leaked content-like fields");
     }),
     test("text stats count characters and bytes", () => {
       const result = api.countTextStats("abc def");

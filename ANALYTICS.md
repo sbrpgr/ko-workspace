@@ -12,6 +12,7 @@
 | `file_download` | 다운로드 버튼을 눌렀을 때 | `tool_id`, `tool_category`, `action`, `control_id`, `output_format` |
 | `permission_request` | 마이크/카메라 권한 요청 또는 연결 버튼을 눌렀을 때 | `tool_id`, `tool_category`, `action`, `control_id` |
 | `tool_help_open` | 사용 예시와 FAQ 접힘 영역을 열었을 때 | `tool_id`, `tool_category`, `section` |
+| `bookmark_prompt_open` | 상단 즐겨찾기 추가 안내 버튼을 눌렀을 때 | `page_locale`, `page_type`, `tool_id`, `tool_category`, `category_page_id`, `action`, `control_id` |
 | `tool_error` | 향후 오류 추적이 필요한 경우 | `tool_id`, `tool_category`, `action`, `control_id` |
 
 ## Never Send
