@@ -433,6 +433,7 @@ function walk(dir, onFile) {
 
 function resolveContent(file, html) {
   const relative = path.relative(ROOT, file).replace(/\\/g, "/");
+  if (html.includes('data-locale="en"')) return null;
   if (relative === "index.html") return { id: "home", ...HOME_CONTENT };
 
   const toolMatch = html.match(/<body[^>]+data-tool="([^"]+)"/);

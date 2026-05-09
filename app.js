@@ -531,8 +531,499 @@ const TOOL_DEFS = [
   },
 ];
 
-const TOOL_MAP = Object.fromEntries(TOOL_DEFS.map((tool) => [tool.id, tool]));
-const CATEGORY_ORDER = ["\uC804\uCCB4", "\uC74C\uC131", "영상", "\uD14D\uC2A4\uD2B8", "\uC774\uBBF8\uC9C0", "PDF", "\uC790\uB9C9"];
+const APP_LOCALE = detectAppLocale();
+const IS_ENGLISH_LOCALE = APP_LOCALE === "en";
+const BRAND_NAME_LOCALIZED = IS_ENGLISH_LOCALE ? "ko-workspace" : BRAND_NAME;
+const BRAND_DESCRIPTION_LOCALIZED = IS_ENGLISH_LOCALE
+  ? "ko-workspace is a collection of browser-based text, image, PDF, subtitle, audio, and video tools that run without sign-up."
+  : BRAND_DESCRIPTION;
+const ALL_CATEGORY_LABEL = IS_ENGLISH_LOCALE ? "All" : "\uC804\uCCB4";
+const CATEGORY_LABELS_EN = {
+  "\uC74C\uC131": "Audio",
+  영상: "Video",
+  "\uD14D\uC2A4\uD2B8": "Text",
+  이미지: "Image",
+  PDF: "PDF",
+  자막: "Subtitles",
+};
+const CATEGORY_ORDER = IS_ENGLISH_LOCALE
+  ? ["All", "Audio", "Video", "Text", "Image", "PDF", "Subtitles"]
+  : ["\uC804\uCCB4", "\uC74C\uC131", "영상", "\uD14D\uC2A4\uD2B8", "\uC774\uBBF8\uC9C0", "PDF", "\uC790\uB9C9"];
+const UI_TEXT = {
+  ko: {
+    freeTool: "무료 온라인 도구",
+    noSearchResult: "검색 조건에 맞는 도구가 없습니다.",
+    searchPlaceholder: "찾는 도구 검색",
+    searchLabel: "찾는 도구 검색",
+    privacy: "개인정보",
+    terms: "이용약관",
+    quickFlow: "사용 흐름",
+    directoryLabel: "도구 목록",
+    categoryTools: "카테고리별 도구",
+    categorySeoSuffix: "를 브라우저에서 바로 사용하세요",
+    detailSummary: "사용 예시와 자주 묻는 질문",
+    help: "도움말",
+    examplesSuffix: " 사용 예시",
+    faqHeading: "자주 묻는 질문",
+    fallbackNotConnected: "이 도구는 아직 연결되지 않았습니다.",
+    fallbackExample1: (title) => `${title}로 반복되는 업무 자료를 브라우저에서 바로 정리합니다.`,
+    fallbackExample2: (title) => `${title} 결과를 복사하거나 필요한 파일로 저장해 다음 작업에 사용합니다.`,
+    freeQuestion: (title) => `${title}는 무료로 사용할 수 있나요?`,
+    freeAnswer: (title) => `네. ${title}는 로그인 없이 무료로 사용할 수 있는 코워크스페이스의 브라우저 기반 업무 도구입니다.`,
+    privacyQuestion: (title) => `${title}에서 입력한 내용은 저장되나요?`,
+    privacyAnswer:
+      "아니요. 도구의 작업 데이터는 코워크스페이스 자체 서버에 저장하지 않고 브라우저 안에서 처리하도록 설계되어 있습니다. 단, Google Analytics와 AdSense 같은 외부 서비스는 정책에 따라 쿠키나 광고 식별자를 사용할 수 있습니다.",
+    useQuestion: (title) => `${title}는 어떤 작업에 활용하면 좋나요?`,
+    defaultFaqQuestion: (title) => `${title}는 어떤 상황에서 사용하면 좋나요?`,
+    otherTools: "다른 도구",
+    openToolLabel: (title) => `${title} 열기`,
+    bookmarkTitle: "즐겨찾기 추가",
+    bookmarkAria: "즐겨찾기 추가 안내",
+    bookmarkToast: (shortcut) => `브라우저 즐겨찾기는 ${shortcut}로 추가할 수 있습니다.`,
+    servicePrinciples: "서비스 원칙 보기",
+    selectionCopy: "선택한 문장 복사",
+    selectionCopied: "선택한 내용을 복사했습니다.",
+    betaLabel: "(베타)",
+  },
+  en: {
+    freeTool: "Free Online Tool",
+    noSearchResult: "No tools match your search.",
+    searchPlaceholder: "Search tools",
+    searchLabel: "Search tools",
+    privacy: "Privacy",
+    terms: "Terms",
+    quickFlow: "Quick Flow",
+    directoryLabel: "Tool Directory",
+    categoryTools: "Tools by Category",
+    categorySeoSuffix: " you can use in your browser",
+    detailSummary: "Examples and FAQ",
+    help: "Help",
+    examplesSuffix: " examples",
+    faqHeading: "Frequently Asked Questions",
+    fallbackNotConnected: "This tool is not connected yet.",
+    fallbackExample1: (title) => `Use ${title} to handle repeat work directly in your browser.`,
+    fallbackExample2: (title) => `Copy the result or download the output file for your next step.`,
+    freeQuestion: (title) => `Is ${title} free to use?`,
+    freeAnswer: (title) => `Yes. ${title} is a free browser-based ko-workspace tool that works without sign-up.`,
+    privacyQuestion: (title) => `Does ${title} store my input?`,
+    privacyAnswer:
+      "No. Tool work data is designed to stay in your browser and is not stored on the ko-workspace application server. Google Analytics and AdSense may use cookies or advertising identifiers under their own policies.",
+    useQuestion: (title) => `What can I use ${title} for?`,
+    defaultFaqQuestion: (title) => `When should I use ${title}?`,
+    otherTools: "Other Tools",
+    openToolLabel: (title) => `Open ${title}`,
+    bookmarkTitle: "Add bookmark",
+    bookmarkAria: "How to add this page to bookmarks",
+    bookmarkToast: (shortcut) => `Use ${shortcut} to bookmark this page in your browser.`,
+    servicePrinciples: "View service principles",
+    selectionCopy: "Copy selected text",
+    selectionCopied: "Selected text copied.",
+    betaLabel: "(Beta)",
+  },
+};
+const TOOL_DEFS_EN_OVERRIDES = {
+  "voice-to-text": {
+    title: "Speech to Text",
+    summary: "Dictate Korean speech in your browser and turn it into draft scripts, meeting notes, or presentation text.",
+    seoTitle: "Speech to Text | Korean Dictation Tool",
+    seoDescription: "Use your browser microphone to dictate Korean speech and organize the transcript without installing software.",
+    keywords: ["speech to text", "Korean dictation", "meeting notes", "script"],
+    guide: [
+      { title: "Allow microphone", text: "Grant microphone permission when your browser asks." },
+      { title: "Start dictation", text: "Your speech appears in the transcript area as you talk." },
+      { title: "Choose a format", text: "Turn the transcript into a general script, YouTube script, presentation, or meeting note." },
+      { title: "Copy or save", text: "Copy the cleaned result or download it as a TXT file." },
+    ],
+  },
+  "audio-file-transcription": {
+    title: "Audio File Transcription",
+    summary: "Turn short phone recordings into review drafts in your browser with an on-demand Whisper model.",
+    seoTitle: "Audio File Transcription | Browser STT for Phone Recordings",
+    seoDescription: "Transcribe short m4a, mp3, wav, and aac recordings in your browser without uploading them to the application server.",
+    keywords: ["audio transcription", "phone recording", "speech to text", "m4a transcription"],
+    guide: [
+      { title: "Choose a recording", text: "Select a short m4a, mp3, wav, or aac recording." },
+      { title: "Prepare the model", text: "The browser downloads the speech model only when you run this tool." },
+      { title: "Transcribe locally", text: "The recording is decoded in the browser and processed as a review draft." },
+      { title: "Review the draft", text: "Check the transcript manually, apply sentence breaks, then copy or save it." },
+    ],
+  },
+  "audio-editor": {
+    title: "Audio Trimmer & Joiner",
+    summary: "Open common phone recordings, view the waveform, cut or paste selected ranges, adjust volume, and export WAV.",
+    seoTitle: "Online Audio Trimmer & Joiner | Edit Phone Recordings",
+    seoDescription: "Edit m4a, aac, mp3, and wav phone recordings in your browser with waveform selection, cut, paste, undo, volume control, and WAV export.",
+    keywords: ["audio trimmer", "m4a cutter", "phone recording editor", "audio joiner"],
+    guide: [
+      { title: "Choose a recording", text: "Select a common phone recording such as m4a, aac, mp3, or wav." },
+      { title: "Select on waveform", text: "Drag across the waveform to select the part you want to cut, keep, copy, or play." },
+      { title: "Edit quickly", text: "Delete, keep, copy, paste, undo, redo, or adjust volume for the selected range." },
+      { title: "Export WAV", text: "Download the edited audio as a WAV file. The recording is not uploaded to the application server." },
+    ],
+  },
+  "webcam-recorder": {
+    title: "Webcam Recorder",
+    summary: "Record your camera and microphone in the browser with mirror, filters, background blur, and local WebM export.",
+    seoTitle: "Webcam Recorder | Browser Camera Recording",
+    seoDescription: "Record webcam video with optional microphone, mirror, filters, brightness controls, and background effects directly in your browser.",
+    keywords: ["webcam recorder", "camera recording", "WebM", "background blur"],
+    guide: [
+      { title: "Allow camera", text: "Grant camera and optional microphone permission." },
+      { title: "Adjust preview", text: "Set mirror, brightness, contrast, saturation, filters, or background effects." },
+      { title: "Record", text: "Record as WebM by default, with MP4 where your browser supports it." },
+      { title: "Save", text: "Preview the recording and download the file locally." },
+    ],
+  },
+  "ai-text-cleaner": {
+    title: "AI Paste Cleaner",
+    summary: "Clean Markdown marks, headings, links, code blocks, and extra line breaks from copied AI answers.",
+    seoTitle: "AI Paste Cleaner | Remove ChatGPT Markdown",
+    seoDescription: "Clean pasted ChatGPT, Claude, or Gemini answers for documents, email, blogs, and messengers.",
+    keywords: ["ChatGPT", "Markdown cleaner", "AI text", "paste cleanup"],
+    guide: [
+      { title: "Paste AI text", text: "Paste an AI answer, draft, email, or blog copy." },
+      { title: "Pick a purpose", text: "Choose plain text, document, blog, or table-friendly cleanup." },
+      { title: "Adjust cleanup", text: "Remove bold marks, heading markers, code blocks, links, and extra blank lines as needed." },
+      { title: "Use the result", text: "Copy the cleaned text into your document, email, or editor." },
+    ],
+  },
+  "ai-table-converter": {
+    title: "AI Table Converter",
+    summary: "Convert Markdown, pipe, TSV, or CSV tables from AI answers into document tables, spreadsheet TSV, and CSV.",
+    seoTitle: "AI Table Converter | Copy ChatGPT Tables to Excel or Word",
+    seoDescription: "Turn AI-generated Markdown tables into document-copy HTML, spreadsheet TSV, and CSV directly in the browser.",
+    keywords: ["ChatGPT table", "Markdown table", "Excel paste", "Word table"],
+    guide: [
+      { title: "Paste the answer", text: "Paste the full AI answer, including text before or after the table." },
+      { title: "Detect table", text: "Find Markdown, pipe, TSV, or CSV tables inside the answer." },
+      { title: "Clean cell marks", text: "Choose whether to remove Markdown marks, links, code, or HTML from cells." },
+      { title: "Copy or save", text: "Copy as a document table, TSV for spreadsheets, CSV text, or download CSV." },
+    ],
+  },
+  "csv-excel-converter": {
+    title: "CSV Excel Converter",
+    summary: "Convert CSV and TSV files to XLSX, or export XLSX sheets to CSV, with browser-side batch processing.",
+    seoTitle: "CSV Excel Converter | CSV to XLSX and XLSX to CSV",
+    seoDescription: "Convert CSV, TSV, and XLSX files in the browser with encoding options, delimiter detection, batch output, and ZIP download.",
+    keywords: ["CSV to Excel", "CSV to XLSX", "XLSX to CSV", "batch converter"],
+    guide: [
+      { title: "Choose files", text: "Select one or more CSV, TSV, or XLSX files." },
+      { title: "Pick direction", text: "CSV/TSV files become XLSX, while XLSX sheets can be exported as CSV." },
+      { title: "Set options", text: "Adjust encoding, delimiter, empty rows, and text preservation for IDs or phone numbers." },
+      { title: "Download", text: "Save each output file or download multiple results as a ZIP." },
+    ],
+  },
+  "character-counter": {
+    title: "Character Counter",
+    summary: "Count characters with and without spaces, words, lines, paragraphs, bytes, and estimated reading time.",
+    seoTitle: "Character Counter | Count Characters, Words, and Bytes",
+    seoDescription: "Paste text to count characters, characters without spaces, words, lines, bytes, and estimated reading time.",
+    keywords: ["character counter", "word count", "byte count", "text length"],
+    guide: [
+      { title: "Paste text", text: "Add an essay, assignment, blog draft, product copy, or message." },
+      { title: "Check counts", text: "Review characters with spaces, without spaces, words, lines, bytes, and reading time." },
+      { title: "Compare limits", text: "Use the numbers to match submission or platform limits." },
+    ],
+  },
+  "line-break-cleaner": {
+    title: "Line Break Cleaner",
+    summary: "Clean awkward line breaks, trim extra spaces, and normalize paragraphs from copied text.",
+    seoTitle: "Line Break Cleaner | Remove Unwanted Line Breaks",
+    seoDescription: "Clean line breaks and spaces from copied text so it is easier to paste into documents, email, or posts.",
+    keywords: ["line break cleaner", "remove line breaks", "paragraph cleanup", "text cleaner"],
+    guide: [
+      { title: "Paste text", text: "Paste text copied from PDFs, web pages, messengers, or email." },
+      { title: "Choose cleanup", text: "Join wrapped lines, collapse blanks, trim spaces, or keep paragraph breaks." },
+      { title: "Copy output", text: "Copy the cleaned paragraph text into your next document." },
+    ],
+  },
+  "markdown-editor": {
+    title: "Markdown Editor",
+    summary: "Write Markdown with quick formatting controls, live preview, copy, and MD download.",
+    seoTitle: "Markdown Editor | Online Markdown Writing Tool",
+    seoDescription: "Write Markdown in your browser with preview, quick syntax buttons, copy, and MD file download.",
+    keywords: ["Markdown editor", "online Markdown", "README editor", "MD writer"],
+    guide: [
+      { title: "Write or paste", text: "Start with plain text or a draft." },
+      { title: "Format", text: "Use buttons for headings, bold, lists, quotes, code, links, and tables." },
+      { title: "Preview and save", text: "Check the preview, copy the Markdown, or download an MD file." },
+    ],
+  },
+  "text-extractor": {
+    title: "Email, URL & Phone Extractor",
+    summary: "Extract emails, URLs, and phone numbers from unstructured text and copy each list separately.",
+    seoTitle: "Email URL Phone Extractor | Text Data Cleanup",
+    seoDescription: "Extract email addresses, links, and phone numbers from long text directly in your browser.",
+    keywords: ["email extractor", "URL extractor", "phone extractor", "contact list"],
+    guide: [
+      { title: "Paste source text", text: "Add email bodies, notices, inquiry logs, or CRM notes." },
+      { title: "Extract contacts", text: "The tool separates emails, URLs, and phone numbers." },
+      { title: "Copy lists", text: "Copy only the list you need for follow-up work." },
+    ],
+  },
+  "duplicate-line-remover": {
+    title: "Duplicate Line Remover",
+    summary: "Remove repeated lines from lists while optionally trimming spaces, ignoring case, and sorting results.",
+    seoTitle: "Duplicate Line Remover | Clean Text Lists",
+    seoDescription: "Remove duplicate lines from text lists in your browser with trim, case, empty line, and sort options.",
+    keywords: ["duplicate remover", "remove duplicate lines", "list cleaner", "unique lines"],
+    guide: [
+      { title: "Paste list", text: "Add emails, URLs, keywords, IDs, or any line-based list." },
+      { title: "Set matching", text: "Choose trimming, case sensitivity, empty line handling, and sorting." },
+      { title: "Use unique list", text: "Copy or download the cleaned list." },
+    ],
+  },
+  "find-replace": {
+    title: "Find and Replace",
+    summary: "Find text or patterns and replace them in one pass with optional case, whole-word, and regex settings.",
+    seoTitle: "Find and Replace | Online Text Replacement Tool",
+    seoDescription: "Replace repeated words, phrases, dates, or patterns in text directly in your browser.",
+    keywords: ["find and replace", "text replacement", "regex replace", "bulk edit"],
+    guide: [
+      { title: "Paste text", text: "Add the document or note you want to edit." },
+      { title: "Enter terms", text: "Set the text to find and the replacement text." },
+      { title: "Apply options", text: "Use case sensitivity, whole-word matching, or regex when needed." },
+      { title: "Copy result", text: "Review replacement count and copy the edited text." },
+    ],
+  },
+  "case-converter": {
+    title: "Case Converter",
+    summary: "Convert text between uppercase, lowercase, title case, sentence case, camelCase, snake_case, and kebab-case.",
+    seoTitle: "Case Converter | Uppercase, Lowercase, camelCase, snake_case",
+    seoDescription: "Convert words, titles, filenames, or variable names between common case formats in your browser.",
+    keywords: ["case converter", "camelCase", "snake_case", "kebab-case"],
+    guide: [
+      { title: "Enter text", text: "Paste words, titles, filenames, tags, or identifiers." },
+      { title: "Choose format", text: "Pick uppercase, lowercase, title case, camelCase, snake_case, kebab-case, and more." },
+      { title: "Copy output", text: "Use the converted text in code, files, or documents." },
+    ],
+  },
+  "text-diff": {
+    title: "Text Diff Checker",
+    summary: "Compare two text blocks line by line and highlight added, removed, and unchanged lines.",
+    seoTitle: "Text Diff Checker | Compare Two Text Blocks",
+    seoDescription: "Compare two versions of text in your browser and see line-level additions and removals.",
+    keywords: ["text diff", "compare text", "line diff", "document comparison"],
+    guide: [
+      { title: "Paste original", text: "Add the earlier version on the left." },
+      { title: "Paste changed text", text: "Add the newer version on the right." },
+      { title: "Review differences", text: "Check added, removed, and unchanged lines." },
+    ],
+  },
+  "qr-code-generator": {
+    title: "QR Code Generator",
+    summary: "Create QR codes for URLs, text, and Wi-Fi details with simple style controls and SVG, PNG, or JPG export.",
+    seoTitle: "QR Code Generator | Create URL, Text, and Wi-Fi QR Codes",
+    seoDescription: "Generate QR codes in your browser and download them as SVG, PNG, or JPG.",
+    keywords: ["QR code generator", "URL QR", "Wi-Fi QR", "SVG QR"],
+    guide: [
+      { title: "Enter content", text: "Add a URL, text, or Wi-Fi connection details." },
+      { title: "Adjust style", text: "Choose colors, module shape, size, and output format." },
+      { title: "Check and save", text: "Preview the QR code and download SVG, PNG, or JPG." },
+    ],
+  },
+  "qr-link-extractor": {
+    title: "QR Link Extractor",
+    summary: "Read a QR image or screenshot in your browser and show the extracted URL or original payload.",
+    seoTitle: "QR Link Extractor | Read QR Codes from Images",
+    seoDescription: "Upload or drop a QR code image to read its URL or text payload before opening it.",
+    keywords: ["QR reader", "QR link extractor", "read QR image", "QR decoder"],
+    guide: [
+      { title: "Choose image", text: "Select a QR image or screenshot." },
+      { title: "Decode", text: "The browser reads the QR code locally." },
+      { title: "Review URL", text: "Check the extracted URL or text before opening anything." },
+    ],
+  },
+  "image-resizer": {
+    title: "Image Resizer",
+    summary: "Resize images by width, height, or percentage while keeping the result in your browser.",
+    seoTitle: "Image Resizer | Resize Photos Online",
+    seoDescription: "Resize images in your browser by pixel size or percentage and download the result.",
+    keywords: ["image resizer", "resize photo", "pixel size", "browser image tool"],
+    guide: [
+      { title: "Choose image", text: "Select a photo, screenshot, or upload image." },
+      { title: "Set size", text: "Enter width, height, or percentage while preserving ratio if needed." },
+      { title: "Download", text: "Preview and save the resized image." },
+    ],
+  },
+  "image-converter": {
+    title: "Image Converter",
+    summary: "Convert images between JPG, PNG, and WEBP in your browser.",
+    seoTitle: "Image Converter | JPG PNG WEBP Converter",
+    seoDescription: "Convert supported images to JPG, PNG, or WEBP locally in your browser.",
+    keywords: ["image converter", "JPG to PNG", "PNG to WEBP", "WEBP converter"],
+    guide: [
+      { title: "Choose image", text: "Select the image you want to convert." },
+      { title: "Pick format", text: "Choose JPG, PNG, or WEBP output." },
+      { title: "Save", text: "Preview the converted image and download it." },
+    ],
+  },
+  "image-compressor": {
+    title: "Image Compressor",
+    summary: "Reduce image file size with quality and width controls before downloading the compressed result.",
+    seoTitle: "Image Compressor | Compress JPG PNG WEBP",
+    seoDescription: "Compress images in your browser with quality and size controls for upload, email, or web use.",
+    keywords: ["image compressor", "compress JPG", "reduce image size", "WEBP compression"],
+    guide: [
+      { title: "Choose image", text: "Select a photo or upload image." },
+      { title: "Set quality", text: "Adjust quality and optional maximum width." },
+      { title: "Download", text: "Save the compressed image after checking the result size." },
+    ],
+  },
+  "exif-metadata-remover": {
+    title: "EXIF Metadata Remover",
+    summary: "Remove EXIF, XMP, IPTC, comments, and text metadata from JPG, PNG, and WEBP images locally.",
+    seoTitle: "EXIF Metadata Remover | Remove Photo Location Data",
+    seoDescription: "Remove privacy-sensitive image metadata such as GPS, camera, XMP, and comments in your browser.",
+    keywords: ["EXIF remover", "metadata remover", "remove GPS", "photo privacy"],
+    guide: [
+      { title: "Choose image", text: "Select a JPG, PNG, or WEBP image." },
+      { title: "Remove metadata", text: "The browser strips supported metadata blocks locally." },
+      { title: "Download clean file", text: "Save the cleaned image and verify it before sharing." },
+    ],
+  },
+  "pdf-merge": {
+    title: "Merge PDF",
+    summary: "Combine multiple PDF files into one document in your browser.",
+    seoTitle: "Merge PDF | Combine PDF Files Online",
+    seoDescription: "Merge multiple PDF files into a single PDF directly in your browser.",
+    keywords: ["merge PDF", "combine PDF", "PDF joiner", "browser PDF"],
+    guide: [
+      { title: "Choose PDFs", text: "Select two or more PDF files." },
+      { title: "Set order", text: "Arrange files in the order you want." },
+      { title: "Merge and save", text: "Create one PDF and download it locally." },
+    ],
+  },
+  "pdf-split": {
+    title: "Split PDF",
+    summary: "Split a PDF into separate files by page or page range in your browser.",
+    seoTitle: "Split PDF | Separate PDF Pages Online",
+    seoDescription: "Split a PDF by page or page range without uploading it to the application server.",
+    keywords: ["split PDF", "PDF separator", "extract PDF pages", "browser PDF"],
+    guide: [
+      { title: "Choose PDF", text: "Select the PDF you want to split." },
+      { title: "Pick split mode", text: "Split by every page or by a page interval." },
+      { title: "Download parts", text: "Save each PDF part locally." },
+    ],
+  },
+  "pdf-extract-pages": {
+    title: "Extract PDF Pages",
+    summary: "Extract selected pages or ranges from a PDF and save them as a new PDF.",
+    seoTitle: "Extract PDF Pages | Save Selected PDF Pages",
+    seoDescription: "Choose page ranges from a PDF and create a new PDF in your browser.",
+    keywords: ["extract PDF pages", "PDF page range", "save PDF pages", "PDF tool"],
+    guide: [
+      { title: "Choose PDF", text: "Select a PDF file." },
+      { title: "Enter pages", text: "Type page numbers or ranges such as 1-3, 5, 8." },
+      { title: "Save result", text: "Download a new PDF containing only the selected pages." },
+    ],
+  },
+  "image-to-pdf": {
+    title: "Images to PDF",
+    summary: "Turn multiple images into a single PDF document in your browser.",
+    seoTitle: "Images to PDF | Convert JPG PNG to PDF",
+    seoDescription: "Combine JPG, PNG, and other supported images into a PDF locally in your browser.",
+    keywords: ["image to PDF", "JPG to PDF", "PNG to PDF", "photo PDF"],
+    guide: [
+      { title: "Choose images", text: "Select one or more images." },
+      { title: "Order pages", text: "Arrange image order for the PDF." },
+      { title: "Download PDF", text: "Create and save the PDF document." },
+    ],
+  },
+  "pdf-to-image": {
+    title: "PDF to Image",
+    summary: "Render PDF pages as PNG images and download selected pages or all pages.",
+    seoTitle: "PDF to Image | Convert PDF Pages to PNG",
+    seoDescription: "Convert PDF pages to PNG images in your browser and download individual pages or all pages.",
+    keywords: ["PDF to image", "PDF to PNG", "PDF page image", "document preview"],
+    guide: [
+      { title: "Choose PDF", text: "Select the PDF you want to render." },
+      { title: "Preview pages", text: "Render pages as images in the browser." },
+      { title: "Download images", text: "Save selected pages or all pages as PNG files." },
+    ],
+  },
+  "srt-cleaner": {
+    title: "SRT Cleaner",
+    summary: "Clean SRT subtitle numbering, timing blocks, spacing, and repeated formatting issues.",
+    seoTitle: "SRT Cleaner | Fix Subtitle Formatting",
+    seoDescription: "Clean and renumber SRT subtitle files in your browser before editing or uploading.",
+    keywords: ["SRT cleaner", "subtitle cleanup", "renumber SRT", "subtitle formatting"],
+    guide: [
+      { title: "Paste or load SRT", text: "Add subtitle text or choose a subtitle file." },
+      { title: "Clean format", text: "Renumber cues, trim spacing, and normalize structure." },
+      { title: "Save subtitle", text: "Copy or download the cleaned SRT." },
+    ],
+  },
+  "subtitle-converter": {
+    title: "SRT VTT Converter",
+    summary: "Convert subtitles between SRT and VTT formats in your browser.",
+    seoTitle: "SRT to VTT Converter | Subtitle Format Converter",
+    seoDescription: "Convert SRT subtitles to VTT or VTT subtitles to SRT without uploading them to the application server.",
+    keywords: ["SRT to VTT", "VTT to SRT", "subtitle converter", "caption format"],
+    guide: [
+      { title: "Add subtitle", text: "Paste subtitle text or choose a file." },
+      { title: "Pick format", text: "Choose SRT or VTT as the output format." },
+      { title: "Download", text: "Copy or save the converted subtitle file." },
+    ],
+  },
+  "subtitle-timing": {
+    title: "Subtitle Timing Shifter",
+    summary: "Move all SRT or VTT subtitle timings forward or backward by a chosen number of seconds.",
+    seoTitle: "Subtitle Timing Shifter | Adjust SRT VTT Sync",
+    seoDescription: "Shift SRT or VTT subtitle timings by seconds to fix subtitle sync in your browser.",
+    keywords: ["subtitle timing", "SRT sync", "VTT sync", "caption offset"],
+    guide: [
+      { title: "Add subtitle", text: "Paste SRT or VTT text or load a subtitle file." },
+      { title: "Set offset", text: "Enter a positive or negative second value." },
+      { title: "Save adjusted file", text: "Check the shifted timings and download the subtitle." },
+    ],
+  },
+};
+const TOOL_VISUALS_EN = {
+  "voice-to-text": { icon: "\uD83C\uDFA4", tone: "red", copy: "Dictate speech into text in your browser." },
+  "audio-file-transcription": { icon: "\uD83C\uDF99\uFE0F", tone: "red", copy: "Create a review draft from a phone recording." },
+  "audio-editor": { icon: "\u2702", tone: "cyan", copy: "Trim and join phone recordings with a waveform." },
+  "webcam-recorder": { icon: "\uD83C\uDFA5", tone: "orange", copy: "Record camera and microphone locally." },
+  "ai-text-cleaner": { icon: "\u2728", tone: "violet", copy: "Clean AI answer formatting for documents." },
+  "ai-table-converter": { icon: "\u25A4", tone: "green", copy: "Convert AI tables for documents and spreadsheets." },
+  "csv-excel-converter": { icon: "XL", tone: "emerald", copy: "Convert CSV, TSV, and XLSX files in the browser." },
+};
+const TOOL_USE_EXAMPLES_EN = {};
+const TOOL_EXTRA_FAQS_EN = {
+  "audio-editor": {
+    question: "Which phone recordings are supported?",
+    answer: "The editor targets common m4a, aac, mp3, and wav recordings when the browser can decode them. Uncommon legacy formats are not a support target.",
+  },
+};
+
+function detectAppLocale() {
+  const bodyLocale = document.body?.dataset?.locale || "";
+  const documentLang = document.documentElement?.lang || "";
+  const pathname = window.location?.pathname || "";
+  if (bodyLocale === "en" || /^en\b/i.test(documentLang)) return "en";
+  return pathname === "/en" || pathname.startsWith("/en/") ? "en" : "ko";
+}
+
+function t(key, ...args) {
+  const value = UI_TEXT[APP_LOCALE]?.[key] ?? UI_TEXT.ko[key] ?? "";
+  return typeof value === "function" ? value(...args) : value;
+}
+
+function localizeToolDef(tool, override = {}) {
+  return {
+    ...tool,
+    ...override,
+    path: `/en${tool.path}`,
+    category: CATEGORY_LABELS_EN[tool.category] || tool.category,
+    guide: override.guide || tool.guide,
+    keywords: override.keywords || tool.keywords,
+  };
+}
+
+const TOOL_DEFS_ACTIVE = IS_ENGLISH_LOCALE
+  ? TOOL_DEFS.map((tool) => localizeToolDef(tool, TOOL_DEFS_EN_OVERRIDES[tool.id]))
+  : TOOL_DEFS;
+const TOOL_MAP = Object.fromEntries(TOOL_DEFS_ACTIVE.map((tool) => [tool.id, tool]));
 const TOOL_VISUALS = {
   "voice-to-text": { icon: "\uD83C\uDFA4", tone: "red", copy: "\ub9d0\ud558\uba74 \ubc14\ub85c \ud14d\uc2a4\ud2b8\ub85c \ubc1b\uc544 \uc801\uc2b5\ub2c8\ub2e4." },
   "audio-file-transcription": { icon: "\uD83C\uDF99\uFE0F", tone: "red", copy: "\ud734\ub300\ud3f0 \ub179\uc74c \ud30c\uc77c\uc744 \ud14d\uc2a4\ud2b8 \ucd08\uc548\uc73c\ub85c \ubcc0\ud658\ud569\ub2c8\ub2e4." },
@@ -814,6 +1305,273 @@ const TOOL_EXTRA_FAQS = {
   },
 };
 
+function getToolVisual(tool) {
+  if (IS_ENGLISH_LOCALE) {
+    const englishVisual = TOOL_VISUALS_EN[tool.id] || {};
+    const baseVisual = TOOL_VISUALS[tool.id] || {};
+    return {
+      icon: englishVisual.icon || baseVisual.icon || tool.title.slice(0, 1),
+      tone: englishVisual.tone || baseVisual.tone || "slate",
+      copy: englishVisual.copy || tool.summary,
+    };
+  }
+  return TOOL_VISUALS[tool.id] || {
+    icon: tool.title.slice(0, 1),
+    tone: "slate",
+    copy: tool.summary,
+  };
+}
+
+function getToolExamples(tool) {
+  return (IS_ENGLISH_LOCALE ? TOOL_USE_EXAMPLES_EN[tool.id] : TOOL_USE_EXAMPLES[tool.id]) || [
+    t("fallbackExample1", tool.title),
+    t("fallbackExample2", tool.title),
+  ];
+}
+
+function getToolExtraFaq(tool, examples) {
+  return (IS_ENGLISH_LOCALE ? TOOL_EXTRA_FAQS_EN[tool.id] : TOOL_EXTRA_FAQS[tool.id]) || {
+    question: t("defaultFaqQuestion", tool.title),
+    answer: examples.join(" "),
+  };
+}
+
+const ENGLISH_WORKSPACE_TEXT = {
+  "녹음 파일 간편 편집기": "Audio Trimmer & Joiner",
+  "휴대폰 녹음 파일을 서버 업로드 없이 브라우저에서 열고, 파형을 보며 구간을 자르고 붙인 뒤 WAV 파일로 저장합니다.":
+    "Open a phone recording in your browser, edit ranges on the waveform, and save the result as a WAV file without uploading it to the application server.",
+  "파일 없음": "No file",
+  "선택 없음": "No selection",
+  "WAV 저장": "Save WAV",
+  "휴대폰 녹음 파일 선택": "Choose phone recording",
+  "iPhone 음성 메모와 Android 녹음 앱에서 흔한 m4a, aac, mp3, wav 파일을 우선 지원합니다. 파일은 코워크스페이스 서버로 업로드하지 않고, 브라우저가 읽을 수 있는 경우에만 편집합니다.":
+    "Common m4a, aac, mp3, and wav files from iPhone Voice Memos and Android recorder apps are the support target. Files are not uploaded to the ko-workspace server, and editing is available when the browser can decode the format.",
+  "파형 편집": "Waveform Editing",
+  "파일을 선택하면 파형이 표시됩니다. 파형을 드래그해 구간을 선택하고, 클릭하면 붙여넣을 위치가 이동합니다.":
+    "Choose a file to show the waveform. Drag on the waveform to select a range, or click to move the paste/playhead position.",
+  "녹음 파일 파형": "Recording waveform",
+  "재생 위치 0:00": "Playhead 0:00",
+  "선택 구간 없음": "No selected range",
+  "전체 재생": "Play All",
+  "선택 재생": "Play Selection",
+  "정지": "Stop",
+  "간편 편집": "Quick Edit",
+  "선택 구간을 만들면 삭제, 복사, 음량 조절을 적용할 수 있습니다.":
+    "Create a selected range to delete, copy, paste, or adjust volume.",
+  "선택 삭제": "Delete Selection",
+  "선택만 남기기": "Keep Selection",
+  "선택 복사": "Copy Selection",
+  "붙이기": "Paste",
+  "음량 조절": "Volume",
+  "선택 구간이 있으면 선택 구간에만, 없으면 전체 녹음에 적용합니다.":
+    "Applies to the selected range when one exists, otherwise to the full recording.",
+  "음량 적용": "Apply Volume",
+  "실행 취소": "Undo",
+  "다시 실행": "Redo",
+  "브라우저 기반 간편 편집입니다.": "This is a browser-based quick editor.",
+  "편집 중 원본 녹음과 결과 파일은 서버로 보내지지 않습니다. 다만 긴 휴대폰 녹음은 기기 메모리와 브라우저 코덱 지원에 따라 열리지 않을 수 있고, 결과 저장은 호환성이 안정적인 WAV 형식으로 제공합니다.":
+    "The original recording and edited result are not sent to the application server while editing. Very long recordings may still depend on device memory and browser codec support, and output is saved as WAV for compatibility.",
+  "처음 상태로": "Reset",
+  "파일 읽는 중": "Reading file",
+  "휴대폰 녹음 파일을 브라우저에서 디코딩하고 있습니다.": "Decoding the phone recording in the browser.",
+  "편집 준비": "Ready to edit",
+  "파형을 드래그해 구간을 선택하거나, 클릭해 붙여넣을 위치를 지정하세요.":
+    "Drag on the waveform to select a range, or click to set the paste position.",
+  "읽기 실패": "Read failed",
+  "브라우저가 이 휴대폰 녹음 형식을 읽지 못했습니다. m4a, aac, mp3, wav 형식이더라도 기기와 코덱에 따라 Chrome 또는 Edge에서 다시 시도해야 할 수 있습니다.":
+    "The browser could not read this phone recording format. Even m4a, aac, mp3, or wav files may need Chrome or Edge depending on the device and codec.",
+  "선택 구간을 삭제했습니다.": "Deleted the selected range.",
+  "선택 구간만 남겼습니다.": "Kept only the selected range.",
+  "복사한 구간을 붙였습니다.": "Pasted the copied range.",
+  "이전 편집 상태로 되돌렸습니다.": "Returned to the previous edit state.",
+  "되돌린 편집을 다시 적용했습니다.": "Reapplied the reverted edit.",
+  "처음 불러온 상태로 되돌렸습니다.": "Restored the initially loaded state.",
+  "현재 브라우저는 오디오 재생 편집을 지원하지 않습니다.": "This browser does not support audio playback editing.",
+  "편집 결과를 WAV 파일로 저장했습니다.": "Saved the edited result as a WAV file.",
+  "녹음 파일을 선택하면 파형이 표시됩니다.": "Choose a recording to show the waveform.",
+  "편집할 녹음 파일을 선택해 주세요.": "Choose a recording to edit.",
+  "현재 브라우저는 녹음 파일 편집에 필요한 오디오 디코딩을 지원하지 않습니다.":
+    "This browser does not support the audio decoding required for recording editing.",
+  "녹음 파일에서 편집할 수 있는 오디오 데이터를 찾지 못했습니다.": "No editable audio data was found in the recording.",
+  "브라우저가 이 녹음 파일을 편집용 파형으로 변환하지 못했습니다.":
+    "The browser could not convert this recording into an editable waveform.",
+  "길이 확인 불가": "Duration unavailable",
+  "서버 업로드 없이 브라우저에서 처리합니다.": "Processed in the browser without application-server upload.",
+  "녹음 파일 텍스트 변환": "Audio File Transcription",
+  "녹음 파일": "Audio file",
+  "파일 선택": "Choose File",
+  "텍스트 변환": "Transcribe",
+  "변환 중...": "Transcribing...",
+  "모델 대기": "Model ready",
+  "변환 중": "Transcribing",
+  "완료": "Done",
+  "오류": "Error",
+  "파일을 선택해 주세요.": "Choose a file.",
+  "파일을 불러오는 중입니다.": "Loading file.",
+  "결과": "Result",
+  "결과 복사": "Copy Result",
+  "TXT 저장": "Save TXT",
+  "문장 줄바꿈 적용": "Apply sentence breaks",
+  "한국어 우선": "Prefer Korean",
+  "자동 감지": "Auto detect",
+  "입력": "Input",
+  "출력": "Output",
+  "원문": "Original",
+  "복사": "Copy",
+  "저장": "Save",
+  "다운로드": "Download",
+  "초기화": "Reset",
+  "삭제": "Delete",
+  "적용": "Apply",
+  "변환": "Convert",
+  "실행": "Run",
+  "정리": "Clean",
+  "추출": "Extract",
+  "만들기": "Create",
+  "파일": "File",
+  "옵션": "Options",
+  "미리보기": "Preview",
+  "상태": "Status",
+  "선택": "Selection",
+  "전체": "All",
+  "이미지 선택": "Choose Image",
+  "PDF 선택": "Choose PDF",
+  "자막 입력": "Subtitle Input",
+  "자막 변환": "Convert Subtitles",
+  "자막 정리": "Clean Subtitles",
+  "시간 보정": "Shift Timing",
+  "QR 만들기": "Create QR",
+  "QR 읽기": "Read QR",
+  "이미지 압축": "Compress Image",
+  "이미지 변환": "Convert Image",
+  "이미지 크기 조절": "Resize Image",
+  "메타데이터 제거": "Remove Metadata",
+  "PDF 합치기": "Merge PDF",
+  "PDF 분할": "Split PDF",
+  "PDF 페이지 추출": "Extract PDF Pages",
+  "이미지 PDF 변환": "Images to PDF",
+  "PDF 이미지 변환": "PDF to Image",
+  "마크다운 입력": "Markdown Input",
+  "마크다운 서식": "Markdown Formatting",
+  "마크다운 복사": "Copy Markdown",
+  "일반 텍스트 복사": "Copy Plain Text",
+  "글자수 세기": "Character Counter",
+  "줄바꿈·공백 정리": "Line Break Cleaner",
+  "중복 줄 제거": "Duplicate Line Remover",
+  "찾기 및 바꾸기": "Find and Replace",
+  "대소문자 변환": "Case Converter",
+  "텍스트 비교기": "Text Diff Checker",
+  "이메일·URL·전화번호 추출기": "Email, URL & Phone Extractor",
+  "AI 복붙 서식 정리": "AI Paste Cleaner",
+  "AI 표 복붙 변환기": "AI Table Converter",
+  "CSV 엑셀 변환기": "CSV Excel Converter",
+  "웹캠 녹화기": "Webcam Recorder",
+  "카메라 연결": "Connect Camera",
+  "카메라 다시 연결": "Reconnect Camera",
+  "카메라 권한 요청": "Request Camera Permission",
+  "권한 다시 요청": "Request Permission Again",
+  "권한 재확인": "Check Permission Again",
+  "카메라 중지": "Stop Camera",
+  "녹화 시작": "Start Recording",
+  "일시정지": "Pause",
+  "다시 시작": "Resume",
+  "녹화 중지": "Stop Recording",
+  "영상 저장": "Save Video",
+};
+
+let englishWorkspaceObserver = null;
+
+function localizeEnglishWorkspace(container) {
+  if (!IS_ENGLISH_LOCALE || !container || typeof MutationObserver === "undefined") return;
+  translateEnglishWorkspaceTree(container);
+  englishWorkspaceObserver?.disconnect();
+  englishWorkspaceObserver = new MutationObserver(() => {
+    englishWorkspaceObserver.disconnect();
+    translateEnglishWorkspaceTree(container);
+    englishWorkspaceObserver.observe(container, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+      attributes: true,
+      attributeFilter: ["aria-label", "placeholder", "title"],
+    });
+  });
+  englishWorkspaceObserver.observe(container, {
+    childList: true,
+    subtree: true,
+    characterData: true,
+    attributes: true,
+    attributeFilter: ["aria-label", "placeholder", "title"],
+  });
+}
+
+function translateEnglishWorkspaceTree(root) {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      const parent = node.parentElement;
+      if (!parent || ["SCRIPT", "STYLE", "TEXTAREA"].includes(parent.tagName)) {
+        return NodeFilter.FILTER_REJECT;
+      }
+      return /[가-힣]/.test(node.nodeValue || "") ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+    },
+  });
+
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  textNodes.forEach((node) => {
+    const translated = translateEnglishWorkspaceText(node.nodeValue);
+    if (translated !== node.nodeValue) node.nodeValue = translated;
+  });
+
+  root.querySelectorAll("[aria-label], [placeholder], [title]").forEach((node) => {
+    ["aria-label", "placeholder", "title"].forEach((attribute) => {
+      const value = node.getAttribute(attribute);
+      if (!value || !/[가-힣]/.test(value)) return;
+      const translated = translateEnglishWorkspaceText(value);
+      if (translated !== value) node.setAttribute(attribute, translated);
+    });
+  });
+}
+
+function translateEnglishWorkspaceText(value) {
+  const text = String(value || "");
+  const leading = text.match(/^\s*/)?.[0] || "";
+  const trailing = text.match(/\s*$/)?.[0] || "";
+  const compact = text.trim();
+  if (!compact) return text;
+  const exact = ENGLISH_WORKSPACE_TEXT[compact];
+  if (exact) return `${leading}${exact}${trailing}`;
+
+  const dynamic = translateEnglishWorkspaceDynamicText(compact);
+  if (dynamic !== compact) return `${leading}${dynamic}${trailing}`;
+
+  let next = compact;
+  for (const [source, target] of Object.entries(ENGLISH_WORKSPACE_TEXT)) {
+    if (source.length < 2 || !next.includes(source)) continue;
+    next = next.split(source).join(target);
+  }
+  return next !== compact ? `${leading}${next}${trailing}` : text;
+}
+
+function translateEnglishWorkspaceDynamicText(text) {
+  return text
+    .replace(/^재생 위치\s+/, "Playhead ")
+    .replace(/^선택 구간 없음 · 전체\s+/, "No selection · Total ")
+    .replace(/^선택\s+/, "Selection ")
+    .replace(/^길이\s+/, "Duration ")
+    .replace(/^크기\s+/, "Size ")
+    .replace(/^형식\s+/, "Type ")
+    .replace(/(\d+)자/g, "$1 chars")
+    .replace(/(\d+)개 결과를 만들었습니다\./g, "$1 results created.")
+    .replace(/현재 베타 버전은 ([^ ]+) 이하 녹음 파일부터 지원합니다\./g, "This beta currently supports recordings up to $1.")
+    .replace(/파일이 너무 큽니다\. ([^ ]+) 이하의 휴대폰 녹음 파일로 다시 시도해 주세요\./g, "The file is too large. Try again with a phone recording up to $1.")
+    .replace(/선택 구간 ([^)]+)을 편집 조각으로 복사했습니다\./g, "Copied the selected $1 range as an edit segment.")
+    .replace(/(선택 구간|전체 녹음) 음량을 (\d+)%로 조절했습니다\./g, (_, scope, value) => `${scope === "선택 구간" ? "Selected range" : "Full recording"} volume set to ${value}%.`)
+    .replace(/([0-9:]+) · ([^·]+) · (\d+)채널 녹음을 모노 편집 파형으로 준비했습니다\./g, "$1 · $2 · Prepared $3-channel recording as a mono editing waveform.")
+    .replace(/카메라 (\d+)/g, "Camera $1")
+    .replace(/(\d+)초/g, "$1 sec");
+}
+
 const ANALYTICS_CONTROL_EVENTS = {
   startBtn: { event: "permission_request", action: "voice_start" },
   transcribeAudioBtn: { event: "tool_run", action: "transcribe_audio" },
@@ -954,7 +1712,94 @@ const CATEGORY_PAGE_DEFS = [
   },
 ];
 
-const CATEGORY_PAGE_MAP = Object.fromEntries(CATEGORY_PAGE_DEFS.map((page) => [page.id, page]));
+const CATEGORY_PAGE_DEFS_EN = [
+  {
+    id: "text",
+    path: "/en/tools/text/",
+    title: "Text Tools",
+    eyebrow: "Text Tools",
+    description:
+      "Clean, convert, count, extract, compare, and reshape everyday text or data directly in your browser.",
+    metaDescription:
+      "A browser-based text tools collection for AI paste cleanup, AI table conversion, CSV and Excel conversion, character counting, line break cleanup, extraction, duplicate removal, find and replace, case conversion, and text diff checks.",
+    keywords: ["AI table converter", "CSV Excel converter", "text cleanup", "character counter", "find and replace"],
+    categories: ["Text"],
+    guide: [
+      { title: "Choose a task", text: "Pick the text cleanup, conversion, counting, extraction, or comparison tool you need." },
+      { title: "Paste or load input", text: "Add text or a supported file and choose only the options required for the job." },
+      { title: "Use the result", text: "Copy the cleaned result or download the generated file from your browser." },
+    ],
+  },
+  {
+    id: "pdf",
+    path: "/en/tools/pdf/",
+    title: "PDF Tools",
+    eyebrow: "PDF Tools",
+    description: "Merge, split, extract, and convert common PDF work without installing a separate app.",
+    metaDescription:
+      "A browser-based PDF tools collection for merging PDFs, splitting PDFs, extracting selected pages, converting images to PDF, and rendering PDF pages as images.",
+    keywords: ["merge PDF", "split PDF", "extract PDF pages", "image to PDF", "PDF to image"],
+    categories: ["PDF"],
+    guide: [
+      { title: "Choose files", text: "Select the PDF or images you want to process." },
+      { title: "Set options", text: "Choose page order, split interval, page ranges, or conversion output." },
+      { title: "Download", text: "Save the generated PDF or image files locally." },
+    ],
+  },
+  {
+    id: "image",
+    path: "/en/tools/image/",
+    title: "Image Tools",
+    eyebrow: "Image Tools",
+    description:
+      "Resize, convert, compress, remove metadata, create QR codes, and read QR images in the browser.",
+    metaDescription:
+      "A browser-based image tools collection for resizing images, converting JPG PNG WEBP files, compressing images, removing EXIF metadata, generating QR codes, and extracting QR links.",
+    keywords: ["image resizer", "image converter", "image compressor", "EXIF remover", "QR code"],
+    categories: ["Image"],
+    guide: [
+      { title: "Choose an image", text: "Select a photo, screenshot, upload image, or QR image." },
+      { title: "Apply the task", text: "Resize, convert, compress, strip metadata, generate QR, or read QR content." },
+      { title: "Save the output", text: "Download the browser-generated result." },
+    ],
+  },
+  {
+    id: "subtitle",
+    path: "/en/tools/subtitle/",
+    title: "Subtitle Tools",
+    eyebrow: "Subtitle Tools",
+    description: "Clean SRT files, convert between SRT and VTT, and shift subtitle timing for video workflows.",
+    metaDescription:
+      "A browser-based subtitle tools collection for SRT cleanup, SRT VTT conversion, and subtitle timing shifts.",
+    keywords: ["SRT cleaner", "SRT to VTT", "subtitle timing", "caption sync"],
+    categories: ["Subtitles"],
+    guide: [
+      { title: "Add subtitles", text: "Paste SRT or VTT text, or load a subtitle file." },
+      { title: "Clean or convert", text: "Fix numbering, normalize format, switch file type, or shift timings." },
+      { title: "Use in editing", text: "Copy or download the subtitle file for your video tool." },
+    ],
+  },
+  {
+    id: "voice-video",
+    path: "/en/tools/voice-video/",
+    title: "Audio & Video Tools",
+    eyebrow: "Audio & Video Tools",
+    description:
+      "Use dictation, audio file transcription, waveform audio editing, and webcam recording directly in the browser.",
+    metaDescription:
+      "A browser-based audio and video tools collection for speech to text, audio file transcription, audio trimming and joining, and webcam recording.",
+    keywords: ["speech to text", "audio transcription", "audio trimmer", "webcam recorder", "browser recording"],
+    categories: ["Audio", "Video"],
+    guide: [
+      { title: "Allow permissions", text: "Grant microphone or camera access only when the selected tool requires it." },
+      { title: "Record or edit", text: "Dictate, transcribe an audio file, edit a recording waveform, or record webcam video." },
+      { title: "Save locally", text: "Download text, edited audio, or recorded video from the browser." },
+    ],
+  },
+];
+
+const CATEGORY_PAGE_DEFS_ACTIVE = IS_ENGLISH_LOCALE ? CATEGORY_PAGE_DEFS_EN : CATEGORY_PAGE_DEFS;
+const CATEGORY_PAGE_MAP = Object.fromEntries(CATEGORY_PAGE_DEFS_ACTIVE.map((page) => [page.id, page]));
 
 const LIBRARIES = {
   qrcode: {
@@ -994,7 +1839,7 @@ const LIBRARIES = {
 const libraryCache = {};
 
 const appState = {
-  category: "전체",
+  category: ALL_CATEGORY_LABEL,
   activeToolId: "",
   categoryPageId: "",
   quickOffset: 0,
@@ -1025,6 +1870,7 @@ const els = {
 };
 
 function init() {
+  applyLocaleChrome();
   bindGlobalEvents();
   renderCategoryFilters();
   renderSidebarTools();
@@ -1041,6 +1887,27 @@ function init() {
 
   initAdSlots();
   injectStructuredData(activeTool, activeCategoryPage);
+}
+
+function applyLocaleChrome() {
+  document.documentElement.lang = IS_ENGLISH_LOCALE ? "en" : "ko";
+  if (els.toolSearch) {
+    els.toolSearch.placeholder = t("searchPlaceholder");
+    els.toolSearch.setAttribute("aria-label", t("searchLabel"));
+  }
+  if (els.helpBtn) {
+    els.helpBtn.setAttribute("aria-label", t("help"));
+    els.helpBtn.title = t("help");
+  }
+  if (els.selectionCopyBtn) {
+    els.selectionCopyBtn.textContent = t("selectionCopy");
+  }
+  document.querySelectorAll('[data-i18n="privacy"]').forEach((node) => {
+    node.textContent = t("privacy");
+  });
+  document.querySelectorAll('[data-i18n="terms"]').forEach((node) => {
+    node.textContent = t("terms");
+  });
 }
 
 function getActiveTool() {
@@ -1088,9 +1955,9 @@ function ensureBookmarkPromptButton() {
   const button = document.createElement("button");
   button.className = "topbar-favorite";
   button.type = "button";
-  button.setAttribute("aria-label", "즐겨찾기 추가 안내");
-  button.title = "즐겨찾기 추가";
-  button.innerHTML = '<span aria-hidden="true">★</span><span>즐겨찾기 추가</span>';
+  button.setAttribute("aria-label", t("bookmarkAria"));
+  button.title = t("bookmarkTitle");
+  button.innerHTML = `<span aria-hidden="true">★</span><span>${escapeHtml(t("bookmarkTitle"))}</span>`;
   button.addEventListener("click", showBookmarkPrompt);
   links.appendChild(button);
 }
@@ -1098,7 +1965,7 @@ function ensureBookmarkPromptButton() {
 function showBookmarkPrompt() {
   const isAppleDevice = /Mac|iPhone|iPad|iPod/i.test(navigator.platform || "");
   const shortcut = isAppleDevice ? "Cmd+D" : "Ctrl+D";
-  showToast(`브라우저 즐겨찾기는 ${shortcut}로 추가할 수 있습니다.`);
+  showToast(t("bookmarkToast", shortcut));
 }
 
 function handlePageTitleReload() {
@@ -1154,7 +2021,9 @@ function renderCategoryFilters() {
   els.categoryFilters.innerHTML = CATEGORY_ORDER.map((category) => {
     const activeClass = category === appState.category ? "is-active" : "";
     const count =
-      category === "전체" ? TOOL_DEFS.length : TOOL_DEFS.filter((tool) => tool.category === category).length;
+      category === ALL_CATEGORY_LABEL
+        ? TOOL_DEFS_ACTIVE.length
+        : TOOL_DEFS_ACTIVE.filter((tool) => tool.category === category).length;
     return `
       <button class="${activeClass}" type="button" data-category="${category}" aria-pressed="${category === appState.category}">
         <span>${category}</span>
@@ -1175,8 +2044,8 @@ function renderCategoryFilters() {
 function renderSidebarTools() {
   const query = (els.toolSearch.value || "").trim().toLowerCase();
   const activeTool = getActiveTool();
-  const filtered = TOOL_DEFS.filter((tool) => {
-    if (appState.category !== "전체" && tool.category !== appState.category) {
+  const filtered = TOOL_DEFS_ACTIVE.filter((tool) => {
+    if (appState.category !== ALL_CATEGORY_LABEL && tool.category !== appState.category) {
       return false;
     }
 
@@ -1188,7 +2057,7 @@ function renderSidebarTools() {
   });
 
   if (filtered.length === 0) {
-    els.toolList.innerHTML = `<div class="tool-note">검색 조건에 맞는 도구가 없습니다.</div>`;
+    els.toolList.innerHTML = `<div class="tool-note">${escapeHtml(t("noSearchResult"))}</div>`;
     return;
   }
 
@@ -1218,15 +2087,19 @@ function renderHomePage() {
   appState.categoryPageId = "";
   setPageMode("home");
   setHeroCopy(
-    BRAND_NAME_EN,
-    BRAND_NAME,
-    "반복 업무를 브라우저에서 처리하고 필요한 결과만 직접 저장하세요."
+    IS_ENGLISH_LOCALE ? "Browser-based office utilities" : BRAND_NAME_EN,
+    IS_ENGLISH_LOCALE ? BRAND_NAME_EN : BRAND_NAME,
+    IS_ENGLISH_LOCALE
+      ? "Run practical text, image, PDF, subtitle, audio, and video tools directly in your browser."
+      : "반복 업무를 브라우저에서 처리하고 필요한 결과만 직접 저장하세요."
   );
 
   setDocumentMeta({
-    title: `${BRAND_NAME} | 브라우저 기반 업무 도구 (${BRAND_NAME_EN})`,
-    description: BRAND_DESCRIPTION,
-    url: `${TOOL_ORIGIN}/`,
+    title: IS_ENGLISH_LOCALE
+      ? `${BRAND_NAME_EN} | Browser-based Office Tools`
+      : `${BRAND_NAME} | 브라우저 기반 업무 도구 (${BRAND_NAME_EN})`,
+    description: BRAND_DESCRIPTION_LOCALIZED,
+    url: `${TOOL_ORIGIN}${IS_ENGLISH_LOCALE ? "/en/" : "/"}`,
   });
   setPageTitleReloadState(null);
 
@@ -1237,9 +2110,9 @@ function renderHomePage() {
   `;
 
   els.toolWorkspace.innerHTML = `
-    <section class="home-tool-section home-directory" aria-label="\ub3c4\uad6c \ubaa9\ub85d">
+    <section class="home-tool-section home-directory" aria-label="${escapeHtml(t("directoryLabel"))}">
       <div class="tool-launch-grid">
-        ${TOOL_DEFS.map((tool) => renderToolLaunchCard(tool)).join("")}
+        ${TOOL_DEFS_ACTIVE.map((tool) => renderToolLaunchCard(tool)).join("")}
       </div>
     </section>
   `;
@@ -1257,7 +2130,7 @@ function renderCategoryPage(categoryPage) {
   setHeroCopy(categoryPage.eyebrow, categoryPage.title, categoryPage.description);
   setPageTitleReloadState(null);
   setDocumentMeta({
-    title: `${categoryPage.title} | 무료 온라인 도구 - ${BRAND_NAME}`,
+    title: `${categoryPage.title} | ${t("freeTool")} - ${BRAND_NAME_LOCALIZED}`,
     description: categoryPage.metaDescription,
     url: `${TOOL_ORIGIN}${categoryPage.path}`,
   });
@@ -1280,7 +2153,7 @@ function renderCategoryPage(categoryPage) {
       </div>
     </section>
     <section class="panel category-seo-panel">
-      <h2>${escapeHtml(categoryPage.title)}를 브라우저에서 바로 사용하세요</h2>
+      <h2>${escapeHtml(categoryPage.title)}${escapeHtml(t("categorySeoSuffix"))}</h2>
       <p>${escapeHtml(categoryPage.metaDescription)}</p>
       <div class="seo-keywords">
         ${categoryPage.keywords.map((keyword) => `<span>${escapeHtml(keyword)}</span>`).join("")}
@@ -1298,10 +2171,10 @@ function renderToolPage(tool) {
   appState.activeToolId = tool.id;
   appState.categoryPageId = "";
   setPageMode("tool");
-  setHeroCopy("무료 온라인 도구", tool.title, tool.summary);
+  setHeroCopy(t("freeTool"), tool.title, tool.summary);
   setPageTitleReloadState(tool.title);
   setDocumentMeta({
-    title: `${tool.seoTitle} | ${BRAND_NAME}`,
+    title: `${tool.seoTitle} | ${BRAND_NAME_LOCALIZED}`,
     description: tool.seoDescription,
     url: `${TOOL_ORIGIN}${tool.path}`,
   });
@@ -1324,12 +2197,13 @@ function renderToolPage(tool) {
 
   const renderer = TOOL_RENDERERS[tool.id];
   if (!renderer) {
-    els.toolWorkspace.innerHTML = `<div class="tool-note">이 도구는 아직 연결되지 않았습니다.</div>`;
+    els.toolWorkspace.innerHTML = `<div class="tool-note">${escapeHtml(t("fallbackNotConnected"))}</div>`;
     return;
   }
 
   renderer(els.toolWorkspace);
   bindUploadBoxDrops(els.toolWorkspace);
+  localizeEnglishWorkspace(els.toolWorkspace);
 }
 
 function setPageMode(mode) {
@@ -1340,14 +2214,14 @@ function setPageMode(mode) {
 
 function getCategoryPageTools(categoryPage) {
   const categorySet = new Set(categoryPage.categories);
-  return TOOL_DEFS.filter((tool) => categorySet.has(tool.category));
+  return TOOL_DEFS_ACTIVE.filter((tool) => categorySet.has(tool.category));
 }
 
 function renderHomeSections() {
   return `
-    <section class="home-tool-section home-directory" aria-label="\ub3c4\uad6c \ubaa9\ub85d">
+    <section class="home-tool-section home-directory" aria-label="${escapeHtml(t("directoryLabel"))}">
       <div class="tool-launch-grid">
-        ${TOOL_DEFS.map((tool) => renderToolLaunchCard(tool)).join("")}
+        ${TOOL_DEFS_ACTIVE.map((tool) => renderToolLaunchCard(tool)).join("")}
       </div>
     </section>
   `;
@@ -1355,10 +2229,10 @@ function renderHomeSections() {
 
 function renderHomeCategoryLinks() {
   return `
-    <nav class="home-category-links" aria-label="카테고리별 도구">
-      ${CATEGORY_PAGE_DEFS.map(
+    <nav class="home-category-links" aria-label="${escapeHtml(t("categoryTools"))}">
+      ${CATEGORY_PAGE_DEFS_ACTIVE.map(
         (page) => `
-          <a href="${page.path}" data-category="${escapeHtml(page.categories[0] || "전체")}">
+          <a href="${page.path}" data-category="${escapeHtml(page.categories[0] || ALL_CATEGORY_LABEL)}">
             <span>${escapeHtml(page.eyebrow)}</span>
             <strong>${escapeHtml(page.title)}</strong>
           </a>
@@ -1369,15 +2243,11 @@ function renderHomeCategoryLinks() {
 }
 
 function renderToolLaunchCard(tool) {
-  const visual = TOOL_VISUALS[tool.id] || {
-    icon: tool.title.slice(0, 1),
-    tone: "slate",
-    copy: tool.summary,
-  };
+  const visual = getToolVisual(tool);
   const searchText = [tool.title, tool.summary, visual.copy, ...tool.keywords].join(" ");
 
   return `
-    <a class="tool-launch-card" href="${tool.path}" data-category="${escapeHtml(tool.category)}" data-tone="${escapeHtml(visual.tone)}" data-search="${escapeHtml(searchText)}" aria-label="${escapeHtml(tool.title)} 열기">
+    <a class="tool-launch-card" href="${tool.path}" data-category="${escapeHtml(tool.category)}" data-tone="${escapeHtml(visual.tone)}" data-search="${escapeHtml(searchText)}" aria-label="${escapeHtml(t("openToolLabel", tool.title))}">
       <span class="tool-launch-icon" aria-hidden="true">${escapeHtml(visual.icon)}</span>
       <span class="tool-launch-body">
         <strong>${renderToolTitle(tool)}</strong>
@@ -1391,12 +2261,12 @@ function renderToolLaunchCard(tool) {
 function renderToolTitle(tool) {
   const title = escapeHtml(tool.title);
   return tool.beta
-    ? `<span class="tool-title-with-beta">${title}<span class="tool-beta-label">(베타)</span></span>`
+    ? `<span class="tool-title-with-beta">${title}<span class="tool-beta-label">${escapeHtml(t("betaLabel"))}</span></span>`
     : title;
 }
 
 function renderBetaToolTitle(title) {
-  return `<span class="tool-title-with-beta">${escapeHtml(title)}<span class="tool-beta-label">(베타)</span></span>`;
+  return `<span class="tool-title-with-beta">${escapeHtml(title)}<span class="tool-beta-label">${escapeHtml(t("betaLabel"))}</span></span>`;
 }
 
 function filterHomeToolCards() {
@@ -1419,8 +2289,9 @@ function setPageTitleReloadState(toolTitle) {
   if (isToolPage) {
     els.pageTitle.tabIndex = 0;
     els.pageTitle.setAttribute("role", "button");
-    els.pageTitle.setAttribute("aria-label", `${toolTitle} 새 작업 시작`);
-    els.pageTitle.title = "새 작업 시작";
+    const label = IS_ENGLISH_LOCALE ? `Start a new ${toolTitle} task` : `${toolTitle} 새 작업 시작`;
+    els.pageTitle.setAttribute("aria-label", label);
+    els.pageTitle.title = IS_ENGLISH_LOCALE ? "Start new task" : "새 작업 시작";
     return;
   }
 
@@ -1480,18 +2351,18 @@ function renderToolDetailAccordion(tool) {
   wrapper.className = "tool-detail-accordion";
   wrapper.innerHTML = `
     <summary>
-      <span>사용 예시와 자주 묻는 질문</span>
-      <small>도움말</small>
+      <span>${escapeHtml(t("detailSummary"))}</span>
+      <small>${escapeHtml(t("help"))}</small>
     </summary>
     <div class="tool-detail-body">
       <section>
-        <h3>${escapeHtml(tool.title)} 사용 예시</h3>
+        <h3>${escapeHtml(tool.title)}${escapeHtml(t("examplesSuffix"))}</h3>
         <ul class="tool-example-list">
           ${detail.examples.map((example) => `<li>${escapeHtml(example)}</li>`).join("")}
         </ul>
       </section>
       <section>
-        <h3>자주 묻는 질문</h3>
+        <h3>${escapeHtml(t("faqHeading"))}</h3>
         <div class="tool-faq-list">
           ${detail.faq
             .map(
@@ -1518,29 +2389,23 @@ function renderToolDetailAccordion(tool) {
 }
 
 function buildToolDetailContent(tool) {
-  const examples = TOOL_USE_EXAMPLES[tool.id] || [
-    `${tool.title}로 반복되는 업무 자료를 브라우저에서 바로 정리합니다.`,
-    `${tool.title} 결과를 복사하거나 필요한 파일로 저장해 다음 작업에 사용합니다.`,
-  ];
-  const extraFaq = TOOL_EXTRA_FAQS[tool.id] || {
-    question: `${tool.title}는 어떤 상황에서 사용하면 좋나요?`,
-    answer: examples.join(" "),
-  };
+  const examples = getToolExamples(tool);
+  const extraFaq = getToolExtraFaq(tool, examples);
 
   return {
     examples,
     faq: [
       {
-        question: `${tool.title}는 무료로 사용할 수 있나요?`,
-        answer: `네. ${tool.title}는 로그인 없이 무료로 사용할 수 있는 코워크스페이스의 브라우저 기반 업무 도구입니다.`,
+        question: t("freeQuestion", tool.title),
+        answer: t("freeAnswer", tool.title),
       },
       {
-        question: `${tool.title}에서 입력한 내용은 저장되나요?`,
-        answer: "아니요. 도구의 작업 데이터는 코워크스페이스 자체 서버에 저장하지 않고 브라우저 안에서 처리하도록 설계되어 있습니다. 단, Google Analytics와 AdSense 같은 외부 서비스는 정책에 따라 쿠키나 광고 식별자를 사용할 수 있습니다.",
+        question: t("privacyQuestion", tool.title),
+        answer: t("privacyAnswer"),
       },
       extraFaq,
       {
-        question: `${tool.title}는 어떤 작업에 활용하면 좋나요?`,
+        question: t("useQuestion", tool.title),
         answer: examples.join(" "),
       },
     ],
@@ -1562,7 +2427,7 @@ function injectStructuredData(tool, categoryPage = null) {
   script.dataset.schema = "dynamic";
 
   if (!tool) {
-    const categories = CATEGORY_ORDER.filter((category) => category !== "전체").map((category) => ({
+    const categories = CATEGORY_ORDER.filter((category) => category !== ALL_CATEGORY_LABEL).map((category) => ({
       "@type": "ListItem",
       position: CATEGORY_ORDER.indexOf(category),
       name: category,
@@ -1571,12 +2436,12 @@ function injectStructuredData(tool, categoryPage = null) {
       {
         "@context": "https://schema.org",
         "@type": "WebSite",
-        "@id": `${TOOL_ORIGIN}/#website`,
-        name: BRAND_NAME,
-        alternateName: [BRAND_NAME_EN, BRAND_DISPLAY_NAME],
-        url: `${TOOL_ORIGIN}/`,
-        inLanguage: "ko-KR",
-        description: BRAND_DESCRIPTION,
+        "@id": `${TOOL_ORIGIN}${IS_ENGLISH_LOCALE ? "/en/" : "/"}#website`,
+        name: BRAND_NAME_LOCALIZED,
+        alternateName: IS_ENGLISH_LOCALE ? [BRAND_NAME, BRAND_DISPLAY_NAME] : [BRAND_NAME_EN, BRAND_DISPLAY_NAME],
+        url: `${TOOL_ORIGIN}${IS_ENGLISH_LOCALE ? "/en/" : "/"}`,
+        inLanguage: IS_ENGLISH_LOCALE ? "en-US" : "ko-KR",
+        description: BRAND_DESCRIPTION_LOCALIZED,
         hasPart: {
           "@type": "ItemList",
           itemListElement: categories,
@@ -1590,18 +2455,18 @@ function injectStructuredData(tool, categoryPage = null) {
       {
         "@context": "https://schema.org",
         "@type": "WebApplication",
-        name: `${tool.title} - ${BRAND_NAME}`,
+        name: `${tool.title} - ${BRAND_NAME_LOCALIZED}`,
         alternateName: `${tool.title} - ${BRAND_NAME_EN}`,
         url: `${TOOL_ORIGIN}${tool.path}`,
         applicationCategory: "BusinessApplication",
         browserRequirements: "Requires a modern browser with JavaScript enabled",
-        inLanguage: "ko-KR",
+        inLanguage: IS_ENGLISH_LOCALE ? "en-US" : "ko-KR",
         description: tool.seoDescription || tool.summary,
         keywords: tool.keywords.join(", "),
         publisher: {
           "@type": "Organization",
-          name: BRAND_NAME,
-          url: `${TOOL_ORIGIN}/`,
+          name: BRAND_NAME_LOCALIZED,
+          url: `${TOOL_ORIGIN}${IS_ENGLISH_LOCALE ? "/en/" : "/"}`,
         },
         operatingSystem: "Any",
         offers: {
@@ -1630,12 +2495,12 @@ function injectCategoryStructuredData(categoryPage) {
         {
           "@type": "CollectionPage",
           "@id": `${TOOL_ORIGIN}${categoryPage.path}#page`,
-          name: `${categoryPage.title} - ${BRAND_NAME}`,
+          name: `${categoryPage.title} - ${BRAND_NAME_LOCALIZED}`,
           url: `${TOOL_ORIGIN}${categoryPage.path}`,
-          inLanguage: "ko-KR",
+          inLanguage: IS_ENGLISH_LOCALE ? "en-US" : "ko-KR",
           description: categoryPage.metaDescription,
           isPartOf: {
-            "@id": `${TOOL_ORIGIN}/#website`,
+            "@id": `${TOOL_ORIGIN}${IS_ENGLISH_LOCALE ? "/en/" : "/"}#website`,
           },
           mainEntity: {
             "@type": "ItemList",
@@ -1654,8 +2519,8 @@ function injectCategoryStructuredData(categoryPage) {
             {
               "@type": "ListItem",
               position: 1,
-              name: BRAND_NAME,
-              item: `${TOOL_ORIGIN}/`,
+              name: BRAND_NAME_LOCALIZED,
+              item: `${TOOL_ORIGIN}${IS_ENGLISH_LOCALE ? "/en/" : "/"}`,
             },
             {
               "@type": "ListItem",
@@ -1842,7 +2707,7 @@ function renderAudioFileTranscription(container) {
       <div class="section-heading">
         <div>
           <p class="eyebrow">Local Audio STT</p>
-          <h2>${renderBetaToolTitle("녹음 파일 텍스트 변환")}</h2>
+          <h2>${renderBetaToolTitle(TOOL_MAP["audio-file-transcription"].title)}</h2>
           <p class="tool-note audio-tool-intro">녹음 파일을 저장하지 않는 브라우저 변환 기능입니다. 파일을 서버에 업로드하지 않고 브라우저 안에서 처리하므로 작업 시간이 오래 걸리거나 인식 품질이 좋지 않을 수 있는 베타 버전입니다.</p>
         </div>
         <div class="status-group" aria-live="polite">
@@ -9700,7 +10565,7 @@ async function copySelectedText() {
     hideSelectionCopyButton();
     return;
   }
-  await safeCopy(appState.selectedText, "선택한 내용을 복사했습니다.");
+  await safeCopy(appState.selectedText, t("selectionCopied"));
   hideSelectionCopyButton();
 }
 
@@ -9714,7 +10579,7 @@ function renderQuickToolDock(activeTool) {
     return;
   }
 
-  const tools = TOOL_DEFS.filter((tool) => tool.id !== activeTool.id);
+  const tools = TOOL_DEFS_ACTIVE.filter((tool) => tool.id !== activeTool.id);
   const pageSize = 10;
   const step = 5;
   const maxOffset = Math.max(0, tools.length - pageSize);
@@ -9725,15 +10590,15 @@ function renderQuickToolDock(activeTool) {
   dock.hidden = false;
   dock.innerHTML = `
     <div class="quick-tool-head">
-      <strong>다른 도구</strong>
+      <strong>${escapeHtml(t("otherTools"))}</strong>
       <span>${appState.quickOffset + 1}-${Math.min(appState.quickOffset + pageSize, tools.length)} / ${tools.length}</span>
     </div>
-    <div class="quick-tool-strip" aria-label="다른 도구로 이동">
-      <button class="quick-tool-arrow" type="button" data-shift="${-step}" aria-label="이전 도구 보기" ${appState.quickOffset === 0 ? "disabled" : ""}>‹</button>
+    <div class="quick-tool-strip" aria-label="${escapeHtml(t("otherTools"))}">
+      <button class="quick-tool-arrow" type="button" data-shift="${-step}" aria-label="${IS_ENGLISH_LOCALE ? "Previous tools" : "이전 도구 보기"}" ${appState.quickOffset === 0 ? "disabled" : ""}>‹</button>
       <div class="quick-tool-icons${motionClass}">
         ${visible.map(renderQuickToolIcon).join("")}
       </div>
-      <button class="quick-tool-arrow" type="button" data-shift="${step}" aria-label="다음 도구 보기" ${appState.quickOffset >= maxOffset ? "disabled" : ""}>›</button>
+      <button class="quick-tool-arrow" type="button" data-shift="${step}" aria-label="${IS_ENGLISH_LOCALE ? "Next tools" : "다음 도구 보기"}" ${appState.quickOffset >= maxOffset ? "disabled" : ""}>›</button>
     </div>
   `;
 
@@ -9776,13 +10641,10 @@ function ensureQuickToolDock() {
 }
 
 function renderQuickToolIcon(tool) {
-  const visual = TOOL_VISUALS[tool.id] || {
-    icon: tool.title.slice(0, 1),
-    tone: "slate",
-  };
+  const visual = getToolVisual(tool);
 
   return `
-    <a class="quick-tool-item" href="${tool.path}" data-tone="${escapeHtml(visual.tone)}" title="${escapeHtml(tool.title)}" aria-label="${escapeHtml(tool.title)} 열기">
+    <a class="quick-tool-item" href="${tool.path}" data-tone="${escapeHtml(visual.tone)}" title="${escapeHtml(tool.title)}" aria-label="${escapeHtml(t("openToolLabel", tool.title))}">
       <span class="quick-tool-icon" aria-hidden="true">
         <span class="quick-tool-symbol">${escapeHtml(visual.icon)}</span>
       </span>

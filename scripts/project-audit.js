@@ -24,6 +24,7 @@ function main() {
     ...auditAssetVersion(),
     ...auditToolPages(),
     ...auditCategoryPages(),
+    ...auditEnglishPages(),
     ...auditSeoRedirects(),
     ...auditStaticReviewContent(),
     ...auditLibraryCsp(),
@@ -142,6 +143,137 @@ function auditCategoryPages() {
     if (!sitemap.includes(`<loc>${url}</loc>`)) problems.push(`sitemap.xml: missing ${url}`);
   }
 
+  return problems;
+}
+
+function auditEnglishPages() {
+  const problems = [];
+  const app = read(path.join(ROOT, "app.js"));
+  const tools = parseRegistry(app, "TOOL_DEFS");
+  const pages = parseRegistry(app, "CATEGORY_PAGE_DEFS");
+  const sitemap = read(path.join(ROOT, "sitemap.xml"));
+  const englishHome = path.join(ROOT, "en", "index.html");
+
+  problems.push(...auditEnglishAppPage({
+    label: "English home",
+    file: englishHome,
+    canonicalPath: "/en/",
+    koPath: "/",
+    dataAttribute: 'data-page="home"',
+    sitemap,
+  }));
+
+  for (const tool of tools) {
+    const enPath = `/en${tool.path}`;
+    const koFile = path.join(ROOT, tool.path.slice(1), "index.html");
+    problems.push(...auditEnglishAppPage({
+      label: `${tool.id} English page`,
+      file: path.join(ROOT, enPath.slice(1), "index.html"),
+      canonicalPath: enPath,
+      koPath: tool.path,
+      dataAttribute: `data-tool="${tool.id}"`,
+      sitemap,
+    }));
+    problems.push(...auditKoreanAlternate(koFile, enPath));
+  }
+
+  for (const page of pages) {
+    const enPath = `/en${page.path}`;
+    const koFile = path.join(ROOT, page.path.slice(1), "index.html");
+    problems.push(...auditEnglishAppPage({
+      label: `${page.id} English category page`,
+      file: path.join(ROOT, enPath.slice(1), "index.html"),
+      canonicalPath: enPath,
+      koPath: page.path,
+      dataAttribute: `data-category-page="${page.id}"`,
+      sitemap,
+    }));
+    problems.push(...auditKoreanAlternate(koFile, enPath));
+  }
+
+  for (const page of [
+    { label: "English privacy page", file: path.join(ROOT, "en", "privacy", "index.html"), canonicalPath: "/en/privacy/", koPath: "/privacy" },
+    { label: "English terms page", file: path.join(ROOT, "en", "terms", "index.html"), canonicalPath: "/en/terms/", koPath: "/terms" },
+  ]) {
+    if (!fs.existsSync(page.file)) {
+      problems.push(`${page.label}: missing ${toRelative(page.file)}`);
+      continue;
+    }
+    const html = read(page.file);
+    const relative = toRelative(page.file);
+    if (!html.includes('data-locale="en"')) problems.push(`${relative}: missing data-locale="en"`);
+    if (!html.includes(`<link rel="canonical" href="${ORIGIN}${page.canonicalPath}"`)) {
+      problems.push(`${relative}: missing canonical ${ORIGIN}${page.canonicalPath}`);
+    }
+    if (!html.includes(`hreflang="ko" href="${ORIGIN}${page.koPath}"`)) {
+      problems.push(`${relative}: missing Korean hreflang ${ORIGIN}${page.koPath}`);
+    }
+    if (!html.includes(`hreflang="en" href="${ORIGIN}${page.canonicalPath}"`)) {
+      problems.push(`${relative}: missing English hreflang ${ORIGIN}${page.canonicalPath}`);
+    }
+    if (!sitemap.includes(`<loc>${ORIGIN}${page.canonicalPath}</loc>`)) {
+      problems.push(`sitemap.xml: missing ${ORIGIN}${page.canonicalPath}`);
+    }
+  }
+
+  problems.push(...auditKoreanAlternate(path.join(ROOT, "index.html"), "/en/"));
+  problems.push(...auditKoreanAlternate(path.join(ROOT, "privacy.html"), "/en/privacy/"));
+  problems.push(...auditKoreanAlternate(path.join(ROOT, "terms.html"), "/en/terms/"));
+
+  return problems;
+}
+
+function auditEnglishAppPage({ label, file, canonicalPath, koPath, dataAttribute, sitemap }) {
+  const problems = [];
+  if (!fs.existsSync(file)) {
+    problems.push(`${label}: missing ${toRelative(file)}`);
+    return problems;
+  }
+
+  const html = read(file);
+  const relative = toRelative(file);
+  if (!html.includes('data-locale="en"')) problems.push(`${relative}: missing data-locale="en"`);
+  if (!html.includes(dataAttribute)) problems.push(`${relative}: missing ${dataAttribute}`);
+  if (!html.includes(`<html lang="en"`)) problems.push(`${relative}: missing lang=en`);
+  if (!html.includes(`<link rel="canonical" href="${ORIGIN}${canonicalPath}"`)) {
+    problems.push(`${relative}: missing canonical ${ORIGIN}${canonicalPath}`);
+  }
+  if (!html.includes(`hreflang="ko" href="${ORIGIN}${koPath}"`)) {
+    problems.push(`${relative}: missing Korean hreflang ${ORIGIN}${koPath}`);
+  }
+  if (!html.includes(`hreflang="en" href="${ORIGIN}${canonicalPath}"`)) {
+    problems.push(`${relative}: missing English hreflang ${ORIGIN}${canonicalPath}`);
+  }
+  if (!sitemap.includes(`<loc>${ORIGIN}${canonicalPath}</loc>`)) {
+    problems.push(`sitemap.xml: missing ${ORIGIN}${canonicalPath}`);
+  }
+  for (const id of REQUIRED_TOOL_PAGE_IDS) {
+    if (!html.includes(`id="${id}"`)) problems.push(`${relative}: missing #${id}`);
+  }
+  if (!html.includes("static-content:start") || !html.includes("static-content-panel")) {
+    problems.push(`${relative}: missing static review content panel`);
+  }
+  const visible = html
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (visible.length < 1500) {
+    problems.push(`${relative}: English static visible content is too thin (${visible.length} chars, expected 1500+)`);
+  }
+
+  return problems;
+}
+
+function auditKoreanAlternate(file, enPath) {
+  const problems = [];
+  if (!fs.existsSync(file)) return problems;
+  const html = read(file);
+  const relative = toRelative(file);
+  if (!html.includes(`hreflang="en" href="${ORIGIN}${enPath}"`)) {
+    problems.push(`${relative}: missing English hreflang ${ORIGIN}${enPath}`);
+  }
   return problems;
 }
 
