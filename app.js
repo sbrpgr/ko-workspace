@@ -4323,25 +4323,130 @@ function formatAudioChunkTimestamp(timestamp) {
   return Number.isFinite(end) ? `[${formatDuration(start)}-${formatDuration(end)}]` : `[${formatDuration(start)}]`;
 }
 
+function getVoiceToolCopy() {
+  if (IS_ENGLISH_LOCALE) {
+    return {
+      recognitionLang: "en-US",
+      title: "Speech to Text Dictation",
+      checking: "Checking",
+      idle: "Idle",
+      start: "Start Dictation",
+      resume: "Resume",
+      pause: "Pause",
+      stop: "Stop",
+      clear: "Clear",
+      transcriptTitle: "Live Transcript",
+      liveMetaInitial: "0 chars · 00:00",
+      transcriptPlaceholder: "When dictation starts, spoken English will appear here.",
+      titleLabel: "Title",
+      titlePlaceholder: "Example: New product intro video",
+      formatLabel: "Format",
+      typeLabels: {
+        general: "General Script",
+        youtube: "YouTube Video",
+        presentation: "Presentation",
+        meeting: "Meeting Summary",
+      },
+      removeFillers: "Clean filler words",
+      addSections: "Add section headings",
+      makeScript: "Make Script",
+      browserNote:
+        "If recognition disconnects, the browser will try to reconnect automatically. Chrome or Edge is recommended.",
+      outputTitle: "Final Script",
+      outputMetaInitial: "0 chars",
+      copy: "Copy",
+      download: "Save TXT",
+      outputPlaceholder: "The cleaned English script will appear here.",
+      unsupported: "Speech recognition unsupported",
+      unsupportedToast: "Please use Chrome or Edge for browser speech recognition.",
+      ready: "English recognition ready",
+      listening: "Listening",
+      waitingSpeech: "Waiting for speech",
+      reconnecting: "Reconnecting",
+      paused: "Paused",
+      permissionToast: "Microphone permission is required to start dictation.",
+      noCopy: "There is no text to copy.",
+      copied: "Copied to clipboard.",
+      noSave: "There is no text to save.",
+      filenameDefault: "script",
+      noSource: "Speak into the microphone or enter text first.",
+      restartFail: "Speech recognition could not restart. Press Start Dictation again.",
+      liveMeta: (chars, seconds) => `${chars.toLocaleString("en-US")} chars · ${formatClock(seconds)}`,
+      outputMeta: (chars) => `${chars.toLocaleString("en-US")} chars`,
+    };
+  }
+
+  return {
+    recognitionLang: "ko-KR",
+    title: "음성 텍스트 받아쓰기",
+    checking: "확인 중",
+    idle: "대기",
+    start: "녹음 시작",
+    resume: "다시 시작",
+    pause: "일시정지",
+    stop: "종료",
+    clear: "초기화",
+    transcriptTitle: "음성 텍스트",
+    liveMetaInitial: "0자 · 00:00",
+    transcriptPlaceholder: "녹음이 시작되면 여기에 말한 내용이 쌓입니다.",
+    titleLabel: "제목",
+    titlePlaceholder: "예: 신제품 소개 영상",
+    formatLabel: "형식",
+    typeLabels: {
+      general: "일반 대본",
+      youtube: "유튜브 영상",
+      presentation: "발표문",
+      meeting: "회의 요약",
+    },
+    removeFillers: "군더더기 말 정리",
+    addSections: "문단 제목 추가",
+    makeScript: "대본 만들기",
+    browserNote:
+      "마이크가 끊기면 브라우저가 자동 재연결을 시도합니다. Chrome 또는 Edge 환경을 권장합니다.",
+    outputTitle: "완성 대본",
+    outputMetaInitial: "0자",
+    copy: "복사",
+    download: "TXT 저장",
+    outputPlaceholder: "정리된 대본이 여기에 만들어집니다.",
+    unsupported: "음성 인식 미지원",
+    unsupportedToast: "Chrome 또는 Edge에서 실행해 주세요.",
+    ready: "한국어 인식 준비",
+    listening: "녹음 중",
+    waitingSpeech: "말 대기 중",
+    reconnecting: "다시 연결 중",
+    paused: "일시정지",
+    permissionToast: "마이크 권한을 허용해야 녹음을 시작할 수 있습니다.",
+    noCopy: "복사할 내용이 없습니다.",
+    copied: "클립보드에 복사했습니다.",
+    noSave: "저장할 내용이 없습니다.",
+    filenameDefault: "대본",
+    noSource: "먼저 마이크로 말하거나 텍스트를 입력해 주세요.",
+    restartFail: "음성 인식을 다시 시작하지 못했습니다. 녹음 시작을 다시 눌러 주세요.",
+    liveMeta: (chars, seconds) => `${chars.toLocaleString("ko-KR")}자 · ${formatClock(seconds)}`,
+    outputMeta: (chars) => `${chars.toLocaleString("ko-KR")}자`,
+  };
+}
+
 function renderVoiceTool(container) {
+  const voiceCopy = getVoiceToolCopy();
   container.innerHTML = `
     <div class="tool-section">
       <div class="section-heading">
         <div>
           <p class="eyebrow">Voice Input</p>
-          <h2>음성 텍스트 받아쓰기</h2>
+          <h2>${escapeHtml(voiceCopy.title)}</h2>
         </div>
         <div class="status-group" aria-live="polite">
-          <span id="supportStatus" class="status-pill">확인 중</span>
-          <span id="recordStatus" class="record-pill">대기</span>
+          <span id="supportStatus" class="status-pill">${escapeHtml(voiceCopy.checking)}</span>
+          <span id="recordStatus" class="record-pill">${escapeHtml(voiceCopy.idle)}</span>
         </div>
       </div>
       <div class="editor-card">
         <div class="action-row">
-          <button id="startBtn" class="primary-action" type="button">녹음 시작</button>
-          <button id="pauseBtn" type="button" disabled>일시정지</button>
-          <button id="stopBtn" type="button" disabled>종료</button>
-          <button id="clearBtn" type="button">초기화</button>
+          <button id="startBtn" class="primary-action" type="button">${escapeHtml(voiceCopy.start)}</button>
+          <button id="pauseBtn" type="button" disabled>${escapeHtml(voiceCopy.pause)}</button>
+          <button id="stopBtn" type="button" disabled>${escapeHtml(voiceCopy.stop)}</button>
+          <button id="clearBtn" type="button">${escapeHtml(voiceCopy.clear)}</button>
           <div class="meter" aria-hidden="true">
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
@@ -4352,47 +4457,47 @@ function renderVoiceTool(container) {
         <article class="editor-card">
           <div class="section-heading">
             <div>
-              <h2>음성 텍스트</h2>
-              <p id="liveMeta" class="tool-note">0자 · 00:00</p>
+              <h2>${escapeHtml(voiceCopy.transcriptTitle)}</h2>
+              <p id="liveMeta" class="tool-note">${escapeHtml(voiceCopy.liveMetaInitial)}</p>
             </div>
             <span id="interimText" class="tool-note"></span>
           </div>
-          <textarea id="transcriptInput" placeholder="녹음이 시작되면 여기에 말한 내용이 쌓입니다."></textarea>
+          <textarea id="transcriptInput" placeholder="${escapeHtml(voiceCopy.transcriptPlaceholder)}"></textarea>
         </article>
         <aside class="editor-card">
           <div class="field">
-            <label for="scriptTitle">제목</label>
-            <input id="scriptTitle" type="text" placeholder="예: 신제품 소개 영상" />
+            <label for="scriptTitle">${escapeHtml(voiceCopy.titleLabel)}</label>
+            <input id="scriptTitle" type="text" placeholder="${escapeHtml(voiceCopy.titlePlaceholder)}" />
           </div>
           <div class="field">
-            <label for="scriptType">형식</label>
+            <label for="scriptType">${escapeHtml(voiceCopy.formatLabel)}</label>
             <select id="scriptType">
-              <option value="general">일반 대본</option>
-              <option value="youtube">유튜브 영상</option>
-              <option value="presentation">발표문</option>
-              <option value="meeting">회의 요약</option>
+              <option value="general">${escapeHtml(voiceCopy.typeLabels.general)}</option>
+              <option value="youtube">${escapeHtml(voiceCopy.typeLabels.youtube)}</option>
+              <option value="presentation">${escapeHtml(voiceCopy.typeLabels.presentation)}</option>
+              <option value="meeting">${escapeHtml(voiceCopy.typeLabels.meeting)}</option>
             </select>
           </div>
           <div class="check-row">
-            <label class="check-item"><input id="removeFillers" type="checkbox" checked /> 군더더기 말 정리</label>
-            <label class="check-item"><input id="addSections" type="checkbox" checked /> 문단 제목 추가</label>
+            <label class="check-item"><input id="removeFillers" type="checkbox" checked /> ${escapeHtml(voiceCopy.removeFillers)}</label>
+            <label class="check-item"><input id="addSections" type="checkbox" checked /> ${escapeHtml(voiceCopy.addSections)}</label>
           </div>
-          <button id="makeScriptBtn" class="primary-action" type="button">대본 만들기</button>
-          <p class="tool-note">마이크가 끊기면 브라우저가 자동 재연결을 시도합니다. Chrome 또는 Edge 환경을 권장합니다.</p>
+          <button id="makeScriptBtn" class="primary-action" type="button">${escapeHtml(voiceCopy.makeScript)}</button>
+          <p class="tool-note">${escapeHtml(voiceCopy.browserNote)}</p>
         </aside>
       </div>
       <article class="result-card">
         <div class="section-heading">
           <div>
-            <h2>완성 대본</h2>
-            <p id="outputMeta" class="tool-note">0자</p>
+            <h2>${escapeHtml(voiceCopy.outputTitle)}</h2>
+            <p id="outputMeta" class="tool-note">${escapeHtml(voiceCopy.outputMetaInitial)}</p>
           </div>
           <div class="action-row">
-            <button id="copyBtn" type="button">복사</button>
-            <button id="downloadBtn" type="button">TXT 저장</button>
+            <button id="copyBtn" type="button">${escapeHtml(voiceCopy.copy)}</button>
+            <button id="downloadBtn" type="button">${escapeHtml(voiceCopy.download)}</button>
           </div>
         </div>
-        <textarea id="scriptOutput" placeholder="정리된 대본이 여기에 만들어집니다."></textarea>
+        <textarea id="scriptOutput" placeholder="${escapeHtml(voiceCopy.outputPlaceholder)}"></textarea>
       </article>
     </div>
   `;
@@ -4434,11 +4539,11 @@ function renderVoiceTool(container) {
   };
 
   if (!SpeechRecognition) {
-    voiceEls.supportStatus.textContent = "음성 인식 미지원";
+    voiceEls.supportStatus.textContent = voiceCopy.unsupported;
     voiceEls.startBtn.disabled = true;
-    showToast("Chrome 또는 Edge에서 실행해 주세요.");
+    showToast(voiceCopy.unsupportedToast);
   } else {
-    voiceEls.supportStatus.textContent = "한국어 인식 준비";
+    voiceEls.supportStatus.textContent = voiceCopy.ready;
     createVoiceRecognition(state, voiceEls);
   }
 
@@ -4450,18 +4555,18 @@ function renderVoiceTool(container) {
   voiceEls.copyBtn.addEventListener("click", async () => {
     const text = voiceEls.scriptOutput.value.trim() || voiceEls.transcriptInput.value.trim();
     if (!text) {
-      showToast("복사할 내용이 없습니다.");
+      showToast(voiceCopy.noCopy);
       return;
     }
-    await safeCopy(text, "클립보드에 복사했습니다.");
+    await safeCopy(text, voiceCopy.copied);
   });
   voiceEls.downloadBtn.addEventListener("click", () => {
     const text = voiceEls.scriptOutput.value.trim() || voiceEls.transcriptInput.value.trim();
     if (!text) {
-      showToast("저장할 내용이 없습니다.");
+      showToast(voiceCopy.noSave);
       return;
     }
-    downloadText(text, `${sanitizeFilename(voiceEls.scriptTitle.value || "대본")}.txt`);
+    downloadText(text, `${sanitizeFilename(voiceEls.scriptTitle.value || voiceCopy.filenameDefault)}.txt`);
   });
   voiceEls.transcriptInput.addEventListener("input", updateMeta);
   voiceEls.scriptOutput.addEventListener("input", updateOutputMeta);
@@ -4472,7 +4577,7 @@ function renderVoiceTool(container) {
 
   function createVoiceRecognition(voiceState, nodes) {
     const recognition = new SpeechRecognition();
-    recognition.lang = "ko-KR";
+    recognition.lang = voiceCopy.recognitionLang;
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.maxAlternatives = 1;
@@ -4482,7 +4587,7 @@ function renderVoiceTool(container) {
       voiceState.isPaused = false;
       voiceState.lastEndReason = null;
       voiceState.heardSpeechInSession = false;
-      nodes.recordStatus.textContent = "녹음 중";
+      nodes.recordStatus.textContent = voiceCopy.listening;
       nodes.recordStatus.classList.add("active");
       nodes.interimText.textContent = "";
       syncButtons();
@@ -4522,7 +4627,7 @@ function renderVoiceTool(container) {
       if (event.error === "no-speech") {
         voiceState.noSpeechCount += 1;
         voiceState.lastEndReason = "no-speech";
-        nodes.recordStatus.textContent = "말 대기 중";
+        nodes.recordStatus.textContent = voiceCopy.waitingSpeech;
         return;
       }
 
@@ -4542,7 +4647,7 @@ function renderVoiceTool(container) {
 
       if (voiceState.isListening && !voiceState.isPaused) {
         nodes.recordStatus.textContent =
-          voiceState.lastEndReason === "no-speech" ? "말 대기 중" : "다시 연결 중";
+          voiceState.lastEndReason === "no-speech" ? voiceCopy.waitingSpeech : voiceCopy.reconnecting;
         scheduleRecognitionRestart(recognition);
         return;
       }
@@ -4568,7 +4673,7 @@ function renderVoiceTool(container) {
       state.isPaused = false;
       state.recognition.start();
     } catch (error) {
-      showToast("마이크 권한을 허용해야 녹음을 시작할 수 있습니다.");
+      showToast(voiceCopy.permissionToast);
       stopMeter();
     }
   }
@@ -4581,7 +4686,7 @@ function renderVoiceTool(container) {
     state.elapsedBeforePause = getElapsedMs();
     state.startedAt = null;
     state.recognition.stop();
-    voiceEls.recordStatus.textContent = "일시정지";
+    voiceEls.recordStatus.textContent = voiceCopy.paused;
     voiceEls.recordStatus.classList.remove("active");
     syncButtons();
   }
@@ -4619,7 +4724,7 @@ function renderVoiceTool(container) {
   function makeScript() {
     const source = voiceEls.transcriptInput.value.trim();
     if (!source) {
-      showToast("먼저 마이크로 말하거나 텍스트를 입력해 주세요.");
+      showToast(voiceCopy.noSource);
       return;
     }
 
@@ -4646,7 +4751,7 @@ function renderVoiceTool(container) {
   }
 
   function syncButtons() {
-    voiceEls.startBtn.textContent = state.isPaused ? "다시 시작" : "녹음 시작";
+    voiceEls.startBtn.textContent = state.isPaused ? voiceCopy.resume : voiceCopy.start;
     voiceEls.startBtn.disabled = state.isListening && !state.isPaused;
     voiceEls.pauseBtn.disabled = !state.isListening || state.isPaused;
     voiceEls.stopBtn.disabled = !state.isListening && !state.isPaused;
@@ -4654,14 +4759,14 @@ function renderVoiceTool(container) {
 
   function syncIdleStatus() {
     if (state.isPaused) {
-      voiceEls.recordStatus.textContent = "일시정지";
+      voiceEls.recordStatus.textContent = voiceCopy.paused;
       voiceEls.recordStatus.classList.remove("active");
       syncButtons();
       return;
     }
 
     state.isListening = false;
-    voiceEls.recordStatus.textContent = "대기";
+    voiceEls.recordStatus.textContent = voiceCopy.idle;
     voiceEls.recordStatus.classList.remove("active");
     syncButtons();
   }
@@ -4688,12 +4793,12 @@ function renderVoiceTool(container) {
   function updateMeta() {
     const chars = voiceEls.transcriptInput.value.trim().length;
     const seconds = Math.floor(getElapsedMs() / 1000);
-    voiceEls.liveMeta.textContent = `${chars.toLocaleString("ko-KR")}자 · ${formatClock(seconds)}`;
+    voiceEls.liveMeta.textContent = voiceCopy.liveMeta(chars, seconds);
   }
 
   function updateOutputMeta() {
     const chars = voiceEls.scriptOutput.value.trim().length;
-    voiceEls.outputMeta.textContent = `${chars.toLocaleString("ko-KR")}자`;
+    voiceEls.outputMeta.textContent = voiceCopy.outputMeta(chars);
   }
 
   function startMeter() {
@@ -4730,7 +4835,7 @@ function renderVoiceTool(container) {
         stopTimer();
         stopMeter();
         syncIdleStatus();
-        showToast("음성 인식을 다시 시작하지 못했습니다. 녹음 시작을 다시 눌러 주세요.");
+        showToast(voiceCopy.restartFail);
       }
     }, delay);
   }
@@ -8406,6 +8511,12 @@ function cleanTranscript(text, removeFillers) {
   let result = text.replace(/\s+/g, " ").replace(/\s+([,.?!。！？])/g, "$1").trim();
   if (!removeFillers) return result;
 
+  if (IS_ENGLISH_LOCALE) {
+    const fillerWords = ["um", "uh", "erm", "like", "you know", "sort of", "kind of", "basically", "actually", "i mean"];
+    const pattern = new RegExp(`\\b(${fillerWords.map(escapeRegExp).join("|")})\\b[,.]?`, "gi");
+    return result.replace(pattern, " ").replace(/\s+/g, " ").trim();
+  }
+
   const fillerWords = ["음", "어", "그러니까", "뭐랄까", "약간", "이제", "일단", "뭔가"];
   const pattern = new RegExp(`(^|\\s)(${fillerWords.join("|")})(?=\\s|,|\\.|$)`, "g");
   return result.replace(pattern, " ").replace(/\s+/g, " ").trim();
@@ -8454,7 +8565,7 @@ function composeScript({ title, type, sentences, addSections }) {
   const lines = [`# ${heading}`, ""];
   body.forEach((paragraph, index) => {
     if (addSections) {
-      lines.push(`## ${sectionLabels[index] || `파트 ${index + 1}`}`);
+      lines.push(`## ${sectionLabels[index] || (IS_ENGLISH_LOCALE ? `Part ${index + 1}` : `파트 ${index + 1}`)}`);
     }
     lines.push(paragraph.join(" "));
     lines.push("");
@@ -8466,11 +8577,11 @@ function composeMeetingSummary(heading, sentences, addSections) {
   const lines = [`# ${heading}`, ""];
   const summary = sentences.slice(0, 4);
   const details = sentences.slice(4);
-  if (addSections) lines.push("## 핵심 요약");
+  if (addSections) lines.push(IS_ENGLISH_LOCALE ? "## Key Summary" : "## 핵심 요약");
   summary.forEach((sentence) => lines.push(`- ${sentence}`));
   if (details.length > 0) {
     lines.push("");
-    if (addSections) lines.push("## 상세 내용");
+    if (addSections) lines.push(IS_ENGLISH_LOCALE ? "## Details" : "## 상세 내용");
     details.forEach((sentence) => lines.push(`- ${sentence}`));
   }
   return lines.join("\n").trim();
@@ -8485,34 +8596,55 @@ function groupParagraphs(sentences, size) {
 }
 
 function getSectionLabels(type, count) {
-  const labels = {
-    general: ["도입", "본문", "마무리"],
-    youtube: ["오프닝", "핵심 내용", "콜 투 액션"],
-    presentation: ["문제 제기", "주요 내용", "결론"],
-  };
+  const labels = IS_ENGLISH_LOCALE
+    ? {
+        general: ["Introduction", "Main Points", "Closing"],
+        youtube: ["Opening", "Main Content", "Call to Action"],
+        presentation: ["Problem", "Key Points", "Conclusion"],
+      }
+    : {
+        general: ["도입", "본문", "마무리"],
+        youtube: ["오프닝", "핵심 내용", "콜 투 액션"],
+        presentation: ["문제 제기", "주요 내용", "결론"],
+      };
   const base = labels[type] || labels.general;
-  return Array.from({ length: count }, (_, index) => base[index] || `파트 ${index + 1}`);
+  return Array.from({ length: count }, (_, index) => base[index] || (IS_ENGLISH_LOCALE ? `Part ${index + 1}` : `파트 ${index + 1}`));
 }
 
 function getDefaultTitle(type) {
-  const titles = {
-    general: "생성된 대본",
-    youtube: "유튜브 영상 대본",
-    presentation: "발표 대본",
-    meeting: "회의 요약",
-  };
+  const titles = IS_ENGLISH_LOCALE
+    ? {
+        general: "Generated Script",
+        youtube: "YouTube Video Script",
+        presentation: "Presentation Script",
+        meeting: "Meeting Summary",
+      }
+    : {
+        general: "생성된 대본",
+        youtube: "유튜브 영상 대본",
+        presentation: "발표 대본",
+        meeting: "회의 요약",
+      };
   return titles[type] || titles.general;
 }
 
 function getRecognitionErrorMessage(error) {
-  const messages = {
-    "no-speech": "소리가 감지되지 않았습니다. 조금 더 크게 말해 주세요.",
-    "audio-capture": "마이크를 찾을 수 없습니다.",
-    "not-allowed": "마이크 권한이 차단되었습니다.",
-    "service-not-allowed": "브라우저 음성 인식 서비스가 차단되었습니다.",
-    network: "음성 인식 서비스 연결이 불안정합니다.",
-  };
-  return messages[error] || `음성 인식 오류: ${error}`;
+  const messages = IS_ENGLISH_LOCALE
+    ? {
+        "no-speech": "No speech was detected. Try speaking a little louder.",
+        "audio-capture": "No microphone was found.",
+        "not-allowed": "Microphone permission is blocked.",
+        "service-not-allowed": "The browser speech recognition service is blocked.",
+        network: "The speech recognition service connection is unstable.",
+      }
+    : {
+        "no-speech": "소리가 감지되지 않았습니다. 조금 더 크게 말해 주세요.",
+        "audio-capture": "마이크를 찾을 수 없습니다.",
+        "not-allowed": "마이크 권한이 차단되었습니다.",
+        "service-not-allowed": "브라우저 음성 인식 서비스가 차단되었습니다.",
+        network: "음성 인식 서비스 연결이 불안정합니다.",
+      };
+  return messages[error] || (IS_ENGLISH_LOCALE ? `Speech recognition error: ${error}` : `음성 인식 오류: ${error}`);
 }
 
 function cleanAiText(text, options) {

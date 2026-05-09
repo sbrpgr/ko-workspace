@@ -32,6 +32,9 @@ const API_NAMES = [
   "AUDIO_TRANSCRIPTION_MODEL_PROFILES",
   "AUDIO_TRANSCRIPTION_DEFAULT_PROFILE",
   "renderToolTitle",
+  "getVoiceToolCopy",
+  "cleanTranscript",
+  "composeScript",
   "getAudioModelProfile",
   "getAudioTranscriberCandidates",
   "formatAudioTranscriptionError",
@@ -55,9 +58,15 @@ const API_NAMES = [
 function main() {
   const app = fs.readFileSync(APP_FILE, "utf8");
   const api = loadAppApi(app);
+  const englishApi = loadAppApi(app, {
+    locale: "en",
+    lang: "en",
+    pathname: "/en/tools/voice-to-text/",
+  });
   const tests = [
     ...buildStructureTests(api),
     ...buildLogicTests(api, app),
+    ...buildEnglishLocaleTests(englishApi),
     ...buildMetadataTests(api),
     ...buildSecurityTests(api, app),
     ...buildUploadUxTests(app),
@@ -80,7 +89,7 @@ function main() {
   console.log(`smoke test passed (${tests.length} checks)`);
 }
 
-function loadAppApi(app) {
+function loadAppApi(app, options = {}) {
   const exportBlock = `\nglobalThis.__smokeApi = { ${API_NAMES.join(", ")} };\n`;
   const source = app.replace(/\r?\ninit\(\);\s*$/, exportBlock);
   if (source === app) {
@@ -106,6 +115,7 @@ function loadAppApi(app) {
       innerWidth: 1280,
       innerHeight: 720,
       isSecureContext: true,
+      location: { pathname: options.pathname || "/" },
       addEventListener() {},
       removeEventListener() {},
       open() {},
@@ -115,7 +125,7 @@ function loadAppApi(app) {
       mediaDevices: null,
       permissions: null,
     },
-    document: makeDocumentStub(),
+    document: makeDocumentStub(options),
     DataTransfer: function DataTransferStub() {
       this.items = { add() {} };
       this.files = [];
@@ -133,9 +143,10 @@ function loadAppApi(app) {
   return context.__smokeApi;
 }
 
-function makeDocumentStub() {
+function makeDocumentStub(options = {}) {
   return {
-    body: makeNodeStub(),
+    body: { ...makeNodeStub(), dataset: { locale: options.locale || "" } },
+    documentElement: { lang: options.lang || "" },
     head: makeNodeStub(),
     querySelector() {
       return null;
@@ -473,6 +484,31 @@ function buildLogicTests(api, app) {
     test("text stats count characters and bytes", () => {
       const result = api.countTextStats("abc def");
       assert(result.characters === 7 && result.words === 2 && result.bytes === 7, "text stats failed");
+    }),
+  ];
+}
+
+function buildEnglishLocaleTests(api) {
+  return [
+    test("English voice dictation uses English recognition and output labels", () => {
+      const copy = api.getVoiceToolCopy();
+      assert(copy.recognitionLang === "en-US", `expected en-US, got ${copy.recognitionLang}`);
+      assert(copy.ready === "English recognition ready", "English readiness label mismatch");
+    }),
+    test("English voice script cleanup removes English filler words", () => {
+      const cleaned = api.cleanTranscript("um this is actually a useful note.", true);
+      assert(cleaned === "this is a useful note.", `unexpected English cleanup result: ${cleaned}`);
+    }),
+    test("English meeting script uses English section headings", () => {
+      const script = api.composeScript({
+        title: "",
+        type: "meeting",
+        sentences: ["We reviewed the launch plan.", "The next step is testing."],
+        addSections: true,
+      });
+      assert(script.includes("# Meeting Summary"), "English meeting title missing");
+      assert(script.includes("## Key Summary"), "English meeting section missing");
+      assert(!script.includes("핵심"), "Korean meeting heading leaked into English output");
     }),
   ];
 }

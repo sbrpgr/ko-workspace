@@ -239,7 +239,7 @@ function makeClassList() {
 
 function readAssetVersion() {
   const spec = fs.readFileSync(path.join(ROOT, "PROJECT_SPEC.md"), "utf8");
-  return spec.match(/Current static asset cache version: `([^`]+)`/)?.[1] || "20260509-04";
+  return spec.match(/Current static asset cache version: `([^`]+)`/)?.[1] || "20260509-05";
 }
 
 function renderAppPage(config, version) {
