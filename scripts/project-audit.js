@@ -152,7 +152,12 @@ function auditEnglishPages() {
   const tools = parseRegistry(app, "TOOL_DEFS");
   const pages = parseRegistry(app, "CATEGORY_PAGE_DEFS");
   const sitemap = read(path.join(ROOT, "sitemap.xml"));
+  const deployWorkflow = read(path.join(ROOT, ".github", "workflows", "cloudflare-pages.yml"));
   const englishHome = path.join(ROOT, "en", "index.html");
+
+  if (!/cp\s+-R\s+en\s+\.cloudflare-dist\//.test(deployWorkflow)) {
+    problems.push(".github/workflows/cloudflare-pages.yml: deployment does not copy en/ into .cloudflare-dist");
+  }
 
   problems.push(...auditEnglishAppPage({
     label: "English home",

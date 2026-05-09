@@ -34,6 +34,7 @@ jobs:
           mkdir -p .cloudflare-dist
           cp index.html styles.css app.js privacy.html terms.html robots.txt sitemap.xml ads.txt _headers _redirects favicon.svg site.webmanifest .cloudflare-dist/
           cp -R tools .cloudflare-dist/
+          cp -R en .cloudflare-dist/
 
       - name: Ensure Cloudflare custom domains and DNS
         env:
