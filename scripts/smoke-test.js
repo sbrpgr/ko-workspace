@@ -362,6 +362,7 @@ function buildLogicTests(api, app) {
         empty: "Empty",
       });
       assert(windowHtml.includes("textarea id=\"source\""), "markdown viewer window editor missing");
+      assert(!windowHtml.includes("id=\"preview\""), "markdown viewer window should be edit-only");
       assert(!windowHtml.includes("</script>\\n# Title"), "markdown viewer window source was not script-safe");
     }),
     test("markdown viewer outline normalizes uneven heading levels", () => {

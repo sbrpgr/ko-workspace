@@ -211,14 +211,14 @@ const TOOL_DEFS = [
     category: "텍스트",
     title: "MD 파일 뷰어",
     summary:
-      "MD, Markdown, TXT 파일을 브라우저에서 열어 넓고 읽기 좋은 화면으로 보고, 본문 폭·글자 크기·줄 간격을 조절합니다.",
+      "MD, Markdown, TXT 파일을 브라우저에서 열어 넓고 읽기 좋은 화면으로 보고, 글자 크기와 줄 간격을 조절합니다.",
     seoTitle: "MD 파일 뷰어 | Markdown 파일 읽기 도구",
     seoDescription:
-      "MD와 Markdown 파일을 서버 업로드 없이 브라우저에서 열어 목차와 미리보기로 읽고, 본문 폭과 글자 크기, 줄 간격을 조절하는 무료 뷰어입니다.",
+      "MD와 Markdown 파일을 서버 업로드 없이 브라우저에서 열어 목차와 문서 화면으로 읽고, 글자 크기와 줄 간격을 조절하는 무료 뷰어입니다.",
     keywords: ["MD 파일 뷰어", "Markdown 뷰어", "마크다운 파일 열기", "README 보기"],
     guide: [
       { title: "파일 선택", text: ".md, .markdown, .txt 파일을 선택하거나 업로드 영역에 끌어다 놓습니다." },
-      { title: "읽기 화면 조절", text: "본문 폭, 글자 크기, 줄 간격, 테마를 문서 성격과 화면 크기에 맞게 조절합니다." },
+      { title: "문서 화면 조절", text: "글자 크기, 줄 간격, 테마를 문서 성격과 화면 크기에 맞게 조절합니다." },
       { title: "목차와 원문 확인", text: "제목 기반 목차로 이동하거나 원문 보기·분할 보기로 마크다운 원문을 함께 확인합니다." },
       { title: "필요한 내용 복사", text: "원문 또는 마크다운 기호를 정리한 텍스트를 브라우저에서 바로 복사합니다." },
     ],
@@ -769,13 +769,13 @@ const TOOL_DEFS_EN_OVERRIDES = {
   },
   "markdown-viewer": {
     title: "MD File Viewer",
-    summary: "Open MD, Markdown, and TXT files in the browser with a spacious reader, table of contents, and adjustable reading size.",
+    summary: "Open MD, Markdown, and TXT files in the browser with a spacious document view, table of contents, and adjustable reading size.",
     seoTitle: "MD File Viewer | Read Markdown Files Online",
-    seoDescription: "Open MD and Markdown files in your browser without uploading them to the application server, then adjust width, font size, line height, and theme.",
+    seoDescription: "Open MD and Markdown files in your browser without uploading them to the application server, then adjust font size, line height, and theme.",
     keywords: ["MD viewer", "Markdown viewer", "read Markdown file", "README viewer"],
     guide: [
       { title: "Choose a file", text: "Select or drop an .md, .markdown, or .txt file." },
-      { title: "Adjust reading", text: "Set the reader width, font size, line height, and theme for the document." },
+      { title: "Adjust document", text: "Set the font size, line height, and theme for the document." },
       { title: "Use the outline", text: "Jump through headings or switch between preview, split, and source views." },
       { title: "Copy text", text: "Copy the Markdown source or a plain-text version from the browser." },
     ],
@@ -1023,7 +1023,7 @@ const TOOL_VISUALS_EN = {
 const TOOL_USE_EXAMPLES_EN = {
   "markdown-viewer": [
     "Open README, changelog, documentation, or exported note files without uploading them to the application server.",
-    "Use the wider reader and outline to review long Markdown files before copying or sharing text.",
+    "Use the spacious document view and outline to review long Markdown files before copying or sharing text.",
     "Switch to split view when you need to compare the rendered document with the original Markdown source.",
   ],
 };
@@ -1147,8 +1147,8 @@ const TOOL_USE_EXAMPLES = {
     "README, 업무 메모, 블로그 초안을 미리보며 작성합니다.",
   ],
   "markdown-viewer": [
-    "README, 릴리스 노트, 업무 메모처럼 긴 MD 파일을 넓은 읽기 화면으로 확인합니다.",
-    "본문 폭과 글자 크기, 줄 간격을 조절해 노트북과 큰 모니터에서 모두 읽기 좋게 맞춥니다.",
+    "README, 릴리스 노트, 업무 메모처럼 긴 MD 파일을 넓은 문서 화면으로 확인합니다.",
+    "글자 크기와 줄 간격을 조절해 노트북과 큰 모니터에서 모두 읽기 좋게 맞춥니다.",
     "목차로 제목 사이를 이동하고, 필요한 경우 원문과 미리보기를 나란히 비교합니다.",
   ],
   "text-extractor": [
@@ -10871,9 +10871,9 @@ function renderMarkdownViewer(container) {
         loadNote: "Files stay in your browser. Raw HTML inside Markdown is escaped before preview.",
         dropTitle: "Choose or drop an MD file",
         dropHint: ".md, .markdown, and .txt files up to 8 MB",
-        readerTitle: "Reader",
+        readerTitle: "Document",
         emptyTitle: "No file loaded",
-        emptyText: "Choose a Markdown file to see a wide, adjustable preview here.",
+        emptyText: "Choose a Markdown file to show the document here.",
         outlineTitle: "Outline",
         outlineEmpty: "Headings appear here after loading a file.",
         sourceTitle: "Source",
@@ -10891,7 +10891,6 @@ function renderMarkdownViewer(container) {
         openWindow: "Open window",
         windowTitle: "Markdown Workspace",
         editorTitle: "Edit MD",
-        previewTitle: "Preview",
         saveEdited: "Save MD",
         closeWindow: "Close",
         copySource: "Copy MD",
@@ -10913,9 +10912,9 @@ function renderMarkdownViewer(container) {
         loadNote: "파일은 브라우저에서만 읽습니다. MD 안의 원시 HTML은 실행하지 않고 안전하게 표시합니다.",
         dropTitle: "MD 파일 선택 또는 드래그",
         dropHint: ".md, .markdown, .txt 파일 · 최대 8MB 권장",
-        readerTitle: "읽기 화면",
+        readerTitle: "문서 내용",
         emptyTitle: "아직 파일을 열지 않았습니다",
-        emptyText: "마크다운 파일을 선택하면 넓고 조절 가능한 미리보기가 여기에 표시됩니다.",
+        emptyText: "마크다운 파일을 선택하면 문서 내용이 여기에 표시됩니다.",
         outlineTitle: "목차",
         outlineEmpty: "파일을 열면 제목 목록이 표시됩니다.",
         sourceTitle: "원문",
@@ -10933,7 +10932,6 @@ function renderMarkdownViewer(container) {
         openWindow: "새창에서 보기",
         windowTitle: "MD 새창 작업 공간",
         editorTitle: "MD 편집",
-        previewTitle: "미리보기",
         saveEdited: "MD 저장",
         closeWindow: "닫기",
         copySource: "MD 복사",
@@ -11125,25 +11123,207 @@ function renderMarkdownViewer(container) {
 }
 
 function openMarkdownViewerWindow(markdown, copy) {
-  const html = buildMarkdownViewerWindowHtml(markdown, {
-    title: copy.windowTitle,
-    editor: copy.editorTitle,
-    preview: copy.previewTitle,
-    font: copy.fontLabel,
-    copy: copy.copySource,
-    copied: copy.sourceCopied,
-    save: copy.saveEdited,
-    close: copy.closeWindow,
-    empty: copy.emptyPreview,
-  });
-  const url = URL.createObjectURL(new Blob([html], { type: "text/html;charset=utf-8" }));
-  const workspace = window.open(url, "_blank");
+  const workspace = window.open("", "_blank");
   if (!workspace) {
-    URL.revokeObjectURL(url);
     showToast(copy.popupBlocked);
     return;
   }
-  setTimeout(() => URL.revokeObjectURL(url), 60000);
+
+  const doc = workspace.document;
+  doc.documentElement.lang = APP_LOCALE === "en" ? "en" : "ko";
+  doc.title = copy.windowTitle;
+  doc.head.replaceChildren();
+  doc.body.replaceChildren();
+
+  const charset = doc.createElement("meta");
+  charset.setAttribute("charset", "utf-8");
+  const viewport = doc.createElement("meta");
+  viewport.setAttribute("name", "viewport");
+  viewport.setAttribute("content", "width=device-width, initial-scale=1");
+  const title = doc.createElement("title");
+  title.textContent = copy.windowTitle;
+  const style = doc.createElement("style");
+  style.textContent = `
+    *, *::before, *::after { box-sizing: border-box; }
+    :root { --font-size: 17px; color-scheme: light; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      background: #f4f7fb;
+      color: #172033;
+      font-family: Arial, "Malgun Gothic", sans-serif;
+    }
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-bottom: 1px solid #dfe5ee;
+      background: #ffffff;
+    }
+    h1 {
+      margin: 0 auto 0 0;
+      font-size: 1rem;
+      line-height: 1.2;
+    }
+    label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #344054;
+      font-size: 0.86rem;
+      font-weight: 800;
+    }
+    input[type="range"] { width: 132px; }
+    button {
+      min-height: 34px;
+      border: 1px solid #cfd7e5;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #20242d;
+      font-weight: 800;
+      padding: 0 12px;
+      cursor: pointer;
+    }
+    button:hover { border-color: #e5322d; }
+    main {
+      min-height: 0;
+      display: grid;
+      padding: 12px;
+    }
+    section {
+      min-width: 0;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      gap: 8px;
+    }
+    h2 {
+      margin: 0;
+      color: #344054;
+      font-size: 0.88rem;
+    }
+    textarea {
+      width: 100%;
+      min-width: 0;
+      min-height: 0;
+      height: 100%;
+      overflow: auto;
+      resize: none;
+      border: 1px solid #d8e0ec;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #101828;
+      padding: clamp(14px, 2vw, 24px);
+      font-family: Consolas, "SFMono-Regular", "Malgun Gothic", monospace;
+      font-size: var(--font-size);
+      line-height: 1.72;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    textarea:focus {
+      border-color: #e5322d;
+      box-shadow: 0 0 0 3px rgba(229, 50, 45, 0.14);
+      outline: none;
+    }
+    .status {
+      color: #667085;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+  `;
+  doc.head.replaceChildren(charset, viewport, title, style);
+
+  const create = (tag, className, text) => {
+    const element = doc.createElement(tag);
+    if (className) element.className = className;
+    if (text !== undefined) element.textContent = text;
+    return element;
+  };
+  const header = create("header");
+  const heading = create("h1", "", copy.windowTitle);
+  const fontLabel = create("label", "", copy.fontLabel);
+  const fontInput = doc.createElement("input");
+  fontInput.type = "range";
+  fontInput.min = "13";
+  fontInput.max = "28";
+  fontInput.step = "1";
+  fontInput.value = "17";
+  const fontValue = doc.createElement("output");
+  fontValue.value = "17px";
+  fontLabel.append(" ", fontInput, " ", fontValue);
+  const copyButton = create("button", "", copy.copySource);
+  copyButton.type = "button";
+  const saveButton = create("button", "", copy.saveEdited);
+  saveButton.type = "button";
+  const closeButton = create("button", "", copy.closeWindow);
+  closeButton.type = "button";
+  const status = create("span", "status");
+  header.append(heading, fontLabel, copyButton, saveButton, closeButton, status);
+
+  const main = create("main");
+  const section = create("section");
+  const editorTitle = create("h2", "", copy.editorTitle);
+  const source = doc.createElement("textarea");
+  source.id = "source";
+  source.spellcheck = false;
+  source.wrap = "soft";
+  source.value = String(markdown || "");
+  section.append(editorTitle, source);
+  main.append(section);
+  doc.body.replaceChildren(header, main);
+
+  const updateStatus = () => {
+    const locale = APP_LOCALE === "en" ? "en-US" : "ko-KR";
+    const chars = source.value.length.toLocaleString(locale);
+    const lines = (source.value ? source.value.split("\n").length : 0).toLocaleString(locale);
+    const charLabel = APP_LOCALE === "en" ? " chars" : "자";
+    const lineLabel = APP_LOCALE === "en" ? " lines" : "줄";
+    status.textContent = `${chars}${charLabel} · ${lines}${lineLabel}`;
+  };
+  const updateFont = () => {
+    const size = Number(fontInput.value) || 17;
+    doc.documentElement.style.setProperty("--font-size", `${size}px`);
+    fontValue.value = `${size}px`;
+  };
+  const copySource = async () => {
+    try {
+      await workspace.navigator.clipboard.writeText(source.value);
+      status.textContent = copy.sourceCopied;
+    } catch (error) {
+      source.focus();
+      source.select();
+      doc.execCommand("copy");
+      status.textContent = copy.sourceCopied;
+    }
+  };
+  const saveSource = () => {
+    const blob = new workspace.Blob([source.value], { type: "text/markdown;charset=utf-8" });
+    const url = workspace.URL.createObjectURL(blob);
+    const link = doc.createElement("a");
+    link.href = url;
+    link.download = "markdown-document.md";
+    doc.body.appendChild(link);
+    link.click();
+    workspace.setTimeout(() => {
+      workspace.URL.revokeObjectURL(url);
+      link.remove();
+    }, 0);
+  };
+
+  fontInput.addEventListener("input", updateFont);
+  source.addEventListener("input", updateStatus);
+  copyButton.addEventListener("click", copySource);
+  saveButton.addEventListener("click", saveSource);
+  closeButton.addEventListener("click", () => workspace.close());
+  updateFont();
+  updateStatus();
+  workspace.focus();
+  source.focus();
 }
 
 function buildMarkdownViewerWindowHtml(markdown, labels) {
@@ -11211,8 +11391,6 @@ function buildMarkdownViewerWindowHtml(markdown, labels) {
       main {
         min-height: 0;
         display: grid;
-        grid-template-columns: minmax(280px, 0.92fr) minmax(0, 1.08fr);
-        gap: 12px;
         padding: 12px;
       }
       section {
@@ -11227,8 +11405,7 @@ function buildMarkdownViewerWindowHtml(markdown, labels) {
         color: #344054;
         font-size: 0.88rem;
       }
-      textarea,
-      .preview {
+      textarea {
         width: 100%;
         min-width: 0;
         min-height: 0;
@@ -11249,33 +11426,10 @@ function buildMarkdownViewerWindowHtml(markdown, labels) {
         font-family: Consolas, "SFMono-Regular", "Malgun Gothic", monospace;
         white-space: pre-wrap;
       }
-      .preview {
-        padding: clamp(16px, 2.4vw, 28px);
-      }
-      .preview h1, .preview h2, .preview h3, .preview h4, .preview h5, .preview h6 {
-        color: #172033;
-        line-height: 1.25;
-      }
-      .preview pre {
-        overflow: auto;
-        white-space: pre-wrap;
-      }
-      .preview table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-      .preview th, .preview td {
-        border: 1px solid #dfe5ee;
-        padding: 6px 8px;
-        vertical-align: top;
-      }
       .status {
         color: #667085;
         font-size: 0.78rem;
         font-weight: 700;
-      }
-      @media (max-width: 860px) {
-        main { grid-template-columns: 1fr; grid-auto-rows: minmax(42vh, 1fr); }
       }
     </style>
   </head>
@@ -11293,50 +11447,17 @@ function buildMarkdownViewerWindowHtml(markdown, labels) {
         <h2>${escapeHtml(labels.editor)}</h2>
         <textarea id="source" spellcheck="false"></textarea>
       </section>
-      <section>
-        <h2>${escapeHtml(labels.preview)}</h2>
-        <div id="preview" class="preview"></div>
-      </section>
     </main>
     <script>
       const labels = ${labelData};
       const source = document.getElementById("source");
-      const preview = document.getElementById("preview");
       const fontSize = document.getElementById("fontSize");
       const fontValue = document.getElementById("fontValue");
       const status = document.getElementById("status");
       source.value = ${initialMarkdown};
 
-      function fallbackEscape(value) {
-        return String(value || "").replace(/[&<>"']/g, (char) => ({
-          "&": "&amp;",
-          "<": "&lt;",
-          ">": "&gt;",
-          '"': "&quot;",
-          "'": "&#39;",
-        })[char]);
-      }
-
-      function fallbackMarkdownToHtml(markdown) {
-        const escaped = fallbackEscape(markdown).trim();
-        if (!escaped) return "<p>" + fallbackEscape(labels.empty) + "</p>";
-        return escaped
-          .split(/\\n{2,}/)
-          .map((block) => {
-            const heading = block.match(/^(#{1,6})\\s+(.+)$/);
-            if (heading) return "<h" + heading[1].length + ">" + heading[2] + "</h" + heading[1].length + ">";
-            return "<p>" + block.replace(/\\n/g, "<br>") + "</p>";
-          })
-          .join("");
-      }
-
       function render() {
         const markdown = source.value;
-        if (window.opener && typeof window.opener.markdownToHtml === "function") {
-          preview.innerHTML = window.opener.markdownToHtml(markdown, labels.empty);
-        } else {
-          preview.innerHTML = fallbackMarkdownToHtml(markdown);
-        }
         const lines = markdown ? markdown.split("\\n").length : 0;
         status.textContent = markdown.length.toLocaleString() + " chars · " + lines.toLocaleString() + " lines";
       }
