@@ -4602,20 +4602,6 @@ body.tool-mode .markdown-editor-v2 .markdown-toolbar button::before {
   gap: 16px;
 }
 
-body[data-tool="markdown-viewer"] .site-layout {
-  width: min(1920px, calc(100% - 24px));
-}
-
-body[data-tool="markdown-viewer"] .platform-hero,
-body[data-tool="markdown-viewer"] .workspace-stack,
-body[data-tool="markdown-viewer"] .info-grid {
-  max-width: none;
-}
-
-body[data-tool="markdown-viewer"] .workspace-panel {
-  padding: 16px;
-}
-
 .markdown-viewer-loader {
   display: grid;
   gap: 14px;
@@ -4653,9 +4639,9 @@ body[data-tool="markdown-viewer"] .workspace-panel {
 
 .markdown-viewer-stage {
   display: grid;
-  grid-template-columns: minmax(180px, 220px) minmax(0, 1fr);
+  grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
   grid-template-areas: "outline reader";
-  gap: 14px;
+  gap: 16px;
   align-items: start;
   justify-items: stretch;
 }

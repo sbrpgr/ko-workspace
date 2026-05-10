@@ -10973,8 +10973,8 @@ function renderMarkdownViewer(container) {
             </select>
           </label>
           <label>${escapeHtml(copy.widthLabel)}
-            <input id="markdownViewerWidth" type="range" min="620" max="1600" step="20" value="1040" />
-            <output id="markdownViewerWidthValue">1040px</output>
+            <input id="markdownViewerWidth" type="range" min="620" max="1320" step="20" value="920" />
+            <output id="markdownViewerWidthValue">920px</output>
           </label>
           <label>${escapeHtml(copy.fontLabel)}
             <input id="markdownViewerFont" type="range" min="14" max="22" step="1" value="17" />
