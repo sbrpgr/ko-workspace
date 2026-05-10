@@ -11144,11 +11144,12 @@ function renderMarkdownOutline(container, headings, preview, emptyText) {
     return;
   }
 
+  const baseLevel = Math.min(...headings.map((heading) => heading.level));
   container.innerHTML = headings
-    .map(
-      (heading, index) =>
-        `<button type="button" data-heading-index="${index}" data-level="${heading.level}">${escapeHtml(heading.text)}</button>`
-    )
+    .map((heading, index) => {
+      const depth = Math.min(Math.max(heading.level - baseLevel, 0), 2);
+      return `<button type="button" data-heading-index="${index}" data-level="${heading.level}" data-depth="${depth}">${escapeHtml(heading.text)}</button>`;
+    })
     .join("");
   container.querySelectorAll("button").forEach((button) => {
     button.addEventListener("click", () => {
