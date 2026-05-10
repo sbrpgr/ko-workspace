@@ -206,6 +206,24 @@ const TOOL_DEFS = [
     ],
   },
   {
+    id: "markdown-viewer",
+    path: "/tools/markdown-viewer/",
+    category: "텍스트",
+    title: "MD 파일 뷰어",
+    summary:
+      "MD, Markdown, TXT 파일을 브라우저에서 열어 넓고 읽기 좋은 화면으로 보고, 본문 폭·글자 크기·줄 간격을 조절합니다.",
+    seoTitle: "MD 파일 뷰어 | Markdown 파일 읽기 도구",
+    seoDescription:
+      "MD와 Markdown 파일을 서버 업로드 없이 브라우저에서 열어 목차와 미리보기로 읽고, 본문 폭과 글자 크기, 줄 간격을 조절하는 무료 뷰어입니다.",
+    keywords: ["MD 파일 뷰어", "Markdown 뷰어", "마크다운 파일 열기", "README 보기"],
+    guide: [
+      { title: "파일 선택", text: ".md, .markdown, .txt 파일을 선택하거나 업로드 영역에 끌어다 놓습니다." },
+      { title: "읽기 화면 조절", text: "본문 폭, 글자 크기, 줄 간격, 테마를 문서 성격과 화면 크기에 맞게 조절합니다." },
+      { title: "목차와 원문 확인", text: "제목 기반 목차로 이동하거나 원문 보기·분할 보기로 마크다운 원문을 함께 확인합니다." },
+      { title: "필요한 내용 복사", text: "원문 또는 마크다운 기호를 정리한 텍스트를 브라우저에서 바로 복사합니다." },
+    ],
+  },
+  {
     id: "text-extractor",
     path: "/tools/text-extractor/",
     category: "텍스트",
@@ -749,6 +767,19 @@ const TOOL_DEFS_EN_OVERRIDES = {
       { title: "Preview and save", text: "Check the preview, copy the Markdown, or download an MD file." },
     ],
   },
+  "markdown-viewer": {
+    title: "MD File Viewer",
+    summary: "Open MD, Markdown, and TXT files in the browser with a spacious reader, table of contents, and adjustable reading size.",
+    seoTitle: "MD File Viewer | Read Markdown Files Online",
+    seoDescription: "Open MD and Markdown files in your browser without uploading them to the application server, then adjust width, font size, line height, and theme.",
+    keywords: ["MD viewer", "Markdown viewer", "read Markdown file", "README viewer"],
+    guide: [
+      { title: "Choose a file", text: "Select or drop an .md, .markdown, or .txt file." },
+      { title: "Adjust reading", text: "Set the reader width, font size, line height, and theme for the document." },
+      { title: "Use the outline", text: "Jump through headings or switch between preview, split, and source views." },
+      { title: "Copy text", text: "Copy the Markdown source or a plain-text version from the browser." },
+    ],
+  },
   "text-extractor": {
     title: "Email, URL & Phone Extractor",
     summary: "Extract emails, URLs, and phone numbers from unstructured text and copy each list separately.",
@@ -987,12 +1018,23 @@ const TOOL_VISUALS_EN = {
   "ai-text-cleaner": { icon: "\u2728", tone: "violet", copy: "Clean AI answer formatting for documents." },
   "ai-table-converter": { icon: "\u25A4", tone: "green", copy: "Convert AI tables for documents and spreadsheets." },
   "csv-excel-converter": { icon: "XL", tone: "emerald", copy: "Convert CSV, TSV, and XLSX files in the browser." },
+  "markdown-viewer": { icon: "MD", tone: "blue", copy: "Read Markdown files with adjustable layout." },
 };
-const TOOL_USE_EXAMPLES_EN = {};
+const TOOL_USE_EXAMPLES_EN = {
+  "markdown-viewer": [
+    "Open README, changelog, documentation, or exported note files without uploading them to the application server.",
+    "Use the wider reader and outline to review long Markdown files before copying or sharing text.",
+    "Switch to split view when you need to compare the rendered document with the original Markdown source.",
+  ],
+};
 const TOOL_EXTRA_FAQS_EN = {
   "audio-editor": {
     question: "Which phone recordings are supported?",
     answer: "The editor targets common m4a, aac, mp3, and wav recordings when the browser can decode them. Uncommon legacy formats are not a support target.",
+  },
+  "markdown-viewer": {
+    question: "Does the viewer run raw HTML inside Markdown files?",
+    answer: "No. Markdown text is escaped before rendering, so raw HTML from the file is displayed safely instead of being executed.",
   },
 };
 
@@ -1035,6 +1077,7 @@ const TOOL_VISUALS = {
   "character-counter": { icon: "\uD83D\uDD22", tone: "blue", copy: "\uacf5\ubc31 \ud3ec\ud568\uacfc \uc81c\uc678 \uae00\uc790\uc218\ub97c \uacc4\uc0b0\ud569\ub2c8\ub2e4." },
   "line-break-cleaner": { icon: "\u21B5", tone: "cyan", copy: "\uc904\ubc14\uafc8\uacfc \uacf5\ubc31\uc744 \ubb38\ub2e8\uc73c\ub85c \uc815\ub9ac\ud569\ub2c8\ub2e4." },
   "markdown-editor": { icon: "MD", tone: "indigo", copy: "\uc77c\ubc18 \ud14d\uc2a4\ud2b8\ub97c \ub9c8\ud06c\ub2e4\uc6b4 \ubb38\uc11c\ub85c \ud3b8\uc9d1\ud569\ub2c8\ub2e4." },
+  "markdown-viewer": { icon: "MD", tone: "blue", copy: "MD 파일을 넓고 읽기 좋은 화면으로 확인합니다." },
   "text-extractor": { icon: "@", tone: "green", copy: "\uc774\uba54\uc77c, URL, \uc804\ud654\ubc88\ud638\ub9cc \ube60\ub974\uac8c \ucd94\ucd9c\ud569\ub2c8\ub2e4." },
   "duplicate-line-remover": { icon: "\u29C9", tone: "slate", copy: "\ubaa9\ub85d\uc5d0\uc11c \uc911\ubcf5\ub41c \uc904\uc744 \uc81c\uac70\ud569\ub2c8\ub2e4." },
   "find-replace": { icon: "\uD83D\uDD0E", tone: "amber", copy: "\ubb38\uc11c \uc548\uc758 \ub2e8\uc5b4\ub97c \ud55c \ubc88\uc5d0 \ubc14\uafc9\ub2c8\ub2e4." },
@@ -1102,6 +1145,11 @@ const TOOL_USE_EXAMPLES = {
   "markdown-editor": [
     "일반 텍스트 초안을 제목, 목록, 표가 있는 마크다운 문서로 정리합니다.",
     "README, 업무 메모, 블로그 초안을 미리보며 작성합니다.",
+  ],
+  "markdown-viewer": [
+    "README, 릴리스 노트, 업무 메모처럼 긴 MD 파일을 넓은 읽기 화면으로 확인합니다.",
+    "본문 폭과 글자 크기, 줄 간격을 조절해 노트북과 큰 모니터에서 모두 읽기 좋게 맞춥니다.",
+    "목차로 제목 사이를 이동하고, 필요한 경우 원문과 미리보기를 나란히 비교합니다.",
   ],
   "text-extractor": [
     "문의 메일, 고객 메모, 공지문에서 이메일 주소와 전화번호만 뽑아냅니다.",
@@ -1226,6 +1274,10 @@ const TOOL_EXTRA_FAQS = {
   "markdown-editor": {
     question: "빈 문서에서도 버튼만 눌러 마크다운을 작성할 수 있나요?",
     answer: "네. 제목, 목록, 체크리스트, 표, 코드블록 같은 기본 문법을 버튼으로 넣고 바로 편집할 수 있습니다.",
+  },
+  "markdown-viewer": {
+    question: "MD 파일 안의 HTML도 그대로 실행되나요?",
+    answer: "아니요. 원문은 브라우저에서만 읽고, 마크다운 미리보기는 HTML을 escape한 뒤 렌더링합니다. 파일 안의 스크립트나 원시 HTML을 실행하지 않습니다.",
   },
   "text-extractor": {
     question: "이메일, URL, 전화번호를 따로 복사할 수 있나요?",
@@ -1635,10 +1687,10 @@ const CATEGORY_PAGE_DEFS = [
     title: "텍스트 업무 도구",
     eyebrow: "Text Tools",
     description:
-      "AI 표 복붙 변환, CSV 엑셀 변환, AI 서식 정리, 글자수 세기, 줄바꿈 정리, 추출기처럼 매일 쓰는 텍스트·데이터 작업을 브라우저에서 바로 처리합니다.",
+      "AI 표 복붙 변환, CSV 엑셀 변환, 마크다운 작성·보기, 글자수 세기, 줄바꿈 정리, 추출기처럼 매일 쓰는 텍스트·데이터 작업을 브라우저에서 바로 처리합니다.",
     metaDescription:
-      "코워크스페이스 텍스트 업무 도구 모음입니다. AI 표 복붙 변환, CSV 엑셀 변환, AI 복붙 서식 정리, 글자수 세기, 줄바꿈 정리, 이메일·URL·전화번호 추출 등을 무료로 사용할 수 있습니다.",
-    keywords: ["AI 표 변환", "CSV 엑셀 변환", "텍스트 정리", "글자수 세기", "AI 서식 정리"],
+      "코워크스페이스 텍스트 업무 도구 모음입니다. AI 표 복붙 변환, CSV 엑셀 변환, 마크다운 편집기, MD 파일 뷰어, 글자수 세기, 줄바꿈 정리, 이메일·URL·전화번호 추출 등을 무료로 사용할 수 있습니다.",
+    keywords: ["AI 표 변환", "CSV 엑셀 변환", "MD 파일 뷰어", "마크다운 편집기", "텍스트 정리"],
     categories: ["텍스트"],
     guide: [
       { title: "도구 선택", text: "정리, 계산, 추출, 비교처럼 필요한 텍스트 작업을 고릅니다." },
@@ -1719,10 +1771,10 @@ const CATEGORY_PAGE_DEFS_EN = [
     title: "Text Tools",
     eyebrow: "Text Tools",
     description:
-      "Clean, convert, count, extract, compare, and reshape everyday text or data directly in your browser.",
+      "Clean, convert, count, read Markdown, extract, compare, and reshape everyday text or data directly in your browser.",
     metaDescription:
-      "A browser-based text tools collection for AI paste cleanup, AI table conversion, CSV and Excel conversion, character counting, line break cleanup, extraction, duplicate removal, find and replace, case conversion, and text diff checks.",
-    keywords: ["AI table converter", "CSV Excel converter", "text cleanup", "character counter", "find and replace"],
+      "A browser-based text tools collection for AI paste cleanup, AI table conversion, CSV and Excel conversion, Markdown editing and viewing, character counting, line break cleanup, extraction, duplicate removal, find and replace, case conversion, and text diff checks.",
+    keywords: ["AI table converter", "CSV Excel converter", "Markdown viewer", "text cleanup", "character counter"],
     categories: ["Text"],
     guide: [
       { title: "Choose a task", text: "Pick the text cleanup, conversion, counting, extraction, or comparison tool you need." },
@@ -2667,6 +2719,7 @@ const TOOL_RENDERERS = {
   "character-counter": renderCharacterCounter,
   "line-break-cleaner": renderLineBreakCleaner,
   "markdown-editor": renderMarkdownEditor,
+  "markdown-viewer": renderMarkdownViewer,
   "text-extractor": renderTextExtractor,
   "duplicate-line-remover": renderDuplicateLineRemover,
   "find-replace": renderFindReplaceTool,
@@ -2721,6 +2774,7 @@ const AUDIO_EDITOR_MAX_BYTES = 180 * 1024 * 1024;
 const AUDIO_EDITOR_UNDO_LIMIT = 10;
 const AUDIO_EDITOR_WAVEFORM_POINTS = 1800;
 const AUDIO_EDITOR_MIN_SELECTION_SECONDS = 0.03;
+const MARKDOWN_VIEWER_MAX_BYTES = 8 * 1024 * 1024;
 let audioTranscriptionWorker = null;
 let audioTranscriptionWorkerUrl = "";
 let audioTranscriptionWorkerRequestId = 0;
@@ -10810,6 +10864,300 @@ function renderQuickToolIcon(tool) {
   `;
 }
 
+function renderMarkdownViewer(container) {
+  const copy = APP_LOCALE === "en"
+    ? {
+        loadTitle: "Open Markdown File",
+        loadNote: "Files stay in your browser. Raw HTML inside Markdown is escaped before preview.",
+        dropTitle: "Choose or drop an MD file",
+        dropHint: ".md, .markdown, and .txt files up to 8 MB",
+        readerTitle: "Reader",
+        emptyTitle: "No file loaded",
+        emptyText: "Choose a Markdown file to see a wide, adjustable preview here.",
+        outlineTitle: "Outline",
+        outlineEmpty: "Headings appear here after loading a file.",
+        sourceTitle: "Source",
+        statsEmpty: "No file loaded",
+        viewLabel: "View",
+        previewMode: "Preview",
+        splitMode: "Split",
+        sourceMode: "Source",
+        themeLabel: "Theme",
+        lightTheme: "Light",
+        paperTheme: "Paper",
+        darkTheme: "Dark",
+        widthLabel: "Width",
+        fontLabel: "Font",
+        lineLabel: "Line",
+        copySource: "Copy MD",
+        copyText: "Copy text",
+        sourceCopied: "Markdown source copied.",
+        textCopied: "Plain text copied.",
+        noCopy: "Nothing to copy yet.",
+        loaded: "Loaded",
+        tooLarge: `Files up to ${formatBytes(MARKDOWN_VIEWER_MAX_BYTES)} are recommended.`,
+        unsupported: "Choose an .md, .markdown, or .txt file.",
+        readFail: "Could not read this file. Check the file format and try again.",
+        emptyPreview: "Load a Markdown file to preview it here.",
+        count: (chars, lines, headings, minutes) =>
+          `${chars.toLocaleString("en-US")} chars · ${lines.toLocaleString("en-US")} lines · ${headings.toLocaleString("en-US")} headings · ${minutes} min read`,
+      }
+    : {
+        loadTitle: "MD 파일 열기",
+        loadNote: "파일은 브라우저에서만 읽습니다. MD 안의 원시 HTML은 실행하지 않고 안전하게 표시합니다.",
+        dropTitle: "MD 파일 선택 또는 드래그",
+        dropHint: ".md, .markdown, .txt 파일 · 최대 8MB 권장",
+        readerTitle: "읽기 화면",
+        emptyTitle: "아직 파일을 열지 않았습니다",
+        emptyText: "마크다운 파일을 선택하면 넓고 조절 가능한 미리보기가 여기에 표시됩니다.",
+        outlineTitle: "목차",
+        outlineEmpty: "파일을 열면 제목 목록이 표시됩니다.",
+        sourceTitle: "원문",
+        statsEmpty: "파일 없음",
+        viewLabel: "보기",
+        previewMode: "미리보기",
+        splitMode: "분할",
+        sourceMode: "원문",
+        themeLabel: "테마",
+        lightTheme: "밝게",
+        paperTheme: "종이",
+        darkTheme: "어둡게",
+        widthLabel: "폭",
+        fontLabel: "글자",
+        lineLabel: "줄간격",
+        copySource: "MD 복사",
+        copyText: "텍스트 복사",
+        sourceCopied: "마크다운 원문을 복사했습니다.",
+        textCopied: "일반 텍스트를 복사했습니다.",
+        noCopy: "복사할 내용이 없습니다.",
+        loaded: "불러옴",
+        tooLarge: `${formatBytes(MARKDOWN_VIEWER_MAX_BYTES)} 이하 파일부터 권장합니다.`,
+        unsupported: ".md, .markdown, .txt 파일을 선택해 주세요.",
+        readFail: "파일을 읽지 못했습니다. 형식과 인코딩을 확인해 주세요.",
+        emptyPreview: "마크다운 파일을 불러오면 미리보기가 표시됩니다.",
+        count: (chars, lines, headings, minutes) =>
+          `${chars.toLocaleString("ko-KR")}자 · ${lines.toLocaleString("ko-KR")}줄 · 제목 ${headings.toLocaleString("ko-KR")}개 · 약 ${minutes}분`,
+      };
+
+  container.innerHTML = `
+    <div class="tool-section markdown-viewer-tool">
+      <section class="input-card markdown-viewer-loader">
+        <div class="section-heading">
+          <div>
+            <h2>${escapeHtml(copy.loadTitle)}</h2>
+            <p class="tool-note">${escapeHtml(copy.loadNote)}</p>
+          </div>
+          <div class="action-row compact-actions">
+            <button id="markdownViewerCopySource" type="button">${escapeHtml(copy.copySource)}</button>
+            <button id="markdownViewerCopyText" type="button">${escapeHtml(copy.copyText)}</button>
+          </div>
+        </div>
+        <div class="upload-box markdown-viewer-upload">
+          <input id="markdownViewFile" type="file" accept=".md,.markdown,.txt,text/markdown,text/plain" />
+          <strong>${escapeHtml(copy.dropTitle)}</strong>
+          <span>${escapeHtml(copy.dropHint)}</span>
+        </div>
+        <div class="markdown-viewer-controls" aria-label="${escapeHtml(copy.readerTitle)}">
+          <label>${escapeHtml(copy.viewLabel)}
+            <select id="markdownViewerMode">
+              <option value="preview">${escapeHtml(copy.previewMode)}</option>
+              <option value="split">${escapeHtml(copy.splitMode)}</option>
+              <option value="source">${escapeHtml(copy.sourceMode)}</option>
+            </select>
+          </label>
+          <label>${escapeHtml(copy.themeLabel)}
+            <select id="markdownViewerTheme">
+              <option value="light">${escapeHtml(copy.lightTheme)}</option>
+              <option value="paper">${escapeHtml(copy.paperTheme)}</option>
+              <option value="dark">${escapeHtml(copy.darkTheme)}</option>
+            </select>
+          </label>
+          <label>${escapeHtml(copy.widthLabel)}
+            <input id="markdownViewerWidth" type="range" min="620" max="1320" step="20" value="920" />
+            <output id="markdownViewerWidthValue">920px</output>
+          </label>
+          <label>${escapeHtml(copy.fontLabel)}
+            <input id="markdownViewerFont" type="range" min="14" max="22" step="1" value="17" />
+            <output id="markdownViewerFontValue">17px</output>
+          </label>
+          <label>${escapeHtml(copy.lineLabel)}
+            <input id="markdownViewerLine" type="range" min="145" max="200" step="5" value="170" />
+            <output id="markdownViewerLineValue">1.70</output>
+          </label>
+        </div>
+        <p id="markdownViewerStats" class="tool-note">${escapeHtml(copy.statsEmpty)}</p>
+      </section>
+      <section class="markdown-viewer-stage" data-mode="preview" data-theme="light">
+        <aside class="markdown-viewer-outline" aria-labelledby="markdownViewerOutlineTitle">
+          <h3 id="markdownViewerOutlineTitle">${escapeHtml(copy.outlineTitle)}</h3>
+          <div id="markdownViewerOutlineList" class="markdown-viewer-outline-list">
+            <p class="tool-note">${escapeHtml(copy.outlineEmpty)}</p>
+          </div>
+        </aside>
+        <article class="result-card markdown-viewer-reader" aria-labelledby="markdownViewerReaderTitle">
+          <div class="section-heading markdown-pane-head">
+            <div>
+              <h2 id="markdownViewerReaderTitle">${escapeHtml(copy.readerTitle)}</h2>
+              <p id="markdownViewerStatus" class="tool-note">${escapeHtml(copy.emptyTitle)}</p>
+            </div>
+          </div>
+          <div class="markdown-viewer-canvas">
+            <div id="markdownViewerPreview" class="markdown-preview markdown-viewer-preview">
+              <h2>${escapeHtml(copy.emptyTitle)}</h2>
+              <p>${escapeHtml(copy.emptyText)}</p>
+            </div>
+            <pre id="markdownViewerSource" class="markdown-viewer-source" hidden></pre>
+          </div>
+        </article>
+      </section>
+    </div>
+  `;
+
+  const nodes = {
+    fileInput: container.querySelector("#markdownViewFile"),
+    mode: container.querySelector("#markdownViewerMode"),
+    theme: container.querySelector("#markdownViewerTheme"),
+    width: container.querySelector("#markdownViewerWidth"),
+    widthValue: container.querySelector("#markdownViewerWidthValue"),
+    font: container.querySelector("#markdownViewerFont"),
+    fontValue: container.querySelector("#markdownViewerFontValue"),
+    line: container.querySelector("#markdownViewerLine"),
+    lineValue: container.querySelector("#markdownViewerLineValue"),
+    stats: container.querySelector("#markdownViewerStats"),
+    stage: container.querySelector(".markdown-viewer-stage"),
+    reader: container.querySelector(".markdown-viewer-reader"),
+    preview: container.querySelector("#markdownViewerPreview"),
+    source: container.querySelector("#markdownViewerSource"),
+    status: container.querySelector("#markdownViewerStatus"),
+    outline: container.querySelector("#markdownViewerOutlineList"),
+    copySource: container.querySelector("#markdownViewerCopySource"),
+    copyText: container.querySelector("#markdownViewerCopyText"),
+  };
+  const state = { markdown: "", plain: "", headings: [] };
+
+  function updateReaderSettings() {
+    const width = Number(nodes.width.value) || 920;
+    const fontSize = Number(nodes.font.value) || 17;
+    const lineHeight = (Number(nodes.line.value) || 170) / 100;
+    nodes.widthValue.value = `${width}px`;
+    nodes.fontValue.value = `${fontSize}px`;
+    nodes.lineValue.value = lineHeight.toFixed(2);
+    nodes.stage.dataset.mode = nodes.mode.value;
+    nodes.stage.dataset.theme = nodes.theme.value;
+    nodes.reader.style.setProperty("--markdown-viewer-width", `${width}px`);
+    nodes.reader.style.setProperty("--markdown-viewer-font-size", `${fontSize}px`);
+    nodes.reader.style.setProperty("--markdown-viewer-line-height", String(lineHeight));
+    nodes.source.hidden = nodes.mode.value === "preview";
+  }
+
+  function renderMarkdownDocument(markdown, file) {
+    const normalized = normalizeNewlines(markdown);
+    state.markdown = normalized;
+    state.plain = markdownToPlainText(normalized);
+    state.headings = extractMarkdownHeadings(normalized);
+    nodes.preview.innerHTML = markdownToHtml(normalized, copy.emptyPreview);
+    nodes.source.textContent = normalized;
+    renderMarkdownOutline(nodes.outline, state.headings, nodes.preview, copy.outlineEmpty);
+
+    const lines = normalized ? normalized.split("\n").length : 0;
+    const readBase = APP_LOCALE === "en" ? 900 : 700;
+    const minutes = Math.max(1, Math.ceil(Math.max(state.plain.length, normalized.length) / readBase));
+    nodes.stats.textContent = `${copy.count(normalized.length, lines, state.headings.length, minutes)} · ${formatBytes(file.size)}`;
+    nodes.status.textContent = `${copy.loaded} · ${formatBytes(file.size)}`;
+  }
+
+  async function loadFile() {
+    const file = nodes.fileInput.files?.[0];
+    if (!file) return;
+    if (!isMarkdownViewerFile(file)) {
+      showToast(copy.unsupported);
+      nodes.fileInput.value = "";
+      return;
+    }
+    if (file.size > MARKDOWN_VIEWER_MAX_BYTES) {
+      showToast(copy.tooLarge);
+      nodes.fileInput.value = "";
+      return;
+    }
+
+    try {
+      const text = await file.text();
+      renderMarkdownDocument(text, file);
+    } catch (error) {
+      trackToolError(TOOL_MAP["markdown-viewer"], error, "read_markdown_file");
+      showToast(copy.readFail);
+    }
+  }
+
+  nodes.fileInput.addEventListener("change", loadFile);
+  [nodes.mode, nodes.theme, nodes.width, nodes.font, nodes.line].forEach((node) => {
+    node.addEventListener("input", updateReaderSettings);
+    node.addEventListener("change", updateReaderSettings);
+  });
+  nodes.copySource.addEventListener("click", async () => {
+    if (!state.markdown.trim()) {
+      showToast(copy.noCopy);
+      return;
+    }
+    await safeCopy(state.markdown, copy.sourceCopied);
+  });
+  nodes.copyText.addEventListener("click", async () => {
+    if (!state.plain.trim()) {
+      showToast(copy.noCopy);
+      return;
+    }
+    await safeCopy(state.plain, copy.textCopied);
+  });
+
+  updateReaderSettings();
+}
+
+function isMarkdownViewerFile(file) {
+  const name = (file.name || "").toLowerCase();
+  const type = (file.type || "").toLowerCase();
+  return name.endsWith(".md") || name.endsWith(".markdown") || name.endsWith(".txt") || type === "text/markdown" || type === "text/plain";
+}
+
+function extractMarkdownHeadings(markdown) {
+  const headings = [];
+  const lines = normalizeNewlines(markdown).split("\n");
+  let inFence = false;
+  for (const line of lines) {
+    if (/^```/.test(line.trim())) {
+      inFence = !inFence;
+      continue;
+    }
+    if (inFence) continue;
+    const match = line.match(/^(#{1,3})\s+(.+)$/);
+    if (!match) continue;
+    headings.push({
+      level: match[1].length,
+      text: markdownToPlainText(match[2]).replace(/\s+/g, " ").trim() || match[2].trim(),
+    });
+  }
+  return headings;
+}
+
+function renderMarkdownOutline(container, headings, preview, emptyText) {
+  if (!headings.length) {
+    container.innerHTML = `<p class="tool-note">${escapeHtml(emptyText)}</p>`;
+    return;
+  }
+
+  container.innerHTML = headings
+    .map(
+      (heading, index) =>
+        `<button type="button" data-heading-index="${index}" data-level="${heading.level}">${escapeHtml(heading.text)}</button>`
+    )
+    .join("");
+  container.querySelectorAll("button").forEach((button) => {
+    button.addEventListener("click", () => {
+      const heading = preview.querySelectorAll("h1,h2,h3")[Number(button.dataset.headingIndex)];
+      heading?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+}
+
 function renderMarkdownEditor(container) {
   container.innerHTML = `
     <div class="tool-section markdown-tool markdown-editor-v2">
@@ -11019,10 +11367,10 @@ function stripListMarker(line) {
     .trim();
 }
 
-function markdownToHtml(markdown) {
+function markdownToHtml(markdown, emptyMessage = "마크다운을 입력하면 미리보기가 여기에 표시됩니다.") {
   const source = normalizeNewlines(markdown);
   if (!source.trim()) {
-    return `<p class="tool-note">마크다운을 입력하면 미리보기가 여기에 표시됩니다.</p>`;
+    return `<p class="tool-note">${escapeHtml(emptyMessage)}</p>`;
   }
 
   const lines = source.split("\n");

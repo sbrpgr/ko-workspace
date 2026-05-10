@@ -55,7 +55,7 @@ Current migration note:
 - Category landing pages are now live at `/tools/text/`, `/tools/pdf/`, `/tools/image/`, `/tools/subtitle/`, and `/tools/voice-video/`.
 - Category pages reuse the shared app shell and are rendered from `CATEGORY_PAGE_DEFS` in `app.js`; do not fork tool logic into category HTML files.
 - Preserve canonical URLs and sitemap entries whenever tool pages are updated.
-- Current static asset cache version is `20260502-08`; bump this version whenever `app.js` or `styles.css` changes.
+- Current static asset cache version is `20260510-01`; bump this version whenever `app.js` or `styles.css` changes.
 
 ## 2A. Current SEO And AdSense Baseline
 
@@ -98,6 +98,8 @@ These should be built early because they are fast to implement, safe for browser
 | 글자수 세기 | `/tools/character-counter/` | 글자수 세기, 공백 제외 글자수, 바이트 수 계산, 원고지 분량 계산 | S | Very low risk. Strong evergreen search demand. |
 | AI 복붙 서식 정리 | `/tools/ai-text-cleaner/` | AI 글 서식 제거, ChatGPT 복사 붙여넣기 정리, 마크다운 제거, 별표 제거, 글 정리 | S | Removes common AI/Markdown artifacts such as `**`, `###`, code fences, excessive bullets, and awkward spacing. Browser-side only. |
 | 줄바꿈 정리 | `/tools/line-break-cleaner/` | 줄바꿈 제거, 문단 정리, 공백 제거, 텍스트 정리 | S | Good companion to voice-to-text output cleanup. |
+| 마크다운 편집기 | `/tools/markdown-editor/` | 마크다운 편집기, Markdown 작성, README 편집, 마크다운 미리보기 | S | Shipped. Browser-side writing and preview for Markdown drafts with quick formatting controls. |
+| MD 파일 뷰어 | `/tools/markdown-viewer/` | MD 파일 뷰어, Markdown 뷰어, 마크다운 파일 열기, README 보기 | S | Shipped as the 30th browser-side tool. Opens `.md`, `.markdown`, and `.txt` files locally with adjustable reader width, font size, line height, theme, outline, source, and split views. Raw HTML is escaped before preview. |
 | 텍스트 중복 줄 제거 | `/tools/duplicate-line-remover/` | 중복 줄 제거, 중복 텍스트 제거, 리스트 정리 | S | Simple utility, good internal link from text tools. |
 | 이메일/URL/전화번호 추출기 | `/tools/text-extractor/` | 이메일 추출, URL 추출, 전화번호 추출, 텍스트에서 링크 추출 | S | Useful for messy documents, CRM prep, and personal contact cleanup. |
 | 찾기 및 바꾸기 | `/tools/find-replace/` | 찾기 바꾸기, 텍스트 일괄 변경, 문자열 치환 | S | Simple bulk replacement with case-sensitive and whole-word options. |

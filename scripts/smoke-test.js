@@ -18,6 +18,9 @@ const API_NAMES = [
   "matrixToDelimitedText",
   "countTextStats",
   "cleanLineBreaks",
+  "markdownToHtml",
+  "markdownToPlainText",
+  "extractMarkdownHeadings",
   "extractContacts",
   "removeDuplicateLines",
   "replaceInText",
@@ -336,6 +339,14 @@ function buildLogicTests(api, app) {
       assert(result.tables[0].rows[0][0] === "A|B", "escaped pipe parsing failed");
       assert(api.tableToCsv(result.tables[0]) === "항목,값\nA|B,\"1,000원\"", "AI table CSV escaping failed");
     }),
+    test("markdown viewer parser escapes raw HTML and extracts headings", () => {
+      const markdown = "# 제목\n\n<script>alert(1)</script>\n\n## 둘째\n\n[링크](https://example.com)";
+      const html = api.markdownToHtml(markdown);
+      assert(html.includes("&lt;script&gt;alert(1)&lt;/script&gt;"), "Markdown raw HTML was not escaped");
+      assert(!html.includes("<script>alert(1)</script>"), "Markdown raw HTML was rendered as script");
+      assert(api.extractMarkdownHeadings(markdown).map((item) => item.text).join(",") === "제목,둘째", "heading extraction failed");
+      assert(api.markdownToPlainText(markdown).includes("링크 https://example.com"), "plain text conversion failed");
+    }),
     test("spreadsheet converter parses CSV with quoted line breaks", () => {
       const rows = api.parseDelimitedText("이름,메모\n홍길동,\"첫 줄\n둘째 줄\"\n김,완료", ",");
       assert(rows.length === 3, "CSV row count failed");
@@ -600,6 +611,7 @@ function buildUploadUxTests(app) {
         "imageFiles",
         "subtitleFile",
         "spreadsheetFiles",
+        "markdownViewFile",
       ]);
       for (const id of ids) {
         assert(supportedIds.has(id), `file input ${id} does not have declared drag support`);

@@ -17,7 +17,7 @@
 - 도구 정의: `app.js`의 `TOOL_DEFS` 중 `audio-editor`
 - 페이지 파일: `tools/audio-editor/index.html`
 - 영어 페이지 파일: `en/tools/audio-editor/index.html`
-- 현재 정적 리소스 캐시 버전: `20260509-06`
+- 현재 정적 리소스 캐시 버전: `20260510-01`
 
 ## 지원 형식 기준
 
