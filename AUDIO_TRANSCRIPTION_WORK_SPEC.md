@@ -15,7 +15,7 @@
 - 도구 정의: `app.js`의 `TOOL_DEFS` 중 `audio-file-transcription`
 - 한국어 페이지 파일: `tools/audio-file-transcription/index.html`
 - 영어 페이지 파일: `en/tools/audio-file-transcription/index.html`
-- 현재 정적 리소스 캐시 버전: `20260511-01`
+- 현재 정적 리소스 캐시 버전: `20260511-02`
 - 모델 프로필:
   - `quality`: `onnx-community/whisper-base`, 기본값, `정확도 우선`
   - `whisper-tiny` 기반 빠른 변환 fallback은 품질 기준 미달로 UI와 프로필에서 제외한다.
