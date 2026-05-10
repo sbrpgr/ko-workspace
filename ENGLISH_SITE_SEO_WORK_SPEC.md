@@ -9,7 +9,7 @@
 - 영어 정적 페이지 생성 스크립트: `scripts/generate-english-pages.js`
 - 영어 도구 정의: `app.js`의 `TOOL_DEFS_EN_OVERRIDES`
 - 영어 카테고리 정의: `app.js`의 `CATEGORY_PAGE_DEFS_EN`
-- 현재 정적 리소스 캐시 버전: `20260511-05`
+- 현재 정적 리소스 캐시 버전: `20260511-06`
 - 최근 영어 SEO 배포 커밋: `0385e6d Polish English SEO copy`
 
 ## 분리 원칙

@@ -3820,6 +3820,115 @@ body.tool-mode .mode-btn {
   }
 }
 
+@media (min-width: 761px) {
+  .site-layout,
+  body[data-page="home"] .site-layout,
+  body.home-mode .site-layout {
+    width: min(1200px, calc(100% - 56px));
+  }
+
+  body.tool-mode .site-layout {
+    width: min(1136px, calc(100% - 56px));
+  }
+
+  body.tool-mode .platform-hero,
+  body.tool-mode .workspace-stack,
+  body.tool-mode .info-grid {
+    max-width: 992px;
+  }
+
+  body[data-page="home"] .platform-hero,
+  body.home-mode .platform-hero {
+    padding: 37px 10px 22px;
+  }
+
+  body[data-page="home"] .hero-copy,
+  body.home-mode .hero-copy {
+    max-width: 656px;
+  }
+
+  body[data-page="home"] .hero-copy h1,
+  body.home-mode .hero-copy h1 {
+    font-size: clamp(1.88rem, 4vw, 3.36rem);
+  }
+
+  body[data-page="home"] .hero-copy p:last-child,
+  body.home-mode .hero-copy p:last-child {
+    max-width: 560px;
+  }
+
+  .home-directory .tool-launch-grid {
+    grid-template-columns: repeat(auto-fill, minmax(202px, 1fr));
+    gap: 13px;
+  }
+
+  .home-directory .tool-launch-card {
+    grid-template-columns: 46px minmax(0, 1fr) 14px;
+    gap: 12px;
+    min-height: 106px;
+    padding: 14px;
+  }
+
+  .home-directory .tool-launch-icon {
+    width: 46px;
+    height: 46px;
+    font-size: 1.2rem;
+  }
+
+  .tool-launch-body {
+    gap: 5px;
+  }
+
+  .tool-launch-body strong {
+    font-size: 0.8rem;
+  }
+
+  .tool-launch-body span {
+    font-size: 0.7rem;
+  }
+
+  body.tool-mode .platform-hero {
+    padding: 19px 2px 8px;
+  }
+
+  body.tool-mode .hero-copy {
+    max-width: 720px;
+  }
+
+  body.tool-mode .hero-copy h1 {
+    font-size: clamp(1.52rem, 2vw, 2.12rem);
+  }
+
+  body.tool-mode .workspace-panel {
+    padding: 18px;
+  }
+
+  body.tool-mode .editor-card,
+  body.tool-mode .result-card,
+  body.tool-mode .input-card,
+  body.tool-mode .action-card,
+  body.tool-mode .stats-card,
+  body.tool-mode .preview-card,
+  body.tool-mode .upload-card {
+    gap: 11px;
+    padding: 14px;
+  }
+
+  body.tool-mode .section-heading {
+    gap: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+  }
+
+  body.tool-mode .section-heading h2 {
+    font-size: 0.86rem;
+  }
+
+  body.tool-mode .tool-note {
+    font-size: 0.7rem;
+  }
+}
+
 @media (max-width: 760px) {
   body.tool-mode .site-layout {
     width: min(100% - 18px, 1180px);
