@@ -11132,10 +11132,22 @@ function extractMarkdownHeadings(markdown) {
     if (!match) continue;
     headings.push({
       level: match[1].length,
-      text: markdownToPlainText(match[2]).replace(/\s+/g, " ").trim() || match[2].trim(),
+      text: cleanMarkdownHeadingText(match[2]),
     });
   }
   return headings;
+}
+
+function cleanMarkdownHeadingText(markdown) {
+  const raw = String(markdown || "").trim();
+  const parsed = parseMarkdownHeadingNumber(raw);
+  if (!parsed) {
+    return markdownToPlainText(raw).replace(/\s+/g, " ").trim() || raw;
+  }
+
+  const suffix = parsed.parts.length === 1 ? "." : "";
+  const body = markdownToPlainText(parsed.rest).replace(/\s+/g, " ").trim() || parsed.rest;
+  return `${parsed.value}${suffix}${body ? ` ${body}` : ""}`.trim();
 }
 
 function getMarkdownHeadingNumberDepth(text) {

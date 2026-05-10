@@ -347,6 +347,7 @@ function buildLogicTests(api, app) {
       assert(html.includes("&lt;script&gt;alert(1)&lt;/script&gt;"), "Markdown raw HTML was not escaped");
       assert(!html.includes("<script>alert(1)</script>"), "Markdown raw HTML was rendered as script");
       assert(api.extractMarkdownHeadings(markdown).map((item) => item.text).join(",") === "제목,둘째", "heading extraction failed");
+      assert(api.extractMarkdownHeadings("## 11. Ideation questions")[0].text === "11. Ideation questions", "heading extraction should preserve top-level numbers");
       assert(api.markdownToPlainText(markdown).includes("링크 https://example.com"), "plain text conversion failed");
     }),
     test("markdown viewer outline normalizes uneven heading levels", () => {
@@ -361,12 +362,16 @@ function buildLogicTests(api, app) {
         { level: 2, text: "2.2 Enterprise labor cost" },
         { level: 2, text: "Korea employment information data" },
         { level: 3, text: "3.1 EIS job status" },
+        { level: 2, text: "11. Ideation questions" },
+        { level: 2, text: "12. Recommended data packages" },
       ];
       const outline = api.buildMarkdownOutlineItems(headings);
-      assert(outline.map((item) => item.depth).join(",") === "0,1,1,2,2,1,2,2,1,2", "outline depth normalization failed");
+      assert(outline.map((item) => item.depth).join(",") === "0,1,1,2,2,1,2,2,1,2,1,1", "outline depth normalization failed");
       assert(outline[2].label === "1. Full data map", "outline should infer the first parent number");
       assert(outline[5].label === "2. Labor ministry data", "outline should infer the second parent number");
       assert(outline[8].label === "3. Korea employment information data", "outline should infer the third parent number");
+      assert(outline[10].label === "11. Ideation questions", "outline should keep explicit double-digit parent numbers");
+      assert(outline[11].label === "12. Recommended data packages", "outline should keep explicit double-digit parent numbers");
     }),
     test("spreadsheet converter parses CSV with quoted line breaks", () => {
       const rows = api.parseDelimitedText("이름,메모\n홍길동,\"첫 줄\n둘째 줄\"\n김,완료", ",");
