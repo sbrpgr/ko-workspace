@@ -21,6 +21,7 @@ const API_NAMES = [
   "markdownToHtml",
   "markdownToPlainText",
   "extractMarkdownHeadings",
+  "computeMarkdownOutlineDepths",
   "extractContacts",
   "removeDuplicateLines",
   "replaceInText",
@@ -346,6 +347,19 @@ function buildLogicTests(api, app) {
       assert(!html.includes("<script>alert(1)</script>"), "Markdown raw HTML was rendered as script");
       assert(api.extractMarkdownHeadings(markdown).map((item) => item.text).join(",") === "제목,둘째", "heading extraction failed");
       assert(api.markdownToPlainText(markdown).includes("링크 https://example.com"), "plain text conversion failed");
+    }),
+    test("markdown viewer outline normalizes uneven heading levels", () => {
+      const headings = [
+        { level: 1, text: "Agency data spec" },
+        { level: 3, text: "How to read this document" },
+        { level: 3, text: "Full data map" },
+        { level: 3, text: "1.1 Useful contest data axes" },
+        { level: 3, text: "1.2 Shared join keys" },
+        { level: 2, text: "Labor ministry data" },
+        { level: 3, text: "2.1 Employment survey" },
+        { level: 2, text: "2.2 Enterprise labor cost" },
+      ];
+      assert(api.computeMarkdownOutlineDepths(headings).join(",") === "0,1,1,2,2,1,2,2", "outline depth normalization failed");
     }),
     test("spreadsheet converter parses CSV with quoted line breaks", () => {
       const rows = api.parseDelimitedText("이름,메모\n홍길동,\"첫 줄\n둘째 줄\"\n김,완료", ",");

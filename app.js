@@ -11138,16 +11138,57 @@ function extractMarkdownHeadings(markdown) {
   return headings;
 }
 
+function getMarkdownHeadingNumberDepth(text) {
+  const trimmed = String(text || "").trim();
+  const dotted = trimmed.match(/^(\d+(?:\.\d+)+)(?:[\s.)]|$)/);
+  if (dotted) {
+    return Math.min(dotted[1].split(".").length, 2);
+  }
+  if (/^\d+[.)]\s+/.test(trimmed)) {
+    return 1;
+  }
+  return null;
+}
+
+function computeMarkdownOutlineDepths(headings) {
+  if (!headings.length) return [];
+
+  const baseLevel = Math.min(...headings.map((heading) => heading.level));
+  const levelDepths = new Map();
+  return headings.map((heading) => {
+    const numericDepth = getMarkdownHeadingNumberDepth(heading.text);
+    let depth = numericDepth;
+
+    if (depth === null) {
+      if (levelDepths.has(heading.level)) {
+        depth = levelDepths.get(heading.level);
+      } else {
+        const parentLevel = [...levelDepths.keys()]
+          .filter((level) => level < heading.level)
+          .sort((a, b) => b - a)[0];
+        depth = parentLevel ? levelDepths.get(parentLevel) + 1 : heading.level - baseLevel;
+      }
+    }
+
+    depth = Math.min(Math.max(depth, 0), 2);
+    for (const level of [...levelDepths.keys()]) {
+      if (level > heading.level) levelDepths.delete(level);
+    }
+    levelDepths.set(heading.level, depth);
+    return depth;
+  });
+}
+
 function renderMarkdownOutline(container, headings, preview, emptyText) {
   if (!headings.length) {
     container.innerHTML = `<p class="tool-note">${escapeHtml(emptyText)}</p>`;
     return;
   }
 
-  const baseLevel = Math.min(...headings.map((heading) => heading.level));
+  const depths = computeMarkdownOutlineDepths(headings);
   container.innerHTML = headings
     .map((heading, index) => {
-      const depth = Math.min(Math.max(heading.level - baseLevel, 0), 2);
+      const depth = depths[index] || 0;
       return `<button type="button" data-heading-index="${index}" data-level="${heading.level}" data-depth="${depth}">${escapeHtml(heading.text)}</button>`;
     })
     .join("");
