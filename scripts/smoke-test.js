@@ -21,6 +21,7 @@ const API_NAMES = [
   "markdownToHtml",
   "markdownToPlainText",
   "extractMarkdownHeadings",
+  "buildMarkdownOutlineItems",
   "computeMarkdownOutlineDepths",
   "extractContacts",
   "removeDuplicateLines",
@@ -350,16 +351,22 @@ function buildLogicTests(api, app) {
     }),
     test("markdown viewer outline normalizes uneven heading levels", () => {
       const headings = [
-        { level: 1, text: "Agency data spec" },
-        { level: 3, text: "How to read this document" },
-        { level: 3, text: "Full data map" },
+        { level: 1, text: "Institution data spec" },
+        { level: 2, text: "How to read this document" },
+        { level: 2, text: "Full data map" },
         { level: 3, text: "1.1 Useful contest data axes" },
         { level: 3, text: "1.2 Shared join keys" },
         { level: 2, text: "Labor ministry data" },
         { level: 3, text: "2.1 Employment survey" },
         { level: 2, text: "2.2 Enterprise labor cost" },
+        { level: 2, text: "Korea employment information data" },
+        { level: 3, text: "3.1 EIS job status" },
       ];
-      assert(api.computeMarkdownOutlineDepths(headings).join(",") === "0,1,1,2,2,1,2,2", "outline depth normalization failed");
+      const outline = api.buildMarkdownOutlineItems(headings);
+      assert(outline.map((item) => item.depth).join(",") === "0,1,1,2,2,1,2,2,1,2", "outline depth normalization failed");
+      assert(outline[2].label === "1. Full data map", "outline should infer the first parent number");
+      assert(outline[5].label === "2. Labor ministry data", "outline should infer the second parent number");
+      assert(outline[8].label === "3. Korea employment information data", "outline should infer the third parent number");
     }),
     test("spreadsheet converter parses CSV with quoted line breaks", () => {
       const rows = api.parseDelimitedText("이름,메모\n홍길동,\"첫 줄\n둘째 줄\"\n김,완료", ",");

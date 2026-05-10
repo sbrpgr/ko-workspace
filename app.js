@@ -11139,44 +11139,72 @@ function extractMarkdownHeadings(markdown) {
 }
 
 function getMarkdownHeadingNumberDepth(text) {
-  const trimmed = String(text || "").trim();
-  const dotted = trimmed.match(/^(\d+(?:\.\d+)+)(?:[\s.)]|$)/);
-  if (dotted) {
-    return Math.min(dotted[1].split(".").length, 2);
-  }
-  if (/^\d+[.)]\s+/.test(trimmed)) {
-    return 1;
-  }
-  return null;
+  const parsed = parseMarkdownHeadingNumber(text);
+  if (!parsed) return null;
+  return parsed.parts.length;
 }
 
-function computeMarkdownOutlineDepths(headings) {
+function parseMarkdownHeadingNumber(text) {
+  const trimmed = String(text || "").trim();
+  const match = trimmed.match(/^(\d+(?:\.\d+)*)(?:[.)])?\s+/);
+  if (!match) return null;
+  return {
+    value: match[1],
+    parts: match[1].split("."),
+    rest: trimmed.slice(match[0].length).trim(),
+  };
+}
+
+function buildMarkdownOutlineItems(headings) {
   if (!headings.length) return [];
 
   const baseLevel = Math.min(...headings.map((heading) => heading.level));
-  const levelDepths = new Map();
-  return headings.map((heading) => {
-    const numericDepth = getMarkdownHeadingNumberDepth(heading.text);
-    let depth = numericDepth;
+  const parsedNumbers = headings.map((heading) => parseMarkdownHeadingNumber(heading.text));
+  const hasDocumentTitle = !parsedNumbers[0];
+  const inferredParentNumbers = new Map();
+  const seenTopNumbers = new Set();
 
-    if (depth === null) {
-      if (levelDepths.has(heading.level)) {
-        depth = levelDepths.get(heading.level);
-      } else {
-        const parentLevel = [...levelDepths.keys()]
-          .filter((level) => level < heading.level)
-          .sort((a, b) => b - a)[0];
-        depth = parentLevel ? levelDepths.get(parentLevel) + 1 : heading.level - baseLevel;
-      }
+  for (let index = 0; index < headings.length; index += 1) {
+    const parsed = parsedNumbers[index];
+    if (parsed) {
+      seenTopNumbers.add(parsed.parts[0]);
+      continue;
     }
 
-    depth = Math.min(Math.max(depth, 0), 2);
-    for (const level of [...levelDepths.keys()]) {
-      if (level > heading.level) levelDepths.delete(level);
+    const nextParsed = parsedNumbers[index + 1];
+    if (!nextParsed || nextParsed.parts.length < 2) continue;
+    const topNumber = nextParsed.parts[0];
+    if (!seenTopNumbers.has(topNumber)) {
+      inferredParentNumbers.set(index, topNumber);
+      seenTopNumbers.add(topNumber);
     }
-    levelDepths.set(heading.level, depth);
-    return depth;
+  }
+
+  return headings.map((heading, index) => {
+    const parsed = parsedNumbers[index];
+    const inferredNumber = inferredParentNumbers.get(index);
+    let depth = 0;
+    let label = heading.text;
+
+    if (parsed) {
+      depth = parsed.parts.length - (hasDocumentTitle ? 0 : 1);
+    } else if (inferredNumber) {
+      depth = hasDocumentTitle ? 1 : 0;
+      label = `${inferredNumber}. ${heading.text}`;
+    } else if (index > 0) {
+      depth = Math.max(heading.level - baseLevel, 1);
+    }
+
+    return {
+      ...heading,
+      depth: Math.min(Math.max(depth, 0), 2),
+      label,
+    };
   });
+}
+
+function computeMarkdownOutlineDepths(headings) {
+  return buildMarkdownOutlineItems(headings).map((item) => item.depth);
 }
 
 function renderMarkdownOutline(container, headings, preview, emptyText) {
@@ -11185,11 +11213,10 @@ function renderMarkdownOutline(container, headings, preview, emptyText) {
     return;
   }
 
-  const depths = computeMarkdownOutlineDepths(headings);
-  container.innerHTML = headings
-    .map((heading, index) => {
-      const depth = depths[index] || 0;
-      return `<button type="button" data-heading-index="${index}" data-level="${heading.level}" data-depth="${depth}">${escapeHtml(heading.text)}</button>`;
+  const outlineItems = buildMarkdownOutlineItems(headings);
+  container.innerHTML = outlineItems
+    .map((item, index) => {
+      return `<button type="button" data-heading-index="${index}" data-level="${item.level}" data-depth="${item.depth}" aria-level="${item.depth + 1}">${escapeHtml(item.label)}</button>`;
     })
     .join("");
   container.querySelectorAll("button").forEach((button) => {
