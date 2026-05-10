@@ -15,7 +15,7 @@ Current production baseline:
 - Cloudflare Pages project: `mic-script-generator`
 - Latest AdSense/SEO readiness commit: `580c060 Improve AdSense SEO readiness`
 - Latest English SEO polish commit: `0385e6d Polish English SEO copy`
-- Current static asset cache version: `20260511-08`
+- Current static asset cache version: `20260511-09`
 - English version deployed under `/en/` on the same domain, with Korean routes preserved
 - Category landing pages, privacy policy updates, sitemap updates, and core FAQ copy were deployed on 2026-04-29
 
@@ -96,7 +96,8 @@ Core constraints:
   - Browser-side Markdown file viewer for `.md`, `.markdown`, and `.txt` files
   - Supports direct file selection and drag-and-drop
   - Renders common Markdown blocks with escaped raw HTML, so file HTML/scripts are not executed
-  - Provides adjustable reader width, font size, line height, light/paper/dark themes, heading outline, preview/source/split modes, source copy, and plain-text copy
+  - Provides adjustable font size, line height, light/paper/dark themes, heading outline, preview/source/split modes, source copy, and plain-text copy
+  - Provides a `새창에서 보기/편집` popout that opens the loaded Markdown as an edit-only workspace with font-size control, automatic soft wrapping, copy, save, and close actions; the popout must not include a preview pane
   - Keeps the selected file and filename in the browser; no application-server upload or analytics content parameters
 - `이메일·URL·전화번호 추출기`
 - `중복 줄 제거`
