@@ -10886,14 +10886,20 @@ function renderMarkdownViewer(container) {
         lightTheme: "Light",
         paperTheme: "Paper",
         darkTheme: "Dark",
-        widthLabel: "Width",
         fontLabel: "Font",
         lineLabel: "Line",
+        openWindow: "Open window",
+        windowTitle: "Markdown Workspace",
+        editorTitle: "Edit MD",
+        previewTitle: "Preview",
+        saveEdited: "Save MD",
+        closeWindow: "Close",
         copySource: "Copy MD",
         copyText: "Copy text",
         sourceCopied: "Markdown source copied.",
         textCopied: "Plain text copied.",
         noCopy: "Nothing to copy yet.",
+        popupBlocked: "Allow pop-ups to open the Markdown workspace.",
         loaded: "Loaded",
         tooLarge: `Files up to ${formatBytes(MARKDOWN_VIEWER_MAX_BYTES)} are recommended.`,
         unsupported: "Choose an .md, .markdown, or .txt file.",
@@ -10922,14 +10928,20 @@ function renderMarkdownViewer(container) {
         lightTheme: "밝게",
         paperTheme: "종이",
         darkTheme: "어둡게",
-        widthLabel: "폭",
         fontLabel: "글자",
         lineLabel: "줄간격",
+        openWindow: "새창에서 보기",
+        windowTitle: "MD 새창 작업 공간",
+        editorTitle: "MD 편집",
+        previewTitle: "미리보기",
+        saveEdited: "MD 저장",
+        closeWindow: "닫기",
         copySource: "MD 복사",
         copyText: "텍스트 복사",
         sourceCopied: "마크다운 원문을 복사했습니다.",
         textCopied: "일반 텍스트를 복사했습니다.",
         noCopy: "복사할 내용이 없습니다.",
+        popupBlocked: "새창 작업 공간을 열 수 있도록 팝업을 허용해 주세요.",
         loaded: "불러옴",
         tooLarge: `${formatBytes(MARKDOWN_VIEWER_MAX_BYTES)} 이하 파일부터 권장합니다.`,
         unsupported: ".md, .markdown, .txt 파일을 선택해 주세요.",
@@ -10948,6 +10960,7 @@ function renderMarkdownViewer(container) {
             <p class="tool-note">${escapeHtml(copy.loadNote)}</p>
           </div>
           <div class="action-row compact-actions">
+            <button id="markdownViewerOpenWindow" type="button">${escapeHtml(copy.openWindow)}</button>
             <button id="markdownViewerCopySource" type="button">${escapeHtml(copy.copySource)}</button>
             <button id="markdownViewerCopyText" type="button">${escapeHtml(copy.copyText)}</button>
           </div>
@@ -10971,10 +10984,6 @@ function renderMarkdownViewer(container) {
               <option value="paper">${escapeHtml(copy.paperTheme)}</option>
               <option value="dark">${escapeHtml(copy.darkTheme)}</option>
             </select>
-          </label>
-          <label>${escapeHtml(copy.widthLabel)}
-            <input id="markdownViewerWidth" type="range" min="620" max="1320" step="20" value="920" />
-            <output id="markdownViewerWidthValue">920px</output>
           </label>
           <label>${escapeHtml(copy.fontLabel)}
             <input id="markdownViewerFont" type="range" min="14" max="22" step="1" value="17" />
@@ -11017,8 +11026,6 @@ function renderMarkdownViewer(container) {
     fileInput: container.querySelector("#markdownViewFile"),
     mode: container.querySelector("#markdownViewerMode"),
     theme: container.querySelector("#markdownViewerTheme"),
-    width: container.querySelector("#markdownViewerWidth"),
-    widthValue: container.querySelector("#markdownViewerWidthValue"),
     font: container.querySelector("#markdownViewerFont"),
     fontValue: container.querySelector("#markdownViewerFontValue"),
     line: container.querySelector("#markdownViewerLine"),
@@ -11030,21 +11037,19 @@ function renderMarkdownViewer(container) {
     source: container.querySelector("#markdownViewerSource"),
     status: container.querySelector("#markdownViewerStatus"),
     outline: container.querySelector("#markdownViewerOutlineList"),
+    openWindow: container.querySelector("#markdownViewerOpenWindow"),
     copySource: container.querySelector("#markdownViewerCopySource"),
     copyText: container.querySelector("#markdownViewerCopyText"),
   };
   const state = { markdown: "", plain: "", headings: [] };
 
   function updateReaderSettings() {
-    const width = Number(nodes.width.value) || 920;
     const fontSize = Number(nodes.font.value) || 17;
     const lineHeight = (Number(nodes.line.value) || 170) / 100;
-    nodes.widthValue.value = `${width}px`;
     nodes.fontValue.value = `${fontSize}px`;
     nodes.lineValue.value = lineHeight.toFixed(2);
     nodes.stage.dataset.mode = nodes.mode.value;
     nodes.stage.dataset.theme = nodes.theme.value;
-    nodes.reader.style.setProperty("--markdown-viewer-width", `${width}px`);
     nodes.reader.style.setProperty("--markdown-viewer-font-size", `${fontSize}px`);
     nodes.reader.style.setProperty("--markdown-viewer-line-height", String(lineHeight));
     nodes.source.hidden = nodes.mode.value === "preview";
@@ -11090,9 +11095,16 @@ function renderMarkdownViewer(container) {
   }
 
   nodes.fileInput.addEventListener("change", loadFile);
-  [nodes.mode, nodes.theme, nodes.width, nodes.font, nodes.line].forEach((node) => {
+  [nodes.mode, nodes.theme, nodes.font, nodes.line].forEach((node) => {
     node.addEventListener("input", updateReaderSettings);
     node.addEventListener("change", updateReaderSettings);
+  });
+  nodes.openWindow.addEventListener("click", () => {
+    if (!state.markdown.trim()) {
+      showToast(copy.noCopy);
+      return;
+    }
+    openMarkdownViewerWindow(state.markdown, copy);
   });
   nodes.copySource.addEventListener("click", async () => {
     if (!state.markdown.trim()) {
@@ -11110,6 +11122,257 @@ function renderMarkdownViewer(container) {
   });
 
   updateReaderSettings();
+}
+
+function openMarkdownViewerWindow(markdown, copy) {
+  const html = buildMarkdownViewerWindowHtml(markdown, {
+    title: copy.windowTitle,
+    editor: copy.editorTitle,
+    preview: copy.previewTitle,
+    font: copy.fontLabel,
+    copy: copy.copySource,
+    copied: copy.sourceCopied,
+    save: copy.saveEdited,
+    close: copy.closeWindow,
+    empty: copy.emptyPreview,
+  });
+  const url = URL.createObjectURL(new Blob([html], { type: "text/html;charset=utf-8" }));
+  const workspace = window.open(url, "_blank");
+  if (!workspace) {
+    URL.revokeObjectURL(url);
+    showToast(copy.popupBlocked);
+    return;
+  }
+  setTimeout(() => URL.revokeObjectURL(url), 60000);
+}
+
+function buildMarkdownViewerWindowHtml(markdown, labels) {
+  const lang = APP_LOCALE === "en" ? "en" : "ko";
+  const initialMarkdown = JSON.stringify(String(markdown || "")).replace(/[<>&]/g, (char) => {
+    return { "<": "\\u003c", ">": "\\u003e", "&": "\\u0026" }[char];
+  });
+  const labelData = JSON.stringify(labels).replace(/[<>&]/g, (char) => {
+    return { "<": "\\u003c", ">": "\\u003e", "&": "\\u0026" }[char];
+  });
+
+  return `<!doctype html>
+<html lang="${lang}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>${escapeHtml(labels.title)}</title>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; }
+      :root { --font-size: 17px; --line-height: 1.72; color-scheme: light; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr);
+        background: #f5f7fb;
+        color: #1f2937;
+        font-family: Arial, "Malgun Gothic", sans-serif;
+      }
+      header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        border-bottom: 1px solid #dfe5ee;
+        background: #ffffff;
+      }
+      h1 {
+        margin: 0 auto 0 0;
+        color: #172033;
+        font-size: 1rem;
+        line-height: 1.2;
+      }
+      label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #344054;
+        font-size: 0.86rem;
+        font-weight: 800;
+      }
+      input[type="range"] { width: 132px; }
+      button {
+        min-height: 34px;
+        border: 1px solid #cfd7e5;
+        border-radius: 8px;
+        background: #ffffff;
+        color: #20242d;
+        font-weight: 800;
+        padding: 0 12px;
+        cursor: pointer;
+      }
+      button:hover { border-color: #e5322d; }
+      main {
+        min-height: 0;
+        display: grid;
+        grid-template-columns: minmax(280px, 0.92fr) minmax(0, 1.08fr);
+        gap: 12px;
+        padding: 12px;
+      }
+      section {
+        min-width: 0;
+        min-height: 0;
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr);
+        gap: 8px;
+      }
+      h2 {
+        margin: 0;
+        color: #344054;
+        font-size: 0.88rem;
+      }
+      textarea,
+      .preview {
+        width: 100%;
+        min-width: 0;
+        min-height: 0;
+        height: 100%;
+        overflow: auto;
+        border: 1px solid #d8e0ec;
+        border-radius: 8px;
+        background: #ffffff;
+        font-size: var(--font-size);
+        line-height: var(--line-height);
+        overflow-wrap: anywhere;
+        word-break: break-word;
+      }
+      textarea {
+        resize: none;
+        padding: 14px;
+        color: #101828;
+        font-family: Consolas, "SFMono-Regular", "Malgun Gothic", monospace;
+        white-space: pre-wrap;
+      }
+      .preview {
+        padding: clamp(16px, 2.4vw, 28px);
+      }
+      .preview h1, .preview h2, .preview h3, .preview h4, .preview h5, .preview h6 {
+        color: #172033;
+        line-height: 1.25;
+      }
+      .preview pre {
+        overflow: auto;
+        white-space: pre-wrap;
+      }
+      .preview table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .preview th, .preview td {
+        border: 1px solid #dfe5ee;
+        padding: 6px 8px;
+        vertical-align: top;
+      }
+      .status {
+        color: #667085;
+        font-size: 0.78rem;
+        font-weight: 700;
+      }
+      @media (max-width: 860px) {
+        main { grid-template-columns: 1fr; grid-auto-rows: minmax(42vh, 1fr); }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>${escapeHtml(labels.title)}</h1>
+      <label>${escapeHtml(labels.font)} <input id="fontSize" type="range" min="13" max="28" value="17" /> <output id="fontValue">17px</output></label>
+      <button id="copySource" type="button">${escapeHtml(labels.copy)}</button>
+      <button id="saveSource" type="button">${escapeHtml(labels.save)}</button>
+      <button id="closeWindow" type="button">${escapeHtml(labels.close)}</button>
+      <span id="status" class="status"></span>
+    </header>
+    <main>
+      <section>
+        <h2>${escapeHtml(labels.editor)}</h2>
+        <textarea id="source" spellcheck="false"></textarea>
+      </section>
+      <section>
+        <h2>${escapeHtml(labels.preview)}</h2>
+        <div id="preview" class="preview"></div>
+      </section>
+    </main>
+    <script>
+      const labels = ${labelData};
+      const source = document.getElementById("source");
+      const preview = document.getElementById("preview");
+      const fontSize = document.getElementById("fontSize");
+      const fontValue = document.getElementById("fontValue");
+      const status = document.getElementById("status");
+      source.value = ${initialMarkdown};
+
+      function fallbackEscape(value) {
+        return String(value || "").replace(/[&<>"']/g, (char) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;",
+        })[char]);
+      }
+
+      function fallbackMarkdownToHtml(markdown) {
+        const escaped = fallbackEscape(markdown).trim();
+        if (!escaped) return "<p>" + fallbackEscape(labels.empty) + "</p>";
+        return escaped
+          .split(/\\n{2,}/)
+          .map((block) => {
+            const heading = block.match(/^(#{1,6})\\s+(.+)$/);
+            if (heading) return "<h" + heading[1].length + ">" + heading[2] + "</h" + heading[1].length + ">";
+            return "<p>" + block.replace(/\\n/g, "<br>") + "</p>";
+          })
+          .join("");
+      }
+
+      function render() {
+        const markdown = source.value;
+        if (window.opener && typeof window.opener.markdownToHtml === "function") {
+          preview.innerHTML = window.opener.markdownToHtml(markdown, labels.empty);
+        } else {
+          preview.innerHTML = fallbackMarkdownToHtml(markdown);
+        }
+        const lines = markdown ? markdown.split("\\n").length : 0;
+        status.textContent = markdown.length.toLocaleString() + " chars · " + lines.toLocaleString() + " lines";
+      }
+
+      function setFont() {
+        const size = Number(fontSize.value) || 17;
+        document.documentElement.style.setProperty("--font-size", size + "px");
+        fontValue.value = size + "px";
+      }
+
+      document.getElementById("copySource").addEventListener("click", async () => {
+        await navigator.clipboard.writeText(source.value);
+      });
+      document.getElementById("saveSource").addEventListener("click", () => {
+        const blob = new Blob([source.value], { type: "text/markdown;charset=utf-8" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "markdown-document.md";
+        document.body.appendChild(link);
+        link.click();
+        setTimeout(() => {
+          URL.revokeObjectURL(link.href);
+          link.remove();
+        }, 0);
+      });
+      document.getElementById("closeWindow").addEventListener("click", () => window.close());
+      source.addEventListener("input", render);
+      fontSize.addEventListener("input", () => {
+        setFont();
+        render();
+      });
+      setFont();
+      render();
+    </script>
+  </body>
+</html>`;
 }
 
 function isMarkdownViewerFile(file) {

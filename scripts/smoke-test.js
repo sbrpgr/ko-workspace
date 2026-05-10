@@ -23,6 +23,7 @@ const API_NAMES = [
   "extractMarkdownHeadings",
   "buildMarkdownOutlineItems",
   "computeMarkdownOutlineDepths",
+  "buildMarkdownViewerWindowHtml",
   "extractContacts",
   "removeDuplicateLines",
   "replaceInText",
@@ -349,6 +350,19 @@ function buildLogicTests(api, app) {
       assert(api.extractMarkdownHeadings(markdown).map((item) => item.text).join(",") === "제목,둘째", "heading extraction failed");
       assert(api.extractMarkdownHeadings("## 11. Ideation questions")[0].text === "11. Ideation questions", "heading extraction should preserve top-level numbers");
       assert(api.markdownToPlainText(markdown).includes("링크 https://example.com"), "plain text conversion failed");
+      const windowHtml = api.buildMarkdownViewerWindowHtml("</script>\n# Title", {
+        title: "Markdown Workspace",
+        editor: "Edit MD",
+        preview: "Preview",
+        font: "Font",
+        copy: "Copy MD",
+        copied: "Copied",
+        save: "Save MD",
+        close: "Close",
+        empty: "Empty",
+      });
+      assert(windowHtml.includes("textarea id=\"source\""), "markdown viewer window editor missing");
+      assert(!windowHtml.includes("</script>\\n# Title"), "markdown viewer window source was not script-safe");
     }),
     test("markdown viewer outline normalizes uneven heading levels", () => {
       const headings = [

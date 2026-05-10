@@ -4722,7 +4722,7 @@ body.tool-mode .markdown-editor-v2 .markdown-toolbar button::before {
 
 .markdown-viewer-controls {
   display: grid;
-  grid-template-columns: repeat(5, minmax(130px, 1fr));
+  grid-template-columns: repeat(4, minmax(130px, 1fr));
   gap: 10px;
   align-items: end;
 }
@@ -4843,7 +4843,7 @@ body.tool-mode .markdown-editor-v2 .markdown-toolbar button::before {
 }
 
 .markdown-viewer-preview {
-  width: min(100%, var(--markdown-viewer-width, 920px));
+  width: 100%;
   margin: 0 auto;
   padding: clamp(20px, 3vw, 38px);
   border: 1px solid #e4e9f1;
@@ -4860,7 +4860,7 @@ body.tool-mode .markdown-editor-v2 .markdown-toolbar button::before {
 }
 
 .markdown-viewer-source {
-  width: min(100%, var(--markdown-viewer-width, 920px));
+  width: 100%;
   max-height: clamp(420px, 66vh, 840px);
   margin: 0 auto;
   padding: clamp(18px, 2.6vw, 30px);
