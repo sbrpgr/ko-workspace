@@ -2772,8 +2772,13 @@ const AUDIO_PREPROCESS_MAX_GAIN = 12;
 const AUDIO_TRANSFORMERS_MODULE_URL = "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.1.0";
 const AUDIO_EDITOR_MAX_BYTES = 180 * 1024 * 1024;
 const AUDIO_EDITOR_UNDO_LIMIT = 10;
-const AUDIO_EDITOR_WAVEFORM_POINTS = 1800;
+const AUDIO_EDITOR_WAVEFORM_POINTS = 24000;
 const AUDIO_EDITOR_MIN_SELECTION_SECONDS = 0.03;
+const AUDIO_EDITOR_MIN_ZOOM = 1;
+const AUDIO_EDITOR_MAX_ZOOM = 16;
+const AUDIO_EDITOR_ZOOM_STEP = 1.18;
+const AUDIO_EDITOR_MAX_WAVEFORM_WIDTH = 24000;
+const AUDIO_EDITOR_MAX_CANVAS_BACKING_WIDTH = 32760;
 const MARKDOWN_VIEWER_MAX_BYTES = 8 * 1024 * 1024;
 let audioTranscriptionWorker = null;
 let audioTranscriptionWorkerUrl = "";
@@ -3103,15 +3108,16 @@ function renderAudioEditor(container) {
           <div class="section-heading">
             <div>
               <h2>파형 편집</h2>
-              <p id="audioEditMeta" class="tool-note">파일을 선택하면 파형이 표시됩니다. 파형을 드래그해 구간을 선택하고, 클릭하면 붙여넣을 위치가 이동합니다.</p>
+              <p id="audioEditMeta" class="tool-note">파일을 선택하면 파형이 표시됩니다. 파형을 드래그해 구간을 선택하고, 클릭하면 붙여넣을 위치가 이동합니다. 마우스 휠로 확대/축소하고, 가로 스크롤로 긴 녹음을 이동할 수 있습니다.</p>
             </div>
           </div>
-          <div class="audio-waveform-frame">
+          <div id="audioEditWaveformFrame" class="audio-waveform-frame" tabindex="0" aria-label="녹음 파일 파형 스크롤 영역">
             <canvas id="audioEditWaveform" class="audio-waveform-canvas" width="960" height="240" aria-label="녹음 파일 파형"></canvas>
           </div>
           <div class="audio-editor-readout" aria-live="polite">
             <span id="audioEditPlayhead">재생 위치 0:00</span>
             <span id="audioEditSelectionMeta">선택 구간 없음</span>
+            <span id="audioEditZoomMeta">확대 100%</span>
           </div>
           <div class="action-row">
             <button id="audioEditPlayAllBtn" class="primary-action" type="button" disabled>전체 재생</button>
@@ -3166,6 +3172,7 @@ function renderAudioEditor(container) {
     originalSamples: null,
     sampleRate: 44100,
     peaks: null,
+    zoom: AUDIO_EDITOR_MIN_ZOOM,
     selection: null,
     clipboard: null,
     playheadSeconds: 0,
@@ -3185,9 +3192,11 @@ function renderAudioEditor(container) {
     fileStatus: container.querySelector("#audioEditFileStatus"),
     selectionStatus: container.querySelector("#audioEditSelectionStatus"),
     meta: container.querySelector("#audioEditMeta"),
+    waveformFrame: container.querySelector("#audioEditWaveformFrame"),
     canvas: container.querySelector("#audioEditWaveform"),
     playhead: container.querySelector("#audioEditPlayhead"),
     selectionMeta: container.querySelector("#audioEditSelectionMeta"),
+    zoomMeta: container.querySelector("#audioEditZoomMeta"),
     status: container.querySelector("#audioEditStatus"),
     playAllBtn: container.querySelector("#audioEditPlayAllBtn"),
     playSelectionBtn: container.querySelector("#audioEditPlaySelectionBtn"),
@@ -3215,6 +3224,7 @@ function renderAudioEditor(container) {
   });
 
   nodes.canvas.addEventListener("pointerdown", handleWaveformPointerDown);
+  nodes.canvas.addEventListener("wheel", handleWaveformWheel, { passive: false });
   nodes.playAllBtn.addEventListener("click", () => playAudioEditorRange(0, getAudioEditorDuration()));
   nodes.playSelectionBtn.addEventListener("click", () => {
     const range = getCurrentAudioSelectionRange();
@@ -3233,7 +3243,7 @@ function renderAudioEditor(container) {
   nodes.downloadBtn.addEventListener("click", downloadEditedAudio);
   nodes.resetBtn.addEventListener("click", resetAudioEditor);
   document.addEventListener("keydown", handleAudioEditorKeyboard);
-  window.addEventListener("resize", drawAudioEditorWaveform);
+  window.addEventListener("resize", handleWaveformResize);
 
   async function loadAudioEditorFile(file) {
     stopAudioEditorPlayback();
@@ -3248,11 +3258,12 @@ function renderAudioEditor(container) {
       state.selection = null;
       state.clipboard = null;
       state.playheadSeconds = 0;
+      resetAudioEditorViewport();
       state.undoStack = [];
       state.redoStack = [];
       nodes.meta.textContent = `${formatDuration(getAudioEditorDuration())} · ${formatBytes(file.size)} · ${decoded.channelCount}채널 녹음을 모노 편집 파형으로 준비했습니다.`;
       nodes.fileStatus.textContent = "편집 준비";
-      nodes.status.textContent = "파형을 드래그해 구간을 선택하거나, 클릭해 붙여넣을 위치를 지정하세요.";
+      nodes.status.textContent = "파형을 드래그해 구간을 선택하세요. 긴 녹음은 마우스 휠로 확대/축소하고 가로 스크롤로 이동할 수 있습니다.";
       drawAudioEditorWaveform();
       updateAudioEditorUi();
     } catch (error) {
@@ -3260,6 +3271,7 @@ function renderAudioEditor(container) {
       state.originalSamples = null;
       state.peaks = null;
       state.selection = null;
+      resetAudioEditorViewport();
       nodes.fileStatus.textContent = "읽기 실패";
       nodes.meta.textContent =
         "브라우저가 이 휴대폰 녹음 형식을 읽지 못했습니다. m4a, aac, mp3, wav 형식이더라도 기기와 코덱에 따라 Chrome 또는 Edge에서 다시 시도해야 할 수 있습니다.";
@@ -3268,6 +3280,53 @@ function renderAudioEditor(container) {
       drawAudioEditorWaveform();
       updateAudioEditorUi();
     }
+  }
+
+  function resetAudioEditorViewport() {
+    state.zoom = AUDIO_EDITOR_MIN_ZOOM;
+    nodes.canvas.style.width = "100%";
+    if (nodes.waveformFrame) nodes.waveformFrame.scrollLeft = 0;
+  }
+
+  function handleWaveformWheel(event) {
+    if (!state.samples?.length) return;
+    event.preventDefault();
+    if (event.shiftKey) {
+      nodes.waveformFrame.scrollLeft += event.deltaY || event.deltaX;
+      return;
+    }
+    const delta = Math.abs(event.deltaY) > 0 ? event.deltaY : event.deltaX;
+    if (!delta) return;
+    const zoomFactor = Math.pow(AUDIO_EDITOR_ZOOM_STEP, -delta / 100);
+    setAudioEditorZoom(state.zoom * zoomFactor, event.clientX);
+  }
+
+  function setAudioEditorZoom(nextZoom, anchorClientX = null) {
+    const frame = nodes.waveformFrame;
+    const previousWidth = getAudioEditorWaveformWidth();
+    const frameRect = frame.getBoundingClientRect();
+    const anchorOffset = Number.isFinite(anchorClientX)
+      ? clampNumber(anchorClientX - frameRect.left, 0, frame.clientWidth)
+      : frame.clientWidth / 2;
+    const anchorRatio = previousWidth > 0 ? clampNumber((frame.scrollLeft + anchorOffset) / previousWidth, 0, 1) : 0;
+    const next = clampAudioEditorZoom(nextZoom);
+    if (Math.abs(next - state.zoom) < 0.001) return;
+    state.zoom = next;
+    drawAudioEditorWaveform();
+    const nextWidth = getAudioEditorWaveformWidth();
+    frame.scrollLeft = clampNumber(anchorRatio * nextWidth - anchorOffset, 0, Math.max(0, nextWidth - frame.clientWidth));
+    updateAudioEditorUi();
+  }
+
+  function handleWaveformResize() {
+    const frame = nodes.waveformFrame;
+    const previousWidth = getAudioEditorWaveformWidth();
+    const centerRatio = previousWidth > 0 ? clampNumber((frame.scrollLeft + frame.clientWidth / 2) / previousWidth, 0, 1) : 0;
+    state.zoom = clampAudioEditorZoom(state.zoom);
+    drawAudioEditorWaveform();
+    const nextWidth = getAudioEditorWaveformWidth();
+    frame.scrollLeft = clampNumber(centerRatio * nextWidth - frame.clientWidth / 2, 0, Math.max(0, nextWidth - frame.clientWidth));
+    updateAudioEditorUi();
   }
 
   function handleWaveformPointerDown(event) {
@@ -3396,7 +3455,10 @@ function renderAudioEditor(container) {
     setAudioEditorSamples(new Float32Array(state.originalSamples));
     state.selection = null;
     state.playheadSeconds = 0;
+    resetAudioEditorViewport();
     nodes.status.textContent = "처음 불러온 상태로 되돌렸습니다.";
+    drawAudioEditorWaveform();
+    updateAudioEditorUi();
   }
 
   function pushAudioEditorUndo() {
@@ -3440,6 +3502,7 @@ function renderAudioEditor(container) {
     state.playbackStartedAt = state.playbackContext.currentTime - start;
     state.playbackEndSeconds = end;
     state.playheadSeconds = start;
+    ensureAudioEditorPlayheadVisible();
     source.onended = () => {
       if (state.source === source) {
         state.source = null;
@@ -3489,6 +3552,7 @@ function renderAudioEditor(container) {
   function tickAudioEditorPlayback() {
     if (!state.isPlaying || !state.playbackContext) return;
     state.playheadSeconds = clampNumber(state.playbackContext.currentTime - state.playbackStartedAt, 0, state.playbackEndSeconds);
+    ensureAudioEditorPlayheadVisible();
     drawAudioEditorWaveform();
     updateAudioEditorUi();
     state.animationId = requestAnimationFrame(tickAudioEditorPlayback);
@@ -3533,6 +3597,7 @@ function renderAudioEditor(container) {
     nodes.selectionMeta.textContent = range
       ? `선택 ${formatDuration(range.startSample / state.sampleRate)} - ${formatDuration(range.endSample / state.sampleRate)} (${formatDuration((range.endSample - range.startSample) / state.sampleRate)})`
       : `선택 구간 없음 · 전체 ${formatDuration(duration)}`;
+    nodes.zoomMeta.textContent = `확대 ${Math.round((hasAudio ? state.zoom : AUDIO_EDITOR_MIN_ZOOM) * 100)}%`;
     nodes.playAllBtn.disabled = !hasAudio || state.isPlaying;
     nodes.playSelectionBtn.disabled = !hasAudio || !range || state.isPlaying;
     nodes.stopBtn.disabled = !state.isPlaying;
@@ -3552,12 +3617,51 @@ function renderAudioEditor(container) {
     return state.samples?.length ? state.samples.length / state.sampleRate : 0;
   }
 
+  function getAudioEditorViewportWidth() {
+    const frameWidth = nodes.waveformFrame?.clientWidth || 0;
+    const canvasWidth = nodes.canvas?.clientWidth || nodes.canvas?.width || 960;
+    return Math.max(320, Math.floor(frameWidth || canvasWidth || 960));
+  }
+
+  function getAudioEditorMaxZoom() {
+    const viewportWidth = getAudioEditorViewportWidth();
+    return Math.max(AUDIO_EDITOR_MIN_ZOOM, Math.min(AUDIO_EDITOR_MAX_ZOOM, AUDIO_EDITOR_MAX_WAVEFORM_WIDTH / viewportWidth));
+  }
+
+  function clampAudioEditorZoom(zoom) {
+    const value = Number.isFinite(zoom) ? zoom : AUDIO_EDITOR_MIN_ZOOM;
+    return clampNumber(value, AUDIO_EDITOR_MIN_ZOOM, getAudioEditorMaxZoom());
+  }
+
+  function getAudioEditorWaveformWidth() {
+    const viewportWidth = getAudioEditorViewportWidth();
+    const zoom = state.samples?.length ? clampAudioEditorZoom(state.zoom) : AUDIO_EDITOR_MIN_ZOOM;
+    return Math.max(viewportWidth, Math.round(viewportWidth * zoom));
+  }
+
+  function ensureAudioEditorPlayheadVisible() {
+    if (!state.samples?.length || state.zoom <= AUDIO_EDITOR_MIN_ZOOM) return;
+    const frame = nodes.waveformFrame;
+    const waveformWidth = getAudioEditorWaveformWidth();
+    const playheadX = durationToCanvasX(state.playheadSeconds, waveformWidth);
+    const margin = Math.min(96, Math.max(32, frame.clientWidth * 0.12));
+    const leftEdge = frame.scrollLeft + margin;
+    const rightEdge = frame.scrollLeft + frame.clientWidth - margin;
+    if (playheadX < leftEdge) {
+      frame.scrollLeft = Math.max(0, playheadX - margin);
+    } else if (playheadX > rightEdge) {
+      frame.scrollLeft = Math.min(Math.max(0, waveformWidth - frame.clientWidth), playheadX - frame.clientWidth + margin);
+    }
+  }
+
   function drawAudioEditorWaveform() {
     const canvas = nodes.canvas;
     const context = canvas.getContext("2d");
-    const width = Math.max(320, Math.floor(canvas.clientWidth || canvas.width || 960));
+    state.zoom = clampAudioEditorZoom(state.zoom);
+    const width = getAudioEditorWaveformWidth();
+    canvas.style.width = `${width}px`;
     const height = Math.max(160, Math.floor(canvas.clientHeight || 240));
-    const ratio = window.devicePixelRatio || 1;
+    const ratio = Math.max(0.5, Math.min(window.devicePixelRatio || 1, AUDIO_EDITOR_MAX_CANVAS_BACKING_WIDTH / Math.max(1, width)));
     if (canvas.width !== Math.round(width * ratio) || canvas.height !== Math.round(height * ratio)) {
       canvas.width = Math.round(width * ratio);
       canvas.height = Math.round(height * ratio);

@@ -459,6 +459,8 @@ function buildLogicTests(api, app) {
       const peaks = api.buildAudioWaveformPeaks(samples, 20);
       assert(peaks.length === 40 && peaks.some((value) => value !== 0), "audio editor waveform peaks failed");
       assert(app.includes("function handleAudioEditorKeyboard"), "audio editor spacebar playback shortcut is missing");
+      assert(app.includes("function handleWaveformWheel"), "audio editor wheel zoom handler is missing");
+      assert(app.includes("audioEditZoomMeta"), "audio editor zoom readout is missing");
     }),
     test("beta tool title attaches beta label without a whitespace break", () => {
       const title = api.renderToolTitle({ title: "녹음 파일 텍스트 변환", beta: true });

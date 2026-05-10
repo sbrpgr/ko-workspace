@@ -1372,15 +1372,39 @@ body.home-mode .tool-workspace {
 }
 
 .audio-waveform-frame {
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scrollbar-gutter: stable;
   border: 1px solid #d8e2ef;
   border-radius: 8px;
   background: #f8fbff;
 }
 
+.audio-waveform-frame:focus {
+  border-color: #e5322d;
+  box-shadow: 0 0 0 3px rgba(229, 50, 45, 0.14);
+  outline: none;
+}
+
+.audio-waveform-frame::-webkit-scrollbar {
+  height: 10px;
+}
+
+.audio-waveform-frame::-webkit-scrollbar-track {
+  background: #edf2f8;
+}
+
+.audio-waveform-frame::-webkit-scrollbar-thumb {
+  border: 2px solid #edf2f8;
+  border-radius: 999px;
+  background: #a8b3c7;
+}
+
 .audio-waveform-canvas {
   display: block;
   width: 100%;
+  min-width: 100%;
   height: 240px;
   touch-action: none;
   cursor: crosshair;

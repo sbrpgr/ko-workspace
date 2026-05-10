@@ -15,7 +15,7 @@ Current production baseline:
 - Cloudflare Pages project: `mic-script-generator`
 - Latest AdSense/SEO readiness commit: `580c060 Improve AdSense SEO readiness`
 - Latest English SEO polish commit: `0385e6d Polish English SEO copy`
-- Current static asset cache version: `20260511-09`
+- Current static asset cache version: `20260511-10`
 - English version deployed under `/en/` on the same domain, with Korean routes preserved
 - Category landing pages, privacy policy updates, sitemap updates, and core FAQ copy were deployed on 2026-04-29
 
@@ -61,6 +61,7 @@ Core constraints:
   - Browser-side waveform editor for common phone recording files
   - Targets common iPhone Voice Memos and Android recorder outputs such as m4a, aac, mp3, and wav when the browser can decode the codec
   - Draws a local waveform on canvas and lets users drag to select a range
+  - Supports mouse-wheel waveform zoom and horizontal scrolling so long recordings can be edited at a workable scale
   - Supports selection playback, selection deletion, keeping only the selected range, copying a selected segment, pasting the copied segment at the playhead or selection start, undo, redo, and volume adjustment
   - Exports edited audio as mono PCM WAV for broad browser-side compatibility
   - Keeps original recordings and edited output in the browser; no application-server upload or analytics content parameters
