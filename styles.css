@@ -4667,9 +4667,12 @@ body.tool-mode .markdown-editor-v2 .markdown-toolbar button::before {
 }
 
 .markdown-viewer-outline-list button {
+  --outline-indent: 0px;
+  display: block;
   width: 100%;
-  justify-content: start;
-  padding: 7px 8px;
+  min-height: 0;
+  margin: 0;
+  padding: 7px 8px 7px calc(8px + var(--outline-indent));
   border-color: transparent;
   background: transparent;
   color: #344054;
@@ -4677,14 +4680,15 @@ body.tool-mode .markdown-editor-v2 .markdown-toolbar button::before {
   font-weight: 700;
   line-height: 1.35;
   text-align: left;
+  white-space: normal;
 }
 
 .markdown-viewer-outline-list button[data-level="2"] {
-  padding-left: 18px;
+  --outline-indent: 14px;
 }
 
 .markdown-viewer-outline-list button[data-level="3"] {
-  padding-left: 30px;
+  --outline-indent: 28px;
   color: #667085;
 }
 
