@@ -69,6 +69,7 @@
 
 - `36e8cad Add browser audio editor`에서 새 브라우저 기반 파형 편집 도구를 배포했다.
 - `14cd537 Add audio editor spacebar playback`에서 스페이스바 재생/멈춤 토글을 추가했다.
+- `b126794 Add audio waveform zoom and scroll`에서 긴 녹음 작업을 위한 파형 마우스 휠 확대/축소와 가로 스크롤을 추가했다.
 - `5bf4287 Use English dictation for English site` 이후 영어 버전 `/en/tools/audio-editor/`도 같은 도구 로직을 영어 정적 페이지에서 사용한다.
 - 운영 URL `https://ko-workspace.com/tools/audio-editor/`와 `https://ko-workspace.com/en/tools/audio-editor/`는 최신 전역 캐시 버전을 따라야 한다.
 - 일반 지원 형식은 `.m4a`, `.aac`, `.mp3`, `.wav`로 제한했다.
