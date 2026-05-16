@@ -15,7 +15,7 @@ Current production baseline:
 - Cloudflare Pages project: `mic-script-generator`
 - Latest AdSense/SEO readiness commit: `580c060 Improve AdSense SEO readiness`
 - Latest English SEO polish commit: `0385e6d Polish English SEO copy`
-- Current static asset cache version: `20260516-03`
+- Current static asset cache version: `20260517-01`
 - English version deployed under `/en/`; Japanese and Simplified Chinese versions are prepared under `/ja/` and `/zh/` on the same domain, with Korean routes preserved
 - Category landing pages, privacy policy updates, sitemap updates, and core FAQ copy were deployed on 2026-04-29
 
