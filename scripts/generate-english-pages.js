@@ -47,6 +47,8 @@ const LOCALES = [
         "ko-workspace is built for the small browser tasks that sit between larger pieces of work.",
     },
     toolEyebrow: "Free Online Tool",
+    guideEyebrow: "Quick Flow",
+    guideTitle: "Workflow",
     categoryTitleSuffix: "Free Online Tools",
     static: {
       useCase: "Use Case",
@@ -124,6 +126,8 @@ const LOCALES = [
         "ko-workspaceは、大きな作業の間に挟まる小さなブラウザ作業をすばやく片付けるためのツール集です。",
     },
     toolEyebrow: "無料オンラインツール",
+    guideEyebrow: "使い方",
+    guideTitle: "操作の流れ",
     categoryTitleSuffix: "無料オンラインツール",
     static: {
       useCase: "利用シーン",
@@ -131,18 +135,48 @@ const LOCALES = [
       result: "ブラウザで生成された結果",
       categoryResult: "選択したツールの出力ファイルやコピー用テキスト",
       readMore: "詳しく見る",
+      scenarioListTitle: "よくある使い方",
+      toolScenarioTitle: (title) => `${title}の利用シーン`,
+      categoryScenarioTitle: (title) => `${title}の活用シーン`,
       notesTitle: "このページの要点",
       notes: [
-        "実用的な範囲で、作業データはブラウザ中心の流れで扱います。",
+        "会議、提出、共有、公開前チェックなど、日本の実務で起こりやすい小さな作業を想定しています。",
         "アップロード、入力、変換、結果表示の操作面と広告枠を分けています。",
-        "結果を使う前に確認しやすいよう、各ページで現実的な利用シーンを説明します。",
+        "結果をそのまま使い切らず、共有前に人が確認しやすい流れを前提にしています。",
       ],
+      categoryScenarios: {
+        text: [
+          "社内メール、チャット、報告書、採用書類など、短い文章を提出前に整えます。",
+          "AI回答、PDFからのコピー、名簿データなど、貼り付けると崩れやすいテキストを扱います。",
+          "文字数、差分、重複、連絡先抽出など、手作業だと見落としやすい確認を軽くします。",
+        ],
+        pdf: [
+          "見積書、請求書、契約書、申請資料など、相手に渡すPDFを提出順に整えます。",
+          "長い資料から必要ページだけを取り出し、会議や確認依頼に使いやすくします。",
+          "スキャン画像や写真資料をPDF化し、メールや業務システムに添付しやすくします。",
+        ],
+        image: [
+          "応募フォーム、学校提出、自治体手続きなどの容量やサイズ制限に合わせます。",
+          "ブログ、EC、社内資料に使う画像を、見た目を確認しながら軽く整えます。",
+          "写真を共有する前に位置情報などのメタデータを外し、安心して渡せる状態にします。",
+        ],
+        subtitle: [
+          "YouTube、社内研修、講義動画の字幕を公開前に整えます。",
+          "SRTとVTTを使い分け、動画編集ソフトやWebプレイヤーの指定形式に合わせます。",
+          "字幕の時間が少しずれたとき、全体をまとめて補正します。",
+        ],
+        "voice-video": [
+          "打ち合わせ録音、研修動画、自己紹介動画などを共有前の下準備に使います。",
+          "スマートフォン録音やブラウザ録画を、サーバー保存なしの流れで確認・整理します。",
+          "文字起こしや録画結果は、公開前に必ず人が確認する前提で扱います。",
+        ],
+      },
       paragraphs: ({ intro, subject, result }) => [
-        `${intro} 重いアプリを開く、ログインする、ファイルをアップロードする、待ち行列を待つといった小さな中断を減らすことを目指しています。`,
-        `${subject}では、入力を選び、必要なオプションだけを確認し、ブラウザ内の処理を実行してから、${result}をコピーまたはダウンロードする流れを重視しています。`,
-        "ツールで扱うファイルやテキストには実務情報が含まれることがあります。そのため、ブラウザで処理できる作業はローカルセッション内にとどめ、保存する内容は利用者が決める設計にしています。",
-        "広告と計測は作業操作から分離しています。アップロード領域、テキスト入力、変換ボタン、結果プレビューの中に広告を入れない方針です。",
-        "各ツールは作業を速くするための補助であり、専門的な確認を置き換えるものではありません。重要な文書、字幕、録音、公開資料は利用前に人が確認してください。",
+        `${intro} 日本語の実務では、稟議書、提出資料、社内共有、学校や自治体への提出など、少し整えるだけで次の確認が楽になる場面が多くあります。`,
+        `${subject}は、その場で大きなアプリを開くほどではない作業を、入力、確認、処理、${result}のコピーまたは保存まで短く済ませるための補助として使えます。`,
+        "扱うファイルやテキストには、取引先名、個人名、録音内容、写真の位置情報などが含まれることがあります。ブラウザで処理できる作業はローカルセッション内にとどめ、保存や共有の判断は利用者側で行う設計にしています。",
+        "広告と計測は作業操作から分離しています。アップロード領域、入力欄、変換ボタン、結果プレビューの中に広告を入れないことで、急ぎの提出前でも操作を見失いにくくしています。",
+        "各ツールは下準備を速くするための補助であり、最終確認を置き換えるものではありません。重要な文書、字幕、録音、公開資料は、共有や提出の前に人が内容を確認してください。",
       ],
     },
     document: {
@@ -201,6 +235,8 @@ const LOCALES = [
         "ko-workspace 面向夹在大型工作之间的小型浏览器任务，让这些步骤更快完成。",
     },
     toolEyebrow: "免费在线工具",
+    guideEyebrow: "使用流程",
+    guideTitle: "操作步骤",
     categoryTitleSuffix: "免费在线工具",
     static: {
       useCase: "使用场景",
@@ -208,18 +244,48 @@ const LOCALES = [
       result: "浏览器生成的结果",
       categoryResult: "所选工具输出的文件或可复制文本",
       readMore: "阅读更多",
+      scenarioListTitle: "常见使用场景",
+      toolScenarioTitle: (title) => `${title}使用场景`,
+      categoryScenarioTitle: (title) => `${title}适用场景`,
       notesTitle: "本页重点",
       notes: [
-        "在可行范围内，工具工作数据采用浏览器优先的处理方式。",
+        "围绕会议纪要、材料提交、群内协作、内容发布前检查等常见中文办公场景编写。",
         "上传、输入、转换和结果控件与广告位置保持分离。",
-        "每个页面说明实际使用场景，方便在信任结果前进行检查。",
+        "工具负责减少重复步骤，最终内容仍建议在转发、提交或公开前人工确认。",
       ],
+      categoryScenarios: {
+        text: [
+          "整理飞书、企业微信、邮件、报告、客服话术中的文本，让复制和转发更顺畅。",
+          "处理AI回答、PDF复制内容、名单、链接和关键词列表，减少手动清理时间。",
+          "在提交简历、公告、方案或运营文案前，快速检查字数、差异和重复内容。",
+        ],
+        pdf: [
+          "合并合同、报价单、报销材料、投标附件或学校申请资料，按提交顺序整理。",
+          "从长PDF中提取关键页，发给同事、客户或老师确认。",
+          "把收据、截图、扫描图合成PDF，方便归档、发送和系统上传。",
+        ],
+        image: [
+          "按照报名系统、政务表单、学校或公司后台的尺寸和容量要求处理图片。",
+          "为电商、公众号、官网或群公告准备更轻、更合适的图片文件。",
+          "分享照片前去掉位置和设备信息，降低不必要的隐私暴露。",
+        ],
+        subtitle: [
+          "为课程视频、访谈、短视频或内部培训整理SRT/VTT字幕。",
+          "根据视频平台、播放器或剪辑软件要求切换字幕格式。",
+          "字幕整体快慢不一致时，按秒调整全片时间轴。",
+        ],
+        "voice-video": [
+          "把会议录音、培训录屏、产品演示或自我介绍视频整理成便于复核的材料。",
+          "在浏览器中处理手机录音、摄像头录制和文字草稿，减少临时安装软件的麻烦。",
+          "转写、剪辑和录制结果都建议在发给同事、客户或公开发布前人工确认。",
+        ],
+      },
       paragraphs: ({ intro, subject, result }) => [
-        `${intro} 目标是减少那些打断工作的步骤，例如打开大型软件、登录、上传文件、等待队列，然后再下载结果。`,
-        `对于 ${subject}，推荐流程很直接：选择输入，检查必要选项，运行浏览器端处理，查看输出，然后复制或下载${result}。`,
-        "这些工具处理的文本和文件可能包含真实工作资料。因此，能在浏览器中完成的任务会尽量留在本地会话中，由用户决定保存什么。",
-        "广告和统计与工具操作保持分离。上传区、文本框、转换按钮和结果预览都被视为工作区域，广告位置放在这些流程之外。",
-        "这些工具是实用辅助，并不能替代专业审查。重要的转写、法律文件、公开材料和客户文件在使用前仍应由人工确认。",
+        `${intro} 在中文办公环境里，很多任务并不需要打开大型软件：可能只是整理一段群消息、压缩几张图片、拆出几页PDF，或把录音先变成可校对的文字。`,
+        `${subject}适合放在这些中间步骤里使用。选择输入，确认必要选项，在浏览器端完成处理，再复制或下载${result}，就可以回到原来的文档、群聊、表格或提交流程。`,
+        "这些文本和文件可能包含客户信息、联系方式、合同页、录音内容或照片位置等敏感资料。因此，能在浏览器中完成的处理会尽量留在本地会话中，由用户自行决定是否保存和分享。",
+        "广告和统计与工具操作保持分离。上传区、文本框、转换按钮和结果预览都被视为工作区域，避免在赶材料、发通知或提交文件时干扰操作。",
+        "这些工具用于减少重复劳动，并不替代人工审核。合同、公开材料、客户文件、字幕和转写稿在正式发送或发布前，仍应由人确认内容是否准确。",
       ],
     },
     document: {
@@ -303,10 +369,11 @@ function renderLocale(locale, api, version) {
       staticContent: renderStaticContent(locale, {
         id: `${tool.id}-${locale.id}`,
         eyebrow: locale.static.useCase,
-        title: `${tool.title} workflow`,
+        title: locale.static.toolScenarioTitle ? locale.static.toolScenarioTitle(tool.title) : `${tool.title} workflow`,
         intro: tool.summary,
         subject: tool.title,
         result: locale.static.result,
+        scenarioItems: tool.examples || [],
       }),
     }, version), version);
   }
@@ -327,10 +394,11 @@ function renderLocale(locale, api, version) {
       staticContent: renderStaticContent(locale, {
         id: `${page.id}-category-${locale.id}`,
         eyebrow: locale.static.categoryGuide,
-        title: `${page.title} scenarios`,
+        title: locale.static.categoryScenarioTitle ? locale.static.categoryScenarioTitle(page.title) : `${page.title} scenarios`,
         intro: page.description,
         subject: page.title,
         result: locale.static.categoryResult,
+        scenarioItems: locale.static.categoryScenarios?.[page.id] || [],
       }),
     }, version), version);
   }
@@ -567,8 +635,8 @@ ${JSON.stringify(config.schema, null, 2)}
                 <article class="panel guide-panel">
                   <div class="section-heading">
                     <div>
-                      <p class="eyebrow">Quick Flow</p>
-                      <h2>Workflow</h2>
+                      <p class="eyebrow">${escapeHtml(locale.guideEyebrow)}</p>
+                      <h2>${escapeHtml(locale.guideTitle)}</h2>
                     </div>
                   </div>
                   <ol id="toolGuideList" class="guide-list"></ol>
@@ -663,7 +731,7 @@ ${config.body}
 `;
 }
 
-function renderStaticContent(locale, { id, eyebrow, title, intro, subject, result }) {
+function renderStaticContent(locale, { id, eyebrow, title, intro, subject, result, scenarioItems = [] }) {
   if (locale.id === "en") {
     return `<!-- static-content:start -->
           <section class="panel static-content-panel" aria-labelledby="staticContentTitle-${escapeAttr(id)}">
@@ -729,7 +797,7 @@ function renderStaticContent(locale, { id, eyebrow, title, intro, subject, resul
               </summary>
               <article class="static-content-article">
                 <div class="static-content-body">
-                  ${locale.static.paragraphs({ intro, subject, result }).map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("\n                  ")}
+                  ${renderStaticBody(locale, { intro, subject, result, scenarioItems })}
                 </div>
                 <aside class="static-content-notes" aria-label="Key points">
                   <h3>${escapeHtml(locale.static.notesTitle)}</h3>
@@ -741,6 +809,26 @@ function renderStaticContent(locale, { id, eyebrow, title, intro, subject, resul
             </details>
           </section>
           <!-- static-content:end -->`;
+}
+
+function renderStaticBody(locale, { intro, subject, result, scenarioItems }) {
+  const blocks = [];
+  const scenarioList = renderScenarioList(locale, scenarioItems);
+  if (scenarioList) blocks.push(scenarioList);
+  blocks.push(...locale.static.paragraphs({ intro, subject, result }).map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`));
+  return blocks.join("\n                  ");
+}
+
+function renderScenarioList(locale, scenarioItems) {
+  const items = Array.isArray(scenarioItems) ? scenarioItems.filter(Boolean) : [];
+  if (!items.length) return "";
+  const title = locale.static.scenarioListTitle || locale.static.useCase || "Scenarios";
+  return `<section class="static-content-scenarios">
+                    <h3>${escapeHtml(title)}</h3>
+                    <ul class="tool-example-list">
+                      ${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("\n                      ")}
+                    </ul>
+                  </section>`;
 }
 
 function privacyBody(locale) {
