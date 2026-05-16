@@ -11,7 +11,7 @@
 - 영어 카테고리 정의: `app.js`의 `CATEGORY_PAGE_DEFS_EN`
 - 일본어/중국어 도구 정의: `app.js`의 `TOOL_DEFS_LOCALE_OVERRIDES`
 - 일본어/중국어 카테고리 정의: `app.js`의 `CATEGORY_PAGE_DEFS_BY_LOCALE`
-- 현재 정적 리소스 캐시 버전: `20260516-02`
+- 현재 정적 리소스 캐시 버전: `20260516-03`
 - 최근 영어 SEO 배포 커밋: `0385e6d Polish English SEO copy`
 
 ## 분리 원칙
