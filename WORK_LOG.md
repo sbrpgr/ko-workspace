@@ -1,5 +1,22 @@
 # Work Log
 
+## 2026-05-17
+
+### Foreign-Language Tool Localization And E2E Release
+
+- Completed the EN/JA/ZH tool localization release without changing the Korean route structure or Korean tool URLs.
+- Localized dynamic runtime messages for browser-side statuses, copy/download toasts, validation errors, and result summaries across text, image, PDF, subtitle, audio, webcam, and speech-recognition tools.
+- Regenerated localized static pages with `node scripts/generate-english-pages.js` and kept shared static asset cache version at `20260517-01`.
+- Ran `npm.cmd run check`; syntax checks, site-tag validation, project audit, 49-check smoke test, and `npm audit --omit=dev` passed.
+- Deployed commit `97baf2f Complete foreign tool localization testing fixes` to `origin/main`.
+- Verified production `https://ko-workspace.com/app.js?v=20260517-01`, `/en/`, `/ja/`, `/zh/`, `robots.txt`, and `sitemap.xml` returned `200 OK`.
+- Ran production E2E for EN/JA/ZH × 30 tools = 90 scenarios with fixture files and browser permission automation.
+- Production E2E result: 0 failures, 0 warnings, and 0 Korean-language leakage findings on the foreign-language pages.
+- Per locale, page load passed 30/30, transform/run passed 30/30, upload passed 17 with 12 N/A and QR generator having no upload step, copy passed 17 with 13 N/A, download passed 20 with 10 N/A, and error-state checks passed 29 with 1 N/A.
+- PDF/image/audio/webcam/speech-recognition paths were covered with generated fixtures, Chromium fake media permissions, and fake SpeechRecognition where physical devices cannot be automated.
+- Search Console remains a manual handoff item: submit or recheck `https://ko-workspace.com/sitemap.xml`, then request indexing for `/en/`, `/ja/`, `/zh/` and priority tool pages.
+- Performance benchmarking was not part of this release validation; LCP, memory, large-file processing time, and conversion-duration baselines remain a separate follow-up.
+
 ## 2026-05-07
 
 ### QR URL Indexing Cleanup

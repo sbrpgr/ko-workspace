@@ -15,8 +15,10 @@ Current production baseline:
 - Cloudflare Pages project: `mic-script-generator`
 - Latest AdSense/SEO readiness commit: `580c060 Improve AdSense SEO readiness`
 - Latest English SEO polish commit: `0385e6d Polish English SEO copy`
+- Latest foreign-language tool localization/E2E commit: `97baf2f Complete foreign tool localization testing fixes`
 - Current static asset cache version: `20260517-01`
-- English version deployed under `/en/`; Japanese and Simplified Chinese versions are prepared under `/ja/` and `/zh/` on the same domain, with Korean routes preserved
+- English version deployed under `/en/`; Japanese and Simplified Chinese versions deployed under `/ja/` and `/zh/` on the same domain, with Korean routes preserved
+- 2026-05-17 production E2E passed EN/JA/ZH × 30 tools = 90 scenarios with 0 failures and 0 Korean-language leakage findings
 - Category landing pages, privacy policy updates, sitemap updates, and core FAQ copy were deployed on 2026-04-29
 
 Core constraints:
@@ -262,13 +264,22 @@ Footer and policy pages should expose the same operator information:
 - Run manual iPhone/Android recording-file checks for the audio editor after each audio-editor change, especially m4a, aac, mp3, and wav files
 - Manually scan generated QR samples on real mobile devices after QR design changes, especially colored or rounded styles
 - Monitor category landing pages in Search Console and expand category copy if pages are indexed with weak impressions
-- Monitor English `/en/` pages in Search Console and expand English FAQ/use-case copy if impressions are weak or queries do not match intent
-- Submit or recheck `https://ko-workspace.com/sitemap.xml` in Search Console after English SEO/page changes
-- Use Search Console URL inspection for the priority English URLs:
+- Monitor English `/en/`, Japanese `/ja/`, and Simplified Chinese `/zh/` pages in Search Console and expand localized FAQ/use-case copy if impressions are weak or queries do not match intent
+- Submit or recheck `https://ko-workspace.com/sitemap.xml` in Search Console after multilingual SEO/page changes
+- Use Search Console URL inspection for the priority localized URLs:
   - `https://ko-workspace.com/en/`
+  - `https://ko-workspace.com/ja/`
+  - `https://ko-workspace.com/zh/`
   - `https://ko-workspace.com/en/tools/voice-to-text/`
   - `https://ko-workspace.com/en/tools/audio-editor/`
   - `https://ko-workspace.com/en/tools/audio-file-transcription/`
+  - `https://ko-workspace.com/ja/tools/audio-file-transcription/`
+  - `https://ko-workspace.com/zh/tools/audio-file-transcription/`
+  - `https://ko-workspace.com/ja/tools/audio-editor/`
+  - `https://ko-workspace.com/zh/tools/audio-editor/`
+  - `https://ko-workspace.com/en/tools/pdf-merge/`
+  - `https://ko-workspace.com/ja/tools/pdf-merge/`
+  - `https://ko-workspace.com/zh/tools/pdf-merge/`
   - `https://ko-workspace.com/en/tools/text/`
   - `https://ko-workspace.com/en/tools/pdf/`
   - `https://ko-workspace.com/en/tools/image/`
@@ -281,6 +292,7 @@ Footer and policy pages should expose the same operator information:
 - Tune AdSense placements after approval and keep ads outside editor/upload/drop zones
 - Monitor MediaPipe background-effect load failures and add a local fallback if CDN reliability becomes a problem
 - Request indexing for new or materially changed tool pages in Search Console
+- Build a separate performance benchmark for EN/JA/ZH tool pages; the 2026-05-17 run verified functional E2E only, not LCP, memory, large-file processing time, or conversion duration under load
 
 ## Verification Checklist
 
@@ -292,6 +304,7 @@ Before committing or deploying broad platform changes:
 - For new HTML pages, confirm these IDs exist: `heroEyebrow`, `pageTitle`, `pageDescription`, `toolSearch`, `categoryFilters`, `toolList`, `toolOverview`, `toolWorkspace`, `toolGuideList`, `helpBtn`, `helpDialog`, `helpCloseBtn`, `selectionCopyBtn`
 - Confirm `sitemap.xml` includes new indexable URLs
 - For localized pages, confirm canonical, `hreflang="ko"`, `hreflang="en"`, `hreflang="ja"`, `hreflang="zh-Hans"`, and `hreflang="x-default"` are present and point to the intended URLs
+- For multilingual functional releases, run the EN/JA/ZH × 30-tool E2E matrix or document which fixture/permission cases were intentionally excluded
 - After push, verify GitHub Actions / Cloudflare Pages success
 - For category pages, verify each production URL returns `200` and contains `data-category-page`
 - For English SEO changes, verify the production `/en/` URL or changed `/en/tools/{slug}/` URL returns `200` and contains the updated title/meta copy
