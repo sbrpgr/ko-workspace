@@ -3,6 +3,11 @@ const path = require("node:path");
 
 const ROOT = path.resolve(__dirname, "..");
 const ORIGIN = "https://ko-workspace.com";
+const LOCALIZED_LOCALES = [
+  { id: "en", hreflang: "en", htmlLang: "en", visibleMin: 1500 },
+  { id: "ja", hreflang: "ja", htmlLang: "ja", visibleMin: 800 },
+  { id: "zh", hreflang: "zh-Hans", htmlLang: "zh-Hans", visibleMin: 750 },
+];
 const REQUIRED_TOOL_PAGE_IDS = [
   "heroEyebrow",
   "pageTitle",
@@ -24,7 +29,7 @@ function main() {
     ...auditAssetVersion(),
     ...auditToolPages(),
     ...auditCategoryPages(),
-    ...auditEnglishPages(),
+    ...auditLocalizedPages(),
     ...auditSeoRedirects(),
     ...auditStaticReviewContent(),
     ...auditLibraryCsp(),
@@ -146,89 +151,76 @@ function auditCategoryPages() {
   return problems;
 }
 
-function auditEnglishPages() {
+function auditLocalizedPages() {
   const problems = [];
   const app = read(path.join(ROOT, "app.js"));
   const tools = parseRegistry(app, "TOOL_DEFS");
   const pages = parseRegistry(app, "CATEGORY_PAGE_DEFS");
   const sitemap = read(path.join(ROOT, "sitemap.xml"));
   const deployWorkflow = read(path.join(ROOT, ".github", "workflows", "cloudflare-pages.yml"));
-  const englishHome = path.join(ROOT, "en", "index.html");
 
-  if (!/cp\s+-R\s+en\s+\.cloudflare-dist\//.test(deployWorkflow)) {
-    problems.push(".github/workflows/cloudflare-pages.yml: deployment does not copy en/ into .cloudflare-dist");
-  }
+  for (const locale of LOCALIZED_LOCALES) {
+    const copyPattern = new RegExp(`cp\\s+-R\\s+${escapeRegExp(locale.id)}\\s+\\.cloudflare-dist/`);
+    if (!copyPattern.test(deployWorkflow)) {
+      problems.push(`.github/workflows/cloudflare-pages.yml: deployment does not copy ${locale.id}/ into .cloudflare-dist`);
+    }
 
-  problems.push(...auditEnglishAppPage({
-    label: "English home",
-    file: englishHome,
-    canonicalPath: "/en/",
-    koPath: "/",
-    dataAttribute: 'data-page="home"',
-    sitemap,
-  }));
-
-  for (const tool of tools) {
-    const enPath = `/en${tool.path}`;
-    const koFile = path.join(ROOT, tool.path.slice(1), "index.html");
-    problems.push(...auditEnglishAppPage({
-      label: `${tool.id} English page`,
-      file: path.join(ROOT, enPath.slice(1), "index.html"),
-      canonicalPath: enPath,
-      koPath: tool.path,
-      dataAttribute: `data-tool="${tool.id}"`,
+    problems.push(...auditLocalizedAppPage({
+      label: `${locale.id} home`,
+      locale,
+      file: path.join(ROOT, locale.id, "index.html"),
+      canonicalPath: localizedPath(locale, "/"),
+      koPath: "/",
+      dataAttribute: 'data-page="home"',
       sitemap,
     }));
-    problems.push(...auditKoreanAlternate(koFile, enPath));
-  }
 
-  for (const page of pages) {
-    const enPath = `/en${page.path}`;
-    const koFile = path.join(ROOT, page.path.slice(1), "index.html");
-    problems.push(...auditEnglishAppPage({
-      label: `${page.id} English category page`,
-      file: path.join(ROOT, enPath.slice(1), "index.html"),
-      canonicalPath: enPath,
-      koPath: page.path,
-      dataAttribute: `data-category-page="${page.id}"`,
-      sitemap,
-    }));
-    problems.push(...auditKoreanAlternate(koFile, enPath));
-  }
+    for (const tool of tools) {
+      const localePath = localizedPath(locale, tool.path);
+      const koFile = path.join(ROOT, tool.path.slice(1), "index.html");
+      problems.push(...auditLocalizedAppPage({
+        label: `${tool.id} ${locale.id} page`,
+        locale,
+        file: path.join(ROOT, localePath.slice(1), "index.html"),
+        canonicalPath: localePath,
+        koPath: tool.path,
+        dataAttribute: `data-tool="${tool.id}"`,
+        sitemap,
+      }));
+      problems.push(...auditKoreanAlternateSet(koFile, tool.path));
+    }
 
-  for (const page of [
-    { label: "English privacy page", file: path.join(ROOT, "en", "privacy", "index.html"), canonicalPath: "/en/privacy/", koPath: "/privacy" },
-    { label: "English terms page", file: path.join(ROOT, "en", "terms", "index.html"), canonicalPath: "/en/terms/", koPath: "/terms" },
-  ]) {
-    if (!fs.existsSync(page.file)) {
-      problems.push(`${page.label}: missing ${toRelative(page.file)}`);
-      continue;
+    for (const page of pages) {
+      const localePath = localizedPath(locale, page.path);
+      const koFile = path.join(ROOT, page.path.slice(1), "index.html");
+      problems.push(...auditLocalizedAppPage({
+        label: `${page.id} ${locale.id} category page`,
+        locale,
+        file: path.join(ROOT, localePath.slice(1), "index.html"),
+        canonicalPath: localePath,
+        koPath: page.path,
+        dataAttribute: `data-category-page="${page.id}"`,
+        sitemap,
+      }));
+      problems.push(...auditKoreanAlternateSet(koFile, page.path));
     }
-    const html = read(page.file);
-    const relative = toRelative(page.file);
-    if (!html.includes('data-locale="en"')) problems.push(`${relative}: missing data-locale="en"`);
-    if (!html.includes(`<link rel="canonical" href="${ORIGIN}${page.canonicalPath}"`)) {
-      problems.push(`${relative}: missing canonical ${ORIGIN}${page.canonicalPath}`);
-    }
-    if (!html.includes(`hreflang="ko" href="${ORIGIN}${page.koPath}"`)) {
-      problems.push(`${relative}: missing Korean hreflang ${ORIGIN}${page.koPath}`);
-    }
-    if (!html.includes(`hreflang="en" href="${ORIGIN}${page.canonicalPath}"`)) {
-      problems.push(`${relative}: missing English hreflang ${ORIGIN}${page.canonicalPath}`);
-    }
-    if (!sitemap.includes(`<loc>${ORIGIN}${page.canonicalPath}</loc>`)) {
-      problems.push(`sitemap.xml: missing ${ORIGIN}${page.canonicalPath}`);
+
+    for (const page of [
+      { label: `${locale.id} privacy page`, file: path.join(ROOT, locale.id, "privacy", "index.html"), canonicalPath: localizedPath(locale, "/privacy"), koPath: "/privacy" },
+      { label: `${locale.id} terms page`, file: path.join(ROOT, locale.id, "terms", "index.html"), canonicalPath: localizedPath(locale, "/terms"), koPath: "/terms" },
+    ]) {
+      problems.push(...auditLocalizedDocumentPage({ ...page, locale, sitemap }));
     }
   }
 
-  problems.push(...auditKoreanAlternate(path.join(ROOT, "index.html"), "/en/"));
-  problems.push(...auditKoreanAlternate(path.join(ROOT, "privacy.html"), "/en/privacy/"));
-  problems.push(...auditKoreanAlternate(path.join(ROOT, "terms.html"), "/en/terms/"));
+  problems.push(...auditKoreanAlternateSet(path.join(ROOT, "index.html"), "/"));
+  problems.push(...auditKoreanAlternateSet(path.join(ROOT, "privacy.html"), "/privacy"));
+  problems.push(...auditKoreanAlternateSet(path.join(ROOT, "terms.html"), "/terms"));
 
   return problems;
 }
 
-function auditEnglishAppPage({ label, file, canonicalPath, koPath, dataAttribute, sitemap }) {
+function auditLocalizedAppPage({ label, locale, file, canonicalPath, koPath, dataAttribute, sitemap }) {
   const problems = [];
   if (!fs.existsSync(file)) {
     problems.push(`${label}: missing ${toRelative(file)}`);
@@ -237,18 +229,13 @@ function auditEnglishAppPage({ label, file, canonicalPath, koPath, dataAttribute
 
   const html = read(file);
   const relative = toRelative(file);
-  if (!html.includes('data-locale="en"')) problems.push(`${relative}: missing data-locale="en"`);
+  if (!html.includes(`data-locale="${locale.id}"`)) problems.push(`${relative}: missing data-locale="${locale.id}"`);
   if (!html.includes(dataAttribute)) problems.push(`${relative}: missing ${dataAttribute}`);
-  if (!html.includes(`<html lang="en"`)) problems.push(`${relative}: missing lang=en`);
+  if (!html.includes(`<html lang="${locale.htmlLang}"`)) problems.push(`${relative}: missing lang=${locale.htmlLang}`);
   if (!html.includes(`<link rel="canonical" href="${ORIGIN}${canonicalPath}"`)) {
     problems.push(`${relative}: missing canonical ${ORIGIN}${canonicalPath}`);
   }
-  if (!html.includes(`hreflang="ko" href="${ORIGIN}${koPath}"`)) {
-    problems.push(`${relative}: missing Korean hreflang ${ORIGIN}${koPath}`);
-  }
-  if (!html.includes(`hreflang="en" href="${ORIGIN}${canonicalPath}"`)) {
-    problems.push(`${relative}: missing English hreflang ${ORIGIN}${canonicalPath}`);
-  }
+  problems.push(...auditAlternateSet(html, relative, koPath));
   if (!sitemap.includes(`<loc>${ORIGIN}${canonicalPath}</loc>`)) {
     problems.push(`sitemap.xml: missing ${ORIGIN}${canonicalPath}`);
   }
@@ -264,22 +251,60 @@ function auditEnglishAppPage({ label, file, canonicalPath, koPath, dataAttribute
     .replace(/<[^>]+>/g, " ")
     .replace(/\s+/g, " ")
     .trim();
-  if (visible.length < 1500) {
-    problems.push(`${relative}: English static visible content is too thin (${visible.length} chars, expected 1500+)`);
+  if (visible.length < locale.visibleMin) {
+    problems.push(`${relative}: localized static visible content is too thin (${visible.length} chars, expected ${locale.visibleMin}+)`);
   }
 
   return problems;
 }
 
-function auditKoreanAlternate(file, enPath) {
+function auditLocalizedDocumentPage({ label, locale, file, canonicalPath, koPath, sitemap }) {
+  const problems = [];
+  if (!fs.existsSync(file)) {
+    problems.push(`${label}: missing ${toRelative(file)}`);
+    return problems;
+  }
+  const html = read(file);
+  const relative = toRelative(file);
+  if (!html.includes(`data-locale="${locale.id}"`)) problems.push(`${relative}: missing data-locale="${locale.id}"`);
+  if (!html.includes(`<html lang="${locale.htmlLang}"`)) problems.push(`${relative}: missing lang=${locale.htmlLang}`);
+  if (!html.includes(`<link rel="canonical" href="${ORIGIN}${canonicalPath}"`)) {
+    problems.push(`${relative}: missing canonical ${ORIGIN}${canonicalPath}`);
+  }
+  problems.push(...auditAlternateSet(html, relative, koPath));
+  if (!sitemap.includes(`<loc>${ORIGIN}${canonicalPath}</loc>`)) {
+    problems.push(`sitemap.xml: missing ${ORIGIN}${canonicalPath}`);
+  }
+  return problems;
+}
+
+function auditKoreanAlternateSet(file, koPath) {
   const problems = [];
   if (!fs.existsSync(file)) return problems;
   const html = read(file);
-  const relative = toRelative(file);
-  if (!html.includes(`hreflang="en" href="${ORIGIN}${enPath}"`)) {
-    problems.push(`${relative}: missing English hreflang ${ORIGIN}${enPath}`);
+  return auditAlternateSet(html, toRelative(file), koPath);
+}
+
+function auditAlternateSet(html, relative, koPath) {
+  const problems = [];
+  const alternates = [
+    ["ko", koPath],
+    ...LOCALIZED_LOCALES.map((locale) => [locale.hreflang, localizedPath(locale, koPath)]),
+    ["x-default", koPath],
+  ];
+  for (const [hreflang, pathname] of alternates) {
+    if (!html.includes(`hreflang="${hreflang}" href="${ORIGIN}${pathname}"`)) {
+      problems.push(`${relative}: missing hreflang ${hreflang} ${ORIGIN}${pathname}`);
+    }
   }
   return problems;
+}
+
+function localizedPath(locale, koPath) {
+  if (koPath === "/") return `/${locale.id}/`;
+  if (koPath === "/privacy") return `/${locale.id}/privacy/`;
+  if (koPath === "/terms") return `/${locale.id}/terms/`;
+  return `/${locale.id}${koPath}`;
 }
 
 function auditSeoRedirects() {

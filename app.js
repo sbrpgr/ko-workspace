@@ -549,24 +549,92 @@ const TOOL_DEFS = [
   },
 ];
 
-const APP_LOCALE = detectAppLocale();
-const IS_ENGLISH_LOCALE = APP_LOCALE === "en";
-const BRAND_NAME_LOCALIZED = IS_ENGLISH_LOCALE ? "ko-workspace" : BRAND_NAME;
-const BRAND_DESCRIPTION_LOCALIZED = IS_ENGLISH_LOCALE
-  ? "ko-workspace is a collection of browser-based text, image, PDF, subtitle, audio, and video tools that run without sign-up."
-  : BRAND_DESCRIPTION;
-const ALL_CATEGORY_LABEL = IS_ENGLISH_LOCALE ? "All" : "\uC804\uCCB4";
-const CATEGORY_LABELS_EN = {
-  "\uC74C\uC131": "Audio",
-  영상: "Video",
-  "\uD14D\uC2A4\uD2B8": "Text",
-  이미지: "Image",
-  PDF: "PDF",
-  자막: "Subtitles",
+const LOCALE_CONFIGS = {
+  ko: {
+    id: "ko",
+    pathPrefix: "",
+    htmlLang: "ko",
+    languageCode: "ko-KR",
+    numberLocale: "ko-KR",
+    brandName: BRAND_NAME,
+    brandDescription: BRAND_DESCRIPTION,
+    allCategoryLabel: "\uC804\uCCB4",
+    categoryOrder: ["\uC804\uCCB4", "\uC74C\uC131", "영상", "\uD14D\uC2A4\uD2B8", "\uC774\uBBF8\uC9C0", "PDF", "\uC790\uB9C9"],
+  },
+  en: {
+    id: "en",
+    pathPrefix: "/en",
+    htmlLang: "en",
+    languageCode: "en-US",
+    numberLocale: "en-US",
+    brandName: "ko-workspace",
+    brandDescription:
+      "ko-workspace is a collection of browser-based text, image, PDF, subtitle, audio, and video tools that run without sign-up.",
+    allCategoryLabel: "All",
+    categoryOrder: ["All", "Audio", "Video", "Text", "Image", "PDF", "Subtitles"],
+  },
+  ja: {
+    id: "ja",
+    pathPrefix: "/ja",
+    htmlLang: "ja",
+    languageCode: "ja-JP",
+    numberLocale: "ja-JP",
+    brandName: "ko-workspace",
+    brandDescription:
+      "ko-workspaceは、登録なしで使えるブラウザ処理中心のテキスト、画像、PDF、字幕、音声、動画ツール集です。",
+    allCategoryLabel: "すべて",
+    categoryOrder: ["すべて", "音声", "動画", "テキスト", "画像", "PDF", "字幕"],
+  },
+  zh: {
+    id: "zh",
+    pathPrefix: "/zh",
+    htmlLang: "zh-Hans",
+    languageCode: "zh-CN",
+    numberLocale: "zh-CN",
+    brandName: "ko-workspace",
+    brandDescription:
+      "ko-workspace 是一组无需注册、以浏览器本地处理为中心的文本、图片、PDF、字幕、音频和视频工具。",
+    allCategoryLabel: "全部",
+    categoryOrder: ["全部", "音频", "视频", "文本", "图片", "PDF", "字幕"],
+  },
 };
-const CATEGORY_ORDER = IS_ENGLISH_LOCALE
-  ? ["All", "Audio", "Video", "Text", "Image", "PDF", "Subtitles"]
-  : ["\uC804\uCCB4", "\uC74C\uC131", "영상", "\uD14D\uC2A4\uD2B8", "\uC774\uBBF8\uC9C0", "PDF", "\uC790\uB9C9"];
+const SUPPORTED_LOCALES = Object.keys(LOCALE_CONFIGS);
+const CATEGORY_LABELS_BY_LOCALE = {
+  en: {
+    "\uC74C\uC131": "Audio",
+    영상: "Video",
+    "\uD14D\uC2A4\uD2B8": "Text",
+    이미지: "Image",
+    PDF: "PDF",
+    자막: "Subtitles",
+  },
+  ja: {
+    "\uC74C\uC131": "音声",
+    영상: "動画",
+    "\uD14D\uC2A4\uD2B8": "テキスト",
+    이미지: "画像",
+    PDF: "PDF",
+    자막: "字幕",
+  },
+  zh: {
+    "\uC74C\uC131": "音频",
+    영상: "视频",
+    "\uD14D\uC2A4\uD2B8": "文本",
+    이미지: "图片",
+    PDF: "PDF",
+    자막: "字幕",
+  },
+};
+
+const APP_LOCALE = detectAppLocale();
+const ACTIVE_LOCALE_CONFIG = LOCALE_CONFIGS[APP_LOCALE] || LOCALE_CONFIGS.ko;
+const IS_ENGLISH_LOCALE = APP_LOCALE === "en";
+const IS_KOREAN_LOCALE = APP_LOCALE === "ko";
+const BRAND_NAME_LOCALIZED = ACTIVE_LOCALE_CONFIG.brandName;
+const BRAND_DESCRIPTION_LOCALIZED = ACTIVE_LOCALE_CONFIG.brandDescription;
+const ALL_CATEGORY_LABEL = ACTIVE_LOCALE_CONFIG.allCategoryLabel;
+const CATEGORY_LABELS_ACTIVE = CATEGORY_LABELS_BY_LOCALE[APP_LOCALE] || {};
+const CATEGORY_ORDER = ACTIVE_LOCALE_CONFIG.categoryOrder;
 const UI_TEXT = {
   ko: {
     freeTool: "무료 온라인 도구",
@@ -602,6 +670,8 @@ const UI_TEXT = {
     selectionCopy: "선택한 문장 복사",
     selectionCopied: "선택한 내용을 복사했습니다.",
     betaLabel: "(베타)",
+    previousTools: "이전 도구 보기",
+    nextTools: "다음 도구 보기",
   },
   en: {
     freeTool: "Free Online Tool",
@@ -637,6 +707,82 @@ const UI_TEXT = {
     selectionCopy: "Copy selected text",
     selectionCopied: "Selected text copied.",
     betaLabel: "(Beta)",
+    previousTools: "Previous tools",
+    nextTools: "Next tools",
+  },
+  ja: {
+    freeTool: "無料オンラインツール",
+    noSearchResult: "検索条件に一致するツールがありません。",
+    searchPlaceholder: "ツールを検索",
+    searchLabel: "ツールを検索",
+    privacy: "プライバシー",
+    terms: "利用規約",
+    quickFlow: "使い方",
+    directoryLabel: "ツール一覧",
+    categoryTools: "カテゴリ別ツール",
+    categorySeoSuffix: "をブラウザでそのまま使えます",
+    detailSummary: "使用例とFAQ",
+    help: "ヘルプ",
+    examplesSuffix: "の使用例",
+    faqHeading: "よくある質問",
+    fallbackNotConnected: "このツールはまだ接続されていません。",
+    fallbackExample1: (title) => `${title}で繰り返し作業をブラウザ内で処理できます。`,
+    fallbackExample2: (title) => `${title}の結果をコピーするか、必要なファイルとして保存できます。`,
+    freeQuestion: (title) => `${title}は無料で使えますか？`,
+    freeAnswer: (title) => `はい。${title}は登録なしで使える無料のブラウザベースのko-workspaceツールです。`,
+    privacyQuestion: (title) => `${title}は入力内容を保存しますか？`,
+    privacyAnswer:
+      "いいえ。ツールの作業データはブラウザ内で処理され、ko-workspaceのアプリケーションサーバーには保存されません。Google AnalyticsやAdSenseは各ポリシーに基づいてCookieや広告識別子を使用する場合があります。",
+    useQuestion: (title) => `${title}はどんな作業に使えますか？`,
+    defaultFaqQuestion: (title) => `${title}はどんな場面で使うと便利ですか？`,
+    otherTools: "ほかのツール",
+    openToolLabel: (title) => `${title}を開く`,
+    bookmarkTitle: "ブックマークに追加",
+    bookmarkAria: "ブックマーク追加の案内",
+    bookmarkToast: (shortcut) => `ブラウザのブックマークは${shortcut}で追加できます。`,
+    servicePrinciples: "サービス方針を見る",
+    selectionCopy: "選択したテキストをコピー",
+    selectionCopied: "選択した内容をコピーしました。",
+    betaLabel: "(ベータ)",
+    previousTools: "前のツール",
+    nextTools: "次のツール",
+  },
+  zh: {
+    freeTool: "免费在线工具",
+    noSearchResult: "没有符合搜索条件的工具。",
+    searchPlaceholder: "搜索工具",
+    searchLabel: "搜索工具",
+    privacy: "隐私",
+    terms: "条款",
+    quickFlow: "使用流程",
+    directoryLabel: "工具目录",
+    categoryTools: "按类别查看工具",
+    categorySeoSuffix: "，可直接在浏览器中使用",
+    detailSummary: "使用示例和常见问题",
+    help: "帮助",
+    examplesSuffix: " 使用示例",
+    faqHeading: "常见问题",
+    fallbackNotConnected: "此工具尚未连接。",
+    fallbackExample1: (title) => `使用 ${title} 可直接在浏览器中处理重复工作。`,
+    fallbackExample2: (title) => `复制 ${title} 的结果，或下载输出文件用于下一步。`,
+    freeQuestion: (title) => `${title} 可以免费使用吗？`,
+    freeAnswer: (title) => `可以。${title} 是 ko-workspace 提供的免费浏览器工具，无需注册。`,
+    privacyQuestion: (title) => `${title} 会保存我的输入吗？`,
+    privacyAnswer:
+      "不会。工具工作数据设计为留在浏览器中处理，不会保存到 ko-workspace 应用服务器。Google Analytics 和 AdSense 可能会按各自政策使用 Cookie 或广告标识符。",
+    useQuestion: (title) => `${title} 适合哪些工作？`,
+    defaultFaqQuestion: (title) => `什么时候适合使用 ${title}？`,
+    otherTools: "其他工具",
+    openToolLabel: (title) => `打开 ${title}`,
+    bookmarkTitle: "添加书签",
+    bookmarkAria: "如何将此页面添加到书签",
+    bookmarkToast: (shortcut) => `可使用 ${shortcut} 将此页面加入浏览器书签。`,
+    servicePrinciples: "查看服务原则",
+    selectionCopy: "复制选中的文本",
+    selectionCopied: "已复制选中的文本。",
+    betaLabel: "(测试版)",
+    previousTools: "上一组工具",
+    nextTools: "下一组工具",
   },
 };
 const TOOL_DEFS_EN_OVERRIDES = {
@@ -1010,6 +1156,354 @@ const TOOL_DEFS_EN_OVERRIDES = {
     ],
   },
 };
+const TOOL_DEFS_LOCALIZED_COPY = {
+  ja: {
+    "voice-to-text": {
+      title: "音声入力テキスト化",
+      summary: "ブラウザのマイクで日本語の音声を入力し、下書きや議事メモに整えます。",
+      keywords: ["音声入力", "音声 テキスト化", "文字起こし", "議事メモ"],
+    },
+    "audio-file-transcription": {
+      title: "録音ファイル文字起こし",
+      summary: "短い録音ファイルをブラウザ内で読み込み、確認用の文字起こし下書きを作ります。",
+      keywords: ["録音 文字起こし", "m4a 文字起こし", "音声ファイル", "ブラウザSTT"],
+    },
+    "audio-editor": {
+      title: "録音ファイル簡易編集",
+      summary: "スマートフォン録音の波形を見ながら切り取り、貼り付け、音量調整を行いWAVで保存します。",
+      keywords: ["音声 カット", "録音 編集", "m4a カット", "波形編集"],
+    },
+    "webcam-recorder": {
+      title: "Webカメラ録画",
+      summary: "カメラとマイクをブラウザで録画し、ミラー、フィルター、背景効果を調整できます。",
+      keywords: ["Webカメラ録画", "ブラウザ録画", "カメラ録画", "WebM"],
+    },
+    "ai-text-cleaner": {
+      title: "AI文章貼り付け整形",
+      summary: "AI回答に残るMarkdown記号、見出し記号、リンク、余分な改行を文書向けに整えます。",
+      keywords: ["ChatGPT 整形", "Markdown削除", "AI文章", "貼り付け整形"],
+    },
+    "ai-table-converter": {
+      title: "AI表変換ツール",
+      summary: "AI回答内のMarkdown表、TSV、CSVを文書やスプレッドシートに貼り付けやすく変換します。",
+      keywords: ["ChatGPT 表", "Markdown表", "Excel貼り付け", "表変換"],
+    },
+    "csv-excel-converter": {
+      title: "CSV Excel変換",
+      summary: "CSV、TSV、XLSXファイルをブラウザで相互変換し、複数結果をまとめて保存できます。",
+      keywords: ["CSV Excel変換", "CSV XLSX", "XLSX CSV", "文字コード"],
+    },
+    "character-counter": {
+      title: "文字数カウンター",
+      summary: "文字数、空白なし文字数、単語数、行数、バイト数、読了時間をすばやく確認します。",
+      keywords: ["文字数カウント", "文字数", "バイト数", "単語数"],
+    },
+    "line-break-cleaner": {
+      title: "改行・空白整形",
+      summary: "不自然な改行や連続スペースを整え、貼り付けたテキストを読みやすい段落にします。",
+      keywords: ["改行削除", "空白整形", "テキスト整形", "段落整形"],
+    },
+    "markdown-editor": {
+      title: "Markdownエディター",
+      summary: "Markdown文書をブラウザで編集し、プレビューやコピー、保存に使えます。",
+      keywords: ["Markdownエディター", "README編集", "Markdownプレビュー", "文書作成"],
+    },
+    "markdown-viewer": {
+      title: "MDファイルビューア",
+      summary: "MD、Markdown、TXTファイルをブラウザで開き、読みやすい表示やアウトラインで確認できます。",
+      keywords: ["MDビューア", "Markdownビューア", "README表示", "Markdownファイル"],
+    },
+    "text-extractor": {
+      title: "メール・URL・電話番号抽出",
+      summary: "貼り付けた文章からメールアドレス、URL、電話番号だけを抽出してコピーできます。",
+      keywords: ["メール抽出", "URL抽出", "電話番号抽出", "テキスト抽出"],
+    },
+    "duplicate-line-remover": {
+      title: "重複行削除",
+      summary: "リストやメモから重複した行を削除し、必要に応じて順序や空白を整理します。",
+      keywords: ["重複行削除", "リスト整理", "重複テキスト", "行整理"],
+    },
+    "find-replace": {
+      title: "検索と置換",
+      summary: "テキスト内の単語や文字列を一括で検索し、まとめて置換できます。",
+      keywords: ["検索置換", "文字列置換", "テキスト編集", "一括置換"],
+    },
+    "case-converter": {
+      title: "大文字小文字変換",
+      summary: "英字テキスト、ファイル名、ラベルを大文字、小文字、camelCase、snake_caseなどへ変換します。",
+      keywords: ["大文字小文字変換", "camelCase", "snake_case", "kebab-case"],
+    },
+    "text-diff": {
+      title: "テキスト差分チェック",
+      summary: "2つのテキストを行単位で比較し、追加、削除、変更箇所を確認できます。",
+      keywords: ["テキスト比較", "差分チェック", "文書比較", "行差分"],
+    },
+    "qr-code-generator": {
+      title: "QRコード作成",
+      summary: "URL、テキスト、Wi-Fi情報のQRコードを作り、SVG、PNG、JPGで保存できます。",
+      keywords: ["QRコード作成", "URL QR", "Wi-Fi QR", "QR保存"],
+    },
+    "qr-link-extractor": {
+      title: "QRリンク読み取り",
+      summary: "QR画像やスクリーンショットをブラウザで読み取り、URLや元のテキストを確認できます。",
+      keywords: ["QR読み取り", "QRデコード", "QRリンク", "画像QR"],
+    },
+    "image-resizer": {
+      title: "画像サイズ変更",
+      summary: "画像の幅、高さ、比率を指定してリサイズし、ブラウザ内で結果を保存します。",
+      keywords: ["画像リサイズ", "写真サイズ変更", "画像サイズ", "ブラウザ画像"],
+    },
+    "image-converter": {
+      title: "画像形式変換",
+      summary: "JPG、PNG、WEBPなど対応形式の画像をブラウザ内で変換します。",
+      keywords: ["画像変換", "JPG PNG", "WEBP変換", "画像形式"],
+    },
+    "image-compressor": {
+      title: "画像圧縮",
+      summary: "品質や幅を調整して画像容量を小さくし、アップロードやメール向けに保存します。",
+      keywords: ["画像圧縮", "写真容量削減", "JPG圧縮", "WEBP圧縮"],
+    },
+    "exif-metadata-remover": {
+      title: "EXIFメタデータ削除",
+      summary: "JPG、PNG、WEBP画像からEXIF、GPS、XMP、コメントなどのメタデータを削除します。",
+      keywords: ["EXIF削除", "メタデータ削除", "GPS削除", "写真プライバシー"],
+    },
+    "pdf-merge": {
+      title: "PDF結合",
+      summary: "複数のPDFファイルをブラウザ内で1つのPDF文書にまとめます。",
+      keywords: ["PDF結合", "PDFマージ", "PDFまとめる", "無料PDF"],
+    },
+    "pdf-split": {
+      title: "PDF分割",
+      summary: "PDFをページ単位や範囲ごとに分割し、必要なファイルとして保存します。",
+      keywords: ["PDF分割", "PDFページ分割", "PDF切り分け", "PDF保存"],
+    },
+    "pdf-extract-pages": {
+      title: "PDFページ抽出",
+      summary: "PDFから必要なページ範囲だけを抽出して、新しいPDFとして保存します。",
+      keywords: ["PDFページ抽出", "PDF一部保存", "PDFページ", "PDF編集"],
+    },
+    "image-to-pdf": {
+      title: "画像をPDFに変換",
+      summary: "JPGやPNGなどの画像を並べて、ブラウザ内でPDF文書に変換します。",
+      keywords: ["画像 PDF変換", "JPG PDF", "写真PDF", "画像からPDF"],
+    },
+    "pdf-to-image": {
+      title: "PDFを画像に変換",
+      summary: "PDFページをJPGやPNG画像としてレンダリングし、まとめて保存できます。",
+      keywords: ["PDF 画像変換", "PDF JPG", "PDF PNG", "PDFページ画像"],
+    },
+    "srt-cleaner": {
+      title: "SRT字幕整形",
+      summary: "SRT字幕の番号、空行、余分な改行を整え、安定した形式にします。",
+      keywords: ["SRT整形", "字幕整形", "SRT修正", "字幕番号"],
+    },
+    "subtitle-converter": {
+      title: "SRT VTT変換",
+      summary: "SRT字幕とVTT字幕をブラウザ内で相互変換し、動画編集や配信に使いやすくします。",
+      keywords: ["SRT VTT変換", "字幕変換", "VTT SRT", "字幕フォーマット"],
+    },
+    "subtitle-timing": {
+      title: "字幕タイミング補正",
+      summary: "SRTやVTT字幕の時間を秒単位で前後にずらし、同期のズレをまとめて補正します。",
+      keywords: ["字幕タイミング", "SRT同期", "字幕時間補正", "字幕ずらし"],
+    },
+  },
+  zh: {
+    "voice-to-text": {
+      title: "语音转文字",
+      summary: "使用浏览器麦克风输入中文语音，并整理成草稿、会议记录或演讲文本。",
+      keywords: ["语音转文字", "语音输入", "听写", "会议记录"],
+    },
+    "audio-file-transcription": {
+      title: "录音文件转文字",
+      summary: "在浏览器中处理短录音文件，生成便于人工校对的文字草稿。",
+      keywords: ["录音转文字", "音频转文字", "m4a转文字", "浏览器STT"],
+    },
+    "audio-editor": {
+      title: "录音文件简易编辑器",
+      summary: "查看手机录音波形，剪切、粘贴、调节音量，并导出为WAV文件。",
+      keywords: ["音频剪切", "录音编辑", "m4a剪切", "波形编辑"],
+    },
+    "webcam-recorder": {
+      title: "网页摄像头录制器",
+      summary: "在浏览器中录制摄像头和麦克风，支持镜像、滤镜和背景效果。",
+      keywords: ["摄像头录制", "浏览器录屏", "相机录制", "WebM"],
+    },
+    "ai-text-cleaner": {
+      title: "AI文本粘贴清理",
+      summary: "清理AI回答中的Markdown符号、标题标记、链接和多余换行，便于粘贴到文档。",
+      keywords: ["ChatGPT清理", "Markdown清理", "AI文本", "粘贴整理"],
+    },
+    "ai-table-converter": {
+      title: "AI表格转换器",
+      summary: "将AI回答中的Markdown表格、TSV或CSV转换为适合文档和电子表格粘贴的格式。",
+      keywords: ["ChatGPT表格", "Markdown表格", "Excel粘贴", "表格转换"],
+    },
+    "csv-excel-converter": {
+      title: "CSV Excel转换器",
+      summary: "在浏览器中转换CSV、TSV和XLSX文件，并可将多个结果打包下载。",
+      keywords: ["CSV转Excel", "CSV XLSX", "XLSX CSV", "批量转换"],
+    },
+    "character-counter": {
+      title: "字数统计",
+      summary: "统计字符数、去空格字符数、词数、行数、字节数和预计阅读时间。",
+      keywords: ["字数统计", "字符计数", "字节数", "词数"],
+    },
+    "line-break-cleaner": {
+      title: "换行和空格清理",
+      summary: "整理异常换行、连续空格和段落，让粘贴文本更易读。",
+      keywords: ["删除换行", "空格清理", "文本整理", "段落整理"],
+    },
+    "markdown-editor": {
+      title: "Markdown编辑器",
+      summary: "在浏览器中编写、预览、复制和保存Markdown文档。",
+      keywords: ["Markdown编辑器", "README编辑", "Markdown预览", "文档编写"],
+    },
+    "markdown-viewer": {
+      title: "MD文件查看器",
+      summary: "本地打开MD、Markdown和TXT文件，用舒适阅读视图和大纲检查内容。",
+      keywords: ["MD查看器", "Markdown查看器", "README查看", "Markdown文件"],
+    },
+    "text-extractor": {
+      title: "邮箱、URL和电话号码提取器",
+      summary: "从粘贴文本中提取邮箱、URL和电话号码，并按类型复制。",
+      keywords: ["邮箱提取", "URL提取", "电话号码提取", "文本提取"],
+    },
+    "duplicate-line-remover": {
+      title: "重复行删除",
+      summary: "从列表或笔记中删除重复行，并可整理空行和顺序。",
+      keywords: ["删除重复行", "列表整理", "重复文本", "行处理"],
+    },
+    "find-replace": {
+      title: "查找和替换",
+      summary: "批量查找并替换文本中的单词或字符串。",
+      keywords: ["查找替换", "字符串替换", "文本编辑", "批量替换"],
+    },
+    "case-converter": {
+      title: "大小写转换",
+      summary: "将英文文本、文件名或标签转换为大写、小写、camelCase、snake_case等格式。",
+      keywords: ["大小写转换", "camelCase", "snake_case", "kebab-case"],
+    },
+    "text-diff": {
+      title: "文本差异比较",
+      summary: "逐行比较两段文本，突出新增、删除和未变化的行。",
+      keywords: ["文本比较", "差异比较", "文档比较", "行差异"],
+    },
+    "qr-code-generator": {
+      title: "二维码生成器",
+      summary: "为URL、文本或Wi-Fi信息生成二维码，并导出为SVG、PNG或JPG。",
+      keywords: ["二维码生成", "URL二维码", "Wi-Fi二维码", "二维码下载"],
+    },
+    "qr-link-extractor": {
+      title: "二维码链接提取器",
+      summary: "在浏览器中读取二维码图片或截图，查看提取出的URL或原始内容。",
+      keywords: ["二维码读取", "二维码解码", "二维码链接", "图片二维码"],
+    },
+    "image-resizer": {
+      title: "图片尺寸调整",
+      summary: "按宽度、高度或比例调整图片尺寸，并在浏览器中保存结果。",
+      keywords: ["图片尺寸调整", "图片缩放", "照片尺寸", "浏览器图片工具"],
+    },
+    "image-converter": {
+      title: "图片格式转换",
+      summary: "在浏览器中将支持的图片转换为JPG、PNG或WEBP。",
+      keywords: ["图片转换", "JPG PNG", "WEBP转换", "图片格式"],
+    },
+    "image-compressor": {
+      title: "图片压缩",
+      summary: "通过质量和宽度控制减小图片体积，适合上传、邮件和网页使用。",
+      keywords: ["图片压缩", "照片压缩", "JPG压缩", "WEBP压缩"],
+    },
+    "exif-metadata-remover": {
+      title: "EXIF元数据删除",
+      summary: "从JPG、PNG和WEBP图片中删除EXIF、GPS、XMP、注释等元数据。",
+      keywords: ["EXIF删除", "元数据删除", "GPS删除", "照片隐私"],
+    },
+    "pdf-merge": {
+      title: "PDF合并",
+      summary: "在浏览器中将多个PDF文件合并为一个文档。",
+      keywords: ["PDF合并", "合并PDF", "PDF拼接", "免费PDF"],
+    },
+    "pdf-split": {
+      title: "PDF拆分",
+      summary: "按页数或范围拆分PDF，并保存为需要的文件。",
+      keywords: ["PDF拆分", "PDF分页", "PDF切分", "PDF保存"],
+    },
+    "pdf-extract-pages": {
+      title: "PDF页面提取",
+      summary: "从PDF中提取指定页面范围，并保存为新的PDF文件。",
+      keywords: ["PDF页面提取", "PDF部分保存", "PDF页面", "PDF编辑"],
+    },
+    "image-to-pdf": {
+      title: "图片转PDF",
+      summary: "将JPG、PNG等图片按顺序合成为PDF文档。",
+      keywords: ["图片转PDF", "JPG转PDF", "照片PDF", "图片合成PDF"],
+    },
+    "pdf-to-image": {
+      title: "PDF转图片",
+      summary: "将PDF页面渲染为JPG或PNG图片，并可批量保存。",
+      keywords: ["PDF转图片", "PDF转JPG", "PDF转PNG", "PDF页面图片"],
+    },
+    "srt-cleaner": {
+      title: "SRT字幕清理",
+      summary: "整理SRT字幕编号、空行和多余换行，使格式更稳定。",
+      keywords: ["SRT清理", "字幕整理", "SRT修复", "字幕编号"],
+    },
+    "subtitle-converter": {
+      title: "SRT VTT转换",
+      summary: "在浏览器中互相转换SRT和VTT字幕格式，便于视频编辑和网页播放。",
+      keywords: ["SRT VTT转换", "字幕转换", "VTT SRT", "字幕格式"],
+    },
+    "subtitle-timing": {
+      title: "字幕时间校正",
+      summary: "按秒整体前移或后移SRT、VTT字幕时间，修正同步偏差。",
+      keywords: ["字幕时间", "SRT同步", "字幕校正", "字幕偏移"],
+    },
+  },
+};
+const LOCALIZED_TOOL_SEO_SUFFIX = {
+  ja: "ブラウザで使える無料ツール",
+  zh: "免费浏览器工具",
+};
+const LOCALIZED_TOOL_DESCRIPTION_SUFFIX = {
+  ja: "登録なしで使え、作業データは可能な限りブラウザ内で処理します。",
+  zh: "无需注册即可使用，工作数据会尽可能在浏览器中处理。",
+};
+const LOCALIZED_GUIDE_STEPS = {
+  ja: [
+    { title: "入力を追加", text: "テキストや対応ファイルをブラウザで開きます。" },
+    { title: "オプションを選択", text: "必要な設定だけを選んで処理を実行します。" },
+    { title: "結果を確認", text: "結果を確認してコピーまたはダウンロードします。" },
+  ],
+  zh: [
+    { title: "添加输入", text: "在浏览器中粘贴文本或选择支持的文件。" },
+    { title: "选择选项", text: "只设置当前任务需要的选项，然后运行处理。" },
+    { title: "检查结果", text: "确认结果后复制或下载输出。" },
+  ],
+};
+
+function buildLocalizedToolOverrides(locale) {
+  const copySet = TOOL_DEFS_LOCALIZED_COPY[locale] || {};
+  const seoSuffix = LOCALIZED_TOOL_SEO_SUFFIX[locale] || "";
+  const descriptionSuffix = LOCALIZED_TOOL_DESCRIPTION_SUFFIX[locale] || "";
+  return Object.fromEntries(
+    Object.entries(copySet).map(([id, copy]) => [
+      id,
+      {
+        ...copy,
+        seoTitle: `${copy.title} | ${seoSuffix}`,
+        seoDescription: `${copy.summary} ${descriptionSuffix}`.trim(),
+        guide: LOCALIZED_GUIDE_STEPS[locale],
+      },
+    ])
+  );
+}
+const TOOL_DEFS_LOCALE_OVERRIDES = {
+  en: TOOL_DEFS_EN_OVERRIDES,
+  ja: buildLocalizedToolOverrides("ja"),
+  zh: buildLocalizedToolOverrides("zh"),
+};
 const TOOL_VISUALS_EN = {
   "voice-to-text": { icon: "\uD83C\uDFA4", tone: "red", copy: "Dictate speech into text in your browser." },
   "audio-file-transcription": { icon: "\uD83C\uDF99\uFE0F", tone: "red", copy: "Create a review draft from a phone recording." },
@@ -1042,8 +1536,12 @@ function detectAppLocale() {
   const bodyLocale = document.body?.dataset?.locale || "";
   const documentLang = document.documentElement?.lang || "";
   const pathname = window.location?.pathname || "";
-  if (bodyLocale === "en" || /^en\b/i.test(documentLang)) return "en";
-  return pathname === "/en" || pathname.startsWith("/en/") ? "en" : "ko";
+  if (SUPPORTED_LOCALES.includes(bodyLocale)) return bodyLocale;
+  if (/^en\b/i.test(documentLang)) return "en";
+  if (/^ja\b/i.test(documentLang)) return "ja";
+  if (/^zh\b/i.test(documentLang)) return "zh";
+  const localePrefix = pathname.match(/^\/(en|ja|zh)(?:\/|$)/);
+  return localePrefix?.[1] || "ko";
 }
 
 function t(key, ...args) {
@@ -1051,20 +1549,21 @@ function t(key, ...args) {
   return typeof value === "function" ? value(...args) : value;
 }
 
-function localizeToolDef(tool, override = {}) {
+function localizeToolDef(tool, override = {}, locale = APP_LOCALE) {
+  const config = LOCALE_CONFIGS[locale] || LOCALE_CONFIGS.ko;
   return {
     ...tool,
     ...override,
-    path: `/en${tool.path}`,
-    category: CATEGORY_LABELS_EN[tool.category] || tool.category,
+    path: `${config.pathPrefix}${tool.path}`,
+    category: CATEGORY_LABELS_BY_LOCALE[locale]?.[tool.category] || tool.category,
     guide: override.guide || tool.guide,
     keywords: override.keywords || tool.keywords,
   };
 }
 
-const TOOL_DEFS_ACTIVE = IS_ENGLISH_LOCALE
-  ? TOOL_DEFS.map((tool) => localizeToolDef(tool, TOOL_DEFS_EN_OVERRIDES[tool.id]))
-  : TOOL_DEFS;
+const TOOL_DEFS_ACTIVE = IS_KOREAN_LOCALE
+  ? TOOL_DEFS
+  : TOOL_DEFS.map((tool) => localizeToolDef(tool, TOOL_DEFS_LOCALE_OVERRIDES[APP_LOCALE]?.[tool.id], APP_LOCALE));
 const TOOL_MAP = Object.fromEntries(TOOL_DEFS_ACTIVE.map((tool) => [tool.id, tool]));
 const TOOL_VISUALS = {
   "voice-to-text": { icon: "\uD83C\uDFA4", tone: "red", copy: "\ub9d0\ud558\uba74 \ubc14\ub85c \ud14d\uc2a4\ud2b8\ub85c \ubc1b\uc544 \uc801\uc2b5\ub2c8\ub2e4." },
@@ -1358,13 +1857,13 @@ const TOOL_EXTRA_FAQS = {
 };
 
 function getToolVisual(tool) {
-  if (IS_ENGLISH_LOCALE) {
-    const englishVisual = TOOL_VISUALS_EN[tool.id] || {};
+  if (!IS_KOREAN_LOCALE) {
+    const localizedVisual = (APP_LOCALE === "en" ? TOOL_VISUALS_EN : {})[tool.id] || {};
     const baseVisual = TOOL_VISUALS[tool.id] || {};
     return {
-      icon: englishVisual.icon || baseVisual.icon || tool.title.slice(0, 1),
-      tone: englishVisual.tone || baseVisual.tone || "slate",
-      copy: englishVisual.copy || tool.summary,
+      icon: localizedVisual.icon || baseVisual.icon || tool.title.slice(0, 1),
+      tone: localizedVisual.tone || baseVisual.tone || "slate",
+      copy: localizedVisual.copy || tool.summary,
     };
   }
   return TOOL_VISUALS[tool.id] || {
@@ -1375,14 +1874,16 @@ function getToolVisual(tool) {
 }
 
 function getToolExamples(tool) {
-  return (IS_ENGLISH_LOCALE ? TOOL_USE_EXAMPLES_EN[tool.id] : TOOL_USE_EXAMPLES[tool.id]) || [
+  const localizedExamples = APP_LOCALE === "en" ? TOOL_USE_EXAMPLES_EN[tool.id] : null;
+  return (IS_KOREAN_LOCALE ? TOOL_USE_EXAMPLES[tool.id] : localizedExamples) || [
     t("fallbackExample1", tool.title),
     t("fallbackExample2", tool.title),
   ];
 }
 
 function getToolExtraFaq(tool, examples) {
-  return (IS_ENGLISH_LOCALE ? TOOL_EXTRA_FAQS_EN[tool.id] : TOOL_EXTRA_FAQS[tool.id]) || {
+  const localizedFaq = APP_LOCALE === "en" ? TOOL_EXTRA_FAQS_EN[tool.id] : null;
+  return (IS_KOREAN_LOCALE ? TOOL_EXTRA_FAQS[tool.id] : localizedFaq) || {
     question: t("defaultFaqQuestion", tool.title),
     answer: examples.join(" "),
   };
@@ -1531,16 +2032,91 @@ const ENGLISH_WORKSPACE_TEXT = {
   "영상 저장": "Save Video",
 };
 
-let englishWorkspaceObserver = null;
+const WORKSPACE_TEXT_BY_LOCALE = {
+  en: ENGLISH_WORKSPACE_TEXT,
+  ja: {
+    "파일 없음": "ファイルなし",
+    "선택 없음": "選択なし",
+    "파일 선택": "ファイルを選択",
+    "결과": "結果",
+    "결과 복사": "結果をコピー",
+    "TXT 저장": "TXT保存",
+    "입력": "入力",
+    "출력": "出力",
+    "원문": "原文",
+    "복사": "コピー",
+    "저장": "保存",
+    "다운로드": "ダウンロード",
+    "초기화": "リセット",
+    "삭제": "削除",
+    "적용": "適用",
+    "변환": "変換",
+    "실행": "実行",
+    "정리": "整形",
+    "추출": "抽出",
+    "만들기": "作成",
+    "파일": "ファイル",
+    "옵션": "オプション",
+    "미리보기": "プレビュー",
+    "상태": "状態",
+    "선택": "選択",
+    "전체": "すべて",
+    "텍스트 변환": "文字起こし",
+    "한국어 우선": "韓国語優先",
+    "자동 감지": "自動検出",
+    "영어": "英語",
+    "일본어": "日本語",
+    "중국어": "中国語",
+  },
+  zh: {
+    "파일 없음": "无文件",
+    "선택 없음": "未选择",
+    "파일 선택": "选择文件",
+    "결과": "结果",
+    "결과 복사": "复制结果",
+    "TXT 저장": "保存TXT",
+    "입력": "输入",
+    "출력": "输出",
+    "원문": "原文",
+    "복사": "复制",
+    "저장": "保存",
+    "다운로드": "下载",
+    "초기화": "重置",
+    "삭제": "删除",
+    "적용": "应用",
+    "변환": "转换",
+    "실행": "运行",
+    "정리": "清理",
+    "추출": "提取",
+    "만들기": "生成",
+    "파일": "文件",
+    "옵션": "选项",
+    "미리보기": "预览",
+    "상태": "状态",
+    "선택": "选择",
+    "전체": "全部",
+    "텍스트 변환": "转写",
+    "한국어 우선": "优先韩语",
+    "자동 감지": "自动检测",
+    "영어": "英语",
+    "일본어": "日语",
+    "중국어": "中文",
+  },
+};
+let localizedWorkspaceObserver = null;
 
 function localizeEnglishWorkspace(container) {
-  if (!IS_ENGLISH_LOCALE || !container || typeof MutationObserver === "undefined") return;
-  translateEnglishWorkspaceTree(container);
-  englishWorkspaceObserver?.disconnect();
-  englishWorkspaceObserver = new MutationObserver(() => {
-    englishWorkspaceObserver.disconnect();
-    translateEnglishWorkspaceTree(container);
-    englishWorkspaceObserver.observe(container, {
+  localizeWorkspace(container);
+}
+
+function localizeWorkspace(container) {
+  if (IS_KOREAN_LOCALE || !container || typeof MutationObserver === "undefined") return;
+  translateWorkspaceTree(container);
+  localizedWorkspaceObserver?.disconnect();
+  localizedWorkspaceObserver = new MutationObserver(() => {
+    localizedWorkspaceObserver.disconnect();
+    translateWorkspaceTree(container);
+    localizedWorkspaceObserver.observe(container, {
       childList: true,
       subtree: true,
       characterData: true,
@@ -1548,7 +2124,7 @@ function localizeEnglishWorkspace(container) {
       attributeFilter: ["aria-label", "placeholder", "title"],
     });
   });
-  englishWorkspaceObserver.observe(container, {
+  localizedWorkspaceObserver.observe(container, {
     childList: true,
     subtree: true,
     characterData: true,
@@ -1557,7 +2133,7 @@ function localizeEnglishWorkspace(container) {
   });
 }
 
-function translateEnglishWorkspaceTree(root) {
+function translateWorkspaceTree(root) {
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
     acceptNode(node) {
       const parent = node.parentElement;
@@ -1571,7 +2147,7 @@ function translateEnglishWorkspaceTree(root) {
   const textNodes = [];
   while (walker.nextNode()) textNodes.push(walker.currentNode);
   textNodes.forEach((node) => {
-    const translated = translateEnglishWorkspaceText(node.nodeValue);
+    const translated = translateWorkspaceText(node.nodeValue);
     if (translated !== node.nodeValue) node.nodeValue = translated;
   });
 
@@ -1579,33 +2155,35 @@ function translateEnglishWorkspaceTree(root) {
     ["aria-label", "placeholder", "title"].forEach((attribute) => {
       const value = node.getAttribute(attribute);
       if (!value || !/[가-힣]/.test(value)) return;
-      const translated = translateEnglishWorkspaceText(value);
+      const translated = translateWorkspaceText(value);
       if (translated !== value) node.setAttribute(attribute, translated);
     });
   });
 }
 
-function translateEnglishWorkspaceText(value) {
+function translateWorkspaceText(value) {
   const text = String(value || "");
   const leading = text.match(/^\s*/)?.[0] || "";
   const trailing = text.match(/\s*$/)?.[0] || "";
   const compact = text.trim();
   if (!compact) return text;
-  const exact = ENGLISH_WORKSPACE_TEXT[compact];
+  const localeText = WORKSPACE_TEXT_BY_LOCALE[APP_LOCALE] || {};
+  const exact = localeText[compact];
   if (exact) return `${leading}${exact}${trailing}`;
 
-  const dynamic = translateEnglishWorkspaceDynamicText(compact);
+  const dynamic = translateWorkspaceDynamicText(compact);
   if (dynamic !== compact) return `${leading}${dynamic}${trailing}`;
 
   let next = compact;
-  for (const [source, target] of Object.entries(ENGLISH_WORKSPACE_TEXT)) {
+  for (const [source, target] of Object.entries(localeText)) {
     if (source.length < 2 || !next.includes(source)) continue;
     next = next.split(source).join(target);
   }
   return next !== compact ? `${leading}${next}${trailing}` : text;
 }
 
-function translateEnglishWorkspaceDynamicText(text) {
+function translateWorkspaceDynamicText(text) {
+  if (APP_LOCALE !== "en") return text;
   return text
     .replace(/^재생 위치\s+/, "Playhead ")
     .replace(/^선택 구간 없음 · 전체\s+/, "No selection · Total ")
@@ -1850,7 +2428,173 @@ const CATEGORY_PAGE_DEFS_EN = [
   },
 ];
 
-const CATEGORY_PAGE_DEFS_ACTIVE = IS_ENGLISH_LOCALE ? CATEGORY_PAGE_DEFS_EN : CATEGORY_PAGE_DEFS;
+const CATEGORY_PAGE_DEFS_JA = [
+  {
+    id: "text",
+    path: "/ja/tools/text/",
+    title: "テキストツール",
+    eyebrow: "Text Tools",
+    description: "AI文章の整形、表変換、CSV/Excel変換、Markdown編集、文字数確認、抽出、比較をブラウザで処理します。",
+    metaDescription:
+      "ko-workspaceの日本語テキストツール集です。AI貼り付け整形、AI表変換、CSV Excel変換、Markdown編集、MDビューア、文字数カウント、改行整形、抽出、差分確認をブラウザで使えます。",
+    keywords: ["テキスト整形", "AI表変換", "CSV Excel変換", "Markdown", "文字数"],
+    categories: ["テキスト"],
+    guide: [
+      { title: "作業を選ぶ", text: "整形、変換、カウント、抽出、比較から必要なツールを選びます。" },
+      { title: "入力を追加", text: "テキストを貼り付けるか対応ファイルを選びます。" },
+      { title: "結果を使う", text: "ブラウザで生成された結果をコピーまたは保存します。" },
+    ],
+  },
+  {
+    id: "pdf",
+    path: "/ja/tools/pdf/",
+    title: "PDFツール",
+    eyebrow: "PDF Tools",
+    description: "PDFの結合、分割、ページ抽出、画像変換をインストールなしで処理します。",
+    metaDescription: "PDF結合、PDF分割、ページ抽出、画像からPDF、PDFから画像をブラウザで処理できる無料ツール集です。",
+    keywords: ["PDF結合", "PDF分割", "PDFページ抽出", "PDF変換"],
+    categories: ["PDF"],
+    guide: [
+      { title: "ファイルを選ぶ", text: "処理したいPDFや画像を選択します。" },
+      { title: "設定する", text: "順序、ページ範囲、分割条件、出力形式を指定します。" },
+      { title: "保存する", text: "生成されたPDFや画像をローカルに保存します。" },
+    ],
+  },
+  {
+    id: "image",
+    path: "/ja/tools/image/",
+    title: "画像ツール",
+    eyebrow: "Image Tools",
+    description: "画像サイズ変更、形式変換、圧縮、EXIF削除、QR作成と読み取りをブラウザ内で実行します。",
+    metaDescription:
+      "画像リサイズ、JPG PNG WEBP変換、画像圧縮、EXIFメタデータ削除、QRコード作成、QRリンク読み取りをブラウザで使えるツール集です。",
+    keywords: ["画像リサイズ", "画像変換", "画像圧縮", "EXIF削除", "QRコード"],
+    categories: ["画像"],
+    guide: [
+      { title: "画像を選ぶ", text: "写真、スクリーンショット、QR画像を選択します。" },
+      { title: "処理する", text: "サイズ、形式、品質、メタデータ、QR処理を選びます。" },
+      { title: "保存する", text: "ブラウザで作成された結果をダウンロードします。" },
+    ],
+  },
+  {
+    id: "subtitle",
+    path: "/ja/tools/subtitle/",
+    title: "字幕ツール",
+    eyebrow: "Subtitle Tools",
+    description: "SRT整形、SRT/VTT変換、字幕タイミング補正を動画作業向けに処理します。",
+    metaDescription: "SRT字幕整形、SRT VTT変換、字幕時間補正をブラウザで実行できる字幕ツール集です。",
+    keywords: ["SRT整形", "SRT VTT変換", "字幕タイミング", "字幕同期"],
+    categories: ["字幕"],
+    guide: [
+      { title: "字幕を追加", text: "SRTまたはVTTのテキストやファイルを追加します。" },
+      { title: "整形・変換", text: "番号、形式、出力形式、時間補正を設定します。" },
+      { title: "動画作業へ", text: "字幕ファイルをコピーまたは保存して使います。" },
+    ],
+  },
+  {
+    id: "voice-video",
+    path: "/ja/tools/voice-video/",
+    title: "音声・動画ツール",
+    eyebrow: "Audio & Video Tools",
+    description: "音声入力、録音ファイル文字起こし、波形編集、Webカメラ録画をブラウザで使えます。",
+    metaDescription:
+      "音声入力、録音ファイル文字起こし、録音編集、Webカメラ録画をブラウザで使える音声・動画ツール集です。",
+    keywords: ["音声入力", "録音文字起こし", "音声編集", "Webカメラ録画"],
+    categories: ["音声", "動画"],
+    guide: [
+      { title: "権限を許可", text: "必要なツールだけマイクやカメラ権限を許可します。" },
+      { title: "録音・編集", text: "音声入力、文字起こし、音声編集、カメラ録画を実行します。" },
+      { title: "保存する", text: "テキスト、編集音声、録画ファイルをローカルに保存します。" },
+    ],
+  },
+];
+
+const CATEGORY_PAGE_DEFS_ZH = [
+  {
+    id: "text",
+    path: "/zh/tools/text/",
+    title: "文本工具",
+    eyebrow: "Text Tools",
+    description: "在浏览器中清理、转换、统计、查看Markdown、提取和比较日常文本与数据。",
+    metaDescription:
+      "ko-workspace中文文本工具集合，支持AI文本清理、AI表格转换、CSV Excel转换、Markdown编辑和查看、字数统计、换行清理、信息提取、重复行删除和文本比较。",
+    keywords: ["文本清理", "AI表格转换", "CSV Excel转换", "Markdown", "字数统计"],
+    categories: ["文本"],
+    guide: [
+      { title: "选择任务", text: "选择清理、转换、统计、提取或比较工具。" },
+      { title: "添加输入", text: "粘贴文本或选择支持的文件。" },
+      { title: "使用结果", text: "复制整理后的结果，或下载生成的文件。" },
+    ],
+  },
+  {
+    id: "pdf",
+    path: "/zh/tools/pdf/",
+    title: "PDF工具",
+    eyebrow: "PDF Tools",
+    description: "无需安装应用即可合并、拆分、提取和转换常见PDF文件。",
+    metaDescription: "浏览器PDF工具集合，支持PDF合并、PDF拆分、页面提取、图片转PDF和PDF转图片。",
+    keywords: ["PDF合并", "PDF拆分", "PDF页面提取", "PDF转换"],
+    categories: ["PDF"],
+    guide: [
+      { title: "选择文件", text: "选择要处理的PDF或图片。" },
+      { title: "设置选项", text: "设置顺序、页码范围、拆分规则或输出格式。" },
+      { title: "下载结果", text: "将生成的PDF或图片保存到本地。" },
+    ],
+  },
+  {
+    id: "image",
+    path: "/zh/tools/image/",
+    title: "图片工具",
+    eyebrow: "Image Tools",
+    description: "在浏览器中调整图片尺寸、转换格式、压缩、删除元数据、生成和读取二维码。",
+    metaDescription:
+      "浏览器图片工具集合，支持图片尺寸调整、JPG PNG WEBP转换、图片压缩、EXIF元数据删除、二维码生成和二维码链接读取。",
+    keywords: ["图片尺寸调整", "图片转换", "图片压缩", "EXIF删除", "二维码"],
+    categories: ["图片"],
+    guide: [
+      { title: "选择图片", text: "选择照片、截图、上传图片或二维码图片。" },
+      { title: "执行处理", text: "调整尺寸、转换格式、压缩、删除元数据或处理二维码。" },
+      { title: "保存输出", text: "下载浏览器生成的结果。" },
+    ],
+  },
+  {
+    id: "subtitle",
+    path: "/zh/tools/subtitle/",
+    title: "字幕工具",
+    eyebrow: "Subtitle Tools",
+    description: "清理SRT字幕、转换SRT和VTT，并调整字幕时间同步。",
+    metaDescription: "浏览器字幕工具集合，支持SRT清理、SRT VTT转换和字幕时间校正。",
+    keywords: ["SRT清理", "SRT VTT转换", "字幕时间", "字幕同步"],
+    categories: ["字幕"],
+    guide: [
+      { title: "添加字幕", text: "粘贴SRT或VTT文本，或选择字幕文件。" },
+      { title: "清理或转换", text: "修复编号、标准化格式、转换类型或移动时间轴。" },
+      { title: "用于视频", text: "复制或下载字幕文件用于视频工具。" },
+    ],
+  },
+  {
+    id: "voice-video",
+    path: "/zh/tools/voice-video/",
+    title: "音频和视频工具",
+    eyebrow: "Audio & Video Tools",
+    description: "直接在浏览器中使用语音输入、录音转文字、波形音频编辑和摄像头录制。",
+    metaDescription: "浏览器音频和视频工具集合，支持语音转文字、录音转文字、音频剪切拼接和网页摄像头录制。",
+    keywords: ["语音转文字", "录音转文字", "音频剪切", "摄像头录制"],
+    categories: ["音频", "视频"],
+    guide: [
+      { title: "允许权限", text: "仅在所选工具需要时允许麦克风或摄像头权限。" },
+      { title: "录制或编辑", text: "进行语音输入、录音转文字、音频编辑或摄像头录制。" },
+      { title: "本地保存", text: "从浏览器下载文本、编辑后的音频或录制视频。" },
+    ],
+  },
+];
+
+const CATEGORY_PAGE_DEFS_BY_LOCALE = {
+  en: CATEGORY_PAGE_DEFS_EN,
+  ja: CATEGORY_PAGE_DEFS_JA,
+  zh: CATEGORY_PAGE_DEFS_ZH,
+};
+const CATEGORY_PAGE_DEFS_ACTIVE = IS_KOREAN_LOCALE ? CATEGORY_PAGE_DEFS : CATEGORY_PAGE_DEFS_BY_LOCALE[APP_LOCALE] || CATEGORY_PAGE_DEFS;
 const CATEGORY_PAGE_MAP = Object.fromEntries(CATEGORY_PAGE_DEFS_ACTIVE.map((page) => [page.id, page]));
 
 const LIBRARIES = {
@@ -1942,7 +2686,7 @@ function init() {
 }
 
 function applyLocaleChrome() {
-  document.documentElement.lang = IS_ENGLISH_LOCALE ? "en" : "ko";
+  document.documentElement.lang = ACTIVE_LOCALE_CONFIG.htmlLang;
   if (els.toolSearch) {
     els.toolSearch.placeholder = t("searchPlaceholder");
     els.toolSearch.setAttribute("aria-label", t("searchLabel"));
@@ -2139,20 +2883,42 @@ function renderHomePage() {
   appState.activeToolId = "";
   appState.categoryPageId = "";
   setPageMode("home");
-  setHeroCopy(
-    IS_ENGLISH_LOCALE ? "Browser-based office utilities" : BRAND_NAME_EN,
-    IS_ENGLISH_LOCALE ? BRAND_NAME_EN : BRAND_NAME,
-    IS_ENGLISH_LOCALE
-      ? "Run practical text, image, PDF, subtitle, audio, and video tools directly in your browser."
-      : "반복 업무를 브라우저에서 처리하고 필요한 결과만 직접 저장하세요."
-  );
+  const localizedHomeCopy = {
+    en: {
+      eyebrow: "Browser-based office utilities",
+      title: BRAND_NAME_EN,
+      description: "Run practical text, image, PDF, subtitle, audio, and video tools directly in your browser.",
+      metaTitle: `${BRAND_NAME_EN} | Browser-based Office Tools`,
+      path: "/en/",
+    },
+    ja: {
+      eyebrow: "ブラウザ型業務ツール",
+      title: BRAND_NAME_EN,
+      description: "テキスト、画像、PDF、字幕、音声、動画の小さな作業をブラウザ内で処理します。",
+      metaTitle: `${BRAND_NAME_EN} | ブラウザで使える業務ツール`,
+      path: "/ja/",
+    },
+    zh: {
+      eyebrow: "浏览器办公工具",
+      title: BRAND_NAME_EN,
+      description: "直接在浏览器中处理文本、图片、PDF、字幕、音频和视频的日常小任务。",
+      metaTitle: `${BRAND_NAME_EN} | 浏览器办公工具`,
+      path: "/zh/",
+    },
+  };
+  const homeCopy = localizedHomeCopy[APP_LOCALE] || {
+    eyebrow: BRAND_NAME_EN,
+    title: BRAND_NAME,
+    description: "반복 업무를 브라우저에서 처리하고 필요한 결과만 직접 저장하세요.",
+    metaTitle: `${BRAND_NAME} | 브라우저 기반 업무 도구 (${BRAND_NAME_EN})`,
+    path: "/",
+  };
+  setHeroCopy(homeCopy.eyebrow, homeCopy.title, homeCopy.description);
 
   setDocumentMeta({
-    title: IS_ENGLISH_LOCALE
-      ? `${BRAND_NAME_EN} | Browser-based Office Tools`
-      : `${BRAND_NAME} | 브라우저 기반 업무 도구 (${BRAND_NAME_EN})`,
+    title: homeCopy.metaTitle,
     description: BRAND_DESCRIPTION_LOCALIZED,
-    url: `${TOOL_ORIGIN}${IS_ENGLISH_LOCALE ? "/en/" : "/"}`,
+    url: `${TOOL_ORIGIN}${homeCopy.path}`,
   });
   setPageTitleReloadState(null);
 
@@ -2342,9 +3108,17 @@ function setPageTitleReloadState(toolTitle) {
   if (isToolPage) {
     els.pageTitle.tabIndex = 0;
     els.pageTitle.setAttribute("role", "button");
-    const label = IS_ENGLISH_LOCALE ? `Start a new ${toolTitle} task` : `${toolTitle} 새 작업 시작`;
+    const label =
+      APP_LOCALE === "en"
+        ? `Start a new ${toolTitle} task`
+        : APP_LOCALE === "ja"
+          ? `${toolTitle}を最初から始める`
+          : APP_LOCALE === "zh"
+            ? `重新开始 ${toolTitle}`
+            : `${toolTitle} 새 작업 시작`;
     els.pageTitle.setAttribute("aria-label", label);
-    els.pageTitle.title = IS_ENGLISH_LOCALE ? "Start new task" : "새 작업 시작";
+    els.pageTitle.title =
+      APP_LOCALE === "en" ? "Start new task" : APP_LOCALE === "ja" ? "最初から始める" : APP_LOCALE === "zh" ? "重新开始" : "새 작업 시작";
     return;
   }
 
@@ -2478,6 +3252,7 @@ function injectStructuredData(tool, categoryPage = null) {
   const script = document.createElement("script");
   script.type = "application/ld+json";
   script.dataset.schema = "dynamic";
+  const localeHomePath = ACTIVE_LOCALE_CONFIG.pathPrefix ? `${ACTIVE_LOCALE_CONFIG.pathPrefix}/` : "/";
 
   if (!tool) {
     const categories = CATEGORY_ORDER.filter((category) => category !== ALL_CATEGORY_LABEL).map((category) => ({
@@ -2489,11 +3264,11 @@ function injectStructuredData(tool, categoryPage = null) {
       {
         "@context": "https://schema.org",
         "@type": "WebSite",
-        "@id": `${TOOL_ORIGIN}${IS_ENGLISH_LOCALE ? "/en/" : "/"}#website`,
+        "@id": `${TOOL_ORIGIN}${localeHomePath}#website`,
         name: BRAND_NAME_LOCALIZED,
-        alternateName: IS_ENGLISH_LOCALE ? [BRAND_NAME, BRAND_DISPLAY_NAME] : [BRAND_NAME_EN, BRAND_DISPLAY_NAME],
-        url: `${TOOL_ORIGIN}${IS_ENGLISH_LOCALE ? "/en/" : "/"}`,
-        inLanguage: IS_ENGLISH_LOCALE ? "en-US" : "ko-KR",
+        alternateName: IS_KOREAN_LOCALE ? [BRAND_NAME_EN, BRAND_DISPLAY_NAME] : [BRAND_NAME, BRAND_DISPLAY_NAME],
+        url: `${TOOL_ORIGIN}${localeHomePath}`,
+        inLanguage: ACTIVE_LOCALE_CONFIG.languageCode,
         description: BRAND_DESCRIPTION_LOCALIZED,
         hasPart: {
           "@type": "ItemList",
@@ -2513,13 +3288,13 @@ function injectStructuredData(tool, categoryPage = null) {
         url: `${TOOL_ORIGIN}${tool.path}`,
         applicationCategory: "BusinessApplication",
         browserRequirements: "Requires a modern browser with JavaScript enabled",
-        inLanguage: IS_ENGLISH_LOCALE ? "en-US" : "ko-KR",
+        inLanguage: ACTIVE_LOCALE_CONFIG.languageCode,
         description: tool.seoDescription || tool.summary,
         keywords: tool.keywords.join(", "),
         publisher: {
           "@type": "Organization",
           name: BRAND_NAME_LOCALIZED,
-          url: `${TOOL_ORIGIN}${IS_ENGLISH_LOCALE ? "/en/" : "/"}`,
+          url: `${TOOL_ORIGIN}${localeHomePath}`,
         },
         operatingSystem: "Any",
         offers: {
@@ -2541,6 +3316,7 @@ function injectCategoryStructuredData(categoryPage) {
   const script = document.createElement("script");
   script.type = "application/ld+json";
   script.dataset.schema = "dynamic";
+  const localeHomePath = ACTIVE_LOCALE_CONFIG.pathPrefix ? `${ACTIVE_LOCALE_CONFIG.pathPrefix}/` : "/";
   script.textContent = JSON.stringify(
     {
       "@context": "https://schema.org",
@@ -2550,10 +3326,10 @@ function injectCategoryStructuredData(categoryPage) {
           "@id": `${TOOL_ORIGIN}${categoryPage.path}#page`,
           name: `${categoryPage.title} - ${BRAND_NAME_LOCALIZED}`,
           url: `${TOOL_ORIGIN}${categoryPage.path}`,
-          inLanguage: IS_ENGLISH_LOCALE ? "en-US" : "ko-KR",
+          inLanguage: ACTIVE_LOCALE_CONFIG.languageCode,
           description: categoryPage.metaDescription,
           isPartOf: {
-            "@id": `${TOOL_ORIGIN}${IS_ENGLISH_LOCALE ? "/en/" : "/"}#website`,
+            "@id": `${TOOL_ORIGIN}${localeHomePath}#website`,
           },
           mainEntity: {
             "@type": "ItemList",
@@ -2573,7 +3349,7 @@ function injectCategoryStructuredData(categoryPage) {
               "@type": "ListItem",
               position: 1,
               name: BRAND_NAME_LOCALIZED,
-              item: `${TOOL_ORIGIN}${IS_ENGLISH_LOCALE ? "/en/" : "/"}`,
+              item: `${TOOL_ORIGIN}${localeHomePath}`,
             },
             {
               "@type": "ListItem",
@@ -2823,6 +3599,7 @@ function renderAudioFileTranscription(container) {
                 <option value="">자동 감지</option>
                 <option value="en">영어</option>
                 <option value="ja">일본어</option>
+                <option value="zh">중국어</option>
               </select>
             </div>
           </div>
@@ -4507,6 +5284,108 @@ function formatAudioChunkTimestamp(timestamp) {
 }
 
 function getVoiceToolCopy() {
+  if (APP_LOCALE === "ja") {
+    return {
+      recognitionLang: "ja-JP",
+      title: "音声入力テキスト化",
+      checking: "確認中",
+      idle: "待機",
+      start: "音声入力開始",
+      resume: "再開",
+      pause: "一時停止",
+      stop: "終了",
+      clear: "リセット",
+      transcriptTitle: "ライブ文字起こし",
+      liveMetaInitial: "0文字 · 00:00",
+      transcriptPlaceholder: "音声入力を開始すると、話した内容がここに表示されます。",
+      titleLabel: "タイトル",
+      titlePlaceholder: "例: 新商品の紹介動画",
+      formatLabel: "形式",
+      typeLabels: {
+        general: "一般原稿",
+        youtube: "YouTube動画",
+        presentation: "プレゼン",
+        meeting: "会議メモ",
+      },
+      removeFillers: "不要な口ぐせを整理",
+      addSections: "見出しを追加",
+      makeScript: "原稿を作成",
+      browserNote: "認識が切れた場合、ブラウザが自動再接続を試みます。ChromeまたはEdgeを推奨します。",
+      outputTitle: "仕上げ原稿",
+      outputMetaInitial: "0文字",
+      copy: "コピー",
+      download: "TXT保存",
+      outputPlaceholder: "整理された日本語原稿がここに表示されます。",
+      unsupported: "音声認識に未対応",
+      unsupportedToast: "ブラウザ音声認識にはChromeまたはEdgeを使用してください。",
+      ready: "日本語認識の準備完了",
+      listening: "認識中",
+      waitingSpeech: "音声待ち",
+      reconnecting: "再接続中",
+      paused: "一時停止",
+      permissionToast: "音声入力を始めるにはマイク権限が必要です。",
+      noCopy: "コピーするテキストがありません。",
+      copied: "クリップボードにコピーしました。",
+      noSave: "保存するテキストがありません。",
+      filenameDefault: "script",
+      noSource: "先にマイクで話すかテキストを入力してください。",
+      restartFail: "音声認識を再開できませんでした。もう一度開始してください。",
+      liveMeta: (chars, seconds) => `${chars.toLocaleString("ja-JP")}文字 · ${formatClock(seconds)}`,
+      outputMeta: (chars) => `${chars.toLocaleString("ja-JP")}文字`,
+    };
+  }
+
+  if (APP_LOCALE === "zh") {
+    return {
+      recognitionLang: "zh-CN",
+      title: "语音转文字",
+      checking: "检查中",
+      idle: "待机",
+      start: "开始听写",
+      resume: "继续",
+      pause: "暂停",
+      stop: "结束",
+      clear: "重置",
+      transcriptTitle: "实时转写",
+      liveMetaInitial: "0字 · 00:00",
+      transcriptPlaceholder: "开始听写后，识别到的中文会显示在这里。",
+      titleLabel: "标题",
+      titlePlaceholder: "例：新品介绍视频",
+      formatLabel: "格式",
+      typeLabels: {
+        general: "通用稿",
+        youtube: "YouTube视频",
+        presentation: "演示稿",
+        meeting: "会议摘要",
+      },
+      removeFillers: "清理口头填充词",
+      addSections: "添加小标题",
+      makeScript: "生成稿件",
+      browserNote: "如果识别连接中断，浏览器会尝试自动重连。建议使用 Chrome 或 Edge。",
+      outputTitle: "整理稿",
+      outputMetaInitial: "0字",
+      copy: "复制",
+      download: "保存TXT",
+      outputPlaceholder: "整理后的中文稿件会显示在这里。",
+      unsupported: "不支持语音识别",
+      unsupportedToast: "请使用 Chrome 或 Edge 的浏览器语音识别。",
+      ready: "中文识别准备就绪",
+      listening: "正在听写",
+      waitingSpeech: "等待语音",
+      reconnecting: "正在重连",
+      paused: "已暂停",
+      permissionToast: "需要允许麦克风权限才能开始听写。",
+      noCopy: "没有可复制的文本。",
+      copied: "已复制到剪贴板。",
+      noSave: "没有可保存的文本。",
+      filenameDefault: "script",
+      noSource: "请先对麦克风说话或输入文本。",
+      restartFail: "无法重新启动语音识别。请再次点击开始听写。",
+      liveMeta: (chars, seconds) => `${chars.toLocaleString("zh-CN")}字 · ${formatClock(seconds)}`,
+      outputMeta: (chars) => `${chars.toLocaleString("zh-CN")}字`,
+    };
+  }
+
   if (IS_ENGLISH_LOCALE) {
     return {
       recognitionLang: "en-US",
@@ -8700,6 +9579,18 @@ function cleanTranscript(text, removeFillers) {
     return result.replace(pattern, " ").replace(/\s+/g, " ").trim();
   }
 
+  if (APP_LOCALE === "ja") {
+    const fillerWords = ["えー", "えっと", "あの", "その", "まあ", "なんか", "つまり"];
+    const pattern = new RegExp(`(^|\\s)(${fillerWords.map(escapeRegExp).join("|")})(?=\\s|,|\\.|。|$)`, "g");
+    return result.replace(pattern, " ").replace(/\s+/g, " ").trim();
+  }
+
+  if (APP_LOCALE === "zh") {
+    const fillerWords = ["嗯", "呃", "那个", "就是", "然后", "其实", "基本上"];
+    const pattern = new RegExp(`(^|\\s)(${fillerWords.map(escapeRegExp).join("|")})(?=\\s|,|\\.|。|$)`, "g");
+    return result.replace(pattern, " ").replace(/\s+/g, " ").trim();
+  }
+
   const fillerWords = ["음", "어", "그러니까", "뭐랄까", "약간", "이제", "일단", "뭔가"];
   const pattern = new RegExp(`(^|\\s)(${fillerWords.join("|")})(?=\\s|,|\\.|$)`, "g");
   return result.replace(pattern, " ").replace(/\s+/g, " ").trim();
@@ -8748,7 +9639,7 @@ function composeScript({ title, type, sentences, addSections }) {
   const lines = [`# ${heading}`, ""];
   body.forEach((paragraph, index) => {
     if (addSections) {
-      lines.push(`## ${sectionLabels[index] || (IS_ENGLISH_LOCALE ? `Part ${index + 1}` : `파트 ${index + 1}`)}`);
+      lines.push(`## ${sectionLabels[index] || getPartLabel(index)}`);
     }
     lines.push(paragraph.join(" "));
     lines.push("");
@@ -8760,11 +9651,11 @@ function composeMeetingSummary(heading, sentences, addSections) {
   const lines = [`# ${heading}`, ""];
   const summary = sentences.slice(0, 4);
   const details = sentences.slice(4);
-  if (addSections) lines.push(IS_ENGLISH_LOCALE ? "## Key Summary" : "## 핵심 요약");
+  if (addSections) lines.push(getMeetingSectionLabel("summary"));
   summary.forEach((sentence) => lines.push(`- ${sentence}`));
   if (details.length > 0) {
     lines.push("");
-    if (addSections) lines.push(IS_ENGLISH_LOCALE ? "## Details" : "## 상세 내용");
+    if (addSections) lines.push(getMeetingSectionLabel("details"));
     details.forEach((sentence) => lines.push(`- ${sentence}`));
   }
   return lines.join("\n").trim();
@@ -8779,55 +9670,131 @@ function groupParagraphs(sentences, size) {
 }
 
 function getSectionLabels(type, count) {
-  const labels = IS_ENGLISH_LOCALE
-    ? {
+  const labelsByLocale = {
+    en: {
         general: ["Introduction", "Main Points", "Closing"],
         youtube: ["Opening", "Main Content", "Call to Action"],
         presentation: ["Problem", "Key Points", "Conclusion"],
-      }
-    : {
+      },
+    ja: {
+        general: ["導入", "主な内容", "まとめ"],
+        youtube: ["オープニング", "本編", "行動喚起"],
+        presentation: ["課題", "要点", "結論"],
+      },
+    zh: {
+        general: ["开头", "重点内容", "结尾"],
+        youtube: ["开场", "主体内容", "行动引导"],
+        presentation: ["问题", "要点", "结论"],
+      },
+    ko: {
         general: ["도입", "본문", "마무리"],
         youtube: ["오프닝", "핵심 내용", "콜 투 액션"],
         presentation: ["문제 제기", "주요 내용", "결론"],
-      };
+      },
+  };
+  const labels = labelsByLocale[APP_LOCALE] || labelsByLocale.ko;
   const base = labels[type] || labels.general;
-  return Array.from({ length: count }, (_, index) => base[index] || (IS_ENGLISH_LOCALE ? `Part ${index + 1}` : `파트 ${index + 1}`));
+  return Array.from({ length: count }, (_, index) => base[index] || getPartLabel(index));
 }
 
 function getDefaultTitle(type) {
-  const titles = IS_ENGLISH_LOCALE
-    ? {
+  const titlesByLocale = {
+    en: {
         general: "Generated Script",
         youtube: "YouTube Video Script",
         presentation: "Presentation Script",
         meeting: "Meeting Summary",
-      }
-    : {
+      },
+    ja: {
+        general: "作成された原稿",
+        youtube: "YouTube動画原稿",
+        presentation: "プレゼン原稿",
+        meeting: "会議メモ",
+      },
+    zh: {
+        general: "生成的稿件",
+        youtube: "YouTube视频稿",
+        presentation: "演示稿",
+        meeting: "会议摘要",
+      },
+    ko: {
         general: "생성된 대본",
         youtube: "유튜브 영상 대본",
         presentation: "발표 대본",
         meeting: "회의 요약",
-      };
+      },
+  };
+  const titles = titlesByLocale[APP_LOCALE] || titlesByLocale.ko;
   return titles[type] || titles.general;
 }
 
 function getRecognitionErrorMessage(error) {
-  const messages = IS_ENGLISH_LOCALE
-    ? {
+  const messagesByLocale = {
+    en: {
         "no-speech": "No speech was detected. Try speaking a little louder.",
         "audio-capture": "No microphone was found.",
         "not-allowed": "Microphone permission is blocked.",
         "service-not-allowed": "The browser speech recognition service is blocked.",
         network: "The speech recognition service connection is unstable.",
-      }
-    : {
+      },
+    ja: {
+        "no-speech": "音声が検出されませんでした。少し大きめに話してください。",
+        "audio-capture": "マイクが見つかりません。",
+        "not-allowed": "マイク権限がブロックされています。",
+        "service-not-allowed": "ブラウザの音声認識サービスがブロックされています。",
+        network: "音声認識サービスの接続が不安定です。",
+      },
+    zh: {
+        "no-speech": "未检测到语音。请稍微大声一点。",
+        "audio-capture": "未找到麦克风。",
+        "not-allowed": "麦克风权限已被阻止。",
+        "service-not-allowed": "浏览器语音识别服务被阻止。",
+        network: "语音识别服务连接不稳定。",
+      },
+    ko: {
         "no-speech": "소리가 감지되지 않았습니다. 조금 더 크게 말해 주세요.",
         "audio-capture": "마이크를 찾을 수 없습니다.",
         "not-allowed": "마이크 권한이 차단되었습니다.",
         "service-not-allowed": "브라우저 음성 인식 서비스가 차단되었습니다.",
         network: "음성 인식 서비스 연결이 불안정합니다.",
-      };
-  return messages[error] || (IS_ENGLISH_LOCALE ? `Speech recognition error: ${error}` : `음성 인식 오류: ${error}`);
+      },
+  };
+  const messages = messagesByLocale[APP_LOCALE] || messagesByLocale.ko;
+  const fallback = {
+    en: `Speech recognition error: ${error}`,
+    ja: `音声認識エラー: ${error}`,
+    zh: `语音识别错误: ${error}`,
+    ko: `음성 인식 오류: ${error}`,
+  };
+  return messages[error] || fallback[APP_LOCALE] || fallback.ko;
+}
+
+function getPartLabel(index) {
+  const partLabels = {
+    en: `Part ${index + 1}`,
+    ja: `パート${index + 1}`,
+    zh: `第${index + 1}部分`,
+    ko: `파트 ${index + 1}`,
+  };
+  return partLabels[APP_LOCALE] || partLabels.ko;
+}
+
+function getMeetingSectionLabel(section) {
+  const labels = {
+    summary: {
+      en: "## Key Summary",
+      ja: "## 要点",
+      zh: "## 重点摘要",
+      ko: "## 핵심 요약",
+    },
+    details: {
+      en: "## Details",
+      ja: "## 詳細",
+      zh: "## 详细内容",
+      ko: "## 상세 내용",
+    },
+  };
+  return labels[section]?.[APP_LOCALE] || labels[section]?.ko || "";
 }
 
 function cleanAiText(text, options) {
@@ -10909,11 +11876,11 @@ function renderQuickToolDock(activeTool) {
       <span>${appState.quickOffset + 1}-${Math.min(appState.quickOffset + pageSize, tools.length)} / ${tools.length}</span>
     </div>
     <div class="quick-tool-strip" aria-label="${escapeHtml(t("otherTools"))}">
-      <button class="quick-tool-arrow" type="button" data-shift="${-step}" aria-label="${IS_ENGLISH_LOCALE ? "Previous tools" : "이전 도구 보기"}" ${appState.quickOffset === 0 ? "disabled" : ""}>‹</button>
+      <button class="quick-tool-arrow" type="button" data-shift="${-step}" aria-label="${escapeHtml(t("previousTools") || (IS_ENGLISH_LOCALE ? "Previous tools" : "이전 도구 보기"))}" ${appState.quickOffset === 0 ? "disabled" : ""}>‹</button>
       <div class="quick-tool-icons${motionClass}">
         ${visible.map(renderQuickToolIcon).join("")}
       </div>
-      <button class="quick-tool-arrow" type="button" data-shift="${step}" aria-label="${IS_ENGLISH_LOCALE ? "Next tools" : "다음 도구 보기"}" ${appState.quickOffset >= maxOffset ? "disabled" : ""}>›</button>
+      <button class="quick-tool-arrow" type="button" data-shift="${step}" aria-label="${escapeHtml(t("nextTools") || (IS_ENGLISH_LOCALE ? "Next tools" : "다음 도구 보기"))}" ${appState.quickOffset >= maxOffset ? "disabled" : ""}>›</button>
     </div>
   `;
 
@@ -11234,7 +12201,7 @@ function openMarkdownViewerWindow(markdown, copy) {
   }
 
   const doc = workspace.document;
-  doc.documentElement.lang = APP_LOCALE === "en" ? "en" : "ko";
+  doc.documentElement.lang = ACTIVE_LOCALE_CONFIG.htmlLang;
   doc.title = copy.windowTitle;
   doc.head.replaceChildren();
   doc.body.replaceChildren();
@@ -11382,7 +12349,7 @@ function openMarkdownViewerWindow(markdown, copy) {
   doc.body.replaceChildren(header, main);
 
   const updateStatus = () => {
-    const locale = APP_LOCALE === "en" ? "en-US" : "ko-KR";
+    const locale = ACTIVE_LOCALE_CONFIG.numberLocale;
     const chars = source.value.length.toLocaleString(locale);
     const lines = (source.value ? source.value.split("\n").length : 0).toLocaleString(locale);
     const charLabel = APP_LOCALE === "en" ? " chars" : "자";
@@ -11431,7 +12398,7 @@ function openMarkdownViewerWindow(markdown, copy) {
 }
 
 function buildMarkdownViewerWindowHtml(markdown, labels) {
-  const lang = APP_LOCALE === "en" ? "en" : "ko";
+  const lang = ACTIVE_LOCALE_CONFIG.htmlLang;
   const initialMarkdown = JSON.stringify(String(markdown || "")).replace(/[<>&]/g, (char) => {
     return { "<": "\\u003c", ">": "\\u003e", "&": "\\u0026" }[char];
   });

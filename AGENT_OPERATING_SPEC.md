@@ -18,7 +18,7 @@
 3. 변경 범위를 좁게 잡고, 영향을 받는 문서와 테스트를 함께 확인한다.
 4. 기능 변경이면 캐시 버전, sitemap, 구조화 데이터, 카테고리 페이지, 분석 태그, 광고 슬롯, 보안 헤더 영향까지 함께 본다.
 5. 사용자가 명시하지 않은 대규모 리팩터링은 하지 않는다.
-6. 영어 버전 작업은 기존 한국어 경로와 기능을 보존하면서 `/en/` 경로, 영어 override, 영어 locale 분기 안에서 먼저 해결한다.
+6. 다국어 버전 작업은 기존 한국어·영어 경로와 기능을 보존하면서 `/en/`, `/ja/`, `/zh/` 경로, locale별 override, locale 분기 안에서 먼저 해결한다.
 
 ## 기능 추가 체크리스트
 
@@ -75,7 +75,7 @@
 - 사용자 입력값, 파일명, 추출 결과, QR 결과, 녹화 내용 등 민감할 수 있는 값은 분석 이벤트로 보내지 않는다.
 - 광고는 작업 영역, 업로드 박스, 텍스트 입력 영역, 결과 미리보기 안에 넣지 않는다.
 - 새 HTML 페이지는 canonical, meta description, 구조화 데이터, sitemap을 확인한다.
-- 다국어 페이지는 canonical, `hreflang="ko"`, `hreflang="en"`, `hreflang="x-default"`의 상호 대응과 sitemap 포함 여부를 확인한다.
+- 다국어 페이지는 canonical, `hreflang="ko"`, `hreflang="en"`, `hreflang="ja"`, `hreflang="zh-Hans"`, `hreflang="x-default"`의 상호 대응과 sitemap 포함 여부를 확인한다.
 - 영어 SEO 문구는 실제 영어판 기능을 기준으로 작성하고, 한국어 기능 설명이 영어판 title, description, 구조화 데이터에 잘못 남지 않게 한다.
 - `app.js` 또는 `styles.css`가 바뀌면 모든 HTML과 `site.webmanifest`의 캐시 버전을 올린다.
 

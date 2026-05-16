@@ -15,8 +15,8 @@ Current production baseline:
 - Cloudflare Pages project: `mic-script-generator`
 - Latest AdSense/SEO readiness commit: `580c060 Improve AdSense SEO readiness`
 - Latest English SEO polish commit: `0385e6d Polish English SEO copy`
-- Current static asset cache version: `20260511-10`
-- English version deployed under `/en/` on the same domain, with Korean routes preserved
+- Current static asset cache version: `20260516-01`
+- English version deployed under `/en/`; Japanese and Simplified Chinese versions are prepared under `/ja/` and `/zh/` on the same domain, with Korean routes preserved
 - Category landing pages, privacy policy updates, sitemap updates, and core FAQ copy were deployed on 2026-04-29
 
 Core constraints:
@@ -147,13 +147,21 @@ Core constraints:
 - English tool pages: `/en/tools/{slug}/`
 - English category landing pages: `/en/tools/text/`, `/en/tools/pdf/`, `/en/tools/image/`, `/en/tools/subtitle/`, `/en/tools/voice-video/`
 - English policy pages: `/en/privacy/`, `/en/terms/`
+- Japanese home: `/ja/`
+- Japanese tool pages: `/ja/tools/{slug}/`
+- Japanese category landing pages: `/ja/tools/text/`, `/ja/tools/pdf/`, `/ja/tools/image/`, `/ja/tools/subtitle/`, `/ja/tools/voice-video/`
+- Japanese policy pages: `/ja/privacy/`, `/ja/terms/`
+- Simplified Chinese home: `/zh/`
+- Simplified Chinese tool pages: `/zh/tools/{slug}/`
+- Simplified Chinese category landing pages: `/zh/tools/text/`, `/zh/tools/pdf/`, `/zh/tools/image/`, `/zh/tools/subtitle/`, `/zh/tools/voice-video/`
+- Simplified Chinese policy pages: `/zh/privacy/`, `/zh/terms/`
 
 Each tool page should have:
 
 - Unique title
 - Unique meta description
 - Canonical URL
-- Korean/English hreflang alternates where a corresponding language page exists
+- Korean/English/Japanese/Simplified Chinese hreflang alternates where corresponding language pages exist
 - Dedicated Open Graph URL
 - Browser-side app shell driven by `app.js`
 - Collapsed usage examples and FAQ below Quick Flow for SEO and user help
@@ -181,8 +189,8 @@ Important frontend implementation notes:
 
 - `TOOL_DEFS` in `app.js` is the source of truth for individual tools.
 - `CATEGORY_PAGE_DEFS` in `app.js` is the source of truth for category landing pages.
-- `TOOL_DEFS_EN_OVERRIDES` and `CATEGORY_PAGE_DEFS_EN` provide the English `/en/` presentation without replacing the Korean defaults.
-- `scripts/generate-english-pages.js` regenerates English static pages from the active English registry.
+- `TOOL_DEFS_LOCALE_OVERRIDES` and `CATEGORY_PAGE_DEFS_BY_LOCALE` provide `/en/`, `/ja/`, and `/zh/` presentation without replacing the Korean defaults.
+- `scripts/generate-english-pages.js` regenerates localized static pages for English, Japanese, and Simplified Chinese from the active locale registry.
 - `renderCategoryPage()` renders category landing pages.
 - `renderHomeCategoryLinks()` adds the compact category links on the home screen.
 - `injectCategoryStructuredData()` injects `CollectionPage`, `ItemList`, and `BreadcrumbList` schema for category pages.
@@ -190,7 +198,7 @@ Important frontend implementation notes:
 - The current category pages intentionally hide the left tool sidebar and show a wider category tool grid.
 - When `app.js` or `styles.css` changes, bump the query-string cache version in every HTML entry and `site.webmanifest`.
 - Run `npm.cmd run apply:site-tags` after adding or changing HTML pages so GTM tags and CSP hashes remain managed.
-- For English SEO changes, confirm English static pages do not keep Korean-only phrases such as `Korean Dictation` unless the tool is intentionally about Korean.
+- For localized SEO changes, confirm static pages do not keep Korean-only or wrong-locale phrases unless the tool is intentionally about that language.
 - File upload tools should support both direct file selection and drag-and-drop on `.upload-box` where browser APIs allow it.
 - Heavy browser-side model tools must load models only on demand and must explain model download, device performance, and local-file processing limits in the UI.
 
@@ -199,7 +207,7 @@ Important frontend implementation notes:
 - GitHub Actions prepares `.cloudflare-dist/`
 - Root files are copied into `.cloudflare-dist/`
 - The `tools/` directory is copied recursively into `.cloudflare-dist/`
-- The `en/` directory is copied recursively into `.cloudflare-dist/`
+- The `en/`, `ja/`, and `zh/` directories are copied recursively into `.cloudflare-dist/`
 - Cloudflare Pages deploys `.cloudflare-dist/`
 
 ## Security Rules
@@ -283,7 +291,7 @@ Before committing or deploying broad platform changes:
 - Confirm all HTML pages use the latest cache version for `/app.js`, `/styles.css`, `/favicon.svg`, and `/site.webmanifest`
 - For new HTML pages, confirm these IDs exist: `heroEyebrow`, `pageTitle`, `pageDescription`, `toolSearch`, `categoryFilters`, `toolList`, `toolOverview`, `toolWorkspace`, `toolGuideList`, `helpBtn`, `helpDialog`, `helpCloseBtn`, `selectionCopyBtn`
 - Confirm `sitemap.xml` includes new indexable URLs
-- For English pages, confirm canonical, `hreflang="ko"`, `hreflang="en"`, and `hreflang="x-default"` are present and point to the intended URLs
+- For localized pages, confirm canonical, `hreflang="ko"`, `hreflang="en"`, `hreflang="ja"`, `hreflang="zh-Hans"`, and `hreflang="x-default"` are present and point to the intended URLs
 - After push, verify GitHub Actions / Cloudflare Pages success
 - For category pages, verify each production URL returns `200` and contains `data-category-page`
 - For English SEO changes, verify the production `/en/` URL or changed `/en/tools/{slug}/` URL returns `200` and contains the updated title/meta copy

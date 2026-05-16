@@ -68,11 +68,13 @@ function collectHtmlFiles() {
     files.add(path.join(ROOT, file));
   }
 
-  const toolsDir = path.join(ROOT, "tools");
-  if (fs.existsSync(toolsDir)) {
-    walk(toolsDir, (file) => {
-      if (file.endsWith(".html")) files.add(file);
-    });
+  for (const dirName of ["tools", "en", "ja", "zh"]) {
+    const dir = path.join(ROOT, dirName);
+    if (fs.existsSync(dir)) {
+      walk(dir, (file) => {
+        if (file.endsWith(".html")) files.add(file);
+      });
+    }
   }
 
   return [...files]

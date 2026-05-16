@@ -70,10 +70,30 @@ function main() {
     lang: "en",
     pathname: "/en/tools/voice-to-text/",
   });
+  const japaneseApi = loadAppApi(app, {
+    locale: "ja",
+    lang: "ja",
+    pathname: "/ja/tools/voice-to-text/",
+  });
+  const chineseApi = loadAppApi(app, {
+    locale: "zh",
+    lang: "zh-Hans",
+    pathname: "/zh/tools/voice-to-text/",
+  });
   const tests = [
     ...buildStructureTests(api),
     ...buildLogicTests(api, app),
     ...buildEnglishLocaleTests(englishApi),
+    ...buildAdditionalLocaleTests(japaneseApi, {
+      name: "Japanese",
+      recognitionLang: "ja-JP",
+      ready: "日本語認識の準備完了",
+    }),
+    ...buildAdditionalLocaleTests(chineseApi, {
+      name: "Chinese",
+      recognitionLang: "zh-CN",
+      ready: "中文识别准备就绪",
+    }),
     ...buildMetadataTests(api),
     ...buildSecurityTests(api, app),
     ...buildUploadUxTests(app),
@@ -581,6 +601,16 @@ function buildEnglishLocaleTests(api) {
       assert(script.includes("# Meeting Summary"), "English meeting title missing");
       assert(script.includes("## Key Summary"), "English meeting section missing");
       assert(!script.includes("핵심"), "Korean meeting heading leaked into English output");
+    }),
+  ];
+}
+
+function buildAdditionalLocaleTests(api, locale) {
+  return [
+    test(`${locale.name} voice dictation uses localized recognition`, () => {
+      const copy = api.getVoiceToolCopy();
+      assert(copy.recognitionLang === locale.recognitionLang, `expected ${locale.recognitionLang}, got ${copy.recognitionLang}`);
+      assert(copy.ready === locale.ready, `${locale.name} readiness label mismatch`);
     }),
   ];
 }
