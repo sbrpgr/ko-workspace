@@ -242,8 +242,13 @@ function auditLocalizedAppPage({ label, locale, file, canonicalPath, koPath, dat
   for (const id of REQUIRED_TOOL_PAGE_IDS) {
     if (!html.includes(`id="${id}"`)) problems.push(`${relative}: missing #${id}`);
   }
-  if (!html.includes("static-content:start") || !html.includes("static-content-panel")) {
+  const shouldHaveStaticContent = dataAttribute === 'data-page="home"';
+  const hasStaticContent = html.includes("static-content:start") || html.includes("static-content-panel");
+  if (shouldHaveStaticContent && !hasStaticContent) {
     problems.push(`${relative}: missing static review content panel`);
+  }
+  if (!shouldHaveStaticContent && hasStaticContent) {
+    problems.push(`${relative}: unexpected static scenario content panel`);
   }
   const visible = html
     .replace(/<script[\s\S]*?<\/script>/gi, " ")
@@ -251,7 +256,7 @@ function auditLocalizedAppPage({ label, locale, file, canonicalPath, koPath, dat
     .replace(/<[^>]+>/g, " ")
     .replace(/\s+/g, " ")
     .trim();
-  if (visible.length < locale.visibleMin) {
+  if (shouldHaveStaticContent && visible.length < locale.visibleMin) {
     problems.push(`${relative}: localized static visible content is too thin (${visible.length} chars, expected ${locale.visibleMin}+)`);
   }
 
@@ -331,14 +336,16 @@ function auditStaticReviewContent() {
   const problems = [];
   const app = read(path.join(ROOT, "app.js"));
   const pages = [
-    { label: "index.html", file: path.join(ROOT, "index.html") },
+    { label: "index.html", file: path.join(ROOT, "index.html"), shouldHaveStaticContent: true },
     ...parseRegistry(app, "TOOL_DEFS").map((tool) => ({
       label: `${tool.id} page`,
       file: path.join(ROOT, tool.path, "index.html"),
+      shouldHaveStaticContent: false,
     })),
     ...parseRegistry(app, "CATEGORY_PAGE_DEFS").map((page) => ({
       label: `${page.id} category page`,
       file: path.join(ROOT, page.path, "index.html"),
+      shouldHaveStaticContent: false,
     })),
   ];
 
@@ -350,8 +357,12 @@ function auditStaticReviewContent() {
 
     const html = read(page.file);
     const relative = toRelative(page.file);
-    if (!html.includes("static-content:start") || !html.includes("static-content-panel")) {
+    const hasStaticContent = html.includes("static-content:start") || html.includes("static-content-panel");
+    if (page.shouldHaveStaticContent && !hasStaticContent) {
       problems.push(`${relative}: missing static review content panel`);
+    }
+    if (!page.shouldHaveStaticContent && hasStaticContent) {
+      problems.push(`${relative}: unexpected static scenario content panel`);
     }
 
     const visible = html
@@ -361,7 +372,7 @@ function auditStaticReviewContent() {
       .replace(/\s+/g, " ")
       .trim();
     const minimumLength = 1500;
-    if (visible.length < minimumLength) {
+    if (page.shouldHaveStaticContent && visible.length < minimumLength) {
       problems.push(`${relative}: static visible content is too thin (${visible.length} chars, expected ${minimumLength}+)`);
     }
   }

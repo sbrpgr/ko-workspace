@@ -366,15 +366,7 @@ function renderLocale(locale, api, version) {
       heroTitle: tool.title,
       heroDescription: tool.summary,
       schema: toolSchema(tool, locale),
-      staticContent: renderStaticContent(locale, {
-        id: `${tool.id}-${locale.id}`,
-        eyebrow: locale.static.useCase,
-        title: locale.static.toolScenarioTitle ? locale.static.toolScenarioTitle(tool.title) : `${tool.title} workflow`,
-        intro: tool.summary,
-        subject: tool.title,
-        result: locale.static.result,
-        scenarioItems: tool.examples || [],
-      }),
+      staticContent: "",
     }, version), version);
   }
 
@@ -391,15 +383,7 @@ function renderLocale(locale, api, version) {
       heroTitle: page.title,
       heroDescription: page.description,
       schema: categorySchema(page, api.tools, locale),
-      staticContent: renderStaticContent(locale, {
-        id: `${page.id}-category-${locale.id}`,
-        eyebrow: locale.static.categoryGuide,
-        title: locale.static.categoryScenarioTitle ? locale.static.categoryScenarioTitle(page.title) : `${page.title} scenarios`,
-        intro: page.description,
-        subject: page.title,
-        result: locale.static.categoryResult,
-        scenarioItems: locale.static.categoryScenarios?.[page.id] || [],
-      }),
+      staticContent: "",
     }, version), version);
   }
 

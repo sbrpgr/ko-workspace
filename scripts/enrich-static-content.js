@@ -407,6 +407,8 @@ function main() {
     const content = resolveContent(file, next);
     if (content) {
       next = upsertStaticContent(next, content);
+    } else if (isToolOrCategoryPage(next)) {
+      next = removeExistingPanel(next);
     }
     if (next !== original) {
       fs.writeFileSync(file, next);
@@ -446,23 +448,11 @@ function resolveContent(file, html) {
   if (html.includes('data-locale="en"')) return null;
   if (relative === "index.html") return { id: "home", ...HOME_CONTENT };
 
-  const toolMatch = html.match(/<body[^>]+data-tool="([^"]+)"/);
-  if (toolMatch) {
-    const id = toolMatch[1];
-    const content = TOOL_CONTENT[id];
-    if (!content) throw new Error(`${relative}: missing TOOL_CONTENT for ${id}`);
-    return { id, ...content };
-  }
-
-  const categoryMatch = html.match(/<body[^>]+data-category-page="([^"]+)"/);
-  if (categoryMatch) {
-    const id = categoryMatch[1];
-    const content = CATEGORY_CONTENT[id];
-    if (!content) throw new Error(`${relative}: missing CATEGORY_CONTENT for ${id}`);
-    return { id, ...content };
-  }
-
   return null;
+}
+
+function isToolOrCategoryPage(html) {
+  return /<body[^>]+data-(?:tool|category-page)=/.test(html);
 }
 
 function normalizeTrustCopy(html) {
