@@ -87,6 +87,9 @@ function auditToolPages() {
   const rendererIds = parseObjectKeys(app, "TOOL_RENDERERS");
   const visualIds = parseObjectKeys(app, "TOOL_VISUALS");
   const scenarioIds = parseObjectKeys(app, "TOOL_SCENARIOS");
+  const englishScenarioIds = parseObjectKeys(app, "TOOL_SCENARIO_LINES_EN");
+  const japaneseScenarioIds = parseNestedObjectKeys(app, "LOCALIZED_TOOL_SCENARIO_LINES", "ja");
+  const chineseScenarioIds = parseNestedObjectKeys(app, "LOCALIZED_TOOL_SCENARIO_LINES", "zh");
 
   problems.push(...findDuplicateIds(tools, "TOOL_DEFS"));
 
@@ -118,6 +121,9 @@ function auditToolPages() {
     if (!rendererIds.has(tool.id)) problems.push(`app.js: missing TOOL_RENDERERS entry for ${tool.id}`);
     if (!visualIds.has(tool.id)) problems.push(`app.js: missing TOOL_VISUALS entry for ${tool.id}`);
     if (!scenarioIds.has(tool.id)) problems.push(`app.js: missing TOOL_SCENARIOS entry for ${tool.id}`);
+    if (!englishScenarioIds.has(tool.id)) problems.push(`app.js: missing TOOL_SCENARIO_LINES_EN entry for ${tool.id}`);
+    if (!japaneseScenarioIds.has(tool.id)) problems.push(`app.js: missing LOCALIZED_TOOL_SCENARIO_LINES.ja entry for ${tool.id}`);
+    if (!chineseScenarioIds.has(tool.id)) problems.push(`app.js: missing LOCALIZED_TOOL_SCENARIO_LINES.zh entry for ${tool.id}`);
   }
 
   return problems;
@@ -619,6 +625,23 @@ function parseObjectKeys(app, name) {
   const objectEnd = findMatchingBracket(app, objectStart, "{", "}");
   const body = app.slice(objectStart + 1, objectEnd);
   return new Set([...body.matchAll(/^\s*"([^"]+)":/gm)].map((match) => match[1]));
+}
+
+function parseNestedObjectKeys(app, name, nestedName) {
+  const startToken = `const ${name} = {`;
+  const start = app.indexOf(startToken);
+  if (start === -1) return new Set();
+
+  const objectStart = app.indexOf("{", start);
+  const objectEnd = findMatchingBracket(app, objectStart, "{", "}");
+  const body = app.slice(objectStart + 1, objectEnd);
+  const nestedMatch = body.match(new RegExp(`\\n\\s*${nestedName}:\\s*{`));
+  if (!nestedMatch) return new Set();
+
+  const nestedStart = body.indexOf("{", nestedMatch.index);
+  const nestedEnd = findMatchingBracket(body, nestedStart, "{", "}");
+  const nestedBody = body.slice(nestedStart + 1, nestedEnd);
+  return new Set([...nestedBody.matchAll(/^\s*"([^"]+)":/gm)].map((match) => match[1]));
 }
 
 function splitTopLevelObjects(text) {
