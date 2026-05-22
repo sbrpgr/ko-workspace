@@ -1056,36 +1056,39 @@ body.home-mode .tool-workspace {
   margin-bottom: 10px;
 }
 
-.tool-example-list,
-.tool-faq-list {
+.tool-scenario-list {
   display: grid;
   gap: 10px;
 }
 
-.tool-example-list {
-  color: #3d4654;
-  line-height: 1.65;
-  margin: 0;
-  padding-left: 20px;
-}
-
-.tool-faq-list article {
+.tool-scenario-card {
   border: 1px solid #eef1f5;
   border-radius: 8px;
   background: #fbfcff;
   padding: 12px;
 }
 
-.tool-faq-list h4 {
+.tool-scenario-card h3 {
   color: #242936;
   font-size: 0.94rem;
   margin: 0 0 6px;
 }
 
-.tool-faq-list p {
+.tool-scenario-card p {
   color: #5f6876;
   font-size: 0.9rem;
   line-height: 1.65;
+}
+
+.tool-scenario-check {
+  border-top: 1px solid #edf1f6;
+  margin-top: 10px;
+  padding-top: 10px;
+}
+
+.tool-scenario-check strong {
+  color: #303846;
+  font-weight: 900;
 }
 
 .related-tools {

@@ -86,8 +86,7 @@ function auditToolPages() {
   const home = read(path.join(ROOT, "index.html"));
   const rendererIds = parseObjectKeys(app, "TOOL_RENDERERS");
   const visualIds = parseObjectKeys(app, "TOOL_VISUALS");
-  const exampleIds = parseObjectKeys(app, "TOOL_USE_EXAMPLES");
-  const faqIds = parseObjectKeys(app, "TOOL_EXTRA_FAQS");
+  const scenarioIds = parseObjectKeys(app, "TOOL_SCENARIOS");
 
   problems.push(...findDuplicateIds(tools, "TOOL_DEFS"));
 
@@ -118,8 +117,7 @@ function auditToolPages() {
     }
     if (!rendererIds.has(tool.id)) problems.push(`app.js: missing TOOL_RENDERERS entry for ${tool.id}`);
     if (!visualIds.has(tool.id)) problems.push(`app.js: missing TOOL_VISUALS entry for ${tool.id}`);
-    if (!exampleIds.has(tool.id)) problems.push(`app.js: missing TOOL_USE_EXAMPLES entry for ${tool.id}`);
-    if (!faqIds.has(tool.id)) problems.push(`app.js: missing TOOL_EXTRA_FAQS entry for ${tool.id}`);
+    if (!scenarioIds.has(tool.id)) problems.push(`app.js: missing TOOL_SCENARIOS entry for ${tool.id}`);
   }
 
   return problems;

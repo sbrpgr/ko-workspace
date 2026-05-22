@@ -647,10 +647,9 @@ const UI_TEXT = {
     directoryLabel: "도구 목록",
     categoryTools: "카테고리별 도구",
     categorySeoSuffix: "를 브라우저에서 바로 사용하세요",
-    detailSummary: "사용 예시와 자주 묻는 질문",
+    detailSummary: "사용 시나리오",
     help: "도움말",
-    examplesSuffix: " 사용 예시",
-    faqHeading: "자주 묻는 질문",
+    scenarioCheckLabel: "확인할 점",
     fallbackNotConnected: "이 도구는 아직 연결되지 않았습니다.",
     fallbackExample1: (title) => `${title}로 반복되는 업무 자료를 브라우저에서 바로 정리합니다.`,
     fallbackExample2: (title) => `${title} 결과를 복사하거나 필요한 파일로 저장해 다음 작업에 사용합니다.`,
@@ -684,10 +683,9 @@ const UI_TEXT = {
     directoryLabel: "Tool Directory",
     categoryTools: "Tools by Category",
     categorySeoSuffix: " you can use in your browser",
-    detailSummary: "Examples and FAQ",
+    detailSummary: "Usage Scenarios",
     help: "Help",
-    examplesSuffix: " examples",
-    faqHeading: "Frequently Asked Questions",
+    scenarioCheckLabel: "Check",
     fallbackNotConnected: "This tool is not connected yet.",
     fallbackExample1: (title) => `Use ${title} to handle repeat work directly in your browser.`,
     fallbackExample2: (title) => `Copy the result or download the output file for your next step.`,
@@ -721,10 +719,9 @@ const UI_TEXT = {
     directoryLabel: "ツール一覧",
     categoryTools: "カテゴリ別ツール",
     categorySeoSuffix: "をブラウザでそのまま使えます",
-    detailSummary: "使用例とFAQ",
+    detailSummary: "利用シナリオ",
     help: "ヘルプ",
-    examplesSuffix: "の使用例",
-    faqHeading: "よくある質問",
+    scenarioCheckLabel: "確認ポイント",
     fallbackNotConnected: "このツールはまだ接続されていません。",
     fallbackExample1: (title) => `${title}で繰り返し作業をブラウザ内で処理できます。`,
     fallbackExample2: (title) => `${title}の結果をコピーするか、必要なファイルとして保存できます。`,
@@ -758,10 +755,9 @@ const UI_TEXT = {
     directoryLabel: "工具目录",
     categoryTools: "按类别查看工具",
     categorySeoSuffix: "，可直接在浏览器中使用",
-    detailSummary: "使用示例和常见问题",
+    detailSummary: "使用场景",
     help: "帮助",
-    examplesSuffix: " 使用示例",
-    faqHeading: "常见问题",
+    scenarioCheckLabel: "注意",
     fallbackNotConnected: "此工具尚未连接。",
     fallbackExample1: (title) => `使用 ${title} 可直接在浏览器中处理重复工作。`,
     fallbackExample2: (title) => `复制 ${title} 的结果，或下载输出文件用于下一步。`,
@@ -1482,7 +1478,7 @@ const LOCALIZED_GUIDE_STEPS = {
     { title: "检查结果", text: "确认结果后复制或下载输出。" },
   ],
 };
-const LOCALIZED_TOOL_USE_EXAMPLES = {
+const LOCALIZED_TOOL_SCENARIO_LINES = {
   ja: {
     "voice-to-text": [
       "朝会や1on1で話した内容をその場で下書きにし、あとから議事メモとして整えます。",
@@ -1800,7 +1796,7 @@ function buildLocalizedToolOverrides(locale) {
         ...copy,
         seoTitle: `${copy.title} | ${seoSuffix}`,
         seoDescription: `${copy.summary} ${descriptionSuffix}`.trim(),
-        examples: LOCALIZED_TOOL_USE_EXAMPLES[locale]?.[id],
+        scenarioLines: LOCALIZED_TOOL_SCENARIO_LINES[locale]?.[id],
         guide: LOCALIZED_GUIDE_STEPS[locale],
       },
     ])
@@ -1821,24 +1817,13 @@ const TOOL_VISUALS_EN = {
   "csv-excel-converter": { icon: "XL", tone: "emerald", copy: "Convert CSV, TSV, and XLSX files in the browser." },
   "markdown-viewer": { icon: "MD", tone: "blue", copy: "Read Markdown files with adjustable layout." },
 };
-const TOOL_USE_EXAMPLES_EN = {
+const TOOL_SCENARIO_LINES_EN = {
   "markdown-viewer": [
     "Open README, changelog, documentation, or exported note files without uploading them to the application server.",
     "Use the spacious document view and outline to review long Markdown files before copying or sharing text.",
     "Switch to split view when you need to compare the rendered document with the original Markdown source.",
   ],
 };
-const TOOL_EXTRA_FAQS_EN = {
-  "audio-editor": {
-    question: "Which phone recordings are supported?",
-    answer: "The editor targets common m4a, aac, mp3, and wav recordings when the browser can decode them. Uncommon legacy formats are not a support target.",
-  },
-  "markdown-viewer": {
-    question: "Does the viewer run raw HTML inside Markdown files?",
-    answer: "No. Markdown text is escaped before rendering, so raw HTML from the file is displayed safely instead of being executed.",
-  },
-};
-
 function detectAppLocale() {
   const bodyLocale = document.body?.dataset?.locale || "";
   const documentLang = document.documentElement?.lang || "";
@@ -1903,6 +1888,609 @@ const TOOL_VISUALS = {
   "srt-cleaner": { icon: "\uD83C\uDFAC", tone: "slate", copy: "SRT \uc790\ub9c9 \ubc88\ud638\uc640 \ud615\uc2dd\uc744 \uc815\ub9ac\ud569\ub2c8\ub2e4." },
   "subtitle-converter": { icon: "\uD83D\uDD01", tone: "violet", copy: "SRT\uc640 VTT \uc790\ub9c9 \ud3ec\ub9f7\uc744 \ubcc0\ud658\ud569\ub2c8\ub2e4." },
   "subtitle-timing": { icon: "\u23F1\uFE0F", tone: "cyan", copy: "\uc790\ub9c9 \uc2f1\ud06c\ub97c \uc55e\ub4a4\ub85c \uc77c\uad04 \ubcf4\uc815\ud569\ub2c8\ub2e4." },
+};
+
+const TOOL_SCENARIOS = {
+  "voice-to-text": [
+    {
+      title: "회의 발언을 현장에서 받아 적을 때",
+      body:
+        "주간회의나 1:1 면담 중 마이크를 켜 두고 발언 흐름을 텍스트 초안으로 남깁니다. 끝난 뒤 자동 정리 결과를 보면서 결정 사항, 담당자, 날짜만 사람이 다시 확인하면 회의록 시작점이 빨라집니다.",
+      check: "Chrome 또는 Edge의 마이크 권한을 먼저 허용하고, 고유명사와 숫자는 회의 직후 원문과 대조하세요.",
+    },
+    {
+      title: "발표 대본을 말로 먼저 풀어낼 때",
+      body:
+        "슬라이드 순서대로 설명을 말하면서 자연스러운 구어체 대본을 만듭니다. 처음부터 문장으로 쓰기 막힐 때 말로 초안을 만들고, 복사한 뒤 문어체로 다듬는 흐름에 잘 맞습니다.",
+      check: "대본용 결과는 말버릇과 반복 표현을 남길 수 있으니 최종 공유 전 문장 호흡을 정리하세요.",
+    },
+    {
+      title: "영상 아이디어를 빠르게 메모할 때",
+      body:
+        "유튜브 쇼츠, 강의 도입부, 안내 멘트를 떠오르는 대로 말해 초안을 확보합니다. 키보드로 정리하기 전 아이디어를 놓치지 않는 용도라서, 짧게 여러 번 녹음하듯 사용하는 편이 효율적입니다.",
+      check: "브라우저 음성 인식은 네트워크와 기기 상태에 영향을 받을 수 있어 중요한 문장은 다시 읽어 확인하세요.",
+    },
+  ],
+  "audio-file-transcription": [
+    {
+      title: "휴대폰 회의 녹음을 회의록 초안으로 만들 때",
+      body:
+        "m4a나 mp3로 남은 짧은 회의 녹음을 브라우저에서 읽어 검토용 텍스트로 바꿉니다. 전체를 다시 듣기 전에 발언 주제와 논의 순서를 먼저 훑고, 필요한 구간만 원본 녹음으로 재확인할 수 있습니다.",
+      check: "첫 사용 시 모델 파일을 내려받을 수 있고, 결과는 사람이 검수해야 하는 초안으로 다루세요.",
+    },
+    {
+      title: "강의와 교육 녹음에서 핵심 구간을 찾을 때",
+      body:
+        "교육 담당자가 녹음 파일을 전부 재생하지 않고도 주요 용어, 과제 안내, 질의응답 위치를 텍스트로 탐색합니다. 긴 정리문을 만들기보다 검토할 지점을 찾는 색인처럼 쓰면 부담이 줄어듭니다.",
+      check: "배경 소음, 여러 명의 겹친 발화, 먼 마이크 녹음은 정확도가 떨어질 수 있습니다.",
+    },
+    {
+      title: "인터뷰 녹취를 문서화하기 전 밑그림이 필요할 때",
+      body:
+        "짧은 인터뷰나 상담 녹음에서 질문과 답변 흐름을 먼저 텍스트로 꺼냅니다. 그대로 제출하기보다 인용 가능한 문장, 확인이 필요한 표현, 개인정보 삭제 지점을 표시하는 준비 단계에 적합합니다.",
+      check: "녹음 파일과 변환 결과는 코워크스페이스 자체 서버에 저장하지 않지만, 민감한 내용은 공유 전 반드시 익명화하세요.",
+    },
+  ],
+  "audio-editor": [
+    {
+      title: "음성 메모의 앞뒤 공백을 잘라낼 때",
+      body:
+        "iPhone 음성 메모나 Android 녹음 파일에서 시작 전 대기음, 마이크 테스트, 끝부분 잡음을 파형을 보며 제거합니다. 필요한 구간만 남긴 뒤 WAV로 저장해 공유용 녹음을 더 짧고 또렷하게 만듭니다.",
+      check: "브라우저가 읽을 수 있는 m4a, aac, mp3, wav를 우선 사용하고 원본은 따로 보관하세요.",
+    },
+    {
+      title: "회의 녹음 중 핵심 발언만 따로 떼어낼 때",
+      body:
+        "긴 회의 녹음에서 결정 발언이나 안내 멘트만 선택해 복사하고 다른 위치에 붙입니다. 파형 확대와 가로 스크롤을 이용하면 긴 파일에서도 선택 시작점과 끝점을 더 정교하게 잡을 수 있습니다.",
+      check: "선택 구간을 삭제하거나 붙이기 전 재생으로 위치를 확인하고, 실수하면 실행 취소를 사용하세요.",
+    },
+    {
+      title: "작게 녹음된 구간만 볼륨을 올릴 때",
+      body:
+        "인터뷰 중 한 사람의 목소리가 작게 들어간 부분을 선택해 음량을 조절합니다. 전체 파일을 키우지 않고 필요한 구간만 손보면 배경 소음이 과하게 커지는 문제를 줄일 수 있습니다.",
+      check: "음량을 크게 올리면 왜곡이 생길 수 있으므로 저장 전 해당 구간을 다시 들어보세요.",
+    },
+  ],
+  "webcam-recorder": [
+    {
+      title: "사내 안내 영상을 급하게 녹화할 때",
+      body:
+        "설치형 녹화 프로그램 없이 브라우저에서 카메라와 마이크를 켜고 짧은 사용법 안내나 교육 공지를 녹화합니다. 밝기, 대비, 배경 흐림을 조절해 임시 녹화라도 화면 인상을 안정적으로 맞출 수 있습니다.",
+      check: "녹화 전 저장 형식 지원 여부와 마이크 입력 레벨을 짧게 테스트하세요.",
+    },
+    {
+      title: "면접과 자기소개 영상을 연습할 때",
+      body:
+        "자기소개나 발표 리허설을 여러 번 녹화해 표정, 시선, 말 속도를 확인합니다. 거울 모드와 필터를 켜고 끄며 실제 제출 화면에 가까운 조건을 만들어 볼 수 있습니다.",
+      check: "브라우저 권한 차단 상태에서는 카메라가 열리지 않으니 주소창 권한 설정을 확인하세요.",
+    },
+    {
+      title: "온라인 수업용 짧은 설명 클립을 만들 때",
+      body:
+        "강사가 과제 안내, 실습 절차, 보충 설명을 몇 분짜리 영상으로 기록합니다. 별도 편집 없이 결과 파일을 저장해 학습관리시스템이나 메신저에 올리는 가벼운 제작 흐름에 맞습니다.",
+      check: "긴 녹화는 브라우저 메모리와 저장 공간의 영향을 받으므로 중요한 영상은 짧게 나누어 촬영하세요.",
+    },
+  ],
+  "ai-text-cleaner": [
+    {
+      title: "AI 답변을 메일 본문으로 옮기기 전",
+      body:
+        "ChatGPT 답변에 남은 별표, 제목 기호, 코드블록 표시를 걷어내고 업무 메일에 붙여도 어색하지 않은 문장 형태로 정리합니다. 복사한 답변을 그대로 보낼 때 생기는 기계적인 흔적을 줄이는 데 초점을 둡니다.",
+      check: "서식은 정리되지만 사실관계는 검증하지 않으므로 이름, 금액, 일정은 원문 기준으로 확인하세요.",
+    },
+    {
+      title: "보고서 초안의 마크다운 흔적을 지울 때",
+      body:
+        "AI가 만든 보고서 개요에서 ### 제목, 굵게 표시, 링크 표기를 제거해 한글 문서나 사내 위키에 맞는 깨끗한 텍스트로 바꿉니다. 문단 간 빈 줄도 조절해 붙여넣은 뒤 다시 손볼 양을 줄입니다.",
+      check: "표 데이터까지 정교하게 옮겨야 한다면 AI 표 변환 도구를 함께 쓰는 편이 좋습니다.",
+    },
+    {
+      title: "메신저 공유용으로 문장을 짧게 다듬을 때",
+      body:
+        "긴 AI 답변을 Slack, Teams, 카카오워크 같은 메신저에 붙이기 전에 과한 구분선과 빈 줄을 줄입니다. 팀원이 모바일에서 읽을 때 끊기지 않도록 단락을 압축하는 용도에 맞습니다.",
+      check: "원문 의미를 바꾸는 요약 도구가 아니므로 필요한 삭제와 표현 수정은 직접 확인하세요.",
+    },
+  ],
+  "ai-table-converter": [
+    {
+      title: "AI가 만든 비교표를 엑셀로 옮길 때",
+      body:
+        "제품 비교, 견적 비교, 후보자 평가표처럼 AI 답변 안에 들어 있는 마크다운 표를 셀 단위 TSV나 CSV로 바꿉니다. 표 앞뒤 설명까지 같이 붙여넣어도 표 영역을 골라낼 수 있어 복사 실수를 줄입니다.",
+      check: "셀 안 줄바꿈과 쉼표가 있는 데이터는 변환 후 엑셀에서 열 구분이 맞는지 확인하세요.",
+    },
+    {
+      title: "문서에 바로 붙는 표가 필요할 때",
+      body:
+        "Word, 한글, Google Docs에 넣을 표를 HTML 형태로 복사해 문서용 표 구조를 유지합니다. 단순 텍스트 표가 무너지는 보고서, 제안서, 회의자료 제작에 적합합니다.",
+      check: "붙여넣는 프로그램의 표 처리 방식에 따라 폭과 테두리는 따로 조정해야 할 수 있습니다.",
+    },
+    {
+      title: "AI 답변 속 표만 분리해 검토할 때",
+      body:
+        "설명 문단, 결론, 표가 섞인 답변에서 실제 데이터 부분만 분리합니다. 자료 조사 결과를 스프레드시트로 옮기기 전에 열 이름과 행 수를 빠르게 확인하는 준비 단계로 쓸 수 있습니다.",
+      check: "AI가 만든 표 자체의 수치와 출처는 도구가 보증하지 않으므로 원자료 검증이 필요합니다.",
+    },
+  ],
+  "csv-excel-converter": [
+    {
+      title: "공공기관이나 사내 시스템 CSV가 깨질 때",
+      body:
+        "CP949나 UTF-8 CSV를 브라우저에서 읽어 XLSX로 바꾸며 한글 깨짐을 줄입니다. 전화번호, 우편번호, 사번처럼 앞자리 0이 중요한 값도 텍스트로 보존해 엑셀에서 자동 숫자 변환되는 문제를 막습니다.",
+      check: "원본 파일은 서버로 올리지 않지만, 변환 후 첫 행과 주요 식별자 열은 직접 열어 확인하세요.",
+    },
+    {
+      title: "여러 설문 결과 파일을 한 번에 정리할 때",
+      body:
+        "행사 신청, 만족도 조사, 주문 내역처럼 여러 CSV와 TSV를 동시에 선택해 각각 XLSX 결과로 저장합니다. 파일이 많으면 개별 다운로드 대신 ZIP으로 묶어 후속 정리 시간을 줄일 수 있습니다.",
+      check: "각 파일의 구분자와 인코딩이 다를 수 있으니 변환 로그와 결과 미리보기를 함께 확인하세요.",
+    },
+    {
+      title: "엑셀 시트를 업로드용 CSV로 다시 만들 때",
+      body:
+        "XLSX의 첫 시트만 내보내거나 전체 시트를 각각 CSV로 저장해 ERP, 쇼핑몰, 내부 관리자 페이지 업로드 양식에 맞춥니다. 시트별 결과가 필요할 때 반복 저장 작업을 줄여줍니다.",
+      check: "업로드 대상 시스템이 요구하는 열 순서, 날짜 형식, 문자 인코딩은 별도로 맞춰야 합니다.",
+    },
+  ],
+  "character-counter": [
+    {
+      title: "자기소개서 제한 글자수를 맞출 때",
+      body:
+        "공백 포함과 공백 제외 글자수를 동시에 보며 문항별 분량을 조정합니다. 문장을 줄였는데도 제출 기준을 넘는지, 반대로 너무 짧아 보이지 않는지 빠르게 확인할 수 있습니다.",
+      check: "플랫폼마다 줄바꿈과 공백 계산 방식이 다를 수 있어 최종 제출 화면에서도 한 번 더 확인하세요.",
+    },
+    {
+      title: "광고 문구와 SNS 문장을 다듬을 때",
+      body:
+        "짧은 제목, 문자 메시지, 앱 푸시, 상품 설명의 길이를 보면서 핵심 단어를 남깁니다. 바이트 수와 줄 수를 함께 확인하면 모바일 화면에서 지나치게 길어지는 표현을 줄이기 쉽습니다.",
+      check: "한글, 이모지, 특수문자는 서비스마다 표시 폭이 달라 실제 미리보기와 함께 보세요.",
+    },
+    {
+      title: "보고서 요약문의 읽기 부담을 볼 때",
+      body:
+        "글자수뿐 아니라 단어 수, 줄 수, 예상 읽기 시간을 확인해 회의 전 공유할 요약문 길이를 조절합니다. 짧아야 하는 공지와 충분히 설명해야 하는 보고서의 분량 차이를 잡는 데 유용합니다.",
+      check: "읽기 시간은 평균적인 추정치이므로 전문 용어나 표가 많은 글은 실제 체감 시간이 달라질 수 있습니다.",
+    },
+  ],
+  "line-break-cleaner": [
+    {
+      title: "PDF에서 복사한 글이 줄마다 끊길 때",
+      body:
+        "자료집이나 판례, 연구보고서에서 복사한 텍스트의 어색한 줄바꿈을 문단 형태로 합칩니다. 문장 중간마다 줄이 바뀌어 메일이나 문서에 붙이기 어려운 상황을 빠르게 정리합니다.",
+      check: "제목, 목록, 표처럼 줄바꿈 자체가 의미 있는 부분은 결과를 보며 필요한 곳을 다시 나누세요.",
+    },
+    {
+      title: "메신저와 메일에 붙일 문장을 정돈할 때",
+      body:
+        "복사 과정에서 생긴 여러 칸 공백, 과한 빈 줄, 들쭉날쭉한 문단을 줄입니다. 모바일 메신저로 공유할 때 화면을 불필요하게 길게 차지하는 문제를 줄이는 데 좋습니다.",
+      check: "공백을 줄이면 원래 의도한 들여쓰기나 시 코드 정렬도 사라질 수 있습니다.",
+    },
+    {
+      title: "마침표 기준으로 안내문 호흡을 다시 잡을 때",
+      body:
+        "공지문이나 안내문을 문장 단위로 보기 좋게 재배치합니다. 긴 문단을 읽기 쉬운 줄로 나누거나, 반대로 잘못 들어간 줄바꿈을 합쳐 공유용 문장으로 정리할 수 있습니다.",
+      check: "약어, 숫자 소수점, URL 주변의 마침표는 자동 판단이 어려우니 결과를 훑어보세요.",
+    },
+  ],
+  "markdown-editor": [
+    {
+      title: "README와 작업 절차서를 바로 작성할 때",
+      body:
+        "제목, 목록, 체크리스트, 코드블록을 넣어 프로젝트 README나 배포 절차 문서를 브라우저에서 정리합니다. 미리보기를 보며 구조를 잡을 수 있어 문서 뼈대를 빠르게 만들기 좋습니다.",
+      check: "민감한 토큰이나 내부 URL을 적은 문서는 복사와 공유 전에 반드시 제거하세요.",
+    },
+    {
+      title: "회의 메모를 사내 위키용으로 바꿀 때",
+      body:
+        "회의 중 적은 일반 텍스트를 안건, 결정 사항, 할 일 목록이 있는 마크다운 문서로 정리합니다. 나중에 Notion, GitHub, 사내 위키에 붙여도 제목 계층이 살아 있게 만드는 데 초점을 둡니다.",
+      check: "위키마다 지원하는 마크다운 문법이 조금씩 다르므로 표와 체크박스는 붙여넣은 뒤 확인하세요.",
+    },
+    {
+      title: "블로그 초안의 구조를 먼저 잡을 때",
+      body:
+        "긴 글을 쓰기 전 H2, H3, 목록, 인용문으로 흐름을 세우고 미리보기로 읽는 리듬을 확인합니다. 별도 편집기를 열지 않고도 초안을 복사하거나 저장해 다음 작성 단계로 넘길 수 있습니다.",
+      check: "이미지 업로드나 원격 저장 기능이 아니라 텍스트 중심 초안 편집기로 사용하세요.",
+    },
+  ],
+  "markdown-viewer": [
+    {
+      title: "받은 README를 편집기 없이 읽을 때",
+      body:
+        "MD, Markdown, TXT 파일을 브라우저에서 열어 넓은 문서 화면으로 확인합니다. 개발 도구를 열기 어려운 PC에서도 릴리스 노트, 설치 설명, 업무 메모를 읽는 데 적합합니다.",
+      check: "파일 내용은 브라우저에서 읽고, 원시 HTML과 스크립트는 실행하지 않도록 처리합니다.",
+    },
+    {
+      title: "긴 마크다운 문서를 목차로 훑을 때",
+      body:
+        "제목 아웃라인을 이용해 필요한 섹션으로 이동하고 글자 크기와 줄 간격을 조절합니다. 긴 매뉴얼이나 교육자료를 처음부터 끝까지 스크롤하지 않고 필요한 부분만 찾기 좋습니다.",
+      check: "목차는 문서 안의 제목 구조에 따라 만들어지므로 제목 문법이 깨진 파일은 수동 확인이 필요합니다.",
+    },
+    {
+      title: "원문과 미리보기를 나란히 비교할 때",
+      body:
+        "분할 보기로 마크다운 원본과 렌더링 결과를 함께 보며 표, 목록, 코드블록이 의도대로 보이는지 확인합니다. 배포 전 문서 검수나 동료가 보낸 파일 확인에 유용합니다.",
+      check: "보기 도구이므로 원문 수정이 필요하면 팝아웃 편집 공간이나 별도 편집기로 이어가세요.",
+    },
+  ],
+  "text-extractor": [
+    {
+      title: "문의 메일에서 연락처만 모을 때",
+      body:
+        "고객 문의, 참가 신청, 상담 메모에 섞인 이메일 주소와 전화번호를 항목별로 뽑아냅니다. 본문을 일일이 훑지 않고 후속 연락에 필요한 정보만 복사할 수 있습니다.",
+      check: "추출 결과에 포함된 개인정보는 목적에 맞게 보관 기간과 공유 대상을 제한하세요.",
+    },
+    {
+      title: "공지문 안의 URL을 한 번에 검토할 때",
+      body:
+        "긴 안내문, 보도자료, 채팅 로그에서 흩어진 링크를 목록으로 정리합니다. 링크를 공유하기 전 중복, 오타, 잘못된 도메인이 있는지 빠르게 확인할 수 있습니다.",
+      check: "도구는 링크를 자동으로 열지 않으므로 의심스러운 URL은 새 탭으로 열기 전 주소를 먼저 보세요.",
+    },
+    {
+      title: "고객 대응 로그에서 다음 행동 정보를 찾을 때",
+      body:
+        "상담 기록이나 영업 메모에서 연락 가능한 이메일, 전화번호, 웹주소를 분리해 다음 팔로업 목록을 만듭니다. 비정형 텍스트를 복사해도 항목별로 정리되어 업무 전달이 쉬워집니다.",
+      check: "국가별 전화번호나 특수한 내선 표기는 일부 누락될 수 있어 원문과 대조하세요.",
+    },
+  ],
+  "duplicate-line-remover": [
+    {
+      title: "메일 발송 목록의 중복을 제거할 때",
+      body:
+        "여러 신청서와 스프레드시트에서 합친 이메일 목록을 줄 단위로 정리합니다. 같은 주소가 여러 번 들어가 발송이 반복되거나 수신자 수가 부풀어 보이는 문제를 줄입니다.",
+      check: "대소문자 무시와 앞뒤 공백 정리 옵션을 적용하면 실제 같은 주소를 더 잘 잡을 수 있습니다.",
+    },
+    {
+      title: "키워드와 태그 후보를 합칠 때",
+      body:
+        "블로그 키워드, 상품 태그, 광고 소재 문구를 여러 출처에서 모은 뒤 중복 줄을 제거합니다. 원래 순서를 유지하거나 정렬해 검토 방식에 맞게 목록을 만들 수 있습니다.",
+      check: "비슷하지만 다른 표현까지 자동 병합하지는 않으므로 동의어 정리는 별도 판단이 필요합니다.",
+    },
+    {
+      title: "참석자 명단을 취합한 뒤 정리할 때",
+      body:
+        "부서별로 받은 참가자 이름이나 사번 목록을 합친 뒤 같은 줄을 제거합니다. 스프레드시트에 붙이기 전 빈 줄과 중복을 줄이면 확인 작업이 훨씬 단순해집니다.",
+      check: "동명이인처럼 같은 이름이 다른 사람을 뜻할 수 있는 자료는 사번이나 이메일 기준으로 확인하세요.",
+    },
+  ],
+  "find-replace": [
+    {
+      title: "문서 속 제품명과 조직명을 한꺼번에 바꿀 때",
+      body:
+        "제안서, 공지문, 매뉴얼에 반복되는 서비스명이나 부서명을 한 번에 치환합니다. 여러 문단을 눈으로 찾는 대신 변경 전후를 확인하며 빠르게 맞출 수 있습니다.",
+      check: "부분 일치로 엉뚱한 단어까지 바뀌지 않도록 대소문자와 단어 경계를 확인하세요.",
+    },
+    {
+      title: "템플릿의 날짜와 담당자를 교체할 때",
+      body:
+        "매주 반복해서 보내는 안내문에서 날짜, 담당자, 연락처만 바꿉니다. 원문을 복사해 넣고 치환 결과를 바로 확인하면 빠뜨린 자리표시자를 줄일 수 있습니다.",
+      check: "개인 이름과 연락처를 바꿀 때는 이전 수신자 정보가 남지 않았는지 최종 본문을 훑으세요.",
+    },
+    {
+      title: "자막이나 녹취록의 반복 오타를 고칠 때",
+      body:
+        "STT 결과나 자막 파일에 반복해서 나온 잘못된 고유명사, 띄어쓰기, 표기법을 일괄 수정합니다. 긴 텍스트에서 같은 실수를 여러 번 고치는 시간을 줄이는 데 적합합니다.",
+      check: "문맥에 따라 일부만 바꿔야 하는 단어는 전체 치환보다 미리 찾기 결과를 검토하세요.",
+    },
+  ],
+  "case-converter": [
+    {
+      title: "파일명과 URL 슬러그를 통일할 때",
+      body:
+        "영문 제목이나 키워드를 snake_case, kebab-case, camelCase로 바꿔 파일명과 URL 규칙에 맞춥니다. 블로그 파일, 데이터 파일, 프런트엔드 라우트 이름을 일관되게 만드는 데 편합니다.",
+      check: "한글과 특수문자는 기대한 대로 변환되지 않을 수 있어 결과 파일명은 직접 확인하세요.",
+    },
+    {
+      title: "개발 문서의 필드명을 정리할 때",
+      body:
+        "API 응답 필드, 스키마 후보, 변수명 아이디어를 여러 케이스로 바꿔 팀 규칙에 맞는 형태를 고릅니다. 직접 타이핑하다 생기는 대문자 누락과 구분자 실수를 줄일 수 있습니다.",
+      check: "보안 토큰이나 실제 비밀번호 같은 민감한 값은 변환 입력으로 넣지 마세요.",
+    },
+    {
+      title: "영문 제목의 대소문자 스타일을 맞출 때",
+      body:
+        "뉴스레터 제목, 보고서 소제목, 상품 옵션명을 대문자, 소문자, 제목형으로 변환합니다. 여러 문구를 같은 스타일로 맞춰야 할 때 수작업보다 빠르게 정리됩니다.",
+      check: "브랜드 표기처럼 일부러 대문자를 유지해야 하는 단어는 변환 후 다시 확인하세요.",
+    },
+  ],
+  "text-diff": [
+    {
+      title: "계약 문구의 수정 전후를 비교할 때",
+      body:
+        "상대방이 보낸 계약서 조항, 약관, 안내문에서 어떤 줄이 추가되고 삭제됐는지 확인합니다. 전체 문서를 다시 읽기 전에 실제로 달라진 부분을 먼저 잡을 수 있습니다.",
+      check: "법률 판단 도구가 아니므로 중요한 계약은 변경 지점을 확인한 뒤 전문가 검토를 받으세요.",
+    },
+    {
+      title: "공지문 리뷰 반영 여부를 볼 때",
+      body:
+        "팀원이 수정한 공지문이나 보도자료를 원본과 나란히 비교합니다. 삭제된 문장, 새로 들어간 표현, 그대로 남은 부분을 줄 단위로 보여 검수 시간을 줄입니다.",
+      check: "줄바꿈 위치가 다르면 실제 내용 변화보다 차이가 크게 보일 수 있어 먼저 문단 정리를 맞추세요.",
+    },
+    {
+      title: "프롬프트와 자막의 미세 변경을 확인할 때",
+      body:
+        "AI 프롬프트, SRT 자막, 스크립트의 버전 차이를 비교해 의도하지 않은 삭제가 없는지 봅니다. 짧은 변경이라도 결과 품질에 영향을 주는 문장을 놓치지 않도록 돕습니다.",
+      check: "단어 단위 비교가 필요한 긴 문장은 줄 단위 결과를 기준으로 다시 원문을 대조하세요.",
+    },
+  ],
+  "qr-code-generator": [
+    {
+      title: "행사 신청 링크를 인쇄물에 넣을 때",
+      body:
+        "세미나 신청 폼, 만족도 조사, 지도 링크를 QR 코드로 만들어 포스터나 안내문에 배치합니다. SVG, PNG, JPG 중 제작물에 맞는 형식으로 저장할 수 있습니다.",
+      check: "인쇄 전 실제 휴대폰 카메라로 스캔해 여백과 색상 대비가 충분한지 확인하세요.",
+    },
+    {
+      title: "매장과 회의실 Wi-Fi 접속을 쉽게 만들 때",
+      body:
+        "방문객이 SSID와 비밀번호를 직접 입력하지 않도록 Wi-Fi 정보를 QR로 만듭니다. 회의실, 매장 카운터, 게스트 네트워크 안내문에 붙이면 문의를 줄일 수 있습니다.",
+      check: "Wi-Fi 비밀번호가 들어간 QR은 공개 범위와 게시 위치를 신중히 정하세요.",
+    },
+    {
+      title: "명함이나 제품 카드에 링크를 넣을 때",
+      body:
+        "포트폴리오, 예약 페이지, 제품 설명서 링크를 작은 QR로 만들어 명함이나 라벨에 넣습니다. 색상과 모듈 모양을 조정하되 스캔 안정성을 해치지 않도록 균형을 잡습니다.",
+      check: "너무 작은 크기나 낮은 대비는 인식률을 떨어뜨리므로 최종 출력 크기로 테스트하세요.",
+    },
+  ],
+  "qr-link-extractor": [
+    {
+      title: "QR을 열기 전에 실제 주소를 확인할 때",
+      body:
+        "포스터나 안내문에 있는 QR 이미지를 바로 열지 않고 브라우저 안에서 원문 URL을 먼저 확인합니다. 낯선 QR이 어디로 연결되는지 보고 나서 복사하거나 새 탭으로 열 수 있습니다.",
+      check: "도구는 자동 접속하지 않지만, 의심스러운 단축 URL은 보안 검토 후 접근하세요.",
+    },
+    {
+      title: "스크린샷 속 QR 링크를 텍스트로 꺼낼 때",
+      body:
+        "채팅방에 공유된 캡처 이미지나 온라인 안내 화면의 QR을 읽어 링크를 복사합니다. 화면을 다른 휴대폰으로 다시 찍는 번거로움 없이 이미지 파일만으로 내용을 확인할 수 있습니다.",
+      check: "흐리거나 기울어진 QR은 인식이 어려울 수 있어 가능하면 원본 해상도 이미지를 사용하세요.",
+    },
+    {
+      title: "Wi-Fi나 일반 텍스트 QR 내용을 확인할 때",
+      body:
+        "URL이 아닌 Wi-Fi 접속 정보, 이메일, 단순 텍스트 QR도 원문으로 확인합니다. 어떤 데이터가 들어 있는지 알 수 있어 공유 가능한 내용인지 판단하기 쉽습니다.",
+      check: "개인 연락처나 비밀번호가 포함된 QR 원문은 필요한 사람에게만 전달하세요.",
+    },
+  ],
+  "image-resizer": [
+    {
+      title: "지원서와 공공 서식의 이미지 규격을 맞출 때",
+      body:
+        "증명사진, 첨부 이미지, 서류 스캔본을 지정된 가로세로 픽셀에 맞춰 조절합니다. 비율 유지 옵션을 쓰면 얼굴이나 문서가 찌그러지는 문제를 줄일 수 있습니다.",
+      check: "제출처가 요구하는 해상도, 용량, 파일 형식 조건을 함께 확인하세요.",
+    },
+    {
+      title: "상품 썸네일을 같은 크기로 맞출 때",
+      body:
+        "쇼핑몰 상품 이미지나 블로그 대표 이미지를 일정한 폭과 비율로 정리합니다. 여러 이미지의 표시 크기가 달라 페이지가 어수선해 보이는 문제를 줄일 수 있습니다.",
+      check: "작은 원본을 크게 늘리면 선명도가 떨어지므로 원본 해상도를 먼저 확인하세요.",
+    },
+    {
+      title: "스크린샷을 공유하기 좋은 크기로 줄일 때",
+      body:
+        "오류 화면, 설정 화면, 안내 캡처를 메신저나 메일에 보내기 전에 적당한 크기로 낮춥니다. 상대가 모바일에서도 빠르게 열어볼 수 있도록 용량과 화면 폭을 함께 줄입니다.",
+      check: "개인정보가 보이는 영역은 크기 조절 전에 잘라내거나 가려서 공유하세요.",
+    },
+  ],
+  "image-converter": [
+    {
+      title: "PNG 스크린샷을 JPG로 가볍게 바꿀 때",
+      body:
+        "화면 캡처나 문서 이미지를 JPG로 변환해 메일 첨부와 폼 업로드를 쉽게 합니다. 투명 배경이 필요 없는 스크린샷이라면 용량을 줄이면서 호환성을 확보하기 좋습니다.",
+      check: "투명 배경이 중요한 이미지는 JPG로 바꾸면 배경이 사라질 수 있으니 PNG를 유지하세요.",
+    },
+    {
+      title: "웹 페이지용 WEBP 이미지를 준비할 때",
+      body:
+        "블로그, 랜딩 페이지, 상품 상세에 올릴 이미지를 WEBP로 바꿔 페이지 무게를 줄입니다. 브라우저에서 바로 결과를 만들기 때문에 간단한 웹 최적화 작업에 적합합니다.",
+      check: "업로드 대상 서비스가 WEBP를 지원하는지 확인하고, 필요하면 JPG나 PNG도 함께 준비하세요.",
+    },
+    {
+      title: "제출처가 받는 형식으로 이미지를 맞출 때",
+      body:
+        "받은 이미지가 시스템에서 거부될 때 JPG, PNG, WEBP 중 허용되는 형식으로 변환합니다. 별도 설치 없이 여러 형식 요구가 섞인 제출 업무를 처리할 수 있습니다.",
+      check: "형식 변환은 이미지 안의 개인정보를 제거하지 않으므로 EXIF 제거가 필요하면 별도 도구를 사용하세요.",
+    },
+  ],
+  "image-compressor": [
+    {
+      title: "업로드 용량 제한에 걸린 사진을 줄일 때",
+      body:
+        "학교, 공공기관, 채용 사이트가 요구하는 용량 제한에 맞춰 사진 품질과 최대 너비를 조절합니다. 원본을 서버로 보내지 않고 결과 용량을 보며 여러 번 조정할 수 있습니다.",
+      check: "압축을 강하게 하면 작은 글씨와 문서 가장자리가 흐려질 수 있어 제출 전 확대해 보세요.",
+    },
+    {
+      title: "상품 이미지와 블로그 삽입 이미지를 가볍게 만들 때",
+      body:
+        "상품 사진, 리뷰 이미지, 본문 삽입 이미지를 적당한 화질로 줄여 페이지 로딩 부담을 낮춥니다. 너무 큰 원본을 그대로 올릴 때 생기는 느린 표시 문제를 줄이는 작업에 맞습니다.",
+      check: "대표 이미지처럼 품질이 중요한 파일은 압축률을 낮게 시작해 비교하세요.",
+    },
+    {
+      title: "여러 장의 사진을 메일로 보내기 전",
+      body:
+        "현장 사진이나 행사 기록 이미지를 한꺼번에 보내기 전에 용량을 줄입니다. 받는 사람이 모바일 환경에서도 빨리 열 수 있게 만들고, 첨부 제한으로 반송되는 일을 줄입니다.",
+      check: "압축 결과 파일명과 순서가 필요한 업무라면 다운로드 후 폴더에서 다시 확인하세요.",
+    },
+  ],
+  "exif-metadata-remover": [
+    {
+      title: "사진을 블로그나 SNS에 올리기 전",
+      body:
+        "휴대폰 사진에 남을 수 있는 GPS 위치, 촬영 기기, 시간 같은 메타데이터를 제거합니다. 이미지 내용은 그대로 두고 파일 내부 정보만 줄여 공개 공유 전 부담을 낮춥니다.",
+      check: "메타데이터 제거가 사진 속 얼굴, 차량 번호, 문서 내용까지 가려주지는 않습니다.",
+    },
+    {
+      title: "거래처에 보낼 이미지의 숨은 정보를 정리할 때",
+      body:
+        "편집 프로그램 이름, 작성자, 내부 설명, 코멘트 같은 업무상 불필요한 정보를 제거합니다. 제안서 첨부 이미지나 검수용 캡처를 외부로 보낼 때 유용합니다.",
+      check: "결과 파일을 다시 저장하는 과정에서 일부 프로그램이 새 메타데이터를 넣을 수 있으니 최종본도 확인하세요.",
+    },
+    {
+      title: "학교나 가족 사진을 공유하기 전",
+      body:
+        "자택, 학교, 행사 장소가 추정될 수 있는 사진을 공유하기 전에 EXIF와 위치 정보를 제거합니다. 파일을 서버에 업로드하지 않고 브라우저 안에서 처리해 가벼운 사전 점검이 가능합니다.",
+      check: "위치가 사진 배경 자체에 드러나는 경우에는 메타데이터 제거만으로 충분하지 않습니다.",
+    },
+  ],
+  "pdf-merge": [
+    {
+      title: "견적서와 계약 첨부를 한 파일로 묶을 때",
+      body:
+        "견적서, 계약서, 사업자등록증, 별도 첨부자료를 제출 순서대로 배치해 하나의 PDF로 합칩니다. 상대가 여러 파일을 따로 열지 않아도 되도록 제출 꾸러미를 정리할 때 적합합니다.",
+      check: "병합 전 파일 순서를 확인하고, 큰 PDF는 브라우저 메모리 상태에 따라 시간이 걸릴 수 있습니다.",
+    },
+    {
+      title: "스캔한 영수증과 증빙 자료를 정리할 때",
+      body:
+        "여러 영수증, 거래명세서, 확인서를 하나의 PDF로 묶어 회계나 행정 시스템에 올립니다. 파일명과 순서를 정해 두면 나중에 누락 여부를 확인하기 쉽습니다.",
+      check: "민감한 주민번호, 계좌번호, 서명 이미지가 있는 페이지는 병합 전 가림 처리를 검토하세요.",
+    },
+    {
+      title: "회의자료 본문과 별첨을 하나로 배포할 때",
+      body:
+        "회의 안건지, 참고자료, 별첨 표를 하나의 PDF로 합쳐 참석자에게 전달합니다. 열어야 하는 파일 수를 줄여 회의 시작 전 자료 확인 흐름을 단순하게 만듭니다.",
+      check: "페이지 번호나 목차가 원래 문서 기준일 수 있으므로 배포 전 첫 페이지부터 빠르게 넘겨보세요.",
+    },
+  ],
+  "pdf-split": [
+    {
+      title: "긴 자료집을 장별 PDF로 나눌 때",
+      body:
+        "교육자료나 제안서처럼 긴 PDF를 일정 페이지 단위나 범위로 분할합니다. 필요한 장만 담당자에게 보내거나, 파일 크기 제한이 있는 시스템에 나누어 올릴 때 편합니다.",
+      check: "목차와 실제 페이지 번호가 다를 수 있으므로 입력 범위를 PDF 페이지 기준으로 확인하세요.",
+    },
+    {
+      title: "연속 스캔한 여러 문서를 따로 저장할 때",
+      body:
+        "복합기에서 한 번에 스캔된 신청서, 영수증, 확인서를 페이지 단위로 나눕니다. 각 문서가 별도 파일이어야 하는 제출 업무에서 후처리 시간을 줄일 수 있습니다.",
+      check: "양면 스캔이나 빈 페이지가 섞인 경우 분할 결과에 빈 파일이 들어가지 않았는지 확인하세요.",
+    },
+    {
+      title: "업로드 제한에 맞춰 PDF를 쪼갤 때",
+      body:
+        "한 파일로 올리기에는 큰 PDF를 여러 묶음으로 분할합니다. 첨부 제한을 넘는 보고서나 자료집을 시스템 요구 크기에 맞게 나누는 실무 흐름에 맞습니다.",
+      check: "분할은 용량을 줄이는 압축과 다르므로 각 결과 파일 크기는 다운로드 후 확인하세요.",
+    },
+  ],
+  "pdf-extract-pages": [
+    {
+      title: "계약서 중 확인할 조항 페이지만 보낼 때",
+      body:
+        "전체 계약서를 공유하지 않고 검토가 필요한 페이지 범위만 새 PDF로 추출합니다. 외부 문의나 내부 검토 요청에서 보는 범위를 좁혀 커뮤니케이션을 단순하게 만듭니다.",
+      check: "추출 페이지에 필요한 앞뒤 맥락과 별첨 참조가 빠지지 않았는지 확인하세요.",
+    },
+    {
+      title: "보고서에서 요약과 결론만 따로 만들 때",
+      body:
+        "긴 보고서의 표지, 요약, 결론, 특정 표가 있는 페이지만 골라 공유용 PDF를 만듭니다. 바쁜 의사결정자가 먼저 볼 부분을 분리할 때 적합합니다.",
+      check: "페이지 범위는 1-3,5,9처럼 입력할 수 있지만 중복과 누락은 결과 미리보기로 확인하세요.",
+    },
+    {
+      title: "스캔본에서 필요한 증빙 페이지만 뽑을 때",
+      body:
+        "여러 서류가 섞인 스캔 PDF에서 제출 대상 페이지만 선택해 새 파일로 저장합니다. 전체 개인정보가 들어 있는 묶음을 그대로 보내지 않고 필요한 부분만 분리할 수 있습니다.",
+      check: "추출한 PDF에도 민감 정보가 남아 있을 수 있으므로 제출 전 페이지별로 확인하세요.",
+    },
+  ],
+  "image-to-pdf": [
+    {
+      title: "영수증과 사진 증빙을 PDF로 묶을 때",
+      body:
+        "휴대폰으로 찍은 영수증, 현장 사진, 확인서를 순서대로 PDF 페이지로 만듭니다. 이미지 여러 장을 따로 보내기보다 하나의 문서로 제출해야 할 때 편합니다.",
+      check: "사진 방향과 페이지 순서를 만들기 전에 확인하면 결과 PDF를 다시 만드는 일을 줄일 수 있습니다.",
+    },
+    {
+      title: "화이트보드와 캡처 이미지를 회의 기록으로 만들 때",
+      body:
+        "회의 중 찍은 화이트보드, 화면 캡처, 메모 사진을 하나의 PDF로 정리합니다. 회의 후 공유할 때 날짜와 안건 순서대로 묶으면 자료 흐름이 분명해집니다.",
+      check: "흐린 사진이나 잘린 모서리는 PDF로 묶어도 읽기 어려우니 원본 품질을 먼저 확인하세요.",
+    },
+    {
+      title: "지원 서류 이미지를 제출용 문서로 바꿀 때",
+      body:
+        "신분 확인 자료, 자격증, 신청서 사진을 PDF 형식으로 요구하는 곳에 맞춰 변환합니다. 여러 이미지 파일을 하나씩 올릴 수 없는 제출 폼에서 유용합니다.",
+      check: "제출처가 요구하는 PDF 용량 제한과 컬러/흑백 조건은 별도로 확인하세요.",
+    },
+  ],
+  "pdf-to-image": [
+    {
+      title: "PDF 표지와 핵심 페이지를 썸네일로 만들 때",
+      body:
+        "보고서 표지, 행사 안내문, 제품 소개서 첫 페이지를 PNG 이미지로 렌더링합니다. 웹 게시글, 메신저 공유, 자료 목록 썸네일을 만들 때 바로 사용할 수 있습니다.",
+      check: "저작권이나 개인정보가 있는 문서는 이미지로 변환해도 공유 범위 제한이 그대로 필요합니다.",
+    },
+    {
+      title: "문서 한 페이지를 채팅방에 빠르게 공유할 때",
+      body:
+        "PDF 전체를 보내기보다 확인이 필요한 한 페이지를 이미지로 저장해 대화 중 바로 보여줍니다. 상대가 PDF 뷰어를 열지 않아도 핵심 페이지를 빠르게 볼 수 있습니다.",
+      check: "작은 글씨가 있는 페이지는 이미지 해상도와 확대 가능 여부를 확인하세요.",
+    },
+    {
+      title: "슬라이드나 발표 자료에 PDF 일부를 넣을 때",
+      body:
+        "PDF 안의 도표, 공정표, 서식 페이지를 이미지로 바꿔 프레젠테이션에 삽입합니다. 캡처보다 페이지 경계가 깔끔하고 반복 작업을 줄일 수 있습니다.",
+      check: "변환 이미지는 편집 가능한 텍스트가 아니므로 원문 수정은 PDF 원본에서 처리하세요.",
+    },
+  ],
+  "srt-cleaner": [
+    {
+      title: "자동 자막의 번호와 공백이 꼬였을 때",
+      body:
+        "음성 인식 도구나 편집 프로그램에서 나온 SRT의 번호, 빈 줄, 시간 블록을 안정적인 구조로 정리합니다. 업로드 전 기본 형식 오류를 줄여 영상 플랫폼에서 거부되는 일을 예방합니다.",
+      check: "자막 내용의 오탈자와 번역 품질은 자동으로 고치지 않으므로 텍스트 검수는 별도로 하세요.",
+    },
+    {
+      title: "번역받은 자막 파일을 편집 전에 다듬을 때",
+      body:
+        "외부에서 받은 SRT에 불규칙한 줄바꿈이나 누락된 번호가 있을 때 먼저 정리합니다. 이후 싱크 조정이나 번역 검수를 하기 전 파일 구조를 안정화하는 준비 단계로 적합합니다.",
+      check: "시간 코드 자체가 잘못된 경우에는 정리 후에도 영상과 맞지 않을 수 있습니다.",
+    },
+    {
+      title: "영상 편집툴에 넣기 전 기본 구조를 맞출 때",
+      body:
+        "Premiere, DaVinci Resolve, YouTube Studio 등에 넣을 SRT를 불필요한 공백 없이 정리합니다. 같은 자막 파일을 여러 도구에서 쓰기 전에 호환성을 높이는 데 도움이 됩니다.",
+      check: "편집툴마다 지원하는 줄 길이와 인코딩이 다를 수 있어 불러오기 테스트를 해보세요.",
+    },
+  ],
+  "subtitle-converter": [
+    {
+      title: "YouTube용 SRT를 웹 플레이어용 VTT로 바꿀 때",
+      body:
+        "SRT 자막을 WebVTT 형식으로 변환해 웹 페이지나 HTML5 플레이어에서 사용할 수 있게 만듭니다. 시간 정보와 본문을 유지하면서 플랫폼 요구 형식에 맞춥니다.",
+      check: "VTT에 필요한 헤더와 시간 구분은 변환되지만, 스타일 확장 문법은 별도 확인이 필요합니다.",
+    },
+    {
+      title: "웹 자막 VTT를 편집툴용 SRT로 돌릴 때",
+      body:
+        "웹에서 쓰던 VTT 자막을 SRT로 바꿔 영상 편집툴이나 업로드 시스템에 맞춥니다. 포맷만 달라서 다시 작성하기 번거로운 자막 작업을 줄여줍니다.",
+      check: "위치, 스타일, 주석 같은 VTT 전용 정보는 SRT로 옮길 때 제한될 수 있습니다.",
+    },
+    {
+      title: "붙여넣은 자막 텍스트를 파일로 저장할 때",
+      body:
+        "파일이 없어도 자막 텍스트를 붙여넣고 필요한 형식으로 다운로드합니다. 간단한 수정 후 바로 배포 형식을 만들고 싶은 상황에 맞습니다.",
+      check: "시간 코드 형식이 크게 깨진 원문은 먼저 SRT 정리 도구로 구조를 맞추는 편이 좋습니다.",
+    },
+  ],
+  "subtitle-timing": [
+    {
+      title: "인트로를 추가해 자막이 전체적으로 밀렸을 때",
+      body:
+        "영상 앞에 로고나 인트로를 추가한 뒤 자막이 늦게 맞는 경우 전체 시간을 같은 초만큼 뒤로 보냅니다. 모든 블록을 손으로 수정하지 않고 한 번에 오프셋을 적용합니다.",
+      check: "오프셋 값은 초 단위로 입력하므로 영상 편집 타임라인에서 실제 차이를 먼저 재보세요.",
+    },
+    {
+      title: "자막이 음성보다 빠르거나 늦을 때",
+      body:
+        "SRT나 VTT 자막 전체가 영상보다 몇 초 앞서거나 뒤처질 때 일괄 보정합니다. 싱크가 일정하게 어긋난 파일이라면 빠르게 맞출 수 있습니다.",
+      check: "중간부터 점점 어긋나는 드리프트 문제는 단일 오프셋만으로 해결되지 않을 수 있습니다.",
+    },
+    {
+      title: "편집 후 잘라낸 구간만큼 시간을 당길 때",
+      body:
+        "영상 앞부분을 잘라낸 뒤 자막 시간을 전체적으로 앞으로 당깁니다. 강의, 인터뷰, 짧은 홍보 영상에서 편집 전 자막을 다시 활용할 때 유용합니다.",
+      check: "시간을 앞으로 당길 때 0초보다 이른 자막이 생기지 않는지 결과를 확인하세요.",
+    },
+  ],
 };
 
 const TOOL_USE_EXAMPLES = {
@@ -2180,21 +2768,41 @@ function getToolVisual(tool) {
   };
 }
 
-function getToolExamples(tool) {
-  const localizedExamples =
-    APP_LOCALE === "en" ? TOOL_USE_EXAMPLES_EN[tool.id] : tool.examples || LOCALIZED_TOOL_USE_EXAMPLES[APP_LOCALE]?.[tool.id];
-  return (IS_KOREAN_LOCALE ? TOOL_USE_EXAMPLES[tool.id] : localizedExamples) || [
-    t("fallbackExample1", tool.title),
-    t("fallbackExample2", tool.title),
-  ];
+function getToolScenarios(tool) {
+  if (IS_KOREAN_LOCALE && TOOL_SCENARIOS[tool.id]) {
+    return TOOL_SCENARIOS[tool.id];
+  }
+
+  const localizedLines =
+    APP_LOCALE === "en" ? TOOL_SCENARIO_LINES_EN[tool.id] : tool.scenarioLines || LOCALIZED_TOOL_SCENARIO_LINES[APP_LOCALE]?.[tool.id];
+  if (localizedLines?.length) {
+    return buildScenarioCardsFromLines(tool, localizedLines);
+  }
+
+  if (tool.guide?.length) {
+    return tool.guide.map((step) => ({
+      title: step.title,
+      body: step.text,
+      check: "",
+    }));
+  }
+
+  return buildScenarioCardsFromLines(tool, [t("fallbackExample1", tool.title), t("fallbackExample2", tool.title)]);
 }
 
-function getToolExtraFaq(tool, examples) {
-  const localizedFaq = APP_LOCALE === "en" ? TOOL_EXTRA_FAQS_EN[tool.id] : null;
-  return (IS_KOREAN_LOCALE ? TOOL_EXTRA_FAQS[tool.id] : localizedFaq) || {
-    question: t("defaultFaqQuestion", tool.title),
-    answer: examples.join(" "),
-  };
+function buildScenarioCardsFromLines(tool, lines) {
+  return lines.map((line, index) => ({
+    title: buildScenarioTitle(line, index),
+    body: line,
+    check: "",
+  }));
+}
+
+function buildScenarioTitle(line, index) {
+  const firstSentence = line.split(/[.!?。！？]/)[0]?.trim() || line.trim();
+  const maxLength = APP_LOCALE === "en" ? 64 : 32;
+  if (firstSentence.length <= maxLength) return firstSentence;
+  return `${firstSentence.slice(0, maxLength - 1)}...`;
 }
 
 const ENGLISH_WORKSPACE_TEXT = {
@@ -4368,33 +4976,25 @@ function renderToolDetailAccordion(tool) {
       <small>${escapeHtml(t("help"))}</small>
     </summary>
     <div class="tool-detail-body">
-      <section>
-        <h3>${escapeHtml(tool.title)}${escapeHtml(t("examplesSuffix"))}</h3>
-        <ul class="tool-example-list">
-          ${detail.examples.map((example) => `<li>${escapeHtml(example)}</li>`).join("")}
-        </ul>
-      </section>
-      <section>
-        <h3>${escapeHtml(t("faqHeading"))}</h3>
-        <div class="tool-faq-list">
-          ${detail.faq
-            .map(
-              (item) => `
-                <article>
-                  <h4>${escapeHtml(item.question)}</h4>
-                  <p>${escapeHtml(item.answer)}</p>
-                </article>
-              `
-            )
-            .join("")}
-        </div>
-      </section>
+      <div class="tool-scenario-list">
+        ${detail.scenarios
+          .map(
+            (scenario) => `
+              <article class="tool-scenario-card">
+                <h3>${escapeHtml(scenario.title)}</h3>
+                <p>${escapeHtml(scenario.body)}</p>
+                ${scenario.check ? `<p class="tool-scenario-check"><strong>${escapeHtml(t("scenarioCheckLabel"))}</strong> ${escapeHtml(scenario.check)}</p>` : ""}
+              </article>
+            `
+          )
+          .join("")}
+      </div>
     </div>
   `;
 
   wrapper.addEventListener("toggle", () => {
     if (wrapper.open) {
-      trackToolEvent("tool_help_open", tool, { section: "faq_examples" });
+      trackToolEvent("tool_help_open", tool, { section: "usage_scenarios" });
     }
   });
 
@@ -4402,32 +5002,14 @@ function renderToolDetailAccordion(tool) {
 }
 
 function buildToolDetailContent(tool) {
-  const examples = getToolExamples(tool);
-  const extraFaq = getToolExtraFaq(tool, examples);
-
   return {
-    examples,
-    faq: [
-      {
-        question: t("freeQuestion", tool.title),
-        answer: t("freeAnswer", tool.title),
-      },
-      {
-        question: t("privacyQuestion", tool.title),
-        answer: t("privacyAnswer"),
-      },
-      extraFaq,
-      {
-        question: t("useQuestion", tool.title),
-        answer: examples.join(" "),
-      },
-    ],
+    scenarios: getToolScenarios(tool),
   };
 }
 
 function injectStructuredData(tool, categoryPage = null) {
   document.querySelectorAll('script[data-schema="dynamic"]').forEach((node) => node.remove());
-  injectFaqStructuredData(tool);
+  clearLegacyFaqStructuredData();
   if (categoryPage) {
     injectCategoryStructuredData(categoryPage);
     return;
@@ -4553,33 +5135,8 @@ function injectCategoryStructuredData(categoryPage) {
   document.head.appendChild(script);
 }
 
-function injectFaqStructuredData(tool) {
+function clearLegacyFaqStructuredData() {
   document.querySelectorAll('script[data-schema="dynamic-faq"]').forEach((node) => node.remove());
-  if (!tool) return;
-
-  const detail = buildToolDetailContent(tool);
-  if (!detail.faq.length) return;
-
-  const script = document.createElement("script");
-  script.type = "application/ld+json";
-  script.dataset.schema = "dynamic-faq";
-  script.textContent = JSON.stringify(
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: detail.faq.map((item) => ({
-        "@type": "Question",
-        name: item.question,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: item.answer,
-        },
-      })),
-    },
-    null,
-    2
-  );
-  document.head.appendChild(script);
 }
 
 function handleAnalyticsClick(event) {

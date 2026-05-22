@@ -16,7 +16,7 @@ Current production baseline:
 - Latest AdSense/SEO readiness commit: `580c060 Improve AdSense SEO readiness`
 - Latest English SEO polish commit: `0385e6d Polish English SEO copy`
 - Latest foreign-language tool localization/E2E commit: `97baf2f Complete foreign tool localization testing fixes`
-- Current static asset cache version: `20260517-01`
+- Current static asset cache version: `20260522-01`
 - English version deployed under `/en/`; Japanese and Simplified Chinese versions deployed under `/ja/` and `/zh/` on the same domain, with Korean routes preserved
 - 2026-05-17 production E2E passed EN/JA/ZH × 30 tools = 90 scenarios with 0 failures and 0 Korean-language leakage findings
 - Category landing pages, privacy policy updates, sitemap updates, and core FAQ copy were deployed on 2026-04-29
@@ -166,7 +166,7 @@ Each tool page should have:
 - Korean/English/Japanese/Simplified Chinese hreflang alternates where corresponding language pages exist
 - Dedicated Open Graph URL
 - Browser-side app shell driven by `app.js`
-- Collapsed usage examples and FAQ below Quick Flow for SEO and user help
+- Collapsed tool-specific usage scenarios below Quick Flow for SEO and user help
 
 Current category pages:
 
