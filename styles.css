@@ -391,6 +391,12 @@ label.secondary-action:hover {
   justify-self: end;
 }
 
+.topbar-support-link {
+  min-height: 36px;
+  box-shadow: 0 8px 18px rgba(174, 116, 0, 0.16);
+  padding: 0 14px;
+}
+
 .primary-action {
   border-color: var(--primary);
   background: var(--primary);

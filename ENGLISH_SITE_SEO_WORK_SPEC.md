@@ -13,7 +13,7 @@
 - 영어 카테고리 정의: `app.js`의 `CATEGORY_PAGE_DEFS_EN`
 - 일본어/중국어 도구 정의: `app.js`의 `TOOL_DEFS_LOCALE_OVERRIDES`
 - 일본어/중국어 카테고리 정의: `app.js`의 `CATEGORY_PAGE_DEFS_BY_LOCALE`
-- 현재 정적 리소스 캐시 버전: `20260604-02`
+- 현재 정적 리소스 캐시 버전: `20260604-03`
 - 최근 영어 SEO 배포 커밋: `0385e6d Polish English SEO copy`
 - 최근 외국어 도구 로컬라이징 및 운영 E2E 배포 커밋: `97baf2f Complete foreign tool localization testing fixes`
 
@@ -67,7 +67,7 @@
 ## 2026-05-17 외국어 기능 검증 기준
 
 - 배포 커밋: `97baf2f Complete foreign tool localization testing fixes`
-- 운영 확인 app 리소스: `https://ko-workspace.com/app.js?v=20260604-02`
+- 운영 확인 app 리소스: `https://ko-workspace.com/app.js?v=20260604-03`
 - 정적 검사: `npm.cmd run check` 통과, smoke test 49 checks 통과, `npm audit --omit=dev` 취약점 0개
 - 운영 E2E 대상: EN/JA/ZH 3개 언어 × 30개 도구 = 90개 시나리오
 - 운영 E2E 결과: 실패 0건, 경고 0건

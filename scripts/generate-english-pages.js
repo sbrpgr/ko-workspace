@@ -591,6 +591,7 @@ ${JSON.stringify(config.schema, null, 2)}
           <div class="topbar-links">
             <label class="topbar-search" for="toolSearch"><input id="toolSearch" type="search" placeholder="${escapeAttr(locale.nav.search)}" aria-label="${escapeAttr(locale.nav.search)}" autocomplete="off" /></label>
             <div class="topbar-policy-links">
+              ${config.kind === "home" ? `<a class="support-action topbar-support-link" href="${KOFI_SUPPORT_URL}" target="_blank" rel="noopener noreferrer">${escapeHtml(getKofiSupportLabel(locale.id))}</a>` : ""}
               <a href="${locale.privacyPath}" data-i18n="privacy">${escapeHtml(locale.nav.privacy)}</a>
               <a href="${locale.termsPath}" data-i18n="terms">${escapeHtml(locale.nav.terms)}</a>
             </div>
