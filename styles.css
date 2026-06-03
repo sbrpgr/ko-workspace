@@ -369,12 +369,12 @@ label.secondary-action:hover {
   justify-content: center;
   box-sizing: border-box;
   min-height: 42px;
-  border: 2px solid #2a1b00;
+  border: 1px solid #e0b900;
   border-radius: 999px;
-  background: #ffd400;
-  color: #201400;
-  box-shadow: 0 10px 24px rgba(174, 116, 0, 0.28);
-  font-weight: 950;
+  background: #ffe680;
+  color: #342400;
+  box-shadow: 0 6px 16px rgba(98, 68, 0, 0.12);
+  font-weight: 850;
   letter-spacing: 0;
   line-height: 1;
   padding: 0 18px;
@@ -385,9 +385,10 @@ label.secondary-action:hover {
 }
 
 .support-action:hover {
-  border-color: #000000;
-  background: #ffbf00;
-  color: #000000;
+  border-color: #c79800;
+  background: #ffd95a;
+  color: #241800;
+  box-shadow: 0 8px 18px rgba(98, 68, 0, 0.16);
   transform: translateY(-1px);
 }
 
@@ -3716,10 +3717,9 @@ body[data-page="home"] .platform-hero .hero-meta {
 
 body.home-mode .platform-hero .hero-support-link,
 body[data-page="home"] .platform-hero .hero-support-link {
-  min-height: 50px;
-  padding: 0 24px;
-  font-size: 1rem;
-  box-shadow: 0 12px 28px rgba(174, 116, 0, 0.3);
+  min-height: 48px;
+  padding: 0 22px;
+  font-size: 0.96rem;
 }
 
 @media (max-width: 760px) {
