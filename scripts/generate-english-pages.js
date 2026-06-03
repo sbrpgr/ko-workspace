@@ -589,7 +589,6 @@ ${JSON.stringify(config.schema, null, 2)}
               <span class="brand-name">ko-workspace</span>
               <span class="brand-subname">${escapeHtml(locale.nav.brandSubname)}</span>
             </a>
-            <a class="support-action topbar-support-link" href="${KOFI_SUPPORT_URL}" target="_blank" rel="noopener noreferrer">${escapeHtml(getKofiSupportLabel(locale.id))}</a>
           </div>
           <div class="topbar-links">
             <label class="topbar-search" for="toolSearch"><input id="toolSearch" type="search" placeholder="${escapeAttr(locale.nav.search)}" aria-label="${escapeAttr(locale.nav.search)}" autocomplete="off" /></label>

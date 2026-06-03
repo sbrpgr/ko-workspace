@@ -410,14 +410,6 @@ label.secondary-action:hover {
   flex: 0 0 auto;
 }
 
-.topbar-support-link {
-  height: 40px;
-  min-height: 40px;
-  box-shadow: 0 8px 20px rgba(174, 116, 0, 0.24);
-  font-size: 0.9rem;
-  padding: 1px 16px 0;
-}
-
 .primary-action {
   border-color: var(--primary);
   background: var(--primary);
@@ -2481,6 +2473,9 @@ body.tool-mode .site-layout {
 
 body[data-page="home"] .platform-hero,
 body.home-mode .platform-hero {
+  display: grid;
+  grid-template-columns: minmax(0, auto) auto;
+  align-items: center;
   min-height: 0;
   border-left: 0;
   justify-content: center;
@@ -2784,12 +2779,6 @@ body.tool-mode .info-grid {
     gap: 8px;
   }
 
-  .topbar-support-link {
-    height: 38px;
-    min-height: 38px;
-    padding: 1px 14px 0;
-  }
-
   .topbar-search {
     grid-column: 1;
     justify-self: center;
@@ -2806,6 +2795,24 @@ body.tool-mode .info-grid {
 
   body.tool-mode .platform-hero {
     grid-template-columns: 1fr;
+  }
+
+  body[data-page="home"] .platform-hero,
+  body.home-mode .platform-hero {
+    grid-template-columns: 1fr;
+  }
+
+  body[data-page="home"] .platform-hero .hero-meta,
+  body.home-mode .platform-hero .hero-meta {
+    justify-self: center;
+    justify-content: center;
+    width: 100%;
+    margin-left: 0;
+  }
+
+  body[data-page="home"] .platform-hero .hero-support-link,
+  body.home-mode .platform-hero .hero-support-link {
+    margin-inline: auto;
   }
 
   .home-section-head {
@@ -3698,7 +3705,36 @@ body.home-mode .overview-panel {
 
 body.home-mode .platform-hero .hero-meta,
 body[data-page="home"] .platform-hero .hero-meta {
-  display: none;
+  display: flex;
+  align-self: center;
+  justify-self: start;
+  justify-items: start;
+  width: max-content;
+  max-width: 100%;
+  margin-left: 8px;
+}
+
+body.home-mode .platform-hero .hero-support-link,
+body[data-page="home"] .platform-hero .hero-support-link {
+  min-height: 50px;
+  padding: 0 24px;
+  font-size: 1rem;
+  box-shadow: 0 12px 28px rgba(174, 116, 0, 0.3);
+}
+
+@media (max-width: 760px) {
+  body.home-mode .platform-hero .hero-meta,
+  body[data-page="home"] .platform-hero .hero-meta {
+    justify-self: center;
+    justify-content: center;
+    width: 100%;
+    margin-left: 0;
+  }
+
+  body.home-mode .platform-hero .hero-support-link,
+  body[data-page="home"] .platform-hero .hero-support-link {
+    margin-inline: auto;
+  }
 }
 
 body.home-mode .hero-copy h1,
