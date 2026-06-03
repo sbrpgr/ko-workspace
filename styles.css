@@ -368,11 +368,11 @@ label.secondary-action:hover {
   align-items: center;
   justify-content: center;
   min-height: 42px;
-  border: 1px solid #f2b600;
+  border: 2px solid #2a1b00;
   border-radius: 999px;
-  background: #ffd84d;
-  color: #3f2800;
-  box-shadow: 0 10px 22px rgba(174, 116, 0, 0.18);
+  background: #ffd400;
+  color: #201400;
+  box-shadow: 0 10px 24px rgba(174, 116, 0, 0.28);
   font-weight: 950;
   letter-spacing: 0;
   padding: 0 18px;
@@ -381,9 +381,9 @@ label.secondary-action:hover {
 }
 
 .support-action:hover {
-  border-color: #d99a00;
-  background: #ffc928;
-  color: #241600;
+  border-color: #000000;
+  background: #ffbf00;
+  color: #000000;
   transform: translateY(-1px);
 }
 
@@ -391,10 +391,24 @@ label.secondary-action:hover {
   justify-self: end;
 }
 
+.topbar-brand-group {
+  grid-column: 1;
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.topbar-brand-group .brand-home {
+  flex: 0 0 auto;
+}
+
 .topbar-support-link {
-  min-height: 36px;
-  box-shadow: 0 8px 18px rgba(174, 116, 0, 0.16);
-  padding: 0 14px;
+  min-height: 38px;
+  box-shadow: 0 8px 20px rgba(174, 116, 0, 0.24);
+  font-size: 0.9rem;
+  padding: 0 15px;
 }
 
 .primary-action {
@@ -2754,6 +2768,18 @@ body.tool-mode .info-grid {
   .brand-home {
     grid-column: 1;
     justify-self: start;
+  }
+
+  .topbar-brand-group {
+    grid-column: 1;
+    justify-self: start;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .topbar-support-link {
+    min-height: 36px;
+    padding: 0 13px;
   }
 
   .topbar-search {
