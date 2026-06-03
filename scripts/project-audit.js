@@ -18,7 +18,6 @@ const REQUIRED_TOOL_PAGE_IDS = [
   "toolOverview",
   "toolWorkspace",
   "toolGuideList",
-  "helpBtn",
   "helpDialog",
   "helpCloseBtn",
   "selectionCopyBtn",
@@ -114,6 +113,7 @@ function auditToolPages() {
     for (const id of REQUIRED_TOOL_PAGE_IDS) {
       if (!html.includes(`id="${id}"`)) problems.push(`${relative}: missing #${id}`);
     }
+    if (!html.includes("hero-support-link")) problems.push(`${relative}: missing hero support link`);
     if (!sitemap.includes(`<loc>${url}</loc>`)) problems.push(`sitemap.xml: missing ${url}`);
     if (!home.includes(`"${url}"`) && !home.includes(`href="${tool.path}"`) && !home.includes(tool.path)) {
       problems.push(`index.html: missing ${tool.path}`);
@@ -246,6 +246,7 @@ function auditLocalizedAppPage({ label, locale, file, canonicalPath, koPath, dat
   for (const id of REQUIRED_TOOL_PAGE_IDS) {
     if (!html.includes(`id="${id}"`)) problems.push(`${relative}: missing #${id}`);
   }
+  if (!html.includes("hero-support-link")) problems.push(`${relative}: missing hero support link`);
   const shouldHaveStaticContent = dataAttribute === 'data-page="home"';
   const hasStaticContent = html.includes("static-content:start") || html.includes("static-content-panel");
   if (shouldHaveStaticContent && !hasStaticContent) {

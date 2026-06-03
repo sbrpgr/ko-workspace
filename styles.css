@@ -363,6 +363,34 @@ label.secondary-action:hover {
   transform: translateY(-1px);
 }
 
+.support-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  border: 1px solid #f2b600;
+  border-radius: 999px;
+  background: #ffd84d;
+  color: #3f2800;
+  box-shadow: 0 10px 22px rgba(174, 116, 0, 0.18);
+  font-weight: 950;
+  letter-spacing: 0;
+  padding: 0 18px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.support-action:hover {
+  border-color: #d99a00;
+  background: #ffc928;
+  color: #241600;
+  transform: translateY(-1px);
+}
+
+.hero-support-link {
+  justify-self: end;
+}
+
 .primary-action {
   border-color: var(--primary);
   background: var(--primary);
@@ -1133,6 +1161,25 @@ body.home-mode .tool-workspace {
 
 .site-footer a:hover {
   color: var(--text);
+}
+
+.site-footer .footer-support-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  border: 1px solid #f2b600;
+  border-radius: 999px;
+  background: #ffd84d;
+  color: #3f2800;
+  font-weight: 900;
+  padding: 0 12px;
+}
+
+.site-footer .footer-support-link:hover {
+  border-color: #d99a00;
+  background: #ffc928;
+  color: #241600;
 }
 
 .footer-brand {

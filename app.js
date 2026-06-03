@@ -4660,9 +4660,11 @@ function bindGlobalEvents() {
     renderSidebarTools();
     filterHomeToolCards();
   });
-  els.helpBtn.addEventListener("click", openHelpDialog);
-  els.helpCloseBtn.addEventListener("click", closeHelpDialog);
-  els.helpDialog.addEventListener("click", closeHelpDialogFromBackdrop);
+  if (els.helpBtn && els.helpDialog && els.helpCloseBtn) {
+    els.helpBtn.addEventListener("click", openHelpDialog);
+    els.helpCloseBtn.addEventListener("click", closeHelpDialog);
+    els.helpDialog.addEventListener("click", closeHelpDialogFromBackdrop);
+  }
   els.pageTitle.addEventListener("click", handlePageTitleReload);
   els.pageTitle.addEventListener("keydown", handlePageTitleReloadKeydown);
 

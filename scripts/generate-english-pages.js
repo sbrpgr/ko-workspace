@@ -7,6 +7,7 @@ const ORIGIN = "https://ko-workspace.com";
 const TODAY = "2026-05-16";
 const GA4_ID = "G-8S4R46L9Q0";
 const ADSENSE_ID = "ca-pub-5869520985295558";
+const KOFI_SUPPORT_URL = "https://ko-fi.com/sbgkp";
 
 const GTAG_SCRIPT = `window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
@@ -315,6 +316,13 @@ const LOCALES = [
   },
 ];
 
+function getKofiSupportLabel(localeId) {
+  if (localeId === "ja") {
+    return "コーヒーを奢る ☕";
+  }
+  return "Support Me on Ko-fi";
+}
+
 function main() {
   const app = fs.readFileSync(path.join(ROOT, "app.js"), "utf8");
   const version = readAssetVersion();
@@ -600,7 +608,7 @@ ${JSON.stringify(config.schema, null, 2)}
               <div class="status-group">
                 ${locale.statusPills.map((item) => `<span class="status-pill">${escapeHtml(item)}</span>`).join("\n                ")}
               </div>
-              <button id="helpBtn" class="secondary-action" type="button" aria-label="${escapeAttr(locale.help.button)}">?</button>
+              <a class="support-action hero-support-link" href="${KOFI_SUPPORT_URL}" target="_blank" rel="noopener noreferrer">${escapeHtml(getKofiSupportLabel(locale.id))}</a>
             </div>
           </header>
 
@@ -704,6 +712,7 @@ ${config.body}
       <footer class="site-footer document-footer">
         <span class="footer-brand">Dayway</span>
         <a href="https://dayway.web.app" target="_blank" rel="noopener noreferrer">dayway.web.app</a>
+        <a class="footer-support-link" href="${KOFI_SUPPORT_URL}" target="_blank" rel="noopener noreferrer">${escapeHtml(getKofiSupportLabel(locale.id))}</a>
         <span class="footer-contact">${escapeHtml(locale.nav.footerContact)}</span>
         <a href="mailto:dayway.ict@gmail.com">dayway.ict@gmail.com</a>
         <a href="${locale.privacyPath}">${escapeHtml(locale.document.privacyHeading)}</a>
