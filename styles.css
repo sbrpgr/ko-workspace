@@ -367,6 +367,7 @@ label.secondary-action:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
   min-height: 42px;
   border: 2px solid #2a1b00;
   border-radius: 999px;
@@ -375,8 +376,11 @@ label.secondary-action:hover {
   box-shadow: 0 10px 24px rgba(174, 116, 0, 0.28);
   font-weight: 950;
   letter-spacing: 0;
+  line-height: 1;
   padding: 0 18px;
+  text-align: center;
   text-decoration: none;
+  vertical-align: middle;
   white-space: nowrap;
 }
 
@@ -389,6 +393,8 @@ label.secondary-action:hover {
 
 .hero-support-link {
   justify-self: end;
+  min-height: 44px;
+  padding: 0 20px;
 }
 
 .topbar-brand-group {
@@ -405,10 +411,11 @@ label.secondary-action:hover {
 }
 
 .topbar-support-link {
-  min-height: 38px;
+  height: 40px;
+  min-height: 40px;
   box-shadow: 0 8px 20px rgba(174, 116, 0, 0.24);
   font-size: 0.9rem;
-  padding: 0 15px;
+  padding: 1px 16px 0;
 }
 
 .primary-action {
@@ -2778,8 +2785,9 @@ body.tool-mode .info-grid {
   }
 
   .topbar-support-link {
-    min-height: 36px;
-    padding: 0 13px;
+    height: 38px;
+    min-height: 38px;
+    padding: 1px 14px 0;
   }
 
   .topbar-search {
