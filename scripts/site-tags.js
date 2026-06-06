@@ -31,6 +31,7 @@ const REQUIRED_SCRIPT_SOURCES = [
   "https://www.google-analytics.com",
   "https://ssl.google-analytics.com",
   "https://analytics.google.com",
+  "https://ads-partners.coupang.com",
 ];
 
 function main() {
