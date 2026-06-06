@@ -4,7 +4,7 @@ const vm = require("node:vm");
 
 const ROOT = path.resolve(__dirname, "..");
 const ORIGIN = "https://ko-workspace.com";
-const TODAY = "2026-05-16";
+const TODAY = "2026-06-07";
 const GA4_ID = "G-8S4R46L9Q0";
 const ADSENSE_ID = "ca-pub-5869520985295558";
 const KOFI_SUPPORT_URL = "https://ko-fi.com/sbgkp";

@@ -343,6 +343,24 @@ const TOOL_DEFS = [
     ],
   },
   {
+    id: "screenshot-saver",
+    path: "/tools/screenshot-saver/",
+    category: "이미지",
+    title: "스샷 저장기",
+    summary:
+      "Win+Shift+S로 캡처한 화면 영역을 Ctrl+V로 붙여넣으면 브라우저에서 바로 이미지 파일로 저장합니다.",
+    seoTitle: "스샷 저장기 | 캡처 붙여넣기 즉시 저장",
+    seoDescription:
+      "Windows 11의 Win+Shift+S 캡처 이미지를 Ctrl+V로 붙여넣고 PNG, JPG, WEBP 이미지로 바로 다운로드하는 무료 브라우저 도구입니다.",
+    keywords: ["스크린샷 저장", "캡처 저장", "Win Shift S", "붙여넣기 이미지"],
+    guide: [
+      { title: "영역 캡처", text: "Windows에서 Win+Shift+S를 누르고 저장할 화면 영역을 드래그합니다." },
+      { title: "붙여넣기", text: "도구 화면에서 Ctrl+V를 누르면 클립보드의 스크린샷 이미지를 읽습니다." },
+      { title: "즉시 저장", text: "기본값으로 붙여넣는 즉시 PNG 파일을 다운로드하고 미리보기를 표시합니다." },
+      { title: "필요 시 형식 변경", text: "JPG나 WEBP가 필요하면 출력 형식을 바꾼 뒤 수동 저장합니다." },
+    ],
+  },
+  {
     id: "image-resizer",
     path: "/tools/image-resizer/",
     category: "이미지",
@@ -1007,6 +1025,19 @@ const TOOL_DEFS_EN_OVERRIDES = {
       { title: "Review URL", text: "Check the extracted URL or text before opening anything." },
     ],
   },
+  "screenshot-saver": {
+    title: "Screenshot Saver",
+    summary: "Paste a Win+Shift+S screenshot and immediately download it as an image file from the browser.",
+    seoTitle: "Screenshot Saver | Paste and Download Screen Captures",
+    seoDescription: "Paste Windows 11 screen captures from the clipboard and instantly save them as PNG, JPG, or WEBP images in your browser.",
+    keywords: ["screenshot saver", "paste screenshot", "Win Shift S", "clipboard image"],
+    guide: [
+      { title: "Capture area", text: "Use Win+Shift+S and drag the screen area you want to save." },
+      { title: "Paste", text: "Press Ctrl+V on this tool page to read the screenshot from the clipboard." },
+      { title: "Save instantly", text: "By default, the pasted capture downloads as a PNG immediately." },
+      { title: "Change format", text: "Switch to JPG or WEBP when you need a different output format." },
+    ],
+  },
   "image-resizer": {
     title: "Image Resizer",
     summary: "Resize images by width, height, or percentage while keeping the result in your browser.",
@@ -1244,6 +1275,11 @@ const TOOL_DEFS_LOCALIZED_COPY = {
       summary: "QR画像やスクリーンショットをブラウザで読み取り、URLや元のテキストを確認できます。",
       keywords: ["QR読み取り", "QRデコード", "QRリンク", "画像QR"],
     },
+    "screenshot-saver": {
+      title: "スクリーンショット保存",
+      summary: "Win+Shift+Sでキャプチャした画像を貼り付けると、ブラウザからすぐ画像ファイルとして保存します。",
+      keywords: ["スクリーンショット保存", "貼り付け画像", "Win Shift S", "クリップボード画像"],
+    },
     "image-resizer": {
       title: "画像サイズ変更",
       summary: "画像の幅、高さ、比率を指定してリサイズし、ブラウザ内で結果を保存します。",
@@ -1395,6 +1431,11 @@ const TOOL_DEFS_LOCALIZED_COPY = {
       title: "二维码链接提取器",
       summary: "在浏览器中读取二维码图片或截图，查看提取出的URL或原始内容。",
       keywords: ["二维码读取", "二维码解码", "二维码链接", "图片二维码"],
+    },
+    "screenshot-saver": {
+      title: "截图保存器",
+      summary: "粘贴 Win+Shift+S 截图后，直接在浏览器中下载为图片文件。",
+      keywords: ["截图保存", "粘贴截图", "Win Shift S", "剪贴板图片"],
     },
     "image-resizer": {
       title: "图片尺寸调整",
@@ -1570,6 +1611,11 @@ const LOCALIZED_TOOL_SCENARIO_LINES = {
       "スクリーンショット内のQRを読み取り、共有してよいリンクかを先に見ます。",
       "Wi-FiやテキストQRの中身を、自動で開かずに原文として確認します。",
     ],
+    "screenshot-saver": [
+      "Win+Shift+Sで選択した画面範囲を貼り付け、ペイントを開かずにPNGとして保存します。",
+      "チャット、メール、問い合わせ、手順書に添付するスクリーンショットをすぐファイル化します。",
+      "自動ダウンロードが制限された場合も、プレビュー後に手動で保存できます。",
+    ],
     "image-resizer": [
       "応募フォーム、学校提出、社内システムの画像サイズ制限に合わせてリサイズします。",
       "ブログやECの商品画像を、縦横比を保ったまま見やすい大きさに整えます。",
@@ -1722,6 +1768,11 @@ const LOCALIZED_TOOL_SCENARIO_LINES = {
       "从海报、截图或群图片里的二维码提取URL，避免手动识别。",
       "读取Wi-Fi、文本或联系方式二维码内容，但不自动跳转。",
     ],
+    "screenshot-saver": [
+      "用 Win+Shift+S 选取屏幕区域后直接粘贴，无需打开画图即可保存为 PNG。",
+      "把复制的截图快速变成文件，方便发到聊天、邮件、工单或文档中。",
+      "如果浏览器限制自动下载，也可以在预览后手动保存。",
+    ],
     "image-resizer": [
       "按报名系统、政务表单、学校或公司系统的尺寸要求调整图片。",
       "处理电商商品图、公众号封面或头像时，保持比例并控制大小。",
@@ -1816,6 +1867,7 @@ const TOOL_VISUALS_EN = {
   "ai-table-converter": { icon: "\u25A4", tone: "green", copy: "Convert AI tables for documents and spreadsheets." },
   "csv-excel-converter": { icon: "XL", tone: "emerald", copy: "Convert CSV, TSV, and XLSX files in the browser." },
   "markdown-viewer": { icon: "MD", tone: "blue", copy: "Read Markdown files with adjustable layout." },
+  "screenshot-saver": { icon: "\u2399", tone: "teal", copy: "Paste a screen capture and save it instantly." },
 };
 const TOOL_SCENARIO_LINES_EN = {
   "voice-to-text": [
@@ -1907,6 +1959,11 @@ const TOOL_SCENARIO_LINES_EN = {
     "Read the real URL inside a QR image before opening or forwarding it.",
     "Extract a QR link from a screenshot, poster photo, or shared image without scanning it with another phone.",
     "Inspect Wi-Fi, email, contact, or plain-text QR contents as text instead of launching them automatically.",
+  ],
+  "screenshot-saver": [
+    "Capture a selected Windows screen area with Win+Shift+S, paste it, and save the PNG without opening Paint or Photos.",
+    "Turn a copied screen capture into a file before attaching it to email, chat, support tickets, or documentation.",
+    "Keep screenshot saving local in the browser, with a preview and manual save fallback when automatic download is blocked.",
   ],
   "image-resizer": [
     "Resize a profile photo, application attachment, or scanned image to the exact pixel dimensions a form requires.",
@@ -2021,6 +2078,7 @@ const TOOL_VISUALS = {
   "text-diff": { icon: "\u2260", tone: "purple", copy: "\ub450 \ud14d\uc2a4\ud2b8\uc758 \ubcc0\uacbd\uc810\uc744 \ube44\uad50\ud569\ub2c8\ub2e4." },
   "qr-code-generator": { icon: "\u25A6", tone: "emerald", copy: "URL, \ud14d\uc2a4\ud2b8, Wi-Fi QR\uc744 \ub9cc\ub4ed\ub2c8\ub2e4." },
   "qr-link-extractor": { icon: "\u25A3", tone: "teal", copy: "QR \uc774\ubbf8\uc9c0\uc5d0\uc11c \ub9c1\ud06c\uc640 \uc6d0\ubb38\uc744 \uc77d\uc2b5\ub2c8\ub2e4." },
+  "screenshot-saver": { icon: "\u2399", tone: "teal", copy: "Win+Shift+S \ucea1\ucc98\ub97c \ubd99\uc5ec\ub123\uc73c\uba74 \uc989\uc2dc \uc800\uc7a5\ud569\ub2c8\ub2e4." },
   "image-resizer": { icon: "\u2194", tone: "orange", copy: "\uc0ac\uc9c4 \ud06c\uae30\ub97c \ud53d\uc140\uc774\ub098 \ube44\uc728\ub85c \uc870\uc808\ud569\ub2c8\ub2e4." },
   "image-converter": { icon: "\uD83D\uDDBC\uFE0F", tone: "pink", copy: "JPG, PNG, WEBP \ud615\uc2dd\uc744 \ubcc0\ud658\ud569\ub2c8\ub2e4." },
   "image-compressor": { icon: "\uD83D\uDDDC\uFE0F", tone: "yellow", copy: "\uc5c5\ub85c\ub4dc\uc6a9 \uc774\ubbf8\uc9c0 \uc6a9\ub7c9\uc744 \uc904\uc785\ub2c8\ub2e4." },
@@ -2396,6 +2454,26 @@ const TOOL_SCENARIOS = {
       check: "개인 연락처나 비밀번호가 포함된 QR 원문은 필요한 사람에게만 전달하세요.",
     },
   ],
+  "screenshot-saver": [
+    {
+      title: "Win+Shift+S 캡처를 바로 파일로 남길 때",
+      body:
+        "Windows 11에서 화면 일부를 캡처한 뒤 그림판이나 사진 앱을 열지 않고, 도구 화면에 Ctrl+V만 눌러 PNG 파일로 바로 저장합니다. 문의 화면, 오류 메시지, 설정 화면을 빠르게 파일화할 때 적합합니다.",
+      check: "붙여넣기 즉시 저장 옵션이 켜져 있으면 클립보드 이미지가 바로 다운로드됩니다.",
+    },
+    {
+      title: "메일과 메신저에 첨부할 스샷을 만들 때",
+      body:
+        "캡처한 영역을 파일로 저장해 이메일, 업무 메신저, 고객 문의, 이슈 트래커에 첨부합니다. 임시 캡처를 한 번 더 편집 앱에 붙여넣고 저장하는 단계를 줄일 수 있습니다.",
+      check: "캡처 영역 안에 개인정보나 내부 URL이 보이지 않는지 저장 전 미리보기를 확인하세요.",
+    },
+    {
+      title: "자동 저장이 막힌 브라우저에서 다시 저장할 때",
+      body:
+        "브라우저가 자동 다운로드를 제한하더라도 붙여넣은 스크린샷은 미리보기와 수동 저장 버튼으로 남습니다. 필요한 경우 JPG나 WEBP 형식으로 바꿔 다시 내려받을 수 있습니다.",
+      check: "JPG로 저장하면 투명 배경은 흰색으로 합쳐질 수 있습니다.",
+    },
+  ],
   "image-resizer": [
     {
       title: "지원서와 공공 서식의 이미지 규격을 맞출 때",
@@ -2720,6 +2798,11 @@ const TOOL_USE_EXAMPLES = {
     "인쇄물, 포스터, 명함에 있는 QR을 열기 전에 실제 URL을 먼저 점검합니다.",
     "URL이 아닌 Wi-Fi, 이메일, 일반 텍스트 QR도 원문 내용으로 확인합니다.",
   ],
+  "screenshot-saver": [
+    "Win+Shift+S로 캡처한 화면 영역을 Ctrl+V로 붙여넣자마자 PNG 파일로 저장합니다.",
+    "오류 화면이나 설정 화면을 그림판 없이 바로 파일로 만들어 메일이나 메신저에 첨부합니다.",
+    "자동 다운로드가 제한되면 미리보기에서 같은 이미지를 다시 수동 저장합니다.",
+  ],
   "image-resizer": [
     "블로그, 쇼핑몰, 지원서 업로드 기준에 맞게 이미지 크기를 줄입니다.",
     "썸네일이나 첨부 이미지의 가로세로 비율을 유지하며 조정합니다.",
@@ -2845,6 +2928,10 @@ const TOOL_EXTRA_FAQS = {
   "qr-link-extractor": {
     question: "QR 이미지를 서버에 업로드하나요?",
     answer: "아니요. 선택한 이미지는 브라우저 안에서만 읽고 QR 내용도 자동으로 열지 않습니다. 추출된 링크는 사용자가 직접 복사하거나 새 탭으로 열 수 있습니다.",
+  },
+  "screenshot-saver": {
+    question: "Win+Shift+S 캡처가 바로 저장되나요?",
+    answer: "네. Windows에서 Win+Shift+S로 영역을 캡처한 뒤 이 도구에 Ctrl+V로 붙여넣으면 기본값으로 PNG 파일을 즉시 다운로드합니다. 이미지는 브라우저 안에서만 처리하고 서버로 업로드하지 않습니다.",
   },
   "image-resizer": {
     question: "비율을 유지하면서 이미지 크기를 바꿀 수 있나요?",
@@ -3806,6 +3893,57 @@ const WORKSPACE_COMMON_TEXT = [
   ["선택한 파일은 자체 서버로 업로드되지 않습니다. 변환 라이브러리만 필요할 때 CDN에서 불러옵니다.", { en: "Selected files are not uploaded to our server. Conversion libraries are loaded from a CDN only when needed.", ja: "選択したファイルは自社サーバーへアップロードされません。変換ライブラリは必要な時だけCDNから読み込みます。", zh: "所选文件不会上传到本站服务器。仅在需要时从 CDN 加载转换库。" }],
   ["링크는 텍스트만 남기기", { en: "Keep link text only", ja: "リンクは文字だけ残す", zh: "链接仅保留文本" }],
   ["위 붙여넣기 칸에 스크린샷 이미지를 붙여넣으면 브라우저 안에서만 QR 내용을 읽습니다.", { en: "Paste a screenshot above to read QR content only in the browser.", ja: "上の貼り付け欄にスクリーンショット画像を貼ると、QR内容をブラウザ内だけで読み取ります。", zh: "把截图粘贴到上方区域后，只会在浏览器内读取二维码内容。" }],
+  ["스샷 저장기", { en: "Screenshot saver", ja: "スクリーンショット保存", zh: "截图保存器" }],
+  ["스샷 저장기 열기", { en: "Open screenshot saver", ja: "スクリーンショット保存を開く", zh: "打开截图保存器" }],
+  ["스크린샷 붙여넣기", { en: "Paste screenshot", ja: "スクリーンショットを貼り付け", zh: "粘贴截图" }],
+  ["Win+Shift+S로 영역 캡처 후 이 칸에 Ctrl+V", { en: "Capture an area with Win+Shift+S, then press Ctrl+V here", ja: "Win+Shift+Sで範囲をキャプチャしてからここでCtrl+V", zh: "用 Win+Shift+S 截取区域后，在此按 Ctrl+V" }],
+  ["저장된 스크린샷 파일을 선택하거나 이 영역에 끌어다 놓습니다.", { en: "Choose a saved screenshot file or drop it here.", ja: "保存済みのスクリーンショットを選択するか、この領域へドロップします。", zh: "选择已保存的截图文件，或拖放到此区域。" }],
+  ["저장 위치", { en: "Save location", ja: "保存先", zh: "保存位置" }],
+  ["저장 위치 설정", { en: "Set save location", ja: "保存先を設定", zh: "设置保存位置" }],
+  ["저장 위치 해제", { en: "Clear save location", ja: "保存先を解除", zh: "清除保存位置" }],
+  ["저장 위치 바꾸기", { en: "Change save location", ja: "保存先を変更", zh: "更改保存位置" }],
+  ["저장 위치를 설정하면 이후 붙여넣기 이미지를 같은 폴더에 자동 저장합니다.", { en: "Set a save location to automatically save future pasted images to the same folder.", ja: "保存先を設定すると、以後貼り付けた画像を同じフォルダーに自動保存します。", zh: "设置保存位置后，之后粘贴的图片会自动保存到同一文件夹。" }],
+  ["이 브라우저는 저장 위치 고정을 지원하지 않습니다.", { en: "This browser does not support fixed save locations.", ja: "このブラウザは保存先の固定に対応していません。", zh: "此浏览器不支持固定保存位置。" }],
+  ["이 브라우저는 저장 위치 고정을 지원하지 않아 기본 다운로드로 저장합니다.", { en: "This browser does not support fixed save locations, so files use the default download flow.", ja: "このブラウザは保存先の固定に対応していないため、通常のダウンロードで保存します。", zh: "此浏览器不支持固定保存位置，因此会使用默认下载流程保存。" }],
+  ["저장 위치 권한이 필요합니다.", { en: "Save location permission is required.", ja: "保存先の権限が必要です。", zh: "需要保存位置权限。" }],
+  ["저장 위치 권한이 필요합니다. 저장 위치 설정을 다시 눌러 허용해 주세요.", { en: "Save location permission is required. Press Set save location again and allow access.", ja: "保存先の権限が必要です。もう一度保存先を設定して許可してください。", zh: "需要保存位置权限。请再次点击设置保存位置并允许访问。" }],
+  ["저장 위치 권한이 필요합니다. 저장 위치 바꾸기를 눌러 다시 허용해 주세요.", { en: "Save location permission is required. Press Change save location and allow access again.", ja: "保存先の権限が必要です。保存先を変更してもう一度許可してください。", zh: "需要保存位置权限。请点击更改保存位置并重新允许访问。" }],
+  ["저장 위치 바꾸기를 눌러 다시 허용해 주세요.", { en: "Press Change save location and allow access again.", ja: "保存先を変更してもう一度許可してください。", zh: "请点击更改保存位置并重新允许访问。" }],
+  ["저장 위치를 설정했습니다.", { en: "Save location set.", ja: "保存先を設定しました。", zh: "已设置保存位置。" }],
+  ["저장 위치를 설정하지 못했습니다.", { en: "Could not set the save location.", ja: "保存先を設定できませんでした。", zh: "无法设置保存位置。" }],
+  ["저장 위치를 설정하지 못했습니다. 브라우저 권한을 확인해 주세요.", { en: "Could not set the save location. Check browser permissions.", ja: "保存先を設定できませんでした。ブラウザの権限を確認してください。", zh: "无法设置保存位置。请检查浏览器权限。" }],
+  ["저장 위치 설정 완료", { en: "Save location set", ja: "保存先設定完了", zh: "保存位置设置完成" }],
+  ["현재 저장 위치", { en: "Current save location", ja: "現在の保存先", zh: "当前保存位置" }],
+  ["저장 위치 권한 확인 필요", { en: "Save location permission check needed", ja: "保存先の権限確認が必要", zh: "需要检查保存位置权限" }],
+  ["저장 위치 정보를 불러오지 못했습니다. 필요하면 다시 설정해 주세요.", { en: "Could not load save location info. Set it again if needed.", ja: "保存先情報を読み込めませんでした。必要に応じて再設定してください。", zh: "无法读取保存位置信息。如有需要请重新设置。" }],
+  ["저장 위치를 해제했습니다.", { en: "Save location cleared.", ja: "保存先を解除しました。", zh: "已清除保存位置。" }],
+  ["저장 위치를 해제했습니다. 이후 저장은 브라우저 다운로드로 처리됩니다.", { en: "Save location cleared. Future saves will use browser downloads.", ja: "保存先を解除しました。以後はブラウザのダウンロードで保存します。", zh: "已清除保存位置。之后将使用浏览器下载保存。" }],
+  ["지정 폴더에 저장하지 못해 브라우저 다운로드로 저장했습니다.", { en: "Could not save to the chosen folder, so the browser download flow was used.", ja: "指定フォルダーに保存できなかったため、ブラウザのダウンロードで保存しました。", zh: "无法保存到指定文件夹，已改用浏览器下载保存。" }],
+  ["지정 폴더 권한을 사용할 수 없어 브라우저 다운로드로 저장했습니다.", { en: "The chosen folder permission was unavailable, so the browser download flow was used.", ja: "指定フォルダーの権限を使用できなかったため、ブラウザのダウンロードで保存しました。", zh: "无法使用指定文件夹权限，已改用浏览器下载保存。" }],
+  ["자동 저장을 시도했습니다. 저장 위치를 설정하면 지정 폴더에 바로 저장됩니다.", { en: "Tried automatic saving. Set a save location to write directly to that folder.", ja: "自動保存を試しました。保存先を設定すると指定フォルダーへ直接保存します。", zh: "已尝试自动保存。设置保存位置后会直接写入该文件夹。" }],
+  ["저장 완료", { en: "Save complete", ja: "保存完了", zh: "保存完成" }],
+  ["붙여넣으면 즉시 저장", { en: "Save immediately after paste", ja: "貼り付けたらすぐ保存", zh: "粘贴后立即保存" }],
+  ["스크린샷 저장", { en: "Save screenshot", ja: "スクリーンショットを保存", zh: "保存截图" }],
+  ["다시 저장", { en: "Save again", ja: "もう一度保存", zh: "再次保存" }],
+  ["붙여넣은 이미지 지우기", { en: "Clear pasted image", ja: "貼り付け画像を消去", zh: "清除粘贴的图片" }],
+  ["Ctrl+V 대기", { en: "Waiting for Ctrl+V", ja: "Ctrl+V待機中", zh: "等待 Ctrl+V" }],
+  ["스크린샷 미리보기", { en: "Screenshot preview", ja: "スクリーンショットプレビュー", zh: "截图预览" }],
+  ["아직 붙여넣은 스크린샷이 없습니다.", { en: "No pasted screenshot yet.", ja: "まだ貼り付けたスクリーンショットはありません。", zh: "尚未粘贴截图。" }],
+  ["Win+Shift+S로 캡처한 뒤 Ctrl+V를 누르면 PNG로 바로 저장합니다.", { en: "Capture with Win+Shift+S, then press Ctrl+V to save as PNG immediately.", ja: "Win+Shift+Sでキャプチャし、Ctrl+VでPNGとしてすぐ保存します。", zh: "使用 Win+Shift+S 截图后按 Ctrl+V，即可立即保存为 PNG。" }],
+  ["클립보드 이미지는 서버로 업로드하지 않고 브라우저 안에서만 처리합니다.", { en: "Clipboard images are processed only in the browser and are not uploaded to the server.", ja: "クリップボード画像はサーバーへアップロードせず、ブラウザ内だけで処理します。", zh: "剪贴板图片只在浏览器中处理，不会上传到服务器。" }],
+  ["붙여넣은 이미지", { en: "Pasted image", ja: "貼り付け画像", zh: "已粘贴图片" }],
+  ["붙여넣은 이미지를 처리하는 중입니다.", { en: "Processing the pasted image.", ja: "貼り付け画像を処理しています。", zh: "正在处理粘贴的图片。" }],
+  ["스샷을 불러오는 중입니다.", { en: "Loading screenshot.", ja: "スクリーンショットを読み込んでいます。", zh: "正在读取截图。" }],
+  ["다시 저장을 누르면 파일로 저장합니다.", { en: "Press Save again to download the file.", ja: "もう一度保存を押すとファイルとして保存します。", zh: "点击再次保存即可下载文件。" }],
+  ["미리보기를 표시하지 못했지만 원본 PNG 저장은 시도했습니다.", { en: "Preview failed, but the original PNG save was attempted.", ja: "プレビューは表示できませんでしたが、元のPNG保存は試しました。", zh: "预览显示失败，但已尝试保存原始 PNG。" }],
+  ["이미지 파일만 사용할 수 있습니다.", { en: "Only image files can be used.", ja: "画像ファイルのみ使用できます。", zh: "只能使用图片文件。" }],
+  ["클립보드에 이미지가 없습니다. Win+Shift+S로 영역을 캡처한 뒤 다시 붙여넣어 주세요.", { en: "There is no image on the clipboard. Capture an area with Win+Shift+S, then paste again.", ja: "クリップボードに画像がありません。Win+Shift+Sで範囲をキャプチャしてからもう一度貼り付けてください。", zh: "剪贴板中没有图片。请用 Win+Shift+S 截取区域后重新粘贴。" }],
+  ["클립보드 이미지를 불러오지 못했습니다. 다시 캡처해 붙여넣어 주세요.", { en: "Could not load the clipboard image. Capture it again and paste once more.", ja: "クリップボード画像を読み込めませんでした。もう一度キャプチャして貼り付けてください。", zh: "无法读取剪贴板图片。请重新截图后再次粘贴。" }],
+  ["저장할 스크린샷이 없습니다.", { en: "There is no screenshot to save.", ja: "保存するスクリーンショットがありません。", zh: "没有可保存的截图。" }],
+  ["스샷을 불러오지 못했습니다.", { en: "Could not load the screenshot.", ja: "スクリーンショットを読み込めませんでした。", zh: "无法读取截图。" }],
+  ["스샷 저장을 완료하지 못했습니다.", { en: "Could not save the screenshot.", ja: "スクリーンショットを保存できませんでした。", zh: "无法保存截图。" }],
+  ["스샷을 저장했습니다.", { en: "Screenshot saved.", ja: "スクリーンショットを保存しました。", zh: "截图已保存。" }],
+  ["자동 저장을 시도했습니다. 다운로드가 보이지 않으면 다시 저장을 눌러 주세요.", { en: "Tried automatic saving. If no download appears, press Save again.", ja: "自動保存を試しました。ダウンロードが見えない場合はもう一度保存を押してください。", zh: "已尝试自动保存。如果没有看到下载，请点击再次保存。" }],
   ["이미지 내용은 서버로 전송되지 않습니다. 결과는 브라우저 안에서 만들어집니다.", { en: "Image content is not sent to the server. Results are created in the browser.", ja: "画像内容はサーバーへ送信されません。結果はブラウザ内で作成されます。", zh: "图片内容不会发送到服务器。结果会在浏览器内生成。" }],
   ["먼저 이미지를 선택해 주세요.", { en: "Choose an image first.", ja: "先に画像を選択してください。", zh: "请先选择图片。" }],
   ["먼저 압축 결과를 만들어 주세요.", { en: "Create a compressed result first.", ja: "先に圧縮結果を作成してください。", zh: "请先生成压缩结果。" }],
@@ -4235,14 +4373,14 @@ const CATEGORY_PAGE_DEFS = [
     path: "/tools/image/",
     title: "이미지 업무 도구",
     eyebrow: "Image Tools",
-    description: "이미지 크기 조절, 형식 변환, 용량 압축, EXIF 제거, QR 생성 작업을 브라우저 안에서 빠르게 처리합니다.",
+    description: "스샷 저장, 이미지 크기 조절, 형식 변환, 용량 압축, EXIF 제거, QR 생성 작업을 브라우저 안에서 빠르게 처리합니다.",
     metaDescription:
-      "코워크스페이스 이미지 업무 도구 모음입니다. 이미지 크기 조절, JPG PNG WEBP 변환, 이미지 압축, EXIF 메타데이터 제거, QR 코드 생성과 QR 링크 추출을 무료로 사용할 수 있습니다.",
-    keywords: ["이미지 크기 조절", "이미지 변환", "이미지 압축", "EXIF 제거", "QR 코드"],
+      "코워크스페이스 이미지 업무 도구 모음입니다. 스샷 저장, 이미지 크기 조절, JPG PNG WEBP 변환, 이미지 압축, EXIF 메타데이터 제거, QR 코드 생성과 QR 링크 추출을 무료로 사용할 수 있습니다.",
+    keywords: ["스샷 저장", "이미지 크기 조절", "이미지 변환", "이미지 압축", "EXIF 제거", "QR 코드"],
     categories: ["이미지"],
     guide: [
-      { title: "이미지 선택", text: "사진, 캡처, 웹 업로드용 이미지를 선택하거나 업로드 영역에 끌어다 놓습니다." },
-      { title: "작업 적용", text: "크기, 형식, 품질, EXIF 제거, QR 생성 또는 QR 판독을 업무 목적에 맞게 처리합니다." },
+      { title: "이미지 선택", text: "사진, 캡처, 웹 업로드용 이미지를 선택하거나 스크린샷을 붙여넣습니다." },
+      { title: "작업 적용", text: "스샷 저장, 크기, 형식, 품질, EXIF 제거, QR 생성 또는 QR 판독을 업무 목적에 맞게 처리합니다." },
       { title: "결과 다운로드", text: "브라우저에서 처리된 결과물을 바로 저장합니다." },
     ],
   },
@@ -4320,14 +4458,14 @@ const CATEGORY_PAGE_DEFS_EN = [
     title: "Image Tools",
     eyebrow: "Image Tools",
     description:
-      "Resize, convert, compress, remove metadata, create QR codes, and read QR images in the browser.",
+      "Save pasted screenshots, resize, convert, compress, remove metadata, create QR codes, and read QR images in the browser.",
     metaDescription:
-      "A browser-based image tools collection for resizing images, converting JPG PNG WEBP files, compressing images, removing EXIF metadata, generating QR codes, and extracting QR links.",
-    keywords: ["image resizer", "image converter", "image compressor", "EXIF remover", "QR code"],
+      "A browser-based image tools collection for saving pasted screenshots, resizing images, converting JPG PNG WEBP files, compressing images, removing EXIF metadata, generating QR codes, and extracting QR links.",
+    keywords: ["screenshot saver", "image resizer", "image converter", "image compressor", "EXIF remover", "QR code"],
     categories: ["Image"],
     guide: [
-      { title: "Choose an image", text: "Select a photo, screenshot, upload image, or QR image." },
-      { title: "Apply the task", text: "Resize, convert, compress, strip metadata, generate QR, or read QR content." },
+      { title: "Choose an image", text: "Paste a screenshot or select a photo, upload image, or QR image." },
+      { title: "Apply the task", text: "Save a screenshot, resize, convert, compress, strip metadata, generate QR, or read QR content." },
       { title: "Save the output", text: "Download the browser-generated result." },
     ],
   },
@@ -4403,14 +4541,14 @@ const CATEGORY_PAGE_DEFS_JA = [
     path: "/ja/tools/image/",
     title: "画像ツール",
     eyebrow: "Image Tools",
-    description: "画像サイズ変更、形式変換、圧縮、EXIF削除、QR作成と読み取りをブラウザ内で実行します。",
+    description: "スクリーンショット保存、画像サイズ変更、形式変換、圧縮、EXIF削除、QR作成と読み取りをブラウザ内で実行します。",
     metaDescription:
-      "画像リサイズ、JPG PNG WEBP変換、画像圧縮、EXIFメタデータ削除、QRコード作成、QRリンク読み取りをブラウザで使えるツール集です。",
-    keywords: ["画像リサイズ", "画像変換", "画像圧縮", "EXIF削除", "QRコード"],
+      "スクリーンショット保存、画像リサイズ、JPG PNG WEBP変換、画像圧縮、EXIFメタデータ削除、QRコード作成、QRリンク読み取りをブラウザで使えるツール集です。",
+    keywords: ["スクリーンショット保存", "画像リサイズ", "画像変換", "画像圧縮", "EXIF削除", "QRコード"],
     categories: ["画像"],
     guide: [
-      { title: "画像を選ぶ", text: "写真、スクリーンショット、QR画像を選択します。" },
-      { title: "処理する", text: "サイズ、形式、品質、メタデータ、QR処理を選びます。" },
+      { title: "画像を選ぶ", text: "スクリーンショットを貼り付けるか、写真やQR画像を選択します。" },
+      { title: "処理する", text: "スクリーンショット保存、サイズ、形式、品質、メタデータ、QR処理を選びます。" },
       { title: "保存する", text: "ブラウザで作成された結果をダウンロードします。" },
     ],
   },
@@ -4484,14 +4622,14 @@ const CATEGORY_PAGE_DEFS_ZH = [
     path: "/zh/tools/image/",
     title: "图片工具",
     eyebrow: "Image Tools",
-    description: "在浏览器中调整图片尺寸、转换格式、压缩、删除元数据、生成和读取二维码。",
+    description: "在浏览器中保存粘贴的截图、调整图片尺寸、转换格式、压缩、删除元数据、生成和读取二维码。",
     metaDescription:
-      "浏览器图片工具集合，支持图片尺寸调整、JPG PNG WEBP转换、图片压缩、EXIF元数据删除、二维码生成和二维码链接读取。",
-    keywords: ["图片尺寸调整", "图片转换", "图片压缩", "EXIF删除", "二维码"],
+      "浏览器图片工具集合，支持粘贴截图保存、图片尺寸调整、JPG PNG WEBP转换、图片压缩、EXIF元数据删除、二维码生成和二维码链接读取。",
+    keywords: ["截图保存", "图片尺寸调整", "图片转换", "图片压缩", "EXIF删除", "二维码"],
     categories: ["图片"],
     guide: [
-      { title: "选择图片", text: "选择照片、截图、上传图片或二维码图片。" },
-      { title: "执行处理", text: "调整尺寸、转换格式、压缩、删除元数据或处理二维码。" },
+      { title: "选择图片", text: "粘贴截图，或选择照片、上传图片、二维码图片。" },
+      { title: "执行处理", text: "保存截图、调整尺寸、转换格式、压缩、删除元数据或处理二维码。" },
       { title: "保存输出", text: "下载浏览器生成的结果。" },
     ],
   },
@@ -5393,6 +5531,7 @@ const TOOL_RENDERERS = {
   "text-diff": renderTextDiffTool,
   "qr-code-generator": renderQrGenerator,
   "qr-link-extractor": renderQrLinkExtractor,
+  "screenshot-saver": renderScreenshotSaver,
   "image-resizer": renderImageResizer,
   "image-converter": renderImageConverter,
   "image-compressor": renderImageCompressor,
@@ -10374,6 +10513,423 @@ function renderQrLinkExtractor(container) {
       status.textContent = "QR 판독 중 오류가 발생했습니다. 다른 이미지로 다시 시도해 주세요.";
       showToast("QR을 읽지 못했습니다.");
     }
+  }
+}
+
+function renderScreenshotSaver(container) {
+  container.innerHTML = `
+    <div class="tool-section screenshot-saver-tool">
+      <div class="tool-grid">
+        <aside class="action-card">
+          <div class="field">
+            <label for="screenshotPasteBox">스크린샷 붙여넣기</label>
+            <textarea
+              id="screenshotPasteBox"
+              class="qr-paste-box"
+              rows="5"
+              placeholder="Win+Shift+S로 영역 캡처 후 이 칸에 Ctrl+V"
+              autocomplete="off"
+              spellcheck="false"
+            ></textarea>
+          </div>
+          <div class="upload-box">
+            <label for="screenshotFile">파일로 선택</label>
+            <input id="screenshotFile" type="file" accept="image/*" />
+            <p>저장된 스크린샷 파일을 선택하거나 이 영역에 끌어다 놓습니다.</p>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="screenshotFormat">출력 형식</label>
+              <select id="screenshotFormat">
+                <option value="image/png">PNG</option>
+                <option value="image/jpeg">JPG</option>
+                <option value="image/webp">WEBP</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="screenshotQuality">품질</label>
+              <input id="screenshotQuality" type="range" min="0.5" max="1" step="0.05" value="0.92" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="screenshotNamePrefix">파일명 접두어</label>
+            <input id="screenshotNamePrefix" type="text" value="screenshot" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label>저장 위치</label>
+            <div class="action-row">
+              <button id="chooseScreenshotFolderBtn" type="button">저장 위치 설정</button>
+              <button id="clearScreenshotFolderBtn" type="button" disabled>저장 위치 해제</button>
+            </div>
+            <p id="screenshotFolderStatus" class="tool-note">저장 위치를 설정하면 이후 붙여넣기 이미지를 같은 폴더에 자동 저장합니다.</p>
+          </div>
+          <label class="check-item"><input id="screenshotAutoSave" type="checkbox" checked /> 붙여넣으면 즉시 저장</label>
+          <div class="action-row">
+            <button id="saveScreenshotBtn" class="primary-action" type="button" disabled>다시 저장</button>
+            <button id="clearScreenshotBtn" type="button">붙여넣은 이미지 지우기</button>
+          </div>
+          <p id="status" class="tool-note">Win+Shift+S로 캡처한 뒤 Ctrl+V를 누르면 PNG로 바로 저장합니다.</p>
+          <p class="tool-note">클립보드 이미지는 서버로 업로드하지 않고 브라우저 안에서만 처리합니다.</p>
+        </aside>
+        <article class="preview-card">
+          <div class="section-heading">
+            <div>
+              <h2>스크린샷 미리보기</h2>
+              <p id="screenshotMeta" class="tool-note">아직 붙여넣은 스크린샷이 없습니다.</p>
+            </div>
+          </div>
+          <div class="canvas-frame"><canvas id="screenshotCanvas"></canvas></div>
+        </article>
+      </div>
+    </div>
+  `;
+
+  const state = {
+    file: null,
+    image: null,
+    blob: null,
+    filename: "",
+    width: 0,
+    height: 0,
+    directoryHandle: null,
+  };
+  const screenshotDirectoryDbName = "koWorkspaceScreenshotSaver";
+  const screenshotDirectoryStoreName = "directoryHandles";
+  const screenshotDirectoryKey = "saveDirectory";
+  const supportsDirectorySave = typeof window.showDirectoryPicker === "function" && "indexedDB" in window;
+  const pasteBox = container.querySelector("#screenshotPasteBox");
+  const fileInput = container.querySelector("#screenshotFile");
+  const formatSelect = container.querySelector("#screenshotFormat");
+  const qualityInput = container.querySelector("#screenshotQuality");
+  const prefixInput = container.querySelector("#screenshotNamePrefix");
+  const autoSaveInput = container.querySelector("#screenshotAutoSave");
+  const chooseFolderBtn = container.querySelector("#chooseScreenshotFolderBtn");
+  const clearFolderBtn = container.querySelector("#clearScreenshotFolderBtn");
+  const folderStatus = container.querySelector("#screenshotFolderStatus");
+  const saveBtn = container.querySelector("#saveScreenshotBtn");
+  const clearBtn = container.querySelector("#clearScreenshotBtn");
+  const status = container.querySelector("#status");
+  const meta = container.querySelector("#screenshotMeta");
+  const canvas = container.querySelector("#screenshotCanvas");
+
+  initScreenshotFolder();
+
+  fileInput.addEventListener("change", async () => {
+    const file = fileInput.files[0];
+    if (file) await loadScreenshotSource(file, { source: "file", autoSave: false });
+  });
+
+  pasteBox.addEventListener("paste", handleScreenshotPaste);
+  pasteBox.addEventListener("input", () => {
+    pasteBox.value = "";
+  });
+  document.addEventListener("paste", handleScreenshotPaste);
+  window.setTimeout(() => pasteBox.focus({ preventScroll: true }), 0);
+
+  saveBtn.addEventListener("click", async () => {
+    await saveCurrentScreenshot(false);
+  });
+
+  chooseFolderBtn.addEventListener("click", async () => {
+    if (!supportsDirectorySave) {
+      showToast("이 브라우저는 저장 위치 고정을 지원하지 않습니다.");
+      return;
+    }
+
+    try {
+      const handle = await window.showDirectoryPicker({ id: "ko-workspace-screenshot-saver", mode: "readwrite" });
+      const allowed = await ensureScreenshotDirectoryPermission(handle, true);
+      if (!allowed) {
+        folderStatus.textContent = "저장 위치 권한이 필요합니다. 저장 위치 설정을 다시 눌러 허용해 주세요.";
+        showToast("저장 위치 권한이 필요합니다.");
+        return;
+      }
+
+      state.directoryHandle = handle;
+      await storeScreenshotDirectoryHandle(handle);
+      await updateScreenshotFolderStatus();
+      status.textContent = `저장 위치 설정 완료: ${handle.name}`;
+      showToast("저장 위치를 설정했습니다.");
+      pasteBox.focus({ preventScroll: true });
+    } catch (error) {
+      if (error?.name !== "AbortError") {
+        folderStatus.textContent = "저장 위치를 설정하지 못했습니다. 브라우저 권한을 확인해 주세요.";
+        showToast("저장 위치를 설정하지 못했습니다.");
+      }
+    }
+  });
+
+  clearFolderBtn.addEventListener("click", async () => {
+    state.directoryHandle = null;
+    try {
+      await clearStoredScreenshotDirectoryHandle();
+    } catch (error) {
+      // The in-memory handle is already cleared; keep the UI usable if IndexedDB cleanup fails.
+    }
+    await updateScreenshotFolderStatus();
+    status.textContent = "저장 위치를 해제했습니다. 이후 저장은 브라우저 다운로드로 처리됩니다.";
+    showToast("저장 위치를 해제했습니다.");
+    pasteBox.focus({ preventScroll: true });
+  });
+
+  clearBtn.addEventListener("click", () => {
+    state.file = null;
+    state.image = null;
+    state.blob = null;
+    state.filename = "";
+    state.width = 0;
+    state.height = 0;
+    fileInput.value = "";
+    pasteBox.value = "";
+    canvas.width = 0;
+    canvas.height = 0;
+    saveBtn.disabled = true;
+    meta.textContent = "아직 붙여넣은 스크린샷이 없습니다.";
+    status.textContent = "Win+Shift+S로 캡처한 뒤 Ctrl+V를 누르면 PNG로 바로 저장합니다.";
+    pasteBox.focus({ preventScroll: true });
+  });
+
+  async function handleScreenshotPaste(event) {
+    if (!container.isConnected || getActiveTool()?.id !== "screenshot-saver") {
+      document.removeEventListener("paste", handleScreenshotPaste);
+      return;
+    }
+
+    const file = getClipboardImageFile(event.clipboardData);
+    if (!file) {
+      if (event.currentTarget === pasteBox) {
+        event.preventDefault();
+        pasteBox.value = "";
+        status.textContent = "클립보드에 이미지가 없습니다. Win+Shift+S로 영역을 캡처한 뒤 다시 붙여넣어 주세요.";
+        showToast("클립보드에 이미지가 없습니다.");
+      }
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+    pasteBox.value = "";
+    await loadScreenshotSource(file, { source: "paste", autoSave: autoSaveInput.checked });
+  }
+
+  async function loadScreenshotSource(file, options) {
+    if (!file.type.startsWith("image/")) {
+      showToast("이미지 파일만 사용할 수 있습니다.");
+      return;
+    }
+
+    const output = getScreenshotOutput();
+    const directPngSave = options.source === "paste" && options.autoSave && output.mime === "image/png" && file.type === "image/png";
+    state.file = file;
+    state.blob = null;
+    state.filename = "";
+    saveBtn.disabled = true;
+    status.textContent = options.source === "paste" ? "붙여넣은 이미지를 처리하는 중입니다." : "스샷을 불러오는 중입니다.";
+
+    if (directPngSave) {
+      state.blob = file;
+      state.filename = buildScreenshotFileName(output.ext);
+      await saveScreenshotBlob(file, state.filename, true);
+    }
+
+    try {
+      const loaded = await loadImageFromFile(file);
+      state.image = loaded.image;
+      state.width = loaded.image.naturalWidth;
+      state.height = loaded.image.naturalHeight;
+      drawImageToCanvas(canvas, loaded.image, state.width, state.height);
+      meta.textContent = `붙여넣은 이미지 ${state.width} x ${state.height} · ${formatBytes(file.size)}`;
+      saveBtn.disabled = false;
+
+      if (options.autoSave && !directPngSave) {
+        await saveCurrentScreenshot(true);
+      } else if (!directPngSave) {
+        status.textContent = `붙여넣은 이미지 ${state.width} x ${state.height} · 다시 저장을 누르면 파일로 저장합니다.`;
+      }
+    } catch (error) {
+      if (directPngSave) {
+        meta.textContent = "미리보기를 표시하지 못했지만 원본 PNG 저장은 시도했습니다.";
+        saveBtn.disabled = false;
+        return;
+      }
+      state.image = null;
+      state.width = 0;
+      state.height = 0;
+      canvas.width = 0;
+      canvas.height = 0;
+      status.textContent = "클립보드 이미지를 불러오지 못했습니다. 다시 캡처해 붙여넣어 주세요.";
+      showToast("스샷을 불러오지 못했습니다.");
+    }
+  }
+
+  async function saveCurrentScreenshot(isAutomatic) {
+    const output = getScreenshotOutput();
+    const filename = buildScreenshotFileName(output.ext);
+
+    try {
+      if (!state.image && state.blob) {
+        state.filename = filename;
+        await saveScreenshotBlob(state.blob, filename, isAutomatic);
+        return;
+      }
+
+      if (!state.image) {
+        showToast("저장할 스크린샷이 없습니다.");
+        return;
+      }
+
+      const background = output.mime === "image/jpeg" ? "#ffffff" : null;
+      drawImageToCanvas(canvas, state.image, state.width, state.height, background);
+      const blob =
+        output.mime === "image/png" && state.file?.type === "image/png"
+          ? state.file
+          : await canvasToBlob(canvas, output.mime, output.quality);
+      state.blob = blob;
+      state.filename = filename;
+      await saveScreenshotBlob(blob, filename, isAutomatic);
+    } catch (error) {
+      status.textContent = "스샷 저장을 완료하지 못했습니다.";
+      showToast("스샷 저장을 완료하지 못했습니다.");
+    }
+  }
+
+  async function initScreenshotFolder() {
+    if (!supportsDirectorySave) {
+      chooseFolderBtn.disabled = true;
+      clearFolderBtn.disabled = true;
+      folderStatus.textContent = "이 브라우저는 저장 위치 고정을 지원하지 않아 기본 다운로드로 저장합니다.";
+      return;
+    }
+
+    try {
+      state.directoryHandle = await readStoredScreenshotDirectoryHandle();
+      await updateScreenshotFolderStatus();
+    } catch (error) {
+      state.directoryHandle = null;
+      folderStatus.textContent = "저장 위치 정보를 불러오지 못했습니다. 필요하면 다시 설정해 주세요.";
+      clearFolderBtn.disabled = true;
+    }
+  }
+
+  async function updateScreenshotFolderStatus() {
+    if (!supportsDirectorySave) {
+      chooseFolderBtn.disabled = true;
+      clearFolderBtn.disabled = true;
+      folderStatus.textContent = "이 브라우저는 저장 위치 고정을 지원하지 않아 기본 다운로드로 저장합니다.";
+      return;
+    }
+
+    chooseFolderBtn.textContent = state.directoryHandle ? "저장 위치 바꾸기" : "저장 위치 설정";
+    clearFolderBtn.disabled = !state.directoryHandle;
+
+    if (!state.directoryHandle) {
+      folderStatus.textContent = "저장 위치를 설정하면 이후 붙여넣기 이미지를 같은 폴더에 자동 저장합니다.";
+      return;
+    }
+
+    const allowed = await ensureScreenshotDirectoryPermission(state.directoryHandle, false);
+    folderStatus.textContent = allowed
+      ? `현재 저장 위치: ${state.directoryHandle.name}`
+      : `저장 위치 권한 확인 필요: ${state.directoryHandle.name} · 저장 위치 바꾸기를 눌러 다시 허용해 주세요.`;
+  }
+
+  async function saveScreenshotBlob(blob, filename, isAutomatic) {
+    if (state.directoryHandle) {
+      const allowed = await ensureScreenshotDirectoryPermission(state.directoryHandle, !isAutomatic);
+      if (allowed) {
+        try {
+          const fileHandle = await state.directoryHandle.getFileHandle(filename, { create: true });
+          const writable = await fileHandle.createWritable();
+          await writable.write(blob);
+          await writable.close();
+          state.filename = filename;
+          const message = `저장 완료: ${state.directoryHandle.name}\\${filename}`;
+          status.textContent = message;
+          showToast(message);
+          await updateScreenshotFolderStatus();
+          return;
+        } catch (error) {
+          folderStatus.textContent = "지정 폴더에 저장하지 못해 브라우저 다운로드로 저장했습니다.";
+        }
+      } else {
+        folderStatus.textContent = "저장 위치 권한이 필요합니다. 저장 위치 바꾸기를 눌러 다시 허용해 주세요.";
+      }
+    }
+
+    downloadBlob(blob, filename);
+    state.filename = filename;
+    status.textContent = state.directoryHandle
+      ? "지정 폴더 권한을 사용할 수 없어 브라우저 다운로드로 저장했습니다."
+      : isAutomatic
+        ? "자동 저장을 시도했습니다. 저장 위치를 설정하면 지정 폴더에 바로 저장됩니다."
+        : "스샷을 저장했습니다.";
+    showToast("스샷을 저장했습니다.");
+  }
+
+  async function ensureScreenshotDirectoryPermission(handle, shouldPrompt) {
+    if (!handle || typeof handle.queryPermission !== "function") return false;
+    const current = await handle.queryPermission({ mode: "readwrite" });
+    if (current === "granted") return true;
+    if (!shouldPrompt || typeof handle.requestPermission !== "function") return false;
+    const next = await handle.requestPermission({ mode: "readwrite" });
+    return next === "granted";
+  }
+
+  function openScreenshotDirectoryDb() {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(screenshotDirectoryDbName, 1);
+      request.onupgradeneeded = () => {
+        request.result.createObjectStore(screenshotDirectoryStoreName);
+      };
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+  }
+
+  async function storeScreenshotDirectoryHandle(handle) {
+    const db = await openScreenshotDirectoryDb();
+    return runScreenshotDirectoryTransaction(db, "readwrite", (store) => store.put(handle, screenshotDirectoryKey));
+  }
+
+  async function readStoredScreenshotDirectoryHandle() {
+    const db = await openScreenshotDirectoryDb();
+    return runScreenshotDirectoryTransaction(db, "readonly", (store) => store.get(screenshotDirectoryKey));
+  }
+
+  async function clearStoredScreenshotDirectoryHandle() {
+    const db = await openScreenshotDirectoryDb();
+    return runScreenshotDirectoryTransaction(db, "readwrite", (store) => store.delete(screenshotDirectoryKey));
+  }
+
+  function runScreenshotDirectoryTransaction(db, mode, action) {
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(screenshotDirectoryStoreName, mode);
+      const request = action(transaction.objectStore(screenshotDirectoryStoreName));
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+      transaction.oncomplete = () => db.close();
+      transaction.onabort = () => {
+        db.close();
+        reject(transaction.error);
+      };
+    });
+  }
+
+  function getScreenshotOutput() {
+    const mime = formatSelect.value || "image/png";
+    return {
+      mime,
+      ext: getExtensionForMime(mime),
+      quality: Number(qualityInput.value || 0.92),
+    };
+  }
+
+  function buildScreenshotFileName(ext) {
+    const prefix = sanitizeFilename(prefixInput.value || "screenshot")
+      .replace(/\.(png|jpe?g|webp)$/i, "")
+      .trim() || "screenshot";
+    const timestamp = new Date().toISOString().slice(0, 19).replace(/[-:T]/g, "");
+    return `${prefix}-${timestamp}.${ext}`;
   }
 }
 

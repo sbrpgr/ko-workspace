@@ -1,4 +1,4 @@
-# 코워크스페이스 (ko-workspace) Roadmap
+﻿# 코워크스페이스 (ko-workspace) Roadmap
 
 Last updated: 2026-04-29
 
@@ -55,7 +55,7 @@ Current migration note:
 - Category landing pages are now live at `/tools/text/`, `/tools/pdf/`, `/tools/image/`, `/tools/subtitle/`, and `/tools/voice-video/`.
 - Category pages reuse the shared app shell and are rendered from `CATEGORY_PAGE_DEFS` in `app.js`; do not fork tool logic into category HTML files.
 - Preserve canonical URLs and sitemap entries whenever tool pages are updated.
-- Current static asset cache version is `20260604-07`; bump this version whenever `app.js` or `styles.css` changes.
+- Current static asset cache version is `20260607-02`; bump this version whenever `app.js` or `styles.css` changes.
 
 ## 2A. Current SEO And AdSense Baseline
 
@@ -106,6 +106,7 @@ These should be built early because they are fast to implement, safe for browser
 | 대소문자 변환 | `/tools/case-converter/` | 대소문자 변환, camelCase 변환, snake_case 변환, 케이스 변환 | S | Useful for English text, filenames, labels, and development-adjacent office work. |
 | 텍스트 비교기 | `/tools/text-diff/` | 텍스트 비교, 문서 비교, 변경사항 비교, 두 글 비교 | M | Browser-side line/word diff. Useful, but lower priority than cleanup/extraction tools. |
 | QR 코드 생성기 | `/tools/qr-code-generator/` | QR 코드 만들기, 무료 QR 생성기, URL QR 코드, QR PNG 저장, QR JPG 저장 | S | Shipped. Client-side QR generation with SVG/PNG/JPG export, simple styling, filename input, contrast fallback, and no server storage. |
+| 스샷 저장기 | `/tools/screenshot-saver/` | 스샷 저장, 스크린샷 저장, Win Shift S 저장, 붙여넣기 이미지 저장 | S | Shipped. Saves Windows Win+Shift+S clipboard captures immediately after Ctrl+V paste, defaults to PNG, supports JPG/WEBP manual save, and keeps clipboard images browser-side. |
 | 이미지 크기 조절 | `/tools/image-resizer/` | 이미지 크기 줄이기, 사진 사이즈 변경, 이미지 리사이즈 | M | Canvas-based browser processing. |
 | 이미지 형식 변환 | `/tools/image-converter/` | WEBP JPG 변환, PNG JPG 변환, 이미지 변환 | M | Browser support varies by format. Clearly state supported formats. |
 | 이미지 용량 압축 | `/tools/image-compressor/` | 이미지 압축, 사진 용량 줄이기, JPG 용량 줄이기, WEBP 압축 | M | Browser-side canvas compression. Avoid server uploads. |

@@ -486,6 +486,7 @@ function auditUploadDropSupport() {
     "audioFile",
     "audioEditFile",
     "qrImageFile",
+    "screenshotFile",
     "imageFile",
     "exifImageFile",
     "pdfFiles",

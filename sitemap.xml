@@ -105,6 +105,10 @@
     <lastmod>2026-04-29</lastmod>
   </url>
   <url>
+    <loc>https://ko-workspace.com/tools/screenshot-saver/</loc>
+    <lastmod>2026-06-07</lastmod>
+  </url>
+  <url>
     <loc>https://ko-workspace.com/tools/image-resizer/</loc>
     <lastmod>2026-04-29</lastmod>
   </url>
@@ -607,5 +611,17 @@
   <url>
     <loc>https://ko-workspace.com/zh/tools/subtitle-timing/</loc>
     <lastmod>2026-05-16</lastmod>
+  </url>
+  <url>
+    <loc>https://ko-workspace.com/en/tools/screenshot-saver/</loc>
+    <lastmod>2026-06-07</lastmod>
+  </url>
+  <url>
+    <loc>https://ko-workspace.com/ja/tools/screenshot-saver/</loc>
+    <lastmod>2026-06-07</lastmod>
+  </url>
+  <url>
+    <loc>https://ko-workspace.com/zh/tools/screenshot-saver/</loc>
+    <lastmod>2026-06-07</lastmod>
   </url>
 </urlset>

@@ -677,6 +677,7 @@ function buildUploadUxTests(app) {
         "audioFile",
         "audioEditFile",
         "qrImageFile",
+        "screenshotFile",
         "imageFile",
         "exifImageFile",
         "pdfFiles",
