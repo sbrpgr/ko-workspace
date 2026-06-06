@@ -1,4 +1,4 @@
-﻿# 코워크스페이스 (ko-workspace) Product Spec
+# 코워크스페이스 (ko-workspace) Product Spec
 
 ## Product Direction
 
@@ -16,8 +16,9 @@ Current production baseline:
 - Latest AdSense/SEO readiness commit: `580c060 Improve AdSense SEO readiness`
 - Latest English SEO polish commit: `0385e6d Polish English SEO copy`
 - Latest foreign-language tool localization/E2E commit: `97baf2f Complete foreign tool localization testing fixes`
-- Current static asset cache version: `20260607-02`
+- Current static asset cache version: `20260607-08`
 - English version deployed under `/en/`; Japanese and Simplified Chinese versions deployed under `/ja/` and `/zh/` on the same domain, with Korean routes preserved
+- 2026-06-07 platform UI update includes screenshot-saver fixed save directories, browser-local favorite tools, a home partner ad banner, and a shortened support CTA
 - 2026-05-17 production E2E passed EN/JA/ZH × 30 tools = 90 scenarios with 0 failures and 0 Korean-language leakage findings
 - Category landing pages, privacy policy updates, sitemap updates, and core FAQ copy were deployed on 2026-04-29
 
@@ -27,6 +28,7 @@ Core constraints:
 - No database or persistent user storage
 - No account system for the current public tool set
 - No collection of user-entered work data by the application itself
+- Browser-local preferences such as favorite tools may use `localStorage`, but they must not require membership or send selected tools to analytics
 - No paid external API required for baseline execution
 - No private API key exposed to client-side JavaScript
 - Tool pages must be directly deployable as static pages
@@ -119,7 +121,10 @@ Core constraints:
   - QR scan stability must be preserved with a quiet-zone margin, high error correction, and automatic contrast fallback to dark foreground on light background
 - `스샷 저장기`
   - Saves Windows 11 `Win+Shift+S` clipboard captures after `Ctrl+V` paste
-  - Defaults to immediate PNG download on paste, with JPG and WEBP manual save options
+  - Lets Chromium users choose a save folder once, keeps that directory handle in browser storage when permission is granted, and auto-saves pasted captures there until the user changes the location
+  - Falls back to regular downloads when the browser does not support fixed save directories
+  - Defaults to immediate PNG save on paste, with JPG and WEBP manual save options
+  - Shows a clear saved/failed status after each paste-save attempt
   - Shows a browser-side preview and keeps the clipboard image local without application-server upload
 - `이미지 크기 조절`
 - `이미지 형식 변환`
@@ -199,6 +204,8 @@ Important frontend implementation notes:
 - `scripts/generate-english-pages.js` regenerates localized static pages for English, Japanese, and Simplified Chinese from the active locale registry.
 - `renderCategoryPage()` renders category landing pages.
 - `renderHomeCategoryLinks()` adds the compact category links on the home screen.
+- Home tool favorite buttons are stored in `localStorage` under `koWorkspace.favoriteTools.v1`; favorite cards are sorted first in the home overview and sidebar without requiring membership.
+- The home support CTA is intentionally short: Korean `후원하기`, English `Support`, Japanese `支援する`, and Simplified Chinese `赞助`.
 - `injectCategoryStructuredData()` injects `CollectionPage`, `ItemList`, and `BreadcrumbList` schema for category pages.
 - `.category-mode` and `.home-category-links` in `styles.css` control category landing layout and home category navigation.
 - The current category pages intentionally hide the left tool sidebar and show a wider category tool grid.
@@ -332,5 +339,7 @@ Prepared slot positions:
 - `bottom-banner`
 - `left-rail`
 - `right-rail`
+- `home-partner-ad-banner` between the home category links and tool overview; fixed `1200px × 140px`, split into three `400px × 140px` slots
 
 When ad slots are empty, they remain hidden.
+The home partner banner keeps ads outside editor, upload, conversion, and result UI. The left slot loads the configured Coupang Partners carousel, while the two remaining slots show compact `광고문의` / `dayway.ict@gmail.com` inquiry blocks.

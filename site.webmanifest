@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "코워크스페이스",
   "short_name": "코워크스페이스",
   "description": "코워크스페이스 (ko-workspace)는 로그인 없이 브라우저에서 바로 실행되는 텍스트, 이미지, PDF, 자막, 음성, 영상 업무 도구 모음입니다.",
@@ -10,7 +10,7 @@
   "theme_color": "#e5322d",
   "icons": [
     {
-      "src": "/favicon.svg?v=20260607-02",
+      "src": "/favicon.svg?v=20260607-08",
       "sizes": "64x64",
       "type": "image/svg+xml",
       "purpose": "any"

@@ -680,6 +680,10 @@ const UI_TEXT = {
     defaultFaqQuestion: (title) => `${title}는 어떤 상황에서 사용하면 좋나요?`,
     otherTools: "다른 도구",
     openToolLabel: (title) => `${title} 열기`,
+    favoriteToolLabel: (title) => `${title} 즐겨찾기 추가`,
+    unfavoriteToolLabel: (title) => `${title} 즐겨찾기 해제`,
+    favoriteAdded: (title) => `${title}를 즐겨찾기에 추가했습니다.`,
+    favoriteRemoved: (title) => `${title} 즐겨찾기를 해제했습니다.`,
     bookmarkTitle: "즐겨찾기 추가",
     bookmarkAria: "즐겨찾기 추가 안내",
     bookmarkToast: (shortcut) => `브라우저 즐겨찾기는 ${shortcut}로 추가할 수 있습니다.`,
@@ -716,6 +720,10 @@ const UI_TEXT = {
     defaultFaqQuestion: (title) => `When should I use ${title}?`,
     otherTools: "Other Tools",
     openToolLabel: (title) => `Open ${title}`,
+    favoriteToolLabel: (title) => `Add ${title} to favorites`,
+    unfavoriteToolLabel: (title) => `Remove ${title} from favorites`,
+    favoriteAdded: (title) => `${title} added to favorites.`,
+    favoriteRemoved: (title) => `${title} removed from favorites.`,
     bookmarkTitle: "Add bookmark",
     bookmarkAria: "How to add this page to bookmarks",
     bookmarkToast: (shortcut) => `Use ${shortcut} to bookmark this page in your browser.`,
@@ -752,6 +760,10 @@ const UI_TEXT = {
     defaultFaqQuestion: (title) => `${title}はどんな場面で使うと便利ですか？`,
     otherTools: "ほかのツール",
     openToolLabel: (title) => `${title}を開く`,
+    favoriteToolLabel: (title) => `${title}をお気に入りに追加`,
+    unfavoriteToolLabel: (title) => `${title}のお気に入りを解除`,
+    favoriteAdded: (title) => `${title}をお気に入りに追加しました。`,
+    favoriteRemoved: (title) => `${title}のお気に入りを解除しました。`,
     bookmarkTitle: "ブックマークに追加",
     bookmarkAria: "ブックマーク追加の案内",
     bookmarkToast: (shortcut) => `ブラウザのブックマークは${shortcut}で追加できます。`,
@@ -788,6 +800,10 @@ const UI_TEXT = {
     defaultFaqQuestion: (title) => `什么时候适合使用 ${title}？`,
     otherTools: "其他工具",
     openToolLabel: (title) => `打开 ${title}`,
+    favoriteToolLabel: (title) => `将 ${title} 加入收藏`,
+    unfavoriteToolLabel: (title) => `取消收藏 ${title}`,
+    favoriteAdded: (title) => `${title} 已加入收藏。`,
+    favoriteRemoved: (title) => `${title} 已取消收藏。`,
     bookmarkTitle: "添加书签",
     bookmarkAria: "如何将此页面添加到书签",
     bookmarkToast: (shortcut) => `可使用 ${shortcut} 将此页面加入浏览器书签。`,
@@ -2059,6 +2075,7 @@ const TOOL_DEFS_ACTIVE = IS_KOREAN_LOCALE
   ? TOOL_DEFS
   : TOOL_DEFS.map((tool) => localizeToolDef(tool, TOOL_DEFS_LOCALE_OVERRIDES[APP_LOCALE]?.[tool.id], APP_LOCALE));
 const TOOL_MAP = Object.fromEntries(TOOL_DEFS_ACTIVE.map((tool) => [tool.id, tool]));
+const TOOL_ORDER_INDEX = new Map(TOOL_DEFS_ACTIVE.map((tool, index) => [tool.id, index]));
 const TOOL_VISUALS = {
   "voice-to-text": { icon: "\uD83C\uDFA4", tone: "red", copy: "\ub9d0\ud558\uba74 \ubc14\ub85c \ud14d\uc2a4\ud2b8\ub85c \ubc1b\uc544 \uc801\uc2b5\ub2c8\ub2e4." },
   "audio-file-transcription": { icon: "\uD83C\uDF99\uFE0F", tone: "red", copy: "\ud734\ub300\ud3f0 \ub179\uc74c \ud30c\uc77c\uc744 \ud14d\uc2a4\ud2b8 \ucd08\uc548\uc73c\ub85c \ubcc0\ud658\ud569\ub2c8\ub2e4." },
@@ -4709,11 +4726,23 @@ const LIBRARIES = {
 };
 
 const libraryCache = {};
+const TOOL_FAVORITES_STORAGE_KEY = "koWorkspace.favoriteTools.v1";
+const COUPANG_PARTNERS_SCRIPT_SRC = "https://ads-partners.coupang.com/g.js";
+const HOME_COUPANG_AD_CONFIG = {
+  id: 995014,
+  template: "carousel",
+  trackingCode: "AF1258921",
+  width: "400",
+  height: "140",
+  tsource: "",
+};
+let coupangPartnersScriptPromise = null;
 
 const appState = {
   category: ALL_CATEGORY_LABEL,
   activeToolId: "",
   categoryPageId: "",
+  favoriteToolIds: loadFavoriteToolIds(),
   quickOffset: 0,
   quickMotion: "",
   quickMotionTimerId: null,
@@ -4792,12 +4821,105 @@ function getActiveCategoryPage() {
   return CATEGORY_PAGE_MAP[categoryId] || null;
 }
 
+function loadFavoriteToolIds() {
+  try {
+    const raw = localStorage.getItem(TOOL_FAVORITES_STORAGE_KEY);
+    const ids = JSON.parse(raw || "[]");
+    return new Set(Array.isArray(ids) ? ids.filter((id) => typeof id === "string") : []);
+  } catch (error) {
+    return new Set();
+  }
+}
+
+function saveFavoriteToolIds() {
+  try {
+    localStorage.setItem(TOOL_FAVORITES_STORAGE_KEY, JSON.stringify([...appState.favoriteToolIds]));
+  } catch (error) {
+    showToast("브라우저 저장소에 즐겨찾기를 저장하지 못했습니다.");
+  }
+}
+
+function isFavoriteTool(toolId) {
+  return appState.favoriteToolIds.has(toolId);
+}
+
+function getFavoriteSortedTools(tools) {
+  return [...tools].sort((left, right) => {
+    const favoriteDiff = Number(isFavoriteTool(right.id)) - Number(isFavoriteTool(left.id));
+    if (favoriteDiff) return favoriteDiff;
+    return (TOOL_ORDER_INDEX.get(left.id) ?? 0) - (TOOL_ORDER_INDEX.get(right.id) ?? 0);
+  });
+}
+
+function handleFavoriteToolClick(event) {
+  const button = event.target.closest(".tool-favorite-button");
+  if (!button) return;
+
+  event.preventDefault();
+  event.stopPropagation();
+
+  const tool = TOOL_MAP[button.dataset.toolId];
+  if (!tool) return;
+
+  if (isFavoriteTool(tool.id)) {
+    appState.favoriteToolIds.delete(tool.id);
+    showToast(t("favoriteRemoved", tool.title));
+  } else {
+    appState.favoriteToolIds.add(tool.id);
+    showToast(t("favoriteAdded", tool.title));
+  }
+
+  saveFavoriteToolIds();
+  syncFavoriteToolCards(tool.id);
+  reorderFavoriteToolCards();
+  renderSidebarTools();
+  filterHomeToolCards();
+}
+
+function syncFavoriteToolCards(toolId = "") {
+  document.querySelectorAll(".tool-favorite-button[data-tool-id]").forEach((button) => {
+    if (toolId && button.dataset.toolId !== toolId) return;
+    const tool = TOOL_MAP[button.dataset.toolId];
+    if (!tool) return;
+    const favorite = isFavoriteTool(tool.id);
+    const label = favorite ? t("unfavoriteToolLabel", tool.title) : t("favoriteToolLabel", tool.title);
+    button.classList.toggle("is-active", favorite);
+    button.setAttribute("aria-pressed", String(favorite));
+    button.setAttribute("aria-label", label);
+    button.title = label;
+  });
+
+  document.querySelectorAll(".tool-launch-card[data-tool-id]").forEach((card) => {
+    if (toolId && card.dataset.toolId !== toolId) return;
+    const tool = TOOL_MAP[card.dataset.toolId];
+    if (!tool) return;
+    const favorite = isFavoriteTool(tool.id);
+    card.classList.toggle("is-favorite", favorite);
+    card.dataset.favorite = favorite ? "true" : "false";
+  });
+}
+
+function reorderFavoriteToolCards() {
+  document.querySelectorAll(".tool-launch-grid").forEach((grid) => {
+    const cards = [...grid.querySelectorAll(":scope > .tool-launch-card[data-tool-id]")];
+    if (cards.length < 2) return;
+    cards
+      .sort((left, right) => {
+        const favoriteDiff = Number(isFavoriteTool(right.dataset.toolId)) - Number(isFavoriteTool(left.dataset.toolId));
+        if (favoriteDiff) return favoriteDiff;
+        return (TOOL_ORDER_INDEX.get(left.dataset.toolId) ?? 0) - (TOOL_ORDER_INDEX.get(right.dataset.toolId) ?? 0);
+      })
+      .forEach((card) => grid.appendChild(card));
+  });
+}
+
 function bindGlobalEvents() {
   ensureBookmarkPromptButton();
   els.toolSearch.addEventListener("input", () => {
     renderSidebarTools();
     filterHomeToolCards();
   });
+  document.addEventListener("click", handleFavoriteToolClick);
   if (els.helpBtn && els.helpDialog && els.helpCloseBtn) {
     els.helpBtn.addEventListener("click", openHelpDialog);
     els.helpCloseBtn.addEventListener("click", closeHelpDialog);
@@ -4936,7 +5058,7 @@ function renderSidebarTools() {
     return;
   }
 
-  els.toolList.innerHTML = filtered
+  els.toolList.innerHTML = getFavoriteSortedTools(filtered)
     .map((tool) => {
       const activeClass = activeTool && activeTool.id === tool.id ? "is-active" : "";
       const tags = tool.keywords
@@ -5004,12 +5126,14 @@ function renderHomePage() {
     <div class="home-divider" aria-hidden="true"></div>
     ${renderHomeCategoryLinks()}
     <div class="home-divider home-divider-after-categories" aria-hidden="true"></div>
+    ${renderHomeAdBanner()}
   `;
+  mountHomeCoupangAd();
 
   els.toolWorkspace.innerHTML = `
     <section class="home-tool-section home-directory" aria-label="${escapeHtml(t("directoryLabel"))}">
       <div class="tool-launch-grid">
-        ${TOOL_DEFS_ACTIVE.map((tool) => renderToolLaunchCard(tool)).join("")}
+        ${getFavoriteSortedTools(TOOL_DEFS_ACTIVE).map((tool) => renderToolLaunchCard(tool)).join("")}
       </div>
     </section>
   `;
@@ -5032,7 +5156,7 @@ function renderCategoryPage(categoryPage) {
     url: `${TOOL_ORIGIN}${categoryPage.path}`,
   });
 
-  const tools = getCategoryPageTools(categoryPage);
+  const tools = getFavoriteSortedTools(getCategoryPageTools(categoryPage));
   els.toolOverview.innerHTML = `
     <div class="category-overview">
       <div>
@@ -5079,9 +5203,12 @@ function renderToolPage(tool) {
 
   els.toolOverview.innerHTML = `
     <div class="overview-header">
-      <p class="eyebrow">${escapeHtml(tool.category)}</p>
-      <h2>${renderToolTitle(tool)}</h2>
-      <p>${escapeHtml(tool.summary)}</p>
+      <div>
+        <p class="eyebrow">${escapeHtml(tool.category)}</p>
+        <h2>${renderToolTitle(tool)}</h2>
+        <p>${escapeHtml(tool.summary)}</p>
+      </div>
+      ${renderFavoriteToolButton(tool, "overview-favorite-button")}
     </div>
     <div class="overview-meta">
       ${tool.keywords.map((keyword) => `<span class="mini-pill">${escapeHtml(keyword)}</span>`).join("")}
@@ -5117,9 +5244,10 @@ function getCategoryPageTools(categoryPage) {
 
 function renderHomeSections() {
   return `
+    ${renderHomeAdBanner()}
     <section class="home-tool-section home-directory" aria-label="${escapeHtml(t("directoryLabel"))}">
       <div class="tool-launch-grid">
-        ${TOOL_DEFS_ACTIVE.map((tool) => renderToolLaunchCard(tool)).join("")}
+        ${getFavoriteSortedTools(TOOL_DEFS_ACTIVE).map((tool) => renderToolLaunchCard(tool)).join("")}
       </div>
     </section>
   `;
@@ -5140,19 +5268,100 @@ function renderHomeCategoryLinks() {
   `;
 }
 
+function renderHomeAdBanner() {
+  return `
+    <section class="home-partner-ad-banner" aria-label="광고 배너">
+      <div class="home-partner-ad-slot home-partner-ad-coupang" data-home-coupang-ad></div>
+      ${renderHomeAdInquirySlot()}
+      ${renderHomeAdInquirySlot()}
+    </section>
+  `;
+}
+
+function renderHomeAdInquirySlot() {
+  return `
+    <a class="home-partner-ad-slot home-partner-ad-inquiry" href="mailto:dayway.ict@gmail.com" aria-label="광고문의 dayway.ict@gmail.com">
+      <span>광고문의</span>
+      <strong>dayway.ict@gmail.com</strong>
+    </a>
+  `;
+}
+
+function loadCoupangPartnersScript() {
+  if (window.PartnersCoupang?.G) {
+    return Promise.resolve();
+  }
+
+  if (coupangPartnersScriptPromise) {
+    return coupangPartnersScriptPromise;
+  }
+
+  const existingScript = document.querySelector(`script[src="${COUPANG_PARTNERS_SCRIPT_SRC}"]`);
+  coupangPartnersScriptPromise = new Promise((resolve, reject) => {
+    const script = existingScript || document.createElement("script");
+    script.addEventListener("load", resolve, { once: true });
+    script.addEventListener("error", reject, { once: true });
+
+    if (!existingScript) {
+      script.src = COUPANG_PARTNERS_SCRIPT_SRC;
+      script.async = true;
+      script.dataset.coupangPartners = "true";
+      document.head.appendChild(script);
+    }
+  });
+
+  return coupangPartnersScriptPromise;
+}
+
+function mountHomeCoupangAd() {
+  const slot = document.querySelector("[data-home-coupang-ad]");
+  if (!slot || slot.dataset.coupangMounted === "true") return;
+
+  slot.dataset.coupangMounted = "pending";
+  loadCoupangPartnersScript()
+    .then(() => {
+      if (!slot.isConnected || slot.dataset.coupangMounted === "true" || !window.PartnersCoupang?.G) return;
+      slot.replaceChildren();
+      new window.PartnersCoupang.G({
+        ...HOME_COUPANG_AD_CONFIG,
+        container: slot,
+      });
+      slot.dataset.coupangMounted = "true";
+    })
+    .catch(() => {
+      if (slot.isConnected) {
+        slot.dataset.coupangMounted = "error";
+      }
+    });
+}
+
 function renderToolLaunchCard(tool) {
   const visual = getToolVisual(tool);
   const searchText = [tool.title, tool.summary, visual.copy, ...tool.keywords].join(" ");
+  const favorite = isFavoriteTool(tool.id);
 
   return `
-    <a class="tool-launch-card" href="${tool.path}" data-category="${escapeHtml(tool.category)}" data-tone="${escapeHtml(visual.tone)}" data-search="${escapeHtml(searchText)}" aria-label="${escapeHtml(t("openToolLabel", tool.title))}">
-      <span class="tool-launch-icon" aria-hidden="true">${escapeHtml(visual.icon)}</span>
-      <span class="tool-launch-body">
-        <strong>${renderToolTitle(tool)}</strong>
-        <span>${escapeHtml(visual.copy)}</span>
-      </span>
-      <span class="tool-launch-arrow" aria-hidden="true">&rsaquo;</span>
-    </a>
+    <div class="tool-launch-card ${favorite ? "is-favorite" : ""}" data-tool-id="${escapeHtml(tool.id)}" data-favorite="${favorite ? "true" : "false"}" data-category="${escapeHtml(tool.category)}" data-tone="${escapeHtml(visual.tone)}" data-search="${escapeHtml(searchText)}">
+      <a class="tool-launch-main" href="${tool.path}" aria-label="${escapeHtml(t("openToolLabel", tool.title))}">
+        <span class="tool-launch-icon" aria-hidden="true">${escapeHtml(visual.icon)}</span>
+        <span class="tool-launch-body">
+          <strong>${renderToolTitle(tool)}</strong>
+          <span>${escapeHtml(visual.copy)}</span>
+        </span>
+        <span class="tool-launch-arrow" aria-hidden="true">&rsaquo;</span>
+      </a>
+      ${renderFavoriteToolButton(tool)}
+    </div>
+  `;
+}
+
+function renderFavoriteToolButton(tool, extraClass = "") {
+  const favorite = isFavoriteTool(tool.id);
+  const label = favorite ? t("unfavoriteToolLabel", tool.title) : t("favoriteToolLabel", tool.title);
+  return `
+    <button class="tool-favorite-button ${extraClass} ${favorite ? "is-active" : ""}" type="button" data-tool-id="${escapeHtml(tool.id)}" aria-pressed="${favorite ? "true" : "false"}" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}">
+      <span aria-hidden="true">★</span>
+    </button>
   `;
 }
 

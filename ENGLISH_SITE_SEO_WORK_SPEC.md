@@ -1,4 +1,4 @@
-﻿# 다국어 버전 및 SEO 작업 명세
+# 다국어 버전 및 SEO 작업 명세
 
 이 문서는 코워크스페이스 영어(`/en/`), 일본어(`/ja/`), 중국어 간체(`/zh/`) 버전과 검색 최적화 작업을 이어서 수정하거나 점검할 때 확인해야 할 작업 명세다. 외국어 버전은 기존 한국어 플랫폼을 대체하지 않고, 같은 도메인 안에서 언어별 하위 경로로 분리된 정적 페이지로 운영한다.
 
@@ -13,9 +13,10 @@
 - 영어 카테고리 정의: `app.js`의 `CATEGORY_PAGE_DEFS_EN`
 - 일본어/중국어 도구 정의: `app.js`의 `TOOL_DEFS_LOCALE_OVERRIDES`
 - 일본어/중국어 카테고리 정의: `app.js`의 `CATEGORY_PAGE_DEFS_BY_LOCALE`
-- 현재 정적 리소스 캐시 버전: `20260607-02`
+- 현재 정적 리소스 캐시 버전: `20260607-08`
 - 최근 영어 SEO 배포 커밋: `0385e6d Polish English SEO copy`
 - 최근 외국어 도구 로컬라이징 및 운영 E2E 배포 커밋: `97baf2f Complete foreign tool localization testing fixes`
+- 후원 CTA 문구는 정적 페이지 생성 스크립트의 `getKofiSupportLabel()` 기준으로 짧게 유지한다: `/en/` `Support`, `/ja/` `支援する`, `/zh/` `赞助`
 
 ## 분리 원칙
 
@@ -26,6 +27,7 @@
 - 영어판 SEO 문구가 한국어 기능 설명을 오해시키지 않도록 `Korean speech`, `Korean Dictation` 같은 문구가 영어 음성 입력 페이지에 남지 않게 한다.
 - 일본어/중국어 사용 예시와 시나리오는 한국어 문장의 단순 번역이 아니라 해당 언어권에서 자연스럽게 쓰는 업무 표현으로 작성한다.
 - 동적으로 생성되는 상태 메시지, 복사/다운로드 안내, 오류 안내도 locale helper를 통해 출력하고, 외국어 페이지에 한국어 fallback이 보이지 않게 한다.
+- 공통 헤더/히어로/푸터 CTA 문구를 바꿀 때는 `scripts/generate-english-pages.js`와 생성된 `/en/`, `/ja/`, `/zh/` HTML을 함께 갱신해 재생성 시 문구가 되돌아가지 않게 한다.
 
 ## SEO 기본 기준
 

@@ -318,9 +318,12 @@ const LOCALES = [
 
 function getKofiSupportLabel(localeId) {
   if (localeId === "ja") {
-    return "コーヒーを奢る ☕";
+    return "支援する";
   }
-  return "Support Me on Ko-fi";
+  if (localeId === "zh") {
+    return "赞助";
+  }
+  return "Support";
 }
 
 function main() {
