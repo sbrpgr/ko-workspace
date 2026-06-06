@@ -16,6 +16,7 @@
 - 현재 정적 리소스 캐시 버전: `20260607-09`
 - 최근 영어 SEO 배포 커밋: `0385e6d Polish English SEO copy`
 - 최근 외국어 도구 로컬라이징 및 운영 E2E 배포 커밋: `97baf2f Complete foreign tool localization testing fixes`
+- 최근 공통 플랫폼 UI/광고 배너 배포 커밋: `c135df4 Add favorite tools promo banner`
 - 후원 CTA 문구는 정적 페이지 생성 스크립트의 `getKofiSupportLabel()` 기준으로 짧게 유지한다: `/en/` `Support`, `/ja/` `支援する`, `/zh/` `赞助`
 
 ## 분리 원칙
@@ -28,6 +29,7 @@
 - 일본어/중국어 사용 예시와 시나리오는 한국어 문장의 단순 번역이 아니라 해당 언어권에서 자연스럽게 쓰는 업무 표현으로 작성한다.
 - 동적으로 생성되는 상태 메시지, 복사/다운로드 안내, 오류 안내도 locale helper를 통해 출력하고, 외국어 페이지에 한국어 fallback이 보이지 않게 한다.
 - 공통 헤더/히어로/푸터 CTA 문구를 바꿀 때는 `scripts/generate-english-pages.js`와 생성된 `/en/`, `/ja/`, `/zh/` HTML을 함께 갱신해 재생성 시 문구가 되돌아가지 않게 한다.
+- 공통 홈 UI 변경인 즐겨찾기 별표, `localStorage` 정렬, 3분할 홈 파트너 배너는 공유 `app.js`/`styles.css` 기준으로 유지하고, locale별 텍스트만 override나 정적 페이지 생성 스크립트에서 조정한다.
 
 ## SEO 기본 기준
 
