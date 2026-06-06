@@ -3609,6 +3609,18 @@ body.home-mode .overview-panel {
   max-width: 100%;
 }
 
+.home-partner-ad-promo {
+  padding: 0;
+  text-decoration: none;
+}
+
+.home-partner-ad-promo img {
+  display: block;
+  width: 400px;
+  height: 140px;
+  object-fit: cover;
+}
+
 .home-partner-ad-inquiry {
   align-content: center;
   gap: 3px;

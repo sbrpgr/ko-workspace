@@ -4728,6 +4728,7 @@ const LIBRARIES = {
 const libraryCache = {};
 const TOOL_FAVORITES_STORAGE_KEY = "koWorkspace.favoriteTools.v1";
 const COUPANG_PARTNERS_SCRIPT_SRC = "https://ads-partners.coupang.com/g.js";
+const HOME_FAVORITES_PROMO_IMAGE_SRC = "/assets/home-favorites-promo.png?v=20260607-09";
 const HOME_COUPANG_AD_CONFIG = {
   id: 995014,
   template: "carousel",
@@ -5272,9 +5273,17 @@ function renderHomeAdBanner() {
   return `
     <section class="home-partner-ad-banner" aria-label="광고 배너">
       <div class="home-partner-ad-slot home-partner-ad-coupang" data-home-coupang-ad></div>
-      ${renderHomeAdInquirySlot()}
+      ${renderHomeFavoritesPromoSlot()}
       ${renderHomeAdInquirySlot()}
     </section>
+  `;
+}
+
+function renderHomeFavoritesPromoSlot() {
+  return `
+    <a class="home-partner-ad-slot home-partner-ad-promo" href="#tools" aria-label="도구 즐겨찾기 기능 안내">
+      <img src="${HOME_FAVORITES_PROMO_IMAGE_SRC}" width="400" height="140" alt="도구 즐겨찾기 기능 추가 - 자주 쓰는 기능은 별표로 맨 위에 고정" loading="lazy" decoding="async" />
+    </a>
   `;
 }
 

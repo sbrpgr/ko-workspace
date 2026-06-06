@@ -1,4 +1,4 @@
-# 다국어 버전 및 SEO 작업 명세
+﻿# 다국어 버전 및 SEO 작업 명세
 
 이 문서는 코워크스페이스 영어(`/en/`), 일본어(`/ja/`), 중국어 간체(`/zh/`) 버전과 검색 최적화 작업을 이어서 수정하거나 점검할 때 확인해야 할 작업 명세다. 외국어 버전은 기존 한국어 플랫폼을 대체하지 않고, 같은 도메인 안에서 언어별 하위 경로로 분리된 정적 페이지로 운영한다.
 
@@ -13,7 +13,7 @@
 - 영어 카테고리 정의: `app.js`의 `CATEGORY_PAGE_DEFS_EN`
 - 일본어/중국어 도구 정의: `app.js`의 `TOOL_DEFS_LOCALE_OVERRIDES`
 - 일본어/중국어 카테고리 정의: `app.js`의 `CATEGORY_PAGE_DEFS_BY_LOCALE`
-- 현재 정적 리소스 캐시 버전: `20260607-08`
+- 현재 정적 리소스 캐시 버전: `20260607-09`
 - 최근 영어 SEO 배포 커밋: `0385e6d Polish English SEO copy`
 - 최근 외국어 도구 로컬라이징 및 운영 E2E 배포 커밋: `97baf2f Complete foreign tool localization testing fixes`
 - 후원 CTA 문구는 정적 페이지 생성 스크립트의 `getKofiSupportLabel()` 기준으로 짧게 유지한다: `/en/` `Support`, `/ja/` `支援する`, `/zh/` `赞助`

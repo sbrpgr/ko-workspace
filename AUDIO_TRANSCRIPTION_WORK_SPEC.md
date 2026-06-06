@@ -1,4 +1,4 @@
-# 녹음 파일 텍스트 변환 작업 명세
+﻿# 녹음 파일 텍스트 변환 작업 명세
 
 이 문서는 `녹음 파일 텍스트 변환` 기능을 다시 수정하거나 이어서 개선할 때 확인해야 할 작업 명세다. 이 기능은 코워크스페이스의 브라우저 비저장 원칙을 유지하면서, 휴대폰 녹음 파일을 검토용 텍스트 초안으로 바꾸는 베타 도구다.
 
@@ -15,7 +15,7 @@
 - 도구 정의: `app.js`의 `TOOL_DEFS` 중 `audio-file-transcription`
 - 한국어 페이지 파일: `tools/audio-file-transcription/index.html`
 - 영어 페이지 파일: `en/tools/audio-file-transcription/index.html`
-- 현재 정적 리소스 캐시 버전: `20260607-08`
+- 현재 정적 리소스 캐시 버전: `20260607-09`
 - 모델 프로필:
   - `quality`: `onnx-community/whisper-base`, 기본값, `정확도 우선`
   - `whisper-tiny` 기반 빠른 변환 fallback은 품질 기준 미달로 UI와 프로필에서 제외한다.

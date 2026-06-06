@@ -81,5 +81,6 @@ GitHub 저장소의 `Settings > Secrets and variables > Actions > Repository sec
 GitHub Actions workflow는 아래 자산을 `.cloudflare-dist/`로 복사합니다.
 
 - 루트 정적 파일: `index.html`, `styles.css`, `app.js`, `privacy.html`, `terms.html`, `robots.txt`, `sitemap.xml`, `ads.txt`, `_headers`, `favicon.svg`, `site.webmanifest`
+- 공통 이미지 자산 디렉터리: `assets/`
 - 도구 페이지 디렉터리: `tools/`
 - 다국어 정적 페이지 디렉터리: `en/`, `ja/`, `zh/`

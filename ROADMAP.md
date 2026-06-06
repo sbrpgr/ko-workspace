@@ -1,4 +1,4 @@
-# 코워크스페이스 (ko-workspace) Roadmap
+﻿# 코워크스페이스 (ko-workspace) Roadmap
 
 Last updated: 2026-06-07
 
@@ -55,7 +55,7 @@ Current migration note:
 - Category landing pages are now live at `/tools/text/`, `/tools/pdf/`, `/tools/image/`, `/tools/subtitle/`, and `/tools/voice-video/`.
 - Category pages reuse the shared app shell and are rendered from `CATEGORY_PAGE_DEFS` in `app.js`; do not fork tool logic into category HTML files.
 - Preserve canonical URLs and sitemap entries whenever tool pages are updated.
-- Current static asset cache version is `20260607-08`; bump this version whenever `app.js` or `styles.css` changes.
+- Current static asset cache version is `20260607-09`; bump this version whenever `app.js` or `styles.css` changes.
 - Home tool cards can be favorited with a small star and stored in browser `localStorage`; favorites sort first without requiring membership.
 - The home support CTA is shortened to `후원하기` in Korean and uses short locale equivalents on `/en/`, `/ja/`, and `/zh/`.
 
@@ -69,7 +69,7 @@ Completed for AdSense/SEO readiness:
 - Tool pages include unique titles, meta descriptions, canonical URLs, Open Graph data, usage flows, collapsed FAQ/examples, and dynamic FAQ structured data.
 - Category landing pages include static metadata, sitemap entries, and dynamic `CollectionPage`/`ItemList`/`BreadcrumbList` structured data.
 - The home page includes compact category links to strengthen internal navigation.
-- The home page has a fixed `1200px × 140px` partner ad strip below the category divider, split into three `400px × 140px` slots: one Coupang Partners carousel and two compact advertising-inquiry slots.
+- The home page has a fixed `1200px × 140px` partner ad strip below the category divider, split into three `400px × 140px` slots: one Coupang Partners carousel, one temporary tool-favorites promo image, and one compact advertising-inquiry slot.
 
 Operational reminders:
 

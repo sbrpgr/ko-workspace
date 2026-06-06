@@ -1,4 +1,4 @@
-# 코워크스페이스 (ko-workspace) Product Spec
+﻿# 코워크스페이스 (ko-workspace) Product Spec
 
 ## Product Direction
 
@@ -16,7 +16,7 @@ Current production baseline:
 - Latest AdSense/SEO readiness commit: `580c060 Improve AdSense SEO readiness`
 - Latest English SEO polish commit: `0385e6d Polish English SEO copy`
 - Latest foreign-language tool localization/E2E commit: `97baf2f Complete foreign tool localization testing fixes`
-- Current static asset cache version: `20260607-08`
+- Current static asset cache version: `20260607-09`
 - English version deployed under `/en/`; Japanese and Simplified Chinese versions deployed under `/ja/` and `/zh/` on the same domain, with Korean routes preserved
 - 2026-06-07 platform UI update includes screenshot-saver fixed save directories, browser-local favorite tools, a home partner ad banner, and a shortened support CTA
 - 2026-05-17 production E2E passed EN/JA/ZH × 30 tools = 90 scenarios with 0 failures and 0 Korean-language leakage findings
@@ -219,6 +219,7 @@ Important frontend implementation notes:
 
 - GitHub Actions prepares `.cloudflare-dist/`
 - Root files are copied into `.cloudflare-dist/`
+- The `assets/` directory is copied recursively into `.cloudflare-dist/`
 - The `tools/` directory is copied recursively into `.cloudflare-dist/`
 - The `en/`, `ja/`, and `zh/` directories are copied recursively into `.cloudflare-dist/`
 - Cloudflare Pages deploys `.cloudflare-dist/`
@@ -342,4 +343,4 @@ Prepared slot positions:
 - `home-partner-ad-banner` between the home category links and tool overview; fixed `1200px × 140px`, split into three `400px × 140px` slots
 
 When ad slots are empty, they remain hidden.
-The home partner banner keeps ads outside editor, upload, conversion, and result UI. The left slot loads the configured Coupang Partners carousel, while the two remaining slots show compact `광고문의` / `dayway.ict@gmail.com` inquiry blocks.
+The home partner banner keeps ads outside editor, upload, conversion, and result UI. The left slot loads the configured Coupang Partners carousel, the middle slot temporarily shows the tool-favorites feature promo image, and the right slot shows a compact `광고문의` / `dayway.ict@gmail.com` inquiry block.
