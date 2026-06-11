@@ -137,6 +137,10 @@
     <lastmod>2026-04-29</lastmod>
   </url>
   <url>
+    <loc>https://ko-workspace.com/tools/pdf-delete-pages/</loc>
+    <lastmod>2026-06-11</lastmod>
+  </url>
+  <url>
     <loc>https://ko-workspace.com/tools/image-to-pdf/</loc>
     <lastmod>2026-04-29</lastmod>
   </url>
@@ -623,5 +627,17 @@
   <url>
     <loc>https://ko-workspace.com/zh/tools/screenshot-saver/</loc>
     <lastmod>2026-06-07</lastmod>
+  </url>
+  <url>
+    <loc>https://ko-workspace.com/en/tools/pdf-delete-pages/</loc>
+    <lastmod>2026-06-11</lastmod>
+  </url>
+  <url>
+    <loc>https://ko-workspace.com/ja/tools/pdf-delete-pages/</loc>
+    <lastmod>2026-06-11</lastmod>
+  </url>
+  <url>
+    <loc>https://ko-workspace.com/zh/tools/pdf-delete-pages/</loc>
+    <lastmod>2026-06-11</lastmod>
   </url>
 </urlset>

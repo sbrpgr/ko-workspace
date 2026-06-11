@@ -481,6 +481,23 @@ const TOOL_DEFS = [
     ],
   },
   {
+    id: "pdf-delete-pages",
+    path: "/tools/pdf-delete-pages/",
+    category: "PDF",
+    title: "PDF 페이지 삭제",
+    summary:
+      "삭제할 페이지 범위를 입력해 나머지 페이지만 새 PDF로 저장합니다.",
+    seoTitle: "PDF 페이지 삭제 | 필요 없는 페이지 제거",
+    seoDescription:
+      "PDF에서 불필요한 페이지를 삭제하고 남은 페이지만 새 파일로 저장하는 브라우저 도구입니다.",
+    keywords: ["PDF", "페이지 삭제", "제거", "문서 정리"],
+    guide: [
+      { title: "파일 선택", text: "정리할 PDF를 선택하거나 업로드 영역에 끌어다 놓습니다." },
+      { title: "삭제 페이지 입력", text: "예: 2,4-6 같은 형식으로 삭제할 페이지를 입력합니다." },
+      { title: "새 파일 저장", text: "선택한 페이지를 제외한 새 PDF를 저장합니다." },
+    ],
+  },
+  {
     id: "image-to-pdf",
     path: "/tools/image-to-pdf/",
     category: "PDF",
@@ -1138,6 +1155,18 @@ const TOOL_DEFS_EN_OVERRIDES = {
       { title: "Save result", text: "Download a new PDF containing only the selected pages." },
     ],
   },
+  "pdf-delete-pages": {
+    title: "Delete PDF Pages",
+    summary: "Remove selected pages from a PDF and save the remaining pages as a new file.",
+    seoTitle: "Delete PDF Pages | Remove Pages from PDF",
+    seoDescription: "Delete unwanted PDF pages in your browser and save a new PDF without uploading the file.",
+    keywords: ["delete PDF pages", "remove PDF pages", "PDF page remover", "browser PDF"],
+    guide: [
+      { title: "Choose PDF", text: "Select the PDF you want to clean up." },
+      { title: "Enter pages", text: "Type pages or ranges to remove, such as 2, 4-6." },
+      { title: "Save result", text: "Download a new PDF with the remaining pages." },
+    ],
+  },
   "image-to-pdf": {
     title: "Images to PDF",
     summary: "Turn multiple images into a single PDF document in your browser.",
@@ -1331,6 +1360,11 @@ const TOOL_DEFS_LOCALIZED_COPY = {
       summary: "PDFから必要なページ範囲だけを抽出して、新しいPDFとして保存します。",
       keywords: ["PDFページ抽出", "PDF一部保存", "PDFページ", "PDF編集"],
     },
+    "pdf-delete-pages": {
+      title: "PDFページ削除",
+      summary: "PDFから不要なページを削除し、残りのページを新しいPDFとして保存します。",
+      keywords: ["PDFページ削除", "PDFページ除去", "PDF整理", "PDF編集"],
+    },
     "image-to-pdf": {
       title: "画像をPDFに変換",
       summary: "JPGやPNGなどの画像を並べて、ブラウザ内でPDF文書に変換します。",
@@ -1487,6 +1521,11 @@ const TOOL_DEFS_LOCALIZED_COPY = {
       title: "PDF页面提取",
       summary: "从PDF中提取指定页面范围，并保存为新的PDF文件。",
       keywords: ["PDF页面提取", "PDF部分保存", "PDF页面", "PDF编辑"],
+    },
+    "pdf-delete-pages": {
+      title: "PDF页面删除",
+      summary: "从PDF中删除不需要的页面，并将剩余页面保存为新的PDF文件。",
+      keywords: ["PDF页面删除", "删除PDF页面", "PDF整理", "PDF编辑"],
     },
     "image-to-pdf": {
       title: "图片转PDF",
@@ -1667,6 +1706,11 @@ const LOCALIZED_TOOL_SCENARIO_LINES = {
       "資料集の一部だけを会議前に渡し、相手が見る範囲を絞ります。",
       "スキャンPDFから必要ページを選び、新しい提出用ファイルにします。",
     ],
+    "pdf-delete-pages": [
+      "提出前のPDFから白紙、重複ページ、不要な案内ページを削除します。",
+      "スキャン資料を整理し、相手に見せる必要のないページを外して保存します。",
+      "申請書や会議資料を共有する前に、残すページだけのPDFに整えます。",
+    ],
     "image-to-pdf": [
       "領収書、ホワイトボード写真、スマホで撮った資料を1つのPDFにまとめます。",
       "学校や会社へ提出する画像資料を、ページ順のあるPDFとして整えます。",
@@ -1823,6 +1867,11 @@ const LOCALIZED_TOOL_SCENARIO_LINES = {
       "从合同、报告或课件中只提取需要确认的几页给同事。",
       "把资料包中的关键页面单独保存，便于会前快速发送。",
       "从扫描PDF中选出指定页，生成新的提交文件。",
+    ],
+    "pdf-delete-pages": [
+      "提交PDF前删除空白页、重复页或不需要的说明页。",
+      "整理扫描资料时，去掉不需要共享的页面后再保存。",
+      "发送申请材料或会议资料前，只保留需要对方查看的页面。",
     ],
     "image-to-pdf": [
       "把发票、收据、截图或白板照片按顺序合成一份PDF。",
@@ -2016,6 +2065,11 @@ const TOOL_SCENARIO_LINES_EN = {
     "Create a short PDF with the cover, summary, conclusion, or selected charts from a report.",
     "Extract required pages from a scanned packet before submitting only the necessary evidence.",
   ],
+  "pdf-delete-pages": [
+    "Remove blank, duplicate, or instruction pages from a PDF before submitting it.",
+    "Clean up scanned paperwork by deleting pages the recipient does not need to see.",
+    "Prepare an application, meeting handout, or client packet with only the pages that should remain.",
+  ],
   "image-to-pdf": [
     "Combine receipt photos, whiteboard shots, or document scans into a single PDF for submission.",
     "Turn multiple screenshots into an ordered PDF that is easier to review than separate image files.",
@@ -2103,6 +2157,7 @@ const TOOL_VISUALS = {
   "pdf-merge": { icon: "\uD83D\uDCCE", tone: "red", copy: "\uc5ec\ub7ec PDF\ub97c \ud558\ub098\uc758 \ubb38\uc11c\ub85c \ud569\uce69\ub2c8\ub2e4." },
   "pdf-split": { icon: "\u2702", tone: "blue", copy: "PDF\ub97c \ud398\uc774\uc9c0 \ub2e8\uc704\ub85c \ub098\ub215\ub2c8\ub2e4." },
   "pdf-extract-pages": { icon: "\uD83D\uDCC4", tone: "teal", copy: "\ud544\uc694\ud55c PDF \ud398\uc774\uc9c0\ub9cc \ucd94\ucd9c\ud569\ub2c8\ub2e4." },
+  "pdf-delete-pages": { icon: "\u232B", tone: "red", copy: "\ubd88\ud544\uc694\ud55c PDF \ud398\uc774\uc9c0\ub97c \uc81c\uc678\ud574 \uc800\uc7a5\ud569\ub2c8\ub2e4." },
   "image-to-pdf": { icon: "\uD83E\uDDFE", tone: "orange", copy: "\uc774\ubbf8\uc9c0\ub97c PDF \ubb38\uc11c\ub85c \ubcc0\ud658\ud569\ub2c8\ub2e4." },
   "pdf-to-image": { icon: "\uD83C\uDFDE\uFE0F", tone: "green", copy: "PDF \ud398\uc774\uc9c0\ub97c \uc774\ubbf8\uc9c0\ub85c \uc800\uc7a5\ud569\ub2c8\ub2e4." },
   "srt-cleaner": { icon: "\uD83C\uDFAC", tone: "slate", copy: "SRT \uc790\ub9c9 \ubc88\ud638\uc640 \ud615\uc2dd\uc744 \uc815\ub9ac\ud569\ub2c8\ub2e4." },
@@ -2631,6 +2686,26 @@ const TOOL_SCENARIOS = {
       check: "추출한 PDF에도 민감 정보가 남아 있을 수 있으므로 제출 전 페이지별로 확인하세요.",
     },
   ],
+  "pdf-delete-pages": [
+    {
+      title: "제출 전 빈 페이지와 중복 페이지를 지울 때",
+      body:
+        "스캔하거나 합친 PDF 안에 들어간 빈 페이지, 중복 페이지, 임시 안내 페이지를 삭제합니다. 원본을 서버에 올리지 않고 브라우저 안에서 남길 페이지만 새 파일로 저장할 수 있습니다.",
+      check: "삭제할 페이지는 PDF 뷰어 기준 페이지 번호로 입력하고, 저장 후 빠진 페이지가 없는지 한 번 더 확인하세요.",
+    },
+    {
+      title: "개인정보가 있는 일부 페이지만 제외할 때",
+      body:
+        "보고서나 신청 서류 묶음에서 주민번호, 계좌번호, 내부 메모가 들어간 페이지를 제외하고 공유용 PDF를 만듭니다. 전체 파일을 다시 만들지 않아도 필요한 페이지만 남길 수 있습니다.",
+      check: "페이지 삭제는 문서 안의 일부 글자만 가리는 기능이 아니므로, 한 페이지 안에 남은 민감 정보는 별도로 확인해야 합니다.",
+    },
+    {
+      title: "회의 자료를 배포용으로 가볍게 정리할 때",
+      body:
+        "회의 안건지나 발표 자료에서 초안, 백업 슬라이드, 내부 검토 페이지만 제거해 참석자용 PDF로 정리합니다. 파일 순서와 문맥은 유지하면서 공유 범위를 줄이는 흐름에 맞습니다.",
+      check: "목차나 페이지 번호가 원본 기준으로 남을 수 있으므로 공식 제출 전에는 문서 안쪽 표기도 함께 확인하세요.",
+    },
+  ],
   "image-to-pdf": [
     {
       title: "영수증과 사진 증빙을 PDF로 묶을 때",
@@ -2851,6 +2926,10 @@ const TOOL_USE_EXAMPLES = {
     "PDF에서 필요한 페이지 범위만 골라 별도 문서로 저장합니다.",
     "자료집, 계약서, 보고서에서 공유할 부분만 추출합니다.",
   ],
+  "pdf-delete-pages": [
+    "PDF에서 빈 페이지, 중복 페이지, 불필요한 첨부 페이지를 삭제합니다.",
+    "삭제할 페이지 범위를 입력하고 남은 페이지만 새 PDF로 저장합니다.",
+  ],
   "image-to-pdf": [
     "여러 장의 사진, 스캔 이미지, 캡처 이미지를 하나의 PDF로 묶습니다.",
     "제출용 이미지 자료를 PDF 문서 형태로 정리합니다.",
@@ -2977,6 +3056,10 @@ const TOOL_EXTRA_FAQS = {
   "pdf-extract-pages": {
     question: "1-3,5,9 같은 페이지 범위 입력이 가능한가요?",
     answer: "네. 필요한 페이지 범위를 입력해 해당 페이지만 새 PDF로 추출할 수 있습니다.",
+  },
+  "pdf-delete-pages": {
+    question: "삭제한 페이지가 서버로 전송되나요?",
+    answer: "아니요. 선택한 PDF는 브라우저 안에서만 읽고, 입력한 페이지를 제외한 새 PDF를 로컬에서 만듭니다. 삭제 후 저장한 결과도 제출 전 직접 확인하는 것을 권장합니다.",
   },
   "image-to-pdf": {
     question: "여러 이미지를 하나의 PDF로 만들 수 있나요?",
@@ -3167,6 +3250,7 @@ const ENGLISH_WORKSPACE_TEXT = {
   "PDF 합치기": "Merge PDF",
   "PDF 분할": "Split PDF",
   "PDF 페이지 추출": "Extract PDF Pages",
+  "PDF 페이지 삭제": "Delete PDF Pages",
   "이미지 PDF 변환": "Images to PDF",
   "PDF 이미지 변환": "PDF to Image",
   "마크다운 입력": "Markdown Input",
@@ -3803,6 +3887,19 @@ const WORKSPACE_COMMON_TEXT = [
   ["원본 페이지 순서를 유지한 새 PDF를 만듭니다.", { en: "Creates a new PDF while preserving the original page order.", ja: "元のページ順を維持して新しいPDFを作成します。", zh: "生成保持原始页面顺序的新 PDF。" }],
   ["필요한 PDF 페이지만 추출합니다.", { en: "Extract only the PDF pages you need.", ja: "必要なPDFページだけを抽出します。", zh: "只提取需要的 PDF 页面。" }],
   ["페이지 추출", { en: "Extract pages", ja: "ページ抽出", zh: "提取页面" }],
+  ["PDF 페이지 삭제", { en: "Delete PDF pages", ja: "PDFページ削除", zh: "删除 PDF 页面" }],
+  ["PDF 페이지 삭제 열기", { en: "Open Delete PDF Pages", ja: "PDFページ削除を開く", zh: "打开删除 PDF 页面" }],
+  ["삭제할 페이지", { en: "Pages to delete", ja: "削除するページ", zh: "要删除的页面" }],
+  ["PDF 파일을 선택하거나 이 영역에 끌어다 놓은 뒤 예: 2,4-6 형식으로 삭제할 페이지를 입력합니다.", { en: "Choose or drop a PDF, then enter pages to delete using ranges such as 2,4-6.", ja: "PDFを選択またはドロップし、2,4-6 のような形式で削除するページを入力します。", zh: "选择或拖放 PDF 后，使用 2,4-6 等范围输入要删除的页面。" }],
+  ["입력한 페이지를 제외하고 남은 페이지로 새 PDF를 만듭니다.", { en: "Creates a new PDF from the pages left after deletion.", ja: "入力したページを除き、残りのページで新しいPDFを作成します。", zh: "删除输入的页面后，用剩余页面生成新的 PDF。" }],
+  ["선택한 PDF에서 필요 없는 페이지를 제거합니다.", { en: "Remove unwanted pages from the selected PDF.", ja: "選択したPDFから不要なページを削除します。", zh: "从所选 PDF 中删除不需要的页面。" }],
+  ["페이지 삭제", { en: "Delete pages", ja: "ページ削除", zh: "删除页面" }],
+  ["삭제할 페이지 범위를 입력해 주세요.", { en: "Enter the pages to delete.", ja: "削除するページ範囲を入力してください。", zh: "请输入要删除的页面范围。" }],
+  ["모든 페이지를 삭제할 수는 없습니다. 최소 1페이지는 남겨 주세요.", { en: "You cannot delete every page. Leave at least one page.", ja: "すべてのページは削除できません。少なくとも1ページ残してください。", zh: "不能删除所有页面，请至少保留 1 页。" }],
+  ["PDF 페이지 삭제를 완료하지 못했습니다.", { en: "Could not delete PDF pages.", ja: "PDFページを削除できませんでした。", zh: "未能删除 PDF 页面。" }],
+  ["PDF 페이지 삭제 중 오류가 발생했습니다.", { en: "An error occurred while deleting PDF pages.", ja: "PDFページ削除中にエラーが発生しました。", zh: "删除 PDF 页面时发生错误。" }],
+  ["PDF 라이브러리를 준비 중입니다.", { en: "Preparing the PDF library.", ja: "PDFライブラリを準備しています。", zh: "正在准备 PDF 库。" }],
+  ["삭제할 PDF 페이지를 읽는 중입니다.", { en: "Reading the PDF pages to delete.", ja: "削除するPDFページを読み込んでいます。", zh: "正在读取要删除的 PDF 页面。" }],
   ["이미지 PDF 변환", { en: "Images to PDF", ja: "画像をPDFに変換", zh: "图片转 PDF" }],
   ["이미지 PDF 변환 열기", { en: "Open Images to PDF", ja: "画像PDF変換を開く", zh: "打开图片转 PDF" }],
   ["이미지 여러 장 선택", { en: "Choose multiple images", ja: "画像を複数選択", zh: "选择多张图片" }],
@@ -4147,6 +4244,7 @@ function translateWorkspaceDynamicText(text) {
       metadataCleaned: (label, detail) => `Cleaned · ${label} removed · ${detail}`,
       mergeDone: (count) => `Merged ${count} files into one PDF.`,
       pagesExtracted: (count) => `Extracted ${count} pages.`,
+      pagesDeleted: (removed, kept) => `Deleted ${removed} pages · ${kept} pages kept.`,
       imagesPdfDone: (count) => `Created a PDF from ${count} images.`,
       pagesRendered: (count) => `Rendered ${count} pages.`,
       pageLabel: (count) => `Page ${count}`,
@@ -4190,6 +4288,7 @@ function translateWorkspaceDynamicText(text) {
       metadataCleaned: (label, detail) => `整理完了 · ${label}を削除 · ${detail}`,
       mergeDone: (count) => `${count}件のPDFを1つに結合しました。`,
       pagesExtracted: (count) => `${count}ページを抽出しました。`,
+      pagesDeleted: (removed, kept) => `${removed}ページを削除し、${kept}ページを残しました。`,
       imagesPdfDone: (count) => `${count}枚の画像をPDFにまとめました。`,
       pagesRendered: (count) => `${count}ページをレンダリングしました。`,
       pageLabel: (count) => `${count}ページ`,
@@ -4233,6 +4332,7 @@ function translateWorkspaceDynamicText(text) {
       metadataCleaned: (label, detail) => `清理完成 · 已移除${label} · ${detail}`,
       mergeDone: (count) => `已将 ${count} 个 PDF 文件合并为一个文件。`,
       pagesExtracted: (count) => `已提取 ${count} 页。`,
+      pagesDeleted: (removed, kept) => `已删除 ${removed} 页，保留 ${kept} 页。`,
       imagesPdfDone: (count) => `已将 ${count} 张图片合并为 PDF。`,
       pagesRendered: (count) => `已渲染 ${count} 页。`,
       pageLabel: (count) => `第 ${count} 页`,
@@ -4263,6 +4363,7 @@ function translateWorkspaceDynamicText(text) {
     .replace(/정리 완료 · ([^·]+) 제거 · (.+)$/g, (_, label, detail) => copy.metadataCleaned(label.trim(), detail.trim()))
     .replace(/병합 완료 · (\d+)개 파일을 하나로 묶었습니다\./g, (_, count) => copy.mergeDone(count))
     .replace(/(\d+)페이지를 추출했습니다\./g, (_, count) => copy.pagesExtracted(count))
+    .replace(/(\d+)페이지를 삭제하고 (\d+)페이지를 남겼습니다\./g, (_, removed, kept) => copy.pagesDeleted(removed, kept))
     .replace(/(\d+)장 이미지를 PDF로 묶었습니다\./g, (_, count) => copy.imagesPdfDone(count))
     .replace(/(\d+)페이지 렌더링이 완료되었습니다\./g, (_, count) => copy.pagesRendered(count))
     .replace(/(\d+)페이지/g, (_, count) => copy.pageLabel(count))
@@ -4343,7 +4444,7 @@ const HOME_CATEGORY_META = {
   },
   PDF: {
     label: "PDF",
-    description: "문서 병합, 분할, 페이지 추출 같은 기본 PDF 작업입니다.",
+    description: "문서 병합, 분할, 페이지 추출·삭제 같은 기본 PDF 작업입니다.",
   },
   자막: {
     label: "Sub",
@@ -4374,10 +4475,10 @@ const CATEGORY_PAGE_DEFS = [
     path: "/tools/pdf/",
     title: "PDF 업무 도구",
     eyebrow: "PDF Tools",
-    description: "PDF 합치기, 분할, 페이지 추출, 이미지 변환처럼 자주 쓰는 문서 작업을 설치 없이 처리합니다.",
+    description: "PDF 합치기, 분할, 페이지 추출·삭제, 이미지 변환처럼 자주 쓰는 문서 작업을 설치 없이 처리합니다.",
     metaDescription:
-      "코워크스페이스 PDF 업무 도구 모음입니다. PDF 합치기, PDF 분할, 페이지 추출, 이미지 PDF 변환을 브라우저에서 무료로 사용할 수 있습니다.",
-    keywords: ["PDF 합치기", "PDF 분할", "PDF 페이지 추출", "PDF 변환"],
+      "코워크스페이스 PDF 업무 도구 모음입니다. PDF 합치기, PDF 분할, 페이지 추출, 페이지 삭제, 이미지 PDF 변환을 브라우저에서 무료로 사용할 수 있습니다.",
+    keywords: ["PDF 합치기", "PDF 분할", "PDF 페이지 추출", "PDF 페이지 삭제", "PDF 변환"],
     categories: ["PDF"],
     guide: [
       { title: "파일 선택", text: "처리할 PDF나 이미지를 선택하거나 업로드 영역에 끌어다 놓습니다." },
@@ -4458,10 +4559,10 @@ const CATEGORY_PAGE_DEFS_EN = [
     path: "/en/tools/pdf/",
     title: "PDF Tools",
     eyebrow: "PDF Tools",
-    description: "Merge, split, extract, and convert common PDF work without installing a separate app.",
+    description: "Merge, split, extract, delete pages, and convert common PDF work without installing a separate app.",
     metaDescription:
-      "A browser-based PDF tools collection for merging PDFs, splitting PDFs, extracting selected pages, converting images to PDF, and rendering PDF pages as images.",
-    keywords: ["merge PDF", "split PDF", "extract PDF pages", "image to PDF", "PDF to image"],
+      "A browser-based PDF tools collection for merging PDFs, splitting PDFs, extracting or deleting selected pages, converting images to PDF, and rendering PDF pages as images.",
+    keywords: ["merge PDF", "split PDF", "extract PDF pages", "delete PDF pages", "image to PDF", "PDF to image"],
     categories: ["PDF"],
     guide: [
       { title: "Choose files", text: "Select the PDF or images you want to process." },
@@ -4543,9 +4644,9 @@ const CATEGORY_PAGE_DEFS_JA = [
     path: "/ja/tools/pdf/",
     title: "PDFツール",
     eyebrow: "PDF Tools",
-    description: "PDFの結合、分割、ページ抽出、画像変換をインストールなしで処理します。",
-    metaDescription: "PDF結合、PDF分割、ページ抽出、画像からPDF、PDFから画像をブラウザで処理できる無料ツール集です。",
-    keywords: ["PDF結合", "PDF分割", "PDFページ抽出", "PDF変換"],
+    description: "PDFの結合、分割、ページ抽出・削除、画像変換をインストールなしで処理します。",
+    metaDescription: "PDF結合、PDF分割、ページ抽出、ページ削除、画像からPDF、PDFから画像をブラウザで処理できる無料ツール集です。",
+    keywords: ["PDF結合", "PDF分割", "PDFページ抽出", "PDFページ削除", "PDF変換"],
     categories: ["PDF"],
     guide: [
       { title: "ファイルを選ぶ", text: "処理したいPDFや画像を選択します。" },
@@ -4624,9 +4725,9 @@ const CATEGORY_PAGE_DEFS_ZH = [
     path: "/zh/tools/pdf/",
     title: "PDF工具",
     eyebrow: "PDF Tools",
-    description: "无需安装应用即可合并、拆分、提取和转换常见PDF文件。",
-    metaDescription: "浏览器PDF工具集合，支持PDF合并、PDF拆分、页面提取、图片转PDF和PDF转图片。",
-    keywords: ["PDF合并", "PDF拆分", "PDF页面提取", "PDF转换"],
+    description: "无需安装应用即可合并、拆分、提取、删除页面和转换常见PDF文件。",
+    metaDescription: "浏览器PDF工具集合，支持PDF合并、PDF拆分、页面提取、页面删除、图片转PDF和PDF转图片。",
+    keywords: ["PDF合并", "PDF拆分", "PDF页面提取", "PDF页面删除", "PDF转换"],
     categories: ["PDF"],
     guide: [
       { title: "选择文件", text: "选择要处理的PDF或图片。" },
@@ -4728,7 +4829,7 @@ const LIBRARIES = {
 const libraryCache = {};
 const TOOL_FAVORITES_STORAGE_KEY = "koWorkspace.favoriteTools.v1";
 const COUPANG_PARTNERS_SCRIPT_SRC = "https://ads-partners.coupang.com/g.js";
-const HOME_FAVORITES_PROMO_IMAGE_SRC = "/assets/home-favorites-promo.png?v=20260607-09";
+const HOME_FAVORITES_PROMO_IMAGE_SRC = "/assets/home-favorites-promo.png?v=20260611-01";
 const HOME_COUPANG_AD_CONFIG = {
   id: 995014,
   template: "carousel",
@@ -5757,6 +5858,7 @@ const TOOL_RENDERERS = {
   "pdf-merge": renderPdfMerge,
   "pdf-split": renderPdfSplit,
   "pdf-extract-pages": renderPdfExtractPages,
+  "pdf-delete-pages": renderPdfDeletePages,
   "image-to-pdf": renderImageToPdf,
   "pdf-to-image": renderPdfToImage,
   "srt-cleaner": renderSrtCleaner,
@@ -11842,6 +11944,69 @@ function renderPdfExtractPages(container) {
     } catch (error) {
       status.textContent = "페이지 추출 중 오류가 발생했습니다.";
       showToast("PDF 페이지 추출을 완료하지 못했습니다.");
+    }
+  });
+}
+
+function renderPdfDeletePages(container) {
+  container.innerHTML = `
+    <div class="tool-section">
+      <aside class="action-card">
+        <div class="upload-box">
+          <label for="pdfFile">PDF 선택</label>
+          <input id="pdfFile" type="file" accept="application/pdf" />
+          <p>PDF 파일을 선택하거나 이 영역에 끌어다 놓은 뒤 예: 2,4-6 형식으로 삭제할 페이지를 입력합니다.</p>
+        </div>
+        <div class="field-row">
+          <div class="field"><label for="deleteRanges">삭제할 페이지</label><input id="deleteRanges" type="text" placeholder="2,4-6" /></div>
+          <div class="field"><label for="fileName">파일명</label><input id="fileName" type="text" placeholder="deleted-pages" /></div>
+        </div>
+        <div class="action-row">
+          <button id="deleteBtn" class="primary-action" type="button">페이지 삭제</button>
+        </div>
+        <p id="status" class="tool-note">입력한 페이지를 제외하고 남은 페이지로 새 PDF를 만듭니다.</p>
+      </aside>
+    </div>
+  `;
+
+  const fileInput = container.querySelector("#pdfFile");
+  const status = container.querySelector("#status");
+
+  container.querySelector("#deleteBtn").addEventListener("click", async () => {
+    const file = fileInput.files[0];
+    if (!file) {
+      showToast("PDF를 선택해 주세요.");
+      return;
+    }
+
+    try {
+      status.textContent = "PDF 라이브러리를 준비 중입니다.";
+      await loadLibrary("pdfLib");
+      status.textContent = "삭제할 PDF 페이지를 읽는 중입니다.";
+      const sourcePdf = await PDFLib.PDFDocument.load(await file.arrayBuffer());
+      const pageCount = sourcePdf.getPageCount();
+      const deleteRanges = parsePageRanges(container.querySelector("#deleteRanges").value, pageCount);
+      if (deleteRanges.length === 0) {
+        showToast("삭제할 페이지 범위를 입력해 주세요.");
+        return;
+      }
+      if (deleteRanges.length >= pageCount) {
+        showToast("모든 페이지를 삭제할 수는 없습니다. 최소 1페이지는 남겨 주세요.");
+        return;
+      }
+
+      const pagesToDelete = new Set(deleteRanges);
+      const pagesToKeep = sourcePdf.getPageIndices().filter((index) => !pagesToDelete.has(index));
+      const resultPdf = await PDFLib.PDFDocument.create();
+      const pages = await resultPdf.copyPages(sourcePdf, pagesToKeep);
+      pages.forEach((page) => resultPdf.addPage(page));
+      const bytes = await resultPdf.save();
+      const filename = `${sanitizeFilename(container.querySelector("#fileName").value || "deleted-pages")}.pdf`;
+      downloadBlob(new Blob([bytes], { type: "application/pdf" }), filename);
+      status.textContent = `${deleteRanges.length}페이지를 삭제하고 ${pagesToKeep.length}페이지를 남겼습니다.`;
+    } catch (error) {
+      status.textContent = "PDF 페이지 삭제 중 오류가 발생했습니다.";
+      showToast("PDF 페이지 삭제를 완료하지 못했습니다.");
     }
   });
 }

@@ -17,7 +17,7 @@ Current production baseline:
 - Latest English SEO polish commit: `0385e6d Polish English SEO copy`
 - Latest foreign-language tool localization/E2E commit: `97baf2f Complete foreign tool localization testing fixes`
 - Latest platform UI/banner deployment commit: `c135df4 Add favorite tools promo banner`
-- Current static asset cache version: `20260607-09`
+- Current static asset cache version: `20260611-01`
 - English version deployed under `/en/`; Japanese and Simplified Chinese versions deployed under `/ja/` and `/zh/` on the same domain, with Korean routes preserved
 - 2026-06-07 platform UI update includes screenshot-saver fixed save directories, browser-local favorite tools, a home partner ad banner with Coupang, temporary favorite-tools promo image, inquiry slot, and a shortened support CTA
 - 2026-05-17 production E2E passed EN/JA/ZH × 30 tools = 90 scenarios with 0 failures and 0 Korean-language leakage findings
@@ -140,6 +140,7 @@ Core constraints:
 - `PDF 합치기`
 - `PDF 분할`
 - `PDF 페이지 추출`
+- `PDF 페이지 삭제`
 - `이미지 PDF 변환`
 - `PDF 이미지 변환`
 
