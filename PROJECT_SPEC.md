@@ -1,4 +1,4 @@
-﻿# 코워크스페이스 (ko-workspace) Product Spec
+# 코워크스페이스 (ko-workspace) Product Spec
 
 ## Product Direction
 
@@ -17,9 +17,10 @@ Current production baseline:
 - Latest English SEO polish commit: `0385e6d Polish English SEO copy`
 - Latest foreign-language tool localization/E2E commit: `97baf2f Complete foreign tool localization testing fixes`
 - Latest platform UI/banner deployment commit: `c135df4 Add favorite tools promo banner`
-- Current static asset cache version: `20260611-01`
+- Current static asset cache version: `20260611-02`
 - English version deployed under `/en/`; Japanese and Simplified Chinese versions deployed under `/ja/` and `/zh/` on the same domain, with Korean routes preserved
 - 2026-06-07 platform UI update includes screenshot-saver fixed save directories, browser-local favorite tools, a home partner ad banner with Coupang, temporary favorite-tools promo image, inquiry slot, and a shortened support CTA
+- 2026-06-11 tool page UI update adds the same separated partner banner directly below the tool hero title and description, before the tool workspace.
 - 2026-05-17 production E2E passed EN/JA/ZH × 30 tools = 90 scenarios with 0 failures and 0 Korean-language leakage findings
 - Category landing pages, privacy policy updates, sitemap updates, and core FAQ copy were deployed on 2026-04-29
 
@@ -343,6 +344,7 @@ Prepared slot positions:
 - `left-rail`
 - `right-rail`
 - `home-partner-ad-banner` between the home category links and tool overview; fixed `1200px × 140px`, split into three `400px × 140px` slots
+- `tool-partner-ad-banner` below the tool hero title/description and above the tool workspace; reuses the separated Coupang, promo, and inquiry slots while staying outside upload, editor, and result UI
 
 When ad slots are empty, they remain hidden.
 The home partner banner keeps ads outside editor, upload, conversion, and result UI. The left slot loads the configured Coupang Partners carousel, the middle slot temporarily shows the tool-favorites feature promo image, and the right slot shows a compact `광고문의` / `dayway.ict@gmail.com` inquiry block.

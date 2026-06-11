@@ -4829,7 +4829,7 @@ const LIBRARIES = {
 const libraryCache = {};
 const TOOL_FAVORITES_STORAGE_KEY = "koWorkspace.favoriteTools.v1";
 const COUPANG_PARTNERS_SCRIPT_SRC = "https://ads-partners.coupang.com/g.js";
-const HOME_FAVORITES_PROMO_IMAGE_SRC = "/assets/home-favorites-promo.png?v=20260611-01";
+const HOME_FAVORITES_PROMO_IMAGE_SRC = "/assets/home-favorites-promo.png?v=20260611-02";
 const HOME_COUPANG_AD_CONFIG = {
   id: 995014,
   template: "carousel",
@@ -4889,6 +4889,7 @@ function init() {
   }
 
   initAdSlots();
+  mountCoupangPartnerAds();
   injectStructuredData(activeTool, activeCategoryPage);
 }
 
@@ -5230,7 +5231,6 @@ function renderHomePage() {
     <div class="home-divider home-divider-after-categories" aria-hidden="true"></div>
     ${renderHomeAdBanner()}
   `;
-  mountHomeCoupangAd();
 
   els.toolWorkspace.innerHTML = `
     <section class="home-tool-section home-directory" aria-label="${escapeHtml(t("directoryLabel"))}">
@@ -5321,6 +5321,7 @@ function renderToolPage(tool) {
   renderToolDetailAccordion(tool);
   renderQuickToolDock(tool);
   trackToolEvent("tool_open", tool);
+  renderToolAdBanner();
 
   const renderer = TOOL_RENDERERS[tool.id];
   if (!renderer) {
@@ -5371,9 +5372,21 @@ function renderHomeCategoryLinks() {
 }
 
 function renderHomeAdBanner() {
+  return renderPartnerAdBanner("home-partner-ad-banner");
+}
+
+function renderToolAdBanner() {
+  const hero = document.querySelector(".platform-hero");
+  if (!hero?.parentElement) return;
+
+  hero.parentElement.querySelectorAll(".tool-partner-ad-banner").forEach((banner) => banner.remove());
+  hero.insertAdjacentHTML("afterend", renderPartnerAdBanner("tool-partner-ad-banner"));
+}
+
+function renderPartnerAdBanner(extraClass = "") {
   return `
-    <section class="home-partner-ad-banner" aria-label="광고 배너">
-      <div class="home-partner-ad-slot home-partner-ad-coupang" data-home-coupang-ad></div>
+    <section class="partner-ad-banner ${extraClass}" aria-label="광고 배너">
+      <div class="partner-ad-slot partner-ad-coupang" data-coupang-partner-ad></div>
       ${renderHomeFavoritesPromoSlot()}
       ${renderHomeAdInquirySlot()}
     </section>
@@ -5382,7 +5395,7 @@ function renderHomeAdBanner() {
 
 function renderHomeFavoritesPromoSlot() {
   return `
-    <a class="home-partner-ad-slot home-partner-ad-promo" href="#tools" aria-label="도구 즐겨찾기 기능 안내">
+    <a class="partner-ad-slot partner-ad-promo" href="#tools" aria-label="도구 즐겨찾기 기능 안내">
       <img src="${HOME_FAVORITES_PROMO_IMAGE_SRC}" width="400" height="140" alt="도구 즐겨찾기 기능 추가 - 자주 쓰는 기능은 별표로 맨 위에 고정" loading="lazy" decoding="async" />
     </a>
   `;
@@ -5390,7 +5403,7 @@ function renderHomeFavoritesPromoSlot() {
 
 function renderHomeAdInquirySlot() {
   return `
-    <a class="home-partner-ad-slot home-partner-ad-inquiry" href="mailto:dayway.ict@gmail.com" aria-label="광고문의 dayway.ict@gmail.com">
+    <a class="partner-ad-slot partner-ad-inquiry" href="mailto:dayway.ict@gmail.com" aria-label="광고문의 dayway.ict@gmail.com">
       <span>광고문의</span>
       <strong>dayway.ict@gmail.com</strong>
     </a>
@@ -5423,25 +5436,34 @@ function loadCoupangPartnersScript() {
   return coupangPartnersScriptPromise;
 }
 
-function mountHomeCoupangAd() {
-  const slot = document.querySelector("[data-home-coupang-ad]");
-  if (!slot || slot.dataset.coupangMounted === "true") return;
+function mountCoupangPartnerAds() {
+  const slots = [...document.querySelectorAll("[data-coupang-partner-ad]")].filter(
+    (slot) => slot.dataset.coupangMounted !== "true" && slot.dataset.coupangMounted !== "pending"
+  );
+  if (slots.length === 0) return;
 
-  slot.dataset.coupangMounted = "pending";
+  slots.forEach((slot) => {
+    slot.dataset.coupangMounted = "pending";
+  });
+
   loadCoupangPartnersScript()
     .then(() => {
-      if (!slot.isConnected || slot.dataset.coupangMounted === "true" || !window.PartnersCoupang?.G) return;
-      slot.replaceChildren();
-      new window.PartnersCoupang.G({
-        ...HOME_COUPANG_AD_CONFIG,
-        container: slot,
+      slots.forEach((slot) => {
+        if (!slot.isConnected || slot.dataset.coupangMounted === "true" || !window.PartnersCoupang?.G) return;
+        slot.replaceChildren();
+        new window.PartnersCoupang.G({
+          ...HOME_COUPANG_AD_CONFIG,
+          container: slot,
+        });
+        slot.dataset.coupangMounted = "true";
       });
-      slot.dataset.coupangMounted = "true";
     })
     .catch(() => {
-      if (slot.isConnected) {
-        slot.dataset.coupangMounted = "error";
-      }
+      slots.forEach((slot) => {
+        if (slot.isConnected) {
+          slot.dataset.coupangMounted = "error";
+        }
+      });
     });
 }
 

@@ -3572,11 +3572,11 @@ body.home-mode .overview-panel {
   margin-top: 2px;
 }
 
-.home-partner-ad-banner {
+.partner-ad-banner {
   display: grid;
-  grid-template-columns: repeat(3, 400px);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   justify-self: start;
-  width: 1200px;
+  width: min(1200px, 100%);
   height: 140px;
   min-height: 140px;
   overflow: hidden;
@@ -3588,40 +3588,57 @@ body.home-mode .overview-panel {
     0 10px 24px rgba(23, 27, 38, 0.045);
 }
 
-.home-partner-ad-slot {
+.home-partner-ad-banner {
+  grid-template-columns: repeat(3, 400px);
+  width: 1200px;
+}
+
+.tool-partner-ad-banner {
+  margin-top: -2px;
+}
+
+.partner-ad-slot {
   position: relative;
   display: grid;
   align-items: center;
   justify-items: center;
-  width: 400px;
+  width: 100%;
   height: 140px;
   min-height: 140px;
   overflow: hidden;
   background: #ffffff;
 }
 
-.home-partner-ad-slot + .home-partner-ad-slot {
+.home-partner-ad-banner .partner-ad-slot {
+  width: 400px;
+}
+
+.partner-ad-slot + .partner-ad-slot {
   border-left: 1px solid #e3e8f0;
 }
 
-.home-partner-ad-coupang iframe,
-.home-partner-ad-coupang > div {
+.partner-ad-coupang iframe,
+.partner-ad-coupang > div {
   max-width: 100%;
 }
 
-.home-partner-ad-promo {
+.partner-ad-promo {
   padding: 0;
   text-decoration: none;
 }
 
-.home-partner-ad-promo img {
+.partner-ad-promo img {
   display: block;
-  width: 400px;
+  width: 100%;
   height: 140px;
   object-fit: cover;
 }
 
-.home-partner-ad-inquiry {
+.home-partner-ad-banner .partner-ad-promo img {
+  width: 400px;
+}
+
+.partner-ad-inquiry {
   align-content: center;
   gap: 3px;
   color: #303846;
@@ -3629,19 +3646,19 @@ body.home-mode .overview-panel {
   text-decoration: none;
 }
 
-.home-partner-ad-inquiry span {
+.partner-ad-inquiry span {
   color: #687487;
   font-size: 0.8rem;
   font-weight: 900;
 }
 
-.home-partner-ad-inquiry strong {
+.partner-ad-inquiry strong {
   overflow-wrap: anywhere;
   font-size: 0.82rem;
   line-height: 1.2;
 }
 
-.home-partner-ad-inquiry:hover {
+.partner-ad-inquiry:hover {
   background: #f8fafc;
 }
 
@@ -4234,6 +4251,26 @@ body.tool-mode .mode-btn {
 @media (max-width: 760px) {
   body.tool-mode .site-layout {
     width: min(100% - 18px, 1180px);
+  }
+
+  body.tool-mode .tool-partner-ad-banner {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 0;
+  }
+
+  body.tool-mode .tool-partner-ad-banner .partner-ad-slot {
+    height: 96px;
+    min-height: 96px;
+  }
+
+  body.tool-mode .tool-partner-ad-banner .partner-ad-slot + .partner-ad-slot {
+    border-top: 1px solid #e3e8f0;
+    border-left: 0;
+  }
+
+  body.tool-mode .tool-partner-ad-banner .partner-ad-promo img {
+    height: 96px;
   }
 
   body.tool-mode .workspace-panel {
