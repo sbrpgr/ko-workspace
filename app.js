@@ -4829,7 +4829,7 @@ const LIBRARIES = {
 const libraryCache = {};
 const TOOL_FAVORITES_STORAGE_KEY = "koWorkspace.favoriteTools.v1";
 const COUPANG_PARTNERS_SCRIPT_SRC = "https://ads-partners.coupang.com/g.js";
-const HOME_FAVORITES_PROMO_IMAGE_SRC = "/assets/home-favorites-promo.png?v=20260611-02";
+const HOME_FAVORITES_PROMO_IMAGE_SRC = "/assets/home-favorites-promo.png?v=20260701-01";
 const HOME_COUPANG_AD_CONFIG = {
   id: 995014,
   template: "carousel",
@@ -11799,19 +11799,133 @@ function renderExifMetadataRemover(container) {
 }
 
 function renderPdfMerge(container) {
+  const copy =
+    {
+      ko: {
+        addLabel: "PDF 추가 선택",
+        dropHint: "PDF 파일을 하나씩 또는 여러 개씩 추가한 뒤, 목록에서 끌어서 병합 순서를 바꿀 수 있습니다.",
+        orderTitle: "병합 순서",
+        orderHint: "위에서 아래 순서대로 합쳐집니다. 파일을 더 추가해도 기존 목록은 유지됩니다.",
+        merge: "PDF 합치기",
+        clear: "목록 비우기",
+        initialStatus: "PDF 라이브러리를 필요한 순간에만 불러옵니다.",
+        emptyTitle: "아직 추가된 PDF가 없습니다.",
+        emptyHint: "파일을 선택하거나 끌어다 놓으세요.",
+        dragLabel: "드래그해서 순서 변경",
+        up: "위로",
+        down: "아래로",
+        remove: "삭제",
+        unsupported: "지원하지 않는 파일 형식입니다. 파일 형식을 확인해 주세요.",
+        added: (count) => `${count}개 PDF를 목록에 추가했습니다.`,
+        removed: "선택한 PDF를 목록에서 제거했습니다.",
+        reordered: "PDF 병합 순서를 변경했습니다.",
+        cleared: "PDF 목록을 비웠습니다.",
+        needTwo: "병합하려면 PDF 두 개 이상이 필요합니다.",
+        preparing: "PDF 라이브러리를 준비 중입니다.",
+        reading: (name) => `${name} 페이지를 읽는 중입니다.`,
+        done: (count) => `병합 완료 · ${count}개 파일을 하나로 묶었습니다.`,
+        errorStatus: "PDF 병합 중 오류가 발생했습니다.",
+        errorToast: "PDF 병합을 완료하지 못했습니다. 파일 형식과 브라우저 상태를 확인해 주세요.",
+      },
+      en: {
+        addLabel: "Add PDFs",
+        dropHint: "Add PDFs one by one or in batches, then drag the list to change the merge order.",
+        orderTitle: "Merge Order",
+        orderHint: "Files are merged from top to bottom. Adding more files keeps the existing list.",
+        merge: "Merge PDF",
+        clear: "Clear list",
+        initialStatus: "PDF libraries load only when needed.",
+        emptyTitle: "No PDFs added yet.",
+        emptyHint: "Choose files or drop them here.",
+        dragLabel: "Drag to reorder",
+        up: "Up",
+        down: "Down",
+        remove: "Remove",
+        unsupported: "Unsupported file format. Check the file type.",
+        added: (count) => `${count} PDF${count === 1 ? "" : "s"} added to the list.`,
+        removed: "Removed the selected PDF from the list.",
+        reordered: "PDF merge order updated.",
+        cleared: "PDF list cleared.",
+        needTwo: "Add at least two PDFs to merge.",
+        preparing: "Preparing the PDF library.",
+        reading: (name) => `Reading pages from ${name}.`,
+        done: (count) => `Merge complete · ${count} files combined into one PDF.`,
+        errorStatus: "An error occurred while merging PDFs.",
+        errorToast: "Could not merge PDFs. Check the file format and browser state.",
+      },
+      ja: {
+        addLabel: "PDFを追加",
+        dropHint: "PDFを1つずつ、または複数まとめて追加し、一覧をドラッグして結合順を変更できます。",
+        orderTitle: "結合順",
+        orderHint: "上から下の順に結合します。ファイルを追加しても既存の一覧は維持されます。",
+        merge: "PDF結合",
+        clear: "一覧をクリア",
+        initialStatus: "PDFライブラリは必要なタイミングでのみ読み込みます。",
+        emptyTitle: "追加されたPDFはまだありません。",
+        emptyHint: "ファイルを選択するか、ここにドロップしてください。",
+        dragLabel: "ドラッグして順序変更",
+        up: "上へ",
+        down: "下へ",
+        remove: "削除",
+        unsupported: "対応していないファイル形式です。形式を確認してください。",
+        added: (count) => `${count}件のPDFを一覧に追加しました。`,
+        removed: "選択したPDFを一覧から削除しました。",
+        reordered: "PDFの結合順を変更しました。",
+        cleared: "PDF一覧をクリアしました。",
+        needTwo: "結合するにはPDFが2件以上必要です。",
+        preparing: "PDFライブラリを準備しています。",
+        reading: (name) => `${name}のページを読み込んでいます。`,
+        done: (count) => `結合完了 · ${count}件のファイルを1つにまとめました。`,
+        errorStatus: "PDF結合中にエラーが発生しました。",
+        errorToast: "PDF結合を完了できませんでした。ファイル形式とブラウザ状態を確認してください。",
+      },
+      zh: {
+        addLabel: "添加 PDF",
+        dropHint: "可逐个或批量添加 PDF，然后拖动列表调整合并顺序。",
+        orderTitle: "合并顺序",
+        orderHint: "将按从上到下的顺序合并。继续添加文件时会保留现有列表。",
+        merge: "合并 PDF",
+        clear: "清空列表",
+        initialStatus: "PDF 库仅在需要时加载。",
+        emptyTitle: "尚未添加 PDF。",
+        emptyHint: "请选择文件或拖放到此处。",
+        dragLabel: "拖动调整顺序",
+        up: "上移",
+        down: "下移",
+        remove: "删除",
+        unsupported: "不支持的文件格式，请检查文件类型。",
+        added: (count) => `已将 ${count} 个 PDF 添加到列表。`,
+        removed: "已从列表中移除所选 PDF。",
+        reordered: "已更新 PDF 合并顺序。",
+        cleared: "已清空 PDF 列表。",
+        needTwo: "至少需要两个 PDF 才能合并。",
+        preparing: "正在准备 PDF 库。",
+        reading: (name) => `正在读取 ${name} 的页面。`,
+        done: (count) => `合并完成 · 已将 ${count} 个文件合并为一个 PDF。`,
+        errorStatus: "合并 PDF 时发生错误。",
+        errorToast: "未能合并 PDF，请检查文件格式和浏览器状态。",
+      },
+    }[APP_LOCALE] || {};
   container.innerHTML = `
     <div class="tool-section">
       <aside class="action-card">
         <div class="upload-box">
-          <label for="pdfFiles">PDF 여러 개 선택</label>
+          <label for="pdfFiles">${escapeHtml(copy.addLabel)}</label>
           <input id="pdfFiles" type="file" accept="application/pdf" multiple />
-          <p>PDF 파일을 선택하거나 이 영역에 끌어다 놓으면 선택한 순서대로 병합됩니다.</p>
+          <p>${escapeHtml(copy.dropHint)}</p>
         </div>
-        <div id="fileList" class="file-list"></div>
+        <div class="section-heading compact-heading">
+          <div>
+            <h2>${escapeHtml(copy.orderTitle)}</h2>
+            <p class="tool-note">${escapeHtml(copy.orderHint)}</p>
+          </div>
+        </div>
+        <div id="fileList" class="file-list sortable-file-list" aria-live="polite"></div>
         <div class="action-row">
-          <button id="mergeBtn" class="primary-action" type="button">PDF 합치기</button>
+          <button id="mergeBtn" class="primary-action" type="button" disabled>${escapeHtml(copy.merge)}</button>
+          <button id="clearBtn" type="button" disabled>${escapeHtml(copy.clear)}</button>
         </div>
-        <p id="status" class="tool-note">PDF 라이브러리를 필요한 순간에만 불러옵니다.</p>
+        <p id="status" class="tool-note">${escapeHtml(copy.initialStatus)}</p>
       </aside>
     </div>
   `;
@@ -11819,27 +11933,165 @@ function renderPdfMerge(container) {
   const fileInput = container.querySelector("#pdfFiles");
   const fileList = container.querySelector("#fileList");
   const status = container.querySelector("#status");
+  const mergeBtn = container.querySelector("#mergeBtn");
+  const clearBtn = container.querySelector("#clearBtn");
+  const state = {
+    files: [],
+    dragId: "",
+  };
+
+  function addFiles(files) {
+    const pdfFiles = files.filter((file) => matchesFileAccept(file, fileInput.accept));
+    if (pdfFiles.length === 0) {
+      showToast(copy.unsupported);
+      return;
+    }
+
+    pdfFiles.forEach((file) => {
+      state.files.push({
+        id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        file,
+      });
+    });
+    fileInput.value = "";
+    renderFileQueue();
+    status.textContent = copy.added(pdfFiles.length);
+  }
+
+  function renderFileQueue() {
+    if (state.files.length === 0) {
+      fileList.innerHTML = `<div class="file-item file-item-empty"><span>${escapeHtml(copy.emptyTitle)}</span><span>${escapeHtml(copy.emptyHint)}</span></div>`;
+    } else {
+      fileList.innerHTML = state.files
+        .map(({ id, file }, index) => {
+          const first = index === 0;
+          const last = index === state.files.length - 1;
+          return `
+            <div class="file-item sortable-file-item" draggable="true" data-file-id="${escapeHtml(id)}">
+              <button class="drag-handle" type="button" aria-label="${escapeHtml(copy.dragLabel)}" title="${escapeHtml(copy.dragLabel)}">↕</button>
+              <span class="file-order">${index + 1}</span>
+              <span class="file-main">
+                <strong>${escapeHtml(file.name)}</strong>
+                <small>${formatBytes(file.size)}</small>
+              </span>
+              <span class="file-actions">
+                <button type="button" data-action="up" data-file-id="${escapeHtml(id)}" ${first ? "disabled" : ""}>${escapeHtml(copy.up)}</button>
+                <button type="button" data-action="down" data-file-id="${escapeHtml(id)}" ${last ? "disabled" : ""}>${escapeHtml(copy.down)}</button>
+                <button type="button" data-action="remove" data-file-id="${escapeHtml(id)}">${escapeHtml(copy.remove)}</button>
+              </span>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    mergeBtn.disabled = state.files.length < 2;
+    clearBtn.disabled = state.files.length === 0;
+  }
+
+  function findFileIndex(id) {
+    return state.files.findIndex((item) => item.id === id);
+  }
+
+  function moveFile(id, nextIndex) {
+    const currentIndex = findFileIndex(id);
+    if (currentIndex < 0) return;
+    const targetIndex = Math.max(0, Math.min(state.files.length - 1, nextIndex));
+    if (currentIndex === targetIndex) return;
+    const [item] = state.files.splice(currentIndex, 1);
+    state.files.splice(targetIndex, 0, item);
+    renderFileQueue();
+  }
 
   fileInput.addEventListener("change", () => {
-    fileList.innerHTML = Array.from(fileInput.files)
-      .map((file, index) => `<div class="file-item"><span>${index + 1}. ${escapeHtml(file.name)}</span><span>${formatBytes(file.size)}</span></div>`)
-      .join("");
+    addFiles(Array.from(fileInput.files || []));
+  });
+
+  fileList.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-action]");
+    if (!button) return;
+    const id = button.dataset.fileId;
+    const index = findFileIndex(id);
+    if (index < 0) return;
+
+    if (button.dataset.action === "up") {
+      moveFile(id, index - 1);
+    } else if (button.dataset.action === "down") {
+      moveFile(id, index + 1);
+    } else if (button.dataset.action === "remove") {
+      state.files.splice(index, 1);
+      renderFileQueue();
+      status.textContent = copy.removed;
+    }
+  });
+
+  fileList.addEventListener("dragstart", (event) => {
+    const item = event.target.closest(".sortable-file-item");
+    if (!item) return;
+    state.dragId = item.dataset.fileId;
+    item.classList.add("is-dragging");
+    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.setData("text/plain", state.dragId);
+  });
+
+  fileList.addEventListener("dragend", () => {
+    state.dragId = "";
+    fileList.querySelectorAll(".sortable-file-item").forEach((item) => item.classList.remove("is-dragging", "is-drop-target"));
+  });
+
+  fileList.addEventListener("dragover", (event) => {
+    const item = event.target.closest(".sortable-file-item");
+    if (!item || !state.dragId || item.dataset.fileId === state.dragId) return;
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+    fileList.querySelectorAll(".sortable-file-item").forEach((node) => node.classList.toggle("is-drop-target", node === item));
+  });
+
+  fileList.addEventListener("dragleave", (event) => {
+    const item = event.target.closest(".sortable-file-item");
+    if (!item || (event.relatedTarget && item.contains(event.relatedTarget))) return;
+    item.classList.remove("is-drop-target");
+  });
+
+  fileList.addEventListener("drop", (event) => {
+    const item = event.target.closest(".sortable-file-item");
+    if (!item || !state.dragId || item.dataset.fileId === state.dragId) return;
+    event.preventDefault();
+    const draggedIndex = findFileIndex(state.dragId);
+    const targetIndex = findFileIndex(item.dataset.fileId);
+    if (draggedIndex < 0 || targetIndex < 0) return;
+    const insertAfter = event.clientY > item.getBoundingClientRect().top + item.getBoundingClientRect().height / 2;
+    const nextIndex =
+      draggedIndex < targetIndex && !insertAfter
+        ? targetIndex - 1
+        : draggedIndex > targetIndex && insertAfter
+          ? targetIndex + 1
+          : targetIndex;
+    moveFile(state.dragId, nextIndex);
+    status.textContent = copy.reordered;
+  });
+
+  clearBtn.addEventListener("click", () => {
+    state.files = [];
+    fileInput.value = "";
+    renderFileQueue();
+    status.textContent = copy.cleared;
   });
 
   container.querySelector("#mergeBtn").addEventListener("click", async () => {
-    const files = Array.from(fileInput.files || []);
+    const files = state.files.map((item) => item.file);
     if (files.length < 2) {
-      showToast("병합하려면 PDF 두 개 이상이 필요합니다.");
+      showToast(copy.needTwo);
       return;
     }
 
     try {
-      status.textContent = "PDF 라이브러리를 준비 중입니다.";
+      status.textContent = copy.preparing;
       await loadLibrary("pdfLib");
       const mergedPdf = await PDFLib.PDFDocument.create();
 
       for (const file of files) {
-        status.textContent = `${file.name} 페이지를 읽는 중입니다.`;
+        status.textContent = copy.reading(file.name);
         const sourcePdf = await PDFLib.PDFDocument.load(await file.arrayBuffer());
         const pageIndices = sourcePdf.getPageIndices();
         const pages = await mergedPdf.copyPages(sourcePdf, pageIndices);
@@ -11848,12 +12100,14 @@ function renderPdfMerge(container) {
 
       const bytes = await mergedPdf.save();
       downloadBlob(new Blob([bytes], { type: "application/pdf" }), "merged.pdf");
-      status.textContent = `병합 완료 · ${files.length}개 파일을 하나로 묶었습니다.`;
+      status.textContent = copy.done(files.length);
     } catch (error) {
-      status.textContent = "PDF 병합 중 오류가 발생했습니다.";
-      showToast("PDF 병합을 완료하지 못했습니다. 파일 형식과 브라우저 상태를 확인해 주세요.");
+      status.textContent = copy.errorStatus;
+      showToast(copy.errorToast);
     }
   });
+
+  renderFileQueue();
 }
 
 function renderPdfSplit(container) {

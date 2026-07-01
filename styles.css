@@ -1595,6 +1595,81 @@ body.home-mode .tool-workspace {
   font-size: 0.88rem;
 }
 
+.sortable-file-list {
+  gap: 10px;
+}
+
+.sortable-file-item {
+  display: grid;
+  grid-template-columns: 34px 34px minmax(0, 1fr) auto;
+  align-items: center;
+  cursor: grab;
+}
+
+.sortable-file-item.is-dragging {
+  opacity: 0.62;
+}
+
+.sortable-file-item.is-drop-target {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(229, 50, 45, 0.1);
+}
+
+.drag-handle {
+  min-width: 0;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  cursor: grab;
+}
+
+.file-order {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: #f2f5f9;
+  color: #303846;
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.file-main {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.file-main strong {
+  overflow-wrap: anywhere;
+  color: #20242d;
+  font-size: 0.92rem;
+}
+
+.file-main small {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.file-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.file-actions button {
+  min-height: 32px;
+  padding: 0 10px;
+  font-size: 0.78rem;
+}
+
+.file-item-empty {
+  color: var(--muted);
+}
+
 .canvas-frame,
 .image-frame,
 .qr-frame,
@@ -4251,6 +4326,19 @@ body.tool-mode .mode-btn {
 @media (max-width: 760px) {
   body.tool-mode .site-layout {
     width: min(100% - 18px, 1180px);
+  }
+
+  .sortable-file-item {
+    grid-template-columns: 32px 30px minmax(0, 1fr);
+  }
+
+  .sortable-file-item .file-actions {
+    grid-column: 1 / -1;
+    justify-content: stretch;
+  }
+
+  .sortable-file-item .file-actions button {
+    flex: 1 1 84px;
   }
 
   body.tool-mode .tool-partner-ad-banner {
