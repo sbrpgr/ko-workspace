@@ -17,7 +17,7 @@ Current production baseline:
 - Latest English SEO polish commit: `0385e6d Polish English SEO copy`
 - Latest foreign-language tool localization/E2E commit: `97baf2f Complete foreign tool localization testing fixes`
 - Latest platform UI/banner deployment commit: `c135df4 Add favorite tools promo banner`
-- Current static asset cache version: `20260701-01`
+- Current static asset cache version: `20260713-01`
 - English version deployed under `/en/`; Japanese and Simplified Chinese versions deployed under `/ja/` and `/zh/` on the same domain, with Korean routes preserved
 - 2026-06-07 platform UI update includes screenshot-saver fixed save directories, browser-local favorite tools, a home partner ad banner with Coupang, temporary favorite-tools promo image, inquiry slot, and a shortened support CTA
 - 2026-06-11 tool page UI update adds the same separated partner banner directly below the tool hero title and description, before the tool workspace.
@@ -93,7 +93,7 @@ Core constraints:
 - `CSV 엑셀 변환기`
   - Converts CSV and TSV files to XLSX using browser-side SheetJS loaded on demand
   - Converts XLSX sheets to CSV, with first-sheet or all-sheets export options
-  - Supports multiple uploaded files, per-result downloads, and ZIP download for multiple results
+  - Supports adding files one by one or in multiple batches, removing individual files, per-result downloads, and ZIP download for multiple results
   - Supports UTF-8 and CP949/EUC-KR CSV reading, delimiter auto-detection, empty-row removal, and text preservation for leading-zero IDs, phone numbers, postal codes, and long numeric strings
   - Keeps selected spreadsheet files and generated results in the browser; no application-server upload or analytics content parameters
 - `글자수 세기`
@@ -145,6 +145,9 @@ Core constraints:
 - `PDF 페이지 추출`
 - `PDF 페이지 삭제`
 - `이미지 PDF 변환`
+  - Supports adding images one by one or in multiple batches while preserving the existing queue
+  - Lets users reorder images by dragging or using up/down buttons, remove individual images, and clear the queue
+  - Creates standard A4 pages with automatic portrait/landscape orientation, preserves image aspect ratio, and centers images without cropping
 - `PDF 이미지 변환`
 
 ### Subtitle

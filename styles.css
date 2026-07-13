@@ -1670,6 +1670,17 @@ body.home-mode .tool-workspace {
   color: var(--muted);
 }
 
+.batch-file-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.image-pdf-a4-note span {
+  color: #4f5968;
+  font-size: 0.88rem;
+}
+
 .canvas-frame,
 .image-frame,
 .qr-frame,
@@ -4339,6 +4350,18 @@ body.tool-mode .mode-btn {
 
   .sortable-file-item .file-actions button {
     flex: 1 1 84px;
+  }
+
+  .batch-file-item {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .batch-file-item .file-actions {
+    justify-content: stretch;
+  }
+
+  .batch-file-item .file-actions button {
+    flex: 1 1 auto;
   }
 
   body.tool-mode .tool-partner-ad-banner {

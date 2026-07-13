@@ -35,6 +35,7 @@ const API_NAMES = [
   "convertSubtitle",
   "shiftSubtitleTimings",
   "parsePageRanges",
+  "getA4ImagePlacement",
   "AUDIO_TRANSCRIPTION_MODEL_PROFILES",
   "AUDIO_TRANSCRIPTION_DEFAULT_PROFILE",
   "renderToolTitle",
@@ -424,6 +425,16 @@ function buildLogicTests(api, app) {
     test("PDF page range parser removes duplicates and out-of-range pages", () => {
       assert(api.parsePageRanges("1-3,2,5,99", 5).join(",") === "0,1,2,4", "page range parsing failed");
     }),
+    test("image PDF placement fits portrait and landscape A4 pages", () => {
+      const portrait = api.getA4ImagePlacement(1000, 2000);
+      const landscape = api.getA4ImagePlacement(2000, 1000);
+      assert(portrait.pageWidth === 595.28 && portrait.pageHeight === 841.89, "portrait A4 size failed");
+      assert(landscape.pageWidth === 841.89 && landscape.pageHeight === 595.28, "landscape A4 size failed");
+      assert(Math.abs(portrait.width / portrait.height - 0.5) < 0.0001, "portrait aspect ratio changed");
+      assert(Math.abs(landscape.width / landscape.height - 2) < 0.0001, "landscape aspect ratio changed");
+      assert(portrait.x >= portrait.margin && portrait.y >= portrait.margin, "portrait image exceeds A4 margins");
+      assert(landscape.x >= landscape.margin && landscape.y >= landscape.margin, "landscape image exceeds A4 margins");
+    }),
     test("audio transcript sentence breaker splits sentence endings", () => {
       const result = api.breakAudioTranscriptSentences("첫 문장입니다. 다음 문장인가요?마지막 문장입니다. 버전 1.2입니다");
       assert(
@@ -694,6 +705,31 @@ function buildUploadUxTests(app) {
       assert(app.includes("subtitle-drop-zone"), "subtitle drop zone missing");
       assert(app.includes("function bindFileDropZone"), "shared drop binding missing");
       assert(app.includes("function setFileInputFiles"), "drop file setter missing");
+    }),
+    test("ordered multi-file tools keep appendable queues", () => {
+      const imageStart = app.indexOf("function renderImageToPdf");
+      const imageEnd = app.indexOf("function renderPdfToImage", imageStart);
+      const imageSource = app.slice(imageStart, imageEnd);
+      assert(imageSource.includes("state.files.push"), "image PDF queue does not append files");
+      assert(imageSource.includes('fileInput.value = ""'), "image PDF picker is not reset for repeated additions");
+      assert(imageSource.includes("addFiles(Array.from(fileInput.files || []))"), "image PDF picker does not feed the append queue");
+      assert(imageSource.includes('class="file-item sortable-file-item"'), "image PDF sortable queue missing");
+      assert(imageSource.includes('data-action="remove"'), "image PDF queue remove action missing");
+      assert(imageSource.includes("state.files.map((item) => item.file)"), "image PDF output does not use queue order");
+
+      const spreadsheetStart = app.indexOf("function renderCsvExcelConverter");
+      const spreadsheetEnd = app.indexOf("function convertSpreadsheetFile", spreadsheetStart);
+      const spreadsheetSource = app.slice(spreadsheetStart, spreadsheetEnd);
+      assert(spreadsheetSource.includes("state.files.push(...addedFiles)"), "spreadsheet queue does not append files");
+      assert(spreadsheetSource.includes('fileInput.value = ""'), "spreadsheet picker is not reset for repeated additions");
+      assert(spreadsheetSource.includes("data-file-index"), "spreadsheet queue remove action missing");
+    }),
+    test("image PDF output uses A4 page dimensions", () => {
+      const imageStart = app.indexOf("function renderImageToPdf");
+      const imageEnd = app.indexOf("function renderPdfToImage", imageStart);
+      const imageSource = app.slice(imageStart, imageEnd);
+      assert(imageSource.includes("getA4ImagePlacement(pageImage.width, pageImage.height)"), "image PDF A4 placement missing");
+      assert(imageSource.includes("pdf.addPage([placement.pageWidth, placement.pageHeight])"), "image PDF A4 page creation missing");
     }),
   ];
 }

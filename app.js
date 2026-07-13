@@ -9728,6 +9728,45 @@ const SPREADSHEET_CONVERTER_MAX_FILE_BYTES = 25 * 1024 * 1024;
 const SPREADSHEET_CONVERTER_MAX_TOTAL_BYTES = 120 * 1024 * 1024;
 
 function renderCsvExcelConverter(container) {
+  const queueCopy =
+    {
+      ko: {
+        addLabel: "파일 추가 또는 끌어다 놓기",
+        addHint: "CSV, TSV, XLSX 파일을 하나씩 또는 여러 번 나눠 추가할 수 있습니다. 기존 목록은 유지됩니다.",
+        empty: "아직 추가한 파일이 없습니다.",
+        remove: "삭제",
+        unsupported: "변환 가능한 CSV, TSV, XLSX 파일을 추가해 주세요.",
+        added: (count) => `${count}개 파일을 목록에 추가했습니다.`,
+        removed: "선택한 파일을 목록에서 제거했습니다.",
+      },
+      en: {
+        addLabel: "Add files or drop them here",
+        addHint: "Add CSV, TSV, and XLSX files one by one or in batches. Existing files stay in the list.",
+        empty: "No files added yet.",
+        remove: "Remove",
+        unsupported: "Add a supported CSV, TSV, or XLSX file.",
+        added: (count) => `${count} file${count === 1 ? "" : "s"} added to the list.`,
+        removed: "Removed the selected file from the list.",
+      },
+      ja: {
+        addLabel: "ファイルを追加またはドロップ",
+        addHint: "CSV、TSV、XLSXファイルを1つずつ、または複数回に分けて追加できます。既存の一覧は維持されます。",
+        empty: "追加されたファイルはまだありません。",
+        remove: "削除",
+        unsupported: "対応するCSV、TSV、XLSXファイルを追加してください。",
+        added: (count) => `${count}件のファイルを一覧に追加しました。`,
+        removed: "選択したファイルを一覧から削除しました。",
+      },
+      zh: {
+        addLabel: "添加文件或拖放到此处",
+        addHint: "可逐个或分批添加 CSV、TSV、XLSX 文件，现有列表会保留。",
+        empty: "尚未添加文件。",
+        remove: "删除",
+        unsupported: "请添加支持的 CSV、TSV 或 XLSX 文件。",
+        added: (count) => `已将 ${count} 个文件添加到列表。`,
+        removed: "已从列表中移除所选文件。",
+      },
+    }[APP_LOCALE] || {};
   container.innerHTML = `
     <div class="tool-section spreadsheet-tool">
       <article class="input-card">
@@ -9739,9 +9778,9 @@ function renderCsvExcelConverter(container) {
           <button id="clearSpreadsheetFilesBtn" type="button">초기화</button>
         </div>
         <div class="upload-box spreadsheet-upload-box">
-          <label for="spreadsheetFiles">파일 선택 또는 끌어다 놓기</label>
+          <label for="spreadsheetFiles">${escapeHtml(queueCopy.addLabel)}</label>
           <input id="spreadsheetFiles" type="file" accept=".csv,.tsv,.xlsx,text/csv,text/tab-separated-values,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" multiple />
-          <p>CSV, TSV, XLSX 파일을 여러 개 선택할 수 있습니다. 구형 XLS는 첫 버전에서 제외했습니다.</p>
+          <p>${escapeHtml(queueCopy.addHint)}</p>
         </div>
         <div id="spreadsheetFileList" class="file-list" aria-live="polite"></div>
       </article>
@@ -9849,11 +9888,31 @@ function renderCsvExcelConverter(container) {
   }
 
   fileInput.addEventListener("change", () => {
-    state.files = Array.from(fileInput.files || []);
+    const addedFiles = Array.from(fileInput.files || []).filter((file) => getSpreadsheetFileKind(file));
+    fileInput.value = "";
+    if (!addedFiles.length) {
+      showToast(queueCopy.unsupported);
+      return;
+    }
+    state.files.push(...addedFiles);
     state.results = [];
     renderSpreadsheetFileList();
     renderSpreadsheetResults();
     syncSpreadsheetActions();
+    status.textContent = queueCopy.added(addedFiles.length);
+  });
+
+  fileList.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-file-index]");
+    if (!button || state.busy) return;
+    const index = Number(button.dataset.fileIndex);
+    if (!Number.isInteger(index) || !state.files[index]) return;
+    state.files.splice(index, 1);
+    state.results = [];
+    renderSpreadsheetFileList();
+    renderSpreadsheetResults();
+    syncSpreadsheetActions();
+    status.textContent = queueCopy.removed;
   });
 
   clearBtn.addEventListener("click", () => {
@@ -9920,7 +9979,7 @@ function renderCsvExcelConverter(container) {
 
   function renderSpreadsheetFileList() {
     if (!state.files.length) {
-      fileList.innerHTML = `<p class="tool-note">선택한 파일이 없습니다.</p>`;
+      fileList.innerHTML = `<p class="tool-note">${escapeHtml(queueCopy.empty)}</p>`;
       return;
     }
 
@@ -9929,9 +9988,14 @@ function renderCsvExcelConverter(container) {
         const kind = getSpreadsheetFileKind(file);
         const label = kind ? kind.label : "지원 제외";
         return `
-          <div class="file-item">
-            <span>${index + 1}. ${escapeHtml(file.name)}</span>
-            <span>${escapeHtml(label)} · ${formatBytes(file.size)}</span>
+          <div class="file-item batch-file-item">
+            <span class="file-main">
+              <strong>${index + 1}. ${escapeHtml(file.name)}</strong>
+              <small>${escapeHtml(label)} · ${formatBytes(file.size)}</small>
+            </span>
+            <span class="file-actions">
+              <button type="button" data-file-index="${index}" ${state.busy ? "disabled" : ""}>${escapeHtml(queueCopy.remove)}</button>
+            </span>
           </div>
         `;
       })
@@ -9988,6 +10052,7 @@ function renderCsvExcelConverter(container) {
   }
 
   function syncSpreadsheetActions() {
+    fileInput.disabled = state.busy;
     convertBtn.disabled = state.busy || !state.files.length;
     clearBtn.disabled = state.busy || !state.files.length;
     downloadZipBtn.disabled = state.busy || !state.results.length;
@@ -12287,20 +12352,165 @@ function renderPdfDeletePages(container) {
   });
 }
 
+function getA4ImagePlacement(imageWidth, imageHeight) {
+  const a4Portrait = [595.28, 841.89];
+  const margin = 28.35;
+  const pageSize = imageWidth > imageHeight ? [a4Portrait[1], a4Portrait[0]] : a4Portrait;
+  const [pageWidth, pageHeight] = pageSize;
+  const scale = Math.min((pageWidth - margin * 2) / imageWidth, (pageHeight - margin * 2) / imageHeight);
+  const width = imageWidth * scale;
+  const height = imageHeight * scale;
+  return {
+    pageWidth,
+    pageHeight,
+    x: (pageWidth - width) / 2,
+    y: (pageHeight - height) / 2,
+    width,
+    height,
+    margin,
+  };
+}
+
 function renderImageToPdf(container) {
+  const copy =
+    {
+      ko: {
+        addLabel: "이미지 추가 선택",
+        dropHint: "이미지를 한 장씩 또는 여러 장씩 계속 추가할 수 있습니다. 추가한 뒤 목록에서 순서를 바꾸세요.",
+        orderTitle: "PDF 페이지 순서",
+        orderHint: "위에서 아래 순서대로 PDF 페이지가 만들어집니다. 새 이미지를 추가해도 기존 목록은 유지됩니다.",
+        a4Title: "A4 자동 맞춤",
+        a4Hint: "세로 이미지는 세로 A4, 가로 이미지는 가로 A4에 비율을 유지한 채 잘리지 않도록 중앙에 맞춥니다.",
+        make: "A4 PDF 만들기",
+        clear: "목록 비우기",
+        initialStatus: "이미지를 추가하면 A4 페이지 순서대로 PDF를 만듭니다.",
+        emptyTitle: "아직 추가한 이미지가 없습니다.",
+        emptyHint: "이미지를 선택하거나 한 장씩 끌어다 놓으세요.",
+        dragLabel: "드래그해서 순서 변경",
+        up: "위로",
+        down: "아래로",
+        remove: "삭제",
+        unsupported: "지원하는 JPG, PNG, WEBP 이미지를 추가해 주세요.",
+        added: (count) => `${count}장 이미지를 목록에 추가했습니다.`,
+        removed: "선택한 이미지를 목록에서 제거했습니다.",
+        reordered: "PDF 페이지 순서를 변경했습니다.",
+        cleared: "이미지 목록을 비웠습니다.",
+        needImage: "이미지를 먼저 추가해 주세요.",
+        preparing: "PDF 라이브러리를 준비 중입니다.",
+        reading: (name) => `${name} 이미지를 A4 페이지에 맞추는 중입니다.`,
+        done: (count) => `${count}장 이미지를 A4 PDF로 묶었습니다.`,
+        errorStatus: "이미지 PDF 변환 중 오류가 발생했습니다.",
+        errorToast: "이미지 PDF 변환을 완료하지 못했습니다. 파일 형식과 브라우저 메모리 상태를 확인해 주세요.",
+      },
+      en: {
+        addLabel: "Add images",
+        dropHint: "Add images one by one or in batches, then reorder them in the list.",
+        orderTitle: "PDF Page Order",
+        orderHint: "PDF pages follow the list from top to bottom. Adding more images keeps the existing list.",
+        a4Title: "Automatic A4 fit",
+        a4Hint: "Portrait images use portrait A4 and landscape images use landscape A4. Each image keeps its aspect ratio and is centered without cropping.",
+        make: "Create A4 PDF",
+        clear: "Clear list",
+        initialStatus: "Add images to create an A4 PDF in the listed order.",
+        emptyTitle: "No images added yet.",
+        emptyHint: "Choose images or drop them here one at a time.",
+        dragLabel: "Drag to reorder",
+        up: "Up",
+        down: "Down",
+        remove: "Remove",
+        unsupported: "Add a supported JPG, PNG, or WEBP image.",
+        added: (count) => `${count} image${count === 1 ? "" : "s"} added to the list.`,
+        removed: "Removed the selected image from the list.",
+        reordered: "PDF page order updated.",
+        cleared: "Image list cleared.",
+        needImage: "Add an image first.",
+        preparing: "Preparing the PDF library.",
+        reading: (name) => `Fitting ${name} to an A4 page.`,
+        done: (count) => `Created an A4 PDF from ${count} image${count === 1 ? "" : "s"}.`,
+        errorStatus: "An error occurred while converting images to PDF.",
+        errorToast: "Could not convert the images to PDF. Check the file format and browser memory.",
+      },
+      ja: {
+        addLabel: "画像を追加",
+        dropHint: "画像を1枚ずつ、または複数まとめて追加し、一覧で順序を変更できます。",
+        orderTitle: "PDFページ順",
+        orderHint: "上から下の順にPDFページを作成します。画像を追加しても既存の一覧は維持されます。",
+        a4Title: "A4自動フィット",
+        a4Hint: "縦画像は縦A4、横画像は横A4に、縦横比を保ったまま切れないよう中央配置します。",
+        make: "A4 PDFを作成",
+        clear: "一覧をクリア",
+        initialStatus: "画像を追加すると、一覧の順序でA4 PDFを作成します。",
+        emptyTitle: "追加された画像はまだありません。",
+        emptyHint: "画像を選択するか、1枚ずつここにドロップしてください。",
+        dragLabel: "ドラッグして順序変更",
+        up: "上へ",
+        down: "下へ",
+        remove: "削除",
+        unsupported: "対応するJPG、PNG、WEBP画像を追加してください。",
+        added: (count) => `${count}枚の画像を一覧に追加しました。`,
+        removed: "選択した画像を一覧から削除しました。",
+        reordered: "PDFページ順を変更しました。",
+        cleared: "画像一覧をクリアしました。",
+        needImage: "先に画像を追加してください。",
+        preparing: "PDFライブラリを準備しています。",
+        reading: (name) => `${name}をA4ページに合わせています。`,
+        done: (count) => `${count}枚の画像をA4 PDFにまとめました。`,
+        errorStatus: "画像のPDF変換中にエラーが発生しました。",
+        errorToast: "画像のPDF変換を完了できませんでした。ファイル形式とブラウザのメモリ状態を確認してください。",
+      },
+      zh: {
+        addLabel: "添加图片",
+        dropHint: "可逐张或批量添加图片，然后在列表中调整顺序。",
+        orderTitle: "PDF 页面顺序",
+        orderHint: "PDF 将按列表从上到下生成页面，继续添加图片时会保留现有列表。",
+        a4Title: "自动适配 A4",
+        a4Hint: "竖图使用纵向 A4，横图使用横向 A4，并保持宽高比居中放置，不裁切图片。",
+        make: "生成 A4 PDF",
+        clear: "清空列表",
+        initialStatus: "添加图片后，将按列表顺序生成 A4 PDF。",
+        emptyTitle: "尚未添加图片。",
+        emptyHint: "请选择图片或逐张拖放到此处。",
+        dragLabel: "拖动调整顺序",
+        up: "上移",
+        down: "下移",
+        remove: "删除",
+        unsupported: "请添加支持的 JPG、PNG 或 WEBP 图片。",
+        added: (count) => `已将 ${count} 张图片添加到列表。`,
+        removed: "已从列表中移除所选图片。",
+        reordered: "已更新 PDF 页面顺序。",
+        cleared: "已清空图片列表。",
+        needImage: "请先添加图片。",
+        preparing: "正在准备 PDF 库。",
+        reading: (name) => `正在将 ${name} 适配到 A4 页面。`,
+        done: (count) => `已将 ${count} 张图片合成为 A4 PDF。`,
+        errorStatus: "图片转 PDF 时发生错误。",
+        errorToast: "未能将图片转换为 PDF，请检查文件格式和浏览器内存状态。",
+      },
+    }[APP_LOCALE] || {};
   container.innerHTML = `
     <div class="tool-section">
       <aside class="action-card">
         <div class="upload-box">
-          <label for="imageFiles">이미지 여러 장 선택</label>
-          <input id="imageFiles" type="file" accept="image/*" multiple />
-          <p>이미지를 선택하거나 이 영역에 끌어다 놓으면 선택한 순서대로 PDF 페이지를 만듭니다.</p>
+          <label for="imageFiles">${escapeHtml(copy.addLabel)}</label>
+          <input id="imageFiles" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" multiple />
+          <p>${escapeHtml(copy.dropHint)}</p>
         </div>
-        <div id="fileList" class="file-list"></div>
+        <div class="notice-card image-pdf-a4-note">
+          <strong>${escapeHtml(copy.a4Title)}</strong>
+          <span>${escapeHtml(copy.a4Hint)}</span>
+        </div>
+        <div class="section-heading compact-heading">
+          <div>
+            <h2>${escapeHtml(copy.orderTitle)}</h2>
+            <p class="tool-note">${escapeHtml(copy.orderHint)}</p>
+          </div>
+        </div>
+        <div id="fileList" class="file-list sortable-file-list" aria-live="polite"></div>
         <div class="action-row">
-          <button id="makeBtn" class="primary-action" type="button">PDF 만들기</button>
+          <button id="makeBtn" class="primary-action" type="button" disabled>${escapeHtml(copy.make)}</button>
+          <button id="clearBtn" type="button" disabled>${escapeHtml(copy.clear)}</button>
         </div>
-        <p id="status" class="tool-note">이미지 업로드 후 PDF 생성 버튼을 누르세요.</p>
+        <p id="status" class="tool-note">${escapeHtml(copy.initialStatus)}</p>
       </aside>
     </div>
   `;
@@ -12308,25 +12518,171 @@ function renderImageToPdf(container) {
   const fileInput = container.querySelector("#imageFiles");
   const fileList = container.querySelector("#fileList");
   const status = container.querySelector("#status");
+  const makeBtn = container.querySelector("#makeBtn");
+  const clearBtn = container.querySelector("#clearBtn");
+  const state = {
+    files: [],
+    dragId: "",
+    busy: false,
+  };
 
-  fileInput.addEventListener("change", () => {
-    fileList.innerHTML = Array.from(fileInput.files)
-      .map((file, index) => `<div class="file-item"><span>${index + 1}. ${escapeHtml(file.name)}</span><span>${formatBytes(file.size)}</span></div>`)
-      .join("");
-  });
-
-  container.querySelector("#makeBtn").addEventListener("click", async () => {
-    const files = Array.from(fileInput.files || []);
-    if (files.length === 0) {
-      showToast("이미지를 먼저 선택해 주세요.");
+  function addFiles(files) {
+    const imageFiles = files.filter((file) => matchesFileAccept(file, fileInput.accept));
+    fileInput.value = "";
+    if (!imageFiles.length) {
+      showToast(copy.unsupported);
       return;
     }
 
+    imageFiles.forEach((file) => {
+      state.files.push({
+        id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        file,
+      });
+    });
+    renderFileQueue();
+    status.textContent = copy.added(imageFiles.length);
+  }
+
+  function renderFileQueue() {
+    if (!state.files.length) {
+      fileList.innerHTML = `<div class="file-item file-item-empty"><span>${escapeHtml(copy.emptyTitle)}</span><span>${escapeHtml(copy.emptyHint)}</span></div>`;
+    } else {
+      fileList.innerHTML = state.files
+        .map(({ id, file }, index) => {
+          const first = index === 0;
+          const last = index === state.files.length - 1;
+          return `
+            <div class="file-item sortable-file-item" draggable="${state.busy ? "false" : "true"}" data-file-id="${escapeHtml(id)}">
+              <button class="drag-handle" type="button" aria-label="${escapeHtml(copy.dragLabel)}" title="${escapeHtml(copy.dragLabel)}" ${state.busy ? "disabled" : ""}>↕</button>
+              <span class="file-order">${index + 1}</span>
+              <span class="file-main">
+                <strong>${escapeHtml(file.name)}</strong>
+                <small>${formatBytes(file.size)}</small>
+              </span>
+              <span class="file-actions">
+                <button type="button" data-action="up" data-file-id="${escapeHtml(id)}" ${first || state.busy ? "disabled" : ""}>${escapeHtml(copy.up)}</button>
+                <button type="button" data-action="down" data-file-id="${escapeHtml(id)}" ${last || state.busy ? "disabled" : ""}>${escapeHtml(copy.down)}</button>
+                <button type="button" data-action="remove" data-file-id="${escapeHtml(id)}" ${state.busy ? "disabled" : ""}>${escapeHtml(copy.remove)}</button>
+              </span>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    fileInput.disabled = state.busy;
+    makeBtn.disabled = state.busy || state.files.length === 0;
+    clearBtn.disabled = state.busy || state.files.length === 0;
+  }
+
+  function findFileIndex(id) {
+    return state.files.findIndex((item) => item.id === id);
+  }
+
+  function moveFile(id, nextIndex) {
+    const currentIndex = findFileIndex(id);
+    if (currentIndex < 0) return;
+    const targetIndex = Math.max(0, Math.min(state.files.length - 1, nextIndex));
+    if (currentIndex === targetIndex) return;
+    const [item] = state.files.splice(currentIndex, 1);
+    state.files.splice(targetIndex, 0, item);
+    renderFileQueue();
+  }
+
+  fileInput.addEventListener("change", () => {
+    addFiles(Array.from(fileInput.files || []));
+  });
+
+  fileList.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-action]");
+    if (!button || state.busy) return;
+    const id = button.dataset.fileId;
+    const index = findFileIndex(id);
+    if (index < 0) return;
+
+    if (button.dataset.action === "up") {
+      moveFile(id, index - 1);
+      status.textContent = copy.reordered;
+    } else if (button.dataset.action === "down") {
+      moveFile(id, index + 1);
+      status.textContent = copy.reordered;
+    } else if (button.dataset.action === "remove") {
+      state.files.splice(index, 1);
+      renderFileQueue();
+      status.textContent = copy.removed;
+    }
+  });
+
+  fileList.addEventListener("dragstart", (event) => {
+    const item = event.target.closest(".sortable-file-item");
+    if (!item || state.busy) return;
+    state.dragId = item.dataset.fileId;
+    item.classList.add("is-dragging");
+    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.setData("text/plain", state.dragId);
+  });
+
+  fileList.addEventListener("dragend", () => {
+    state.dragId = "";
+    fileList.querySelectorAll(".sortable-file-item").forEach((item) => item.classList.remove("is-dragging", "is-drop-target"));
+  });
+
+  fileList.addEventListener("dragover", (event) => {
+    const item = event.target.closest(".sortable-file-item");
+    if (!item || !state.dragId || item.dataset.fileId === state.dragId) return;
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+    fileList.querySelectorAll(".sortable-file-item").forEach((node) => node.classList.toggle("is-drop-target", node === item));
+  });
+
+  fileList.addEventListener("dragleave", (event) => {
+    const item = event.target.closest(".sortable-file-item");
+    if (!item || (event.relatedTarget && item.contains(event.relatedTarget))) return;
+    item.classList.remove("is-drop-target");
+  });
+
+  fileList.addEventListener("drop", (event) => {
+    const item = event.target.closest(".sortable-file-item");
+    if (!item || !state.dragId || item.dataset.fileId === state.dragId) return;
+    event.preventDefault();
+    const draggedIndex = findFileIndex(state.dragId);
+    const targetIndex = findFileIndex(item.dataset.fileId);
+    if (draggedIndex < 0 || targetIndex < 0) return;
+    const insertAfter = event.clientY > item.getBoundingClientRect().top + item.getBoundingClientRect().height / 2;
+    const nextIndex =
+      draggedIndex < targetIndex && !insertAfter
+        ? targetIndex - 1
+        : draggedIndex > targetIndex && insertAfter
+          ? targetIndex + 1
+          : targetIndex;
+    moveFile(state.dragId, nextIndex);
+    status.textContent = copy.reordered;
+  });
+
+  clearBtn.addEventListener("click", () => {
+    state.files = [];
+    fileInput.value = "";
+    renderFileQueue();
+    status.textContent = copy.cleared;
+  });
+
+  makeBtn.addEventListener("click", async () => {
+    const files = state.files.map((item) => item.file);
+    if (files.length === 0) {
+      showToast(copy.needImage);
+      return;
+    }
+
+    state.busy = true;
+    renderFileQueue();
     try {
+      status.textContent = copy.preparing;
       await loadLibrary("pdfLib");
       const pdf = await PDFLib.PDFDocument.create();
 
       for (const file of files) {
+        status.textContent = copy.reading(file.name);
         let pageImage;
         if (file.type === "image/png") {
           pageImage = await pdf.embedPng(new Uint8Array(await file.arrayBuffer()));
@@ -12336,23 +12692,30 @@ function renderImageToPdf(container) {
           const bytes = await convertImageFileToPngBytes(file);
           pageImage = await pdf.embedPng(bytes);
         }
-        const page = pdf.addPage([pageImage.width + 40, pageImage.height + 40]);
+        const placement = getA4ImagePlacement(pageImage.width, pageImage.height);
+        const page = pdf.addPage([placement.pageWidth, placement.pageHeight]);
         page.drawImage(pageImage, {
-          x: 20,
-          y: 20,
-          width: pageImage.width,
-          height: pageImage.height,
+          x: placement.x,
+          y: placement.y,
+          width: placement.width,
+          height: placement.height,
         });
       }
 
       const pdfBytes = await pdf.save();
       downloadBlob(new Blob([pdfBytes], { type: "application/pdf" }), "images-to-pdf.pdf");
-      status.textContent = `${files.length}장 이미지를 PDF로 묶었습니다.`;
+      status.textContent = copy.done(files.length);
     } catch (error) {
-      status.textContent = "이미지 PDF 변환 중 오류가 발생했습니다.";
-      showToast("이미지 PDF 변환을 완료하지 못했습니다.");
+      status.textContent = copy.errorStatus;
+      trackToolError(TOOL_MAP["image-to-pdf"], error, "convert_images_to_pdf");
+      showToast(copy.errorToast);
+    } finally {
+      state.busy = false;
+      renderFileQueue();
     }
   });
+
+  renderFileQueue();
 }
 
 function renderPdfToImage(container) {
