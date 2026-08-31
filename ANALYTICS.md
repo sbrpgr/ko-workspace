@@ -17,7 +17,7 @@
 
 ## Never Send
 
-Market cross-promotion (2026-08-31): outbound links use `utm_source=ko-workspace`, `utm_medium=referral`, `utm_campaign=spirit_latest`, and public article ID in `utm_content`. These parameters let Market distinguish referred visits; no new Ko Workspace event is added. The public article/image requests omit credentials and referrer and never contain input text, filenames, tool results or user identifiers.
+Insight Spirit cross-promotion (2026-08-31): Market, Money tips and Health outbound links use `utm_source=ko-workspace`, `utm_medium=referral`, `utm_campaign=spirit_latest`, and public article ID in `utm_content`. These parameters let each destination distinguish referred visits; no new Ko Workspace event is added. The three public article feeds omit credentials/referrer; image requests omit referrer. None contain input text, filenames, tool results or user identifiers.
 
 - 사용자가 입력한 텍스트
 - 파일명

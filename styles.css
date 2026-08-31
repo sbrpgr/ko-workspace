@@ -3694,6 +3694,22 @@ body.home-mode .overview-panel {
   color: #202630;
   text-decoration: none;
 }
+.spirit-topic { min-width: 0; --topic-color: #b3372d; }
+.spirit-topic[data-channel="money"] { --topic-color: #996409; }
+.spirit-topic[data-channel="health"] { --topic-color: #167568; }
+.spirit-topic-heading { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.spirit-topic-heading a { color: var(--topic-color); font-size: 13px; font-weight: 750; text-decoration: none; }
+.spirit-topic-heading small { font-size: 10px; color: #67717d; }
+.spirit-topic-fallback { display: flex; flex-direction: column; justify-content: center; gap: 6px; min-height: 130px; padding: 12px 14px; border: 1px solid #dce2e9; border-radius: 6px; background: #fafbfc; text-decoration: none; }
+.spirit-topic-fallback strong { color: var(--topic-color); font-size: 14px; }
+.spirit-topic-fallback span,.spirit-topic-fallback small { color: #67717d; font-size: 12px; }
+.spirit-controls { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.spirit-controls button { min-width: 30px; min-height: 28px; padding: 3px 8px; border: 1px solid #dce2e9; border-radius: 5px; background: #fff; color: #354151; font-size: 12px; cursor: pointer; }
+.spirit-controls button:disabled { opacity: .4; cursor: default; }
+.spirit-controls button[hidden] { display: none; }
+.spirit-banner button:focus-visible { outline: 2px solid #b3372d; outline-offset: 3px; }
+@keyframes spiritTopicReveal { from { opacity: .65; transform: translateY(3px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: no-preference) { .spirit-topic .spirit-article { animation: spiritTopicReveal .4s ease-out; } }
 .spirit-article:hover { border-color: #a6b1bf; }
 .spirit-article:focus-visible, .spirit-articles:focus-visible,
 .spirit-banner a:focus-visible { outline: 2px solid #b3372d; outline-offset: 3px; }
@@ -3762,14 +3778,10 @@ body.home-mode .overview-panel {
 .spirit-swipe-hint { display: none; }
 @media (max-width: 1000px) {
   .spirit-articles {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    overscroll-behavior-x: contain;
-    scrollbar-width: thin;
-    padding-bottom: 4px;
+    grid-template-columns: minmax(0, 1fr);
+    touch-action: pan-y;
   }
-  .spirit-article { flex: 0 0 100%; scroll-snap-align: start; }
+  .spirit-banner-heading { flex-wrap: wrap; }
   .spirit-article-media { max-height: 160px; }
   .spirit-article-media img { max-height: 160px; }
   .spirit-banner-label { display: none; }

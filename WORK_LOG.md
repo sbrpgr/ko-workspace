@@ -1,5 +1,12 @@
 # Work Log
 
+## 2026-08-31 — Three-topic banner rotation
+
+- Expanded the existing banner to fixed desktop Market / Money tips / Health slots, latest three public posts each; seven-second per-topic rotation and balanced mobile interleaving. Empty topics retain desktop links and are skipped on mobile.
+- Added independent anonymous requests, category-9 overlap exclusion, strict Health origins, manual pause/previous/next, hover/focus/touch/offscreen/hidden/reduced-motion protections, and subtle transitions.
+- Updated localized topic/control text without changing tool functions. Added classification, cross-origin, unequal-bucket, partial-outage and rotation lifecycle regression checks. Cache version 20260831-02.
+- No WordPress publication, account, infrastructure, model, ad-service or user-file changes. Existing untracked PDF preserved.
+
 ## 2026-08-31 — Market article promotion
 
 - Reused the existing home/tool partner banner for three Insight Spirit Market articles; removed Coupang loader, temporary favorites creative, and inquiry creative without changing actual favorites/tools.

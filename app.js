@@ -4879,7 +4879,7 @@ function init() {
 
   initAdSlots();
   if (document.querySelector(".spirit-banner")) {
-    import("/assets/spirit-market.mjs?v=20260831-01")
+    import("/assets/spirit-market.mjs?v=20260831-02")
       .then(({ mountSpiritBanners }) => mountSpiritBanners(APP_LOCALE))
       .catch(() => {}); // The existing Market link remains usable if the module fails.
   }
@@ -5378,8 +5378,8 @@ function renderToolAdBanner() {
 
 function renderPartnerAdBanner(extraClass = "") {
   return `
-    <section class="partner-ad-banner ${extraClass} spirit-banner" aria-label="Insight Spirit Market">
-      <a class="spirit-fallback" href="https://insightspiritmarket.com/?utm_source=ko-workspace&amp;utm_medium=referral&amp;utm_campaign=spirit_latest" target="_blank" rel="noopener noreferrer">Insight Spirit Market ↗</a>
+    <section class="partner-ad-banner ${extraClass} spirit-banner" aria-label="Insight Spirit">
+      <a class="spirit-fallback" href="https://insightspiritmarket.com/?utm_source=ko-workspace&amp;utm_medium=referral&amp;utm_campaign=spirit_latest" target="_blank" rel="noopener noreferrer">Insight Spirit ↗</a>
     </section>
   `;
 }

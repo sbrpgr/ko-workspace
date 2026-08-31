@@ -17,7 +17,7 @@ Current production baseline:
 - Latest English SEO polish commit: `0385e6d Polish English SEO copy`
 - Latest foreign-language tool localization/E2E commit: `97baf2f Complete foreign tool localization testing fixes`
 - Latest platform UI/banner deployment commit: `c135df4 Add favorite tools promo banner`
-- Current static asset cache version: `20260831-01`
+- Current static asset cache version: `20260831-02`
 - English version deployed under `/en/`; Japanese and Simplified Chinese versions deployed under `/ja/` and `/zh/` on the same domain, with Korean routes preserved
 - 2026-06-07 platform UI update includes screenshot-saver fixed save directories, browser-local favorite tools, a home partner ad banner with Coupang, temporary favorite-tools promo image, inquiry slot, and a shortened support CTA
 - 2026-06-11 tool page UI update adds the same separated partner banner directly below the tool hero title and description, before the tool workspace.
@@ -348,8 +348,8 @@ Prepared slot positions:
 - `bottom-banner`
 - `left-rail`
 - `right-rail`
-- `home-partner-ad-banner` between home categories and tools; responsive Market article strip, maximum 1200px, three desktop cards and one swipeable card on narrow screens
+- `home-partner-ad-banner` between home categories and tools; Market / Money tips / Health strip, maximum 1200px, one fixed desktop slot per topic and interleaved topics on narrow screens
 - `tool-partner-ad-banner` below the tool hero and above the workspace; same article strip, outside upload, editor, and result UI
 
 When ad slots are empty, they remain hidden.
-The former Coupang, favorites-promo and inquiry slots now promote Insight Spirit Market (owner request, 2026-08-31). `assets/spirit-market.mjs` reads the public WordPress REST feed on entry and every five minutes while visible, selecting the latest three published, non-protected, non-demo articles. No manual banner updates, new backend, paid API, authentication or user-content transfer. Withdrawn articles are removed at the next successful refresh; feed errors replace cards with a compact Market link rather than showing stale content. Images occupy half the card and use contain, not cropping. Foreign-language pages label the articles as Korean. UTM source `ko-workspace` distinguishes referred visits in Market analytics. See `MARKET_PROMOTION.md` for maintenance and tests.
+The former advertising slots now promote Market, Money tips and Health (owner request, 2026-08-31). `assets/spirit-market.mjs` reads three anonymous feeds on entry/every five visible minutes, keeping three eligible articles per topic. Market excludes money-information (category 9); money includes it; Health uses insightspirithealth.com. Desktop: each topic's slot rotates every seven seconds. Mobile: Market1 → Money1 → Health1 → Market2, skipping empty topics and balancing uneven buckets. Empty/failed desktop topics retain an accurate topic link; one failed feed does not remove the others. Hover, focus/manual input, hidden/offscreen state and reduced-motion preference stop autoplay; previous/next/play controls remain available. Half-image cards use contain. No new server, paid API, credential or user-content transfer. UTM source ko-workspace distinguishes visits in the destination site's analytics. See MARKET_PROMOTION.md.
