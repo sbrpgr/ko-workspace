@@ -17,7 +17,7 @@ Current production baseline:
 - Latest English SEO polish commit: `0385e6d Polish English SEO copy`
 - Latest foreign-language tool localization/E2E commit: `97baf2f Complete foreign tool localization testing fixes`
 - Latest platform UI/banner deployment commit: `c135df4 Add favorite tools promo banner`
-- Current static asset cache version: `20260831-02`
+- Current static asset cache version: `20260831-03`
 - English version deployed under `/en/`; Japanese and Simplified Chinese versions deployed under `/ja/` and `/zh/` on the same domain, with Korean routes preserved
 - 2026-06-07 platform UI update includes screenshot-saver fixed save directories, browser-local favorite tools, a home partner ad banner with Coupang, temporary favorite-tools promo image, inquiry slot, and a shortened support CTA
 - 2026-06-11 tool page UI update adds the same separated partner banner directly below the tool hero title and description, before the tool workspace.

@@ -19,7 +19,7 @@ Updated 2026-08-31 at owner request. Existing ad slots are reused; no new banner
 
 No deployment is needed for newly published articles. If WordPress category IDs/domains change, update channel configuration and origin tests. Test topic disjointness, health origin/media, matching IDs across sites, unequal/empty buckets, future/private/demo exclusion, request failure, controls, reduced motion and small screens.
 
-Ko Workspace: assets/spirit-market.mjs, styles.css, scripts/spirit-market.test.mjs. Cache version 20260831-02. Run npm.cmd run check and git diff --check; deploy existing main → Cloudflare Pages. EN/JA/ZH labels identify Korean content.
+Ko Workspace: assets/spirit-market.mjs, styles.css, scripts/spirit-market.test.mjs. Cache version 20260831-03. Run npm.cmd run check and git diff --check; deploy existing main → Cloudflare Pages. EN/JA/ZH labels identify Korean content. Keep the play/pause button 68px wide so focus-triggered label changes cannot move the Next button during a click.
 
 Kospi Preview: frontend/src/lib/spirit-articles.ts and frontend/src/components/spirit-article-banner.tsx. Run test, typecheck, lint and build in frontend. CI must pass before merging; use deploy-hosting only. Do not deploy Cloud Run/Cloud Build, change model refresh, YouTube workflow, DNS or WordPress settings for this feature.
 

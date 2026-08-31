@@ -4879,7 +4879,7 @@ function init() {
 
   initAdSlots();
   if (document.querySelector(".spirit-banner")) {
-    import("/assets/spirit-market.mjs?v=20260831-02")
+    import("/assets/spirit-market.mjs?v=20260831-03")
       .then(({ mountSpiritBanners }) => mountSpiritBanners(APP_LOCALE))
       .catch(() => {}); // The existing Market link remains usable if the module fails.
   }

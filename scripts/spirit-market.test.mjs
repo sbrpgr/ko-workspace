@@ -67,6 +67,7 @@ test("banner integration replaces Coupang without changing tool renderers", asyn
   assert.ok(css.includes("grid-template-columns: 1fr 1fr"));
   assert.ok(css.includes("touch-action: pan-y"));
   assert.ok(css.includes("object-fit: contain"));
+  assert.ok(css.includes(".spirit-controls [data-playback] { width: 68px;"));
 });
 
 test("topic classification, strict origins, balanced rotation and empty states", () => {
