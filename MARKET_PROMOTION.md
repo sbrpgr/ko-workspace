@@ -1,0 +1,14 @@
+# Insight Spirit Market promotion
+
+- Owner instruction: reuse all three existing banner slots; replace Coupang, favorites notice and inquiry creative. Keep tools/favorites functionality and other AdSense scaffolding intact.
+- Locations: home and individual tool pages, where the former partner banner lived. No new overlay or work-surface advertisement. Category index and policy pages remain unchanged.
+- Source: `https://insightspiritmarket.com/wp-json/wp/v2/posts`, anonymous public GET, latest 12 candidates → latest 3 eligible articles. Include `money-information` naturally when those articles are published; no empty category-specific filter.
+- Eligible: `publish`, past publication time, valid numeric ID, non-protected, not `insight_demo` or editorial preview. Draft/future/private/trash never shown. Deduplicate by ID.
+- Updates: entry, five-minute intervals while visible, and return to a visible tab when refresh is due. Eight-second request timeout. No localStorage/cookies or persistent stale article cache. WordPress API failure/empty results show a compact link to Market. A deleted post can remain displayed up to the next refresh.
+- Rendering: text is escaped, article/media URLs restricted to exact HTTPS Market origin without credentials. Resized featured image preferred; original fallback. Failed/missing image uses a brand placeholder. No injected WordPress HTML/scripts.
+- Layout: three desktop cards, 50:50 image/text; narrow screens one card with native swipe/scroll snapping and keyboard arrows. No forced auto-rotation while the visitor works. Images fit without cropping. EN/JA/ZH labels explicitly state Korean articles.
+- Privacy: no tool input, file, filename, result or identifiers sent. Feed uses `credentials: omit`, `no-referrer`, `no-store`. Link clicks use noopener/noreferrer and public UTM campaign values only.
+- CSP: no new hosts required because existing image/connect rules permit HTTPS. Removed obsolete Coupang script allowlist entries; remaining existing CSP/AdSense policies unchanged.
+- Implementation: `app.js` lazy imports versioned `assets/spirit-market.mjs`. `styles.css` owns layout. Shared cache version 20260831-01. Assets directory is already packaged by the existing Cloudflare Pages GitHub workflow; no new infrastructure or recurring job.
+- Checks: `npm.cmd run check` includes `scripts/spirit-market.test.mjs`; additionally inspect home/tool at desktop/mobile widths, verify image loads and outbound URLs, existing text tool operation, localized labels, module MIME/CSP on production. Close all created browser tabs after verification.
+- Deployment: normal main push → existing GitHub Actions / Cloudflare Pages project `mic-script-generator`. Do not change DNS, credentials, WordPress plugins, editorial workflow or unrelated platforms for this module.

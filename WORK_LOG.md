@@ -1,5 +1,15 @@
 # Work Log
 
+## 2026-08-31 — Market article promotion
+
+- Reused the existing home/tool partner banner for three Insight Spirit Market articles; removed Coupang loader, temporary favorites creative, and inquiry creative without changing actual favorites/tools.
+- Added an anonymous, timeout-bounded public feed with five-minute visible-tab refresh, published/demo/password checks, safe origins, escaped titles, failure fallback and UTM attribution. No backend, new paid service, private credential or user input transfer.
+- Responsive 50:50 image/text cards: desktop three columns; mobile one native swipeable card, uncropped images, keyboard support. EN/JA/ZH chrome identifies Korean content.
+- Removed obsolete Coupang CSP script entries and their tag-manager allowlist. Bumped all shared static asset versions to 20260831-01; documented feed maintenance in MARKET_PROMOTION.md.
+- Pre-deployment validation: npm check passed (52 existing smoke checks + 9 new feed/security/lifecycle checks, zero dependency vulnerabilities), git diff --check passed.
+- In-app UI: 1280px home showed three loaded thumbnails with no horizontal overflow; 390px fixture showed one full card and scroll affordance; character-counter remained outside banner and returned 8 characters / 7 without spaces / 2 words for test input. English fallback label verified.
+- Existing untracked user PDF was preserved and excluded from staging. Deployment uses the existing main → GitHub Actions → Cloudflare Pages route.
+
 ## 2026-05-17
 
 ### Foreign-Language Tool Localization And E2E Release

@@ -4828,17 +4828,6 @@ const LIBRARIES = {
 
 const libraryCache = {};
 const TOOL_FAVORITES_STORAGE_KEY = "koWorkspace.favoriteTools.v1";
-const COUPANG_PARTNERS_SCRIPT_SRC = "https://ads-partners.coupang.com/g.js";
-const HOME_FAVORITES_PROMO_IMAGE_SRC = "/assets/home-favorites-promo.png?v=20260701-01";
-const HOME_COUPANG_AD_CONFIG = {
-  id: 995014,
-  template: "carousel",
-  trackingCode: "AF1258921",
-  width: "400",
-  height: "140",
-  tsource: "",
-};
-let coupangPartnersScriptPromise = null;
 
 const appState = {
   category: ALL_CATEGORY_LABEL,
@@ -4889,7 +4878,11 @@ function init() {
   }
 
   initAdSlots();
-  mountCoupangPartnerAds();
+  if (document.querySelector(".spirit-banner")) {
+    import("/assets/spirit-market.mjs?v=20260831-01")
+      .then(({ mountSpiritBanners }) => mountSpiritBanners(APP_LOCALE))
+      .catch(() => {}); // The existing Market link remains usable if the module fails.
+  }
   injectStructuredData(activeTool, activeCategoryPage);
 }
 
@@ -5385,86 +5378,10 @@ function renderToolAdBanner() {
 
 function renderPartnerAdBanner(extraClass = "") {
   return `
-    <section class="partner-ad-banner ${extraClass}" aria-label="광고 배너">
-      <div class="partner-ad-slot partner-ad-coupang" data-coupang-partner-ad></div>
-      ${renderHomeFavoritesPromoSlot()}
-      ${renderHomeAdInquirySlot()}
+    <section class="partner-ad-banner ${extraClass} spirit-banner" aria-label="Insight Spirit Market">
+      <a class="spirit-fallback" href="https://insightspiritmarket.com/?utm_source=ko-workspace&amp;utm_medium=referral&amp;utm_campaign=spirit_latest" target="_blank" rel="noopener noreferrer">Insight Spirit Market ↗</a>
     </section>
   `;
-}
-
-function renderHomeFavoritesPromoSlot() {
-  return `
-    <a class="partner-ad-slot partner-ad-promo" href="#tools" aria-label="도구 즐겨찾기 기능 안내">
-      <img src="${HOME_FAVORITES_PROMO_IMAGE_SRC}" width="400" height="140" alt="도구 즐겨찾기 기능 추가 - 자주 쓰는 기능은 별표로 맨 위에 고정" loading="lazy" decoding="async" />
-    </a>
-  `;
-}
-
-function renderHomeAdInquirySlot() {
-  return `
-    <a class="partner-ad-slot partner-ad-inquiry" href="mailto:dayway.ict@gmail.com" aria-label="광고문의 dayway.ict@gmail.com">
-      <span>광고문의</span>
-      <strong>dayway.ict@gmail.com</strong>
-    </a>
-  `;
-}
-
-function loadCoupangPartnersScript() {
-  if (window.PartnersCoupang?.G) {
-    return Promise.resolve();
-  }
-
-  if (coupangPartnersScriptPromise) {
-    return coupangPartnersScriptPromise;
-  }
-
-  const existingScript = document.querySelector(`script[src="${COUPANG_PARTNERS_SCRIPT_SRC}"]`);
-  coupangPartnersScriptPromise = new Promise((resolve, reject) => {
-    const script = existingScript || document.createElement("script");
-    script.addEventListener("load", resolve, { once: true });
-    script.addEventListener("error", reject, { once: true });
-
-    if (!existingScript) {
-      script.src = COUPANG_PARTNERS_SCRIPT_SRC;
-      script.async = true;
-      script.dataset.coupangPartners = "true";
-      document.head.appendChild(script);
-    }
-  });
-
-  return coupangPartnersScriptPromise;
-}
-
-function mountCoupangPartnerAds() {
-  const slots = [...document.querySelectorAll("[data-coupang-partner-ad]")].filter(
-    (slot) => slot.dataset.coupangMounted !== "true" && slot.dataset.coupangMounted !== "pending"
-  );
-  if (slots.length === 0) return;
-
-  slots.forEach((slot) => {
-    slot.dataset.coupangMounted = "pending";
-  });
-
-  loadCoupangPartnersScript()
-    .then(() => {
-      slots.forEach((slot) => {
-        if (!slot.isConnected || slot.dataset.coupangMounted === "true" || !window.PartnersCoupang?.G) return;
-        slot.replaceChildren();
-        new window.PartnersCoupang.G({
-          ...HOME_COUPANG_AD_CONFIG,
-          container: slot,
-        });
-        slot.dataset.coupangMounted = "true";
-      });
-    })
-    .catch(() => {
-      slots.forEach((slot) => {
-        if (slot.isConnected) {
-          slot.dataset.coupangMounted = "error";
-        }
-      });
-    });
 }
 
 function renderToolLaunchCard(tool) {

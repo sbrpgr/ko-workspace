@@ -83,5 +83,6 @@ GitHub Actions workflow는 아래 자산을 `.cloudflare-dist/`로 복사합니�
 
 - 루트 정적 파일: `index.html`, `styles.css`, `app.js`, `privacy.html`, `terms.html`, `robots.txt`, `sitemap.xml`, `ads.txt`, `_headers`, `favicon.svg`, `site.webmanifest`
 - 공통 이미지 자산 디렉터리: `assets/` (홈 즐겨찾기 홍보 이미지 같은 배너 자산 포함)
+- 2026-08-31: `assets/spirit-market.mjs`도 위 assets 복사 범위에 포함된다. 마켓 공개 기사 배너는 브라우저에서 자동 갱신되므로 새 글마다 재배포하지 않는다. 모듈 변경 시 app.js의 import 버전과 공통 캐시 버전을 함께 올린다.
 - 도구 페이지 디렉터리: `tools/`
 - 다국어 정적 페이지 디렉터리: `en/`, `ja/`, `zh/`
