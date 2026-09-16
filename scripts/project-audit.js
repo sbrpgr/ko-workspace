@@ -30,6 +30,7 @@ function main() {
     ...auditCategoryPages(),
     ...auditLocalizedPages(),
     ...auditSeoRedirects(),
+    ...auditNotFoundPage(),
     ...auditStaticReviewContent(),
     ...auditLibraryCsp(),
     ...auditSupportContact(),
@@ -69,6 +70,18 @@ function auditAssetVersion() {
     problems.push(`PROJECT_SPEC.md: current cache version does not match ${version}`);
   }
 
+  return problems;
+}
+
+function auditNotFoundPage() {
+  const file = path.join(ROOT, "404.html");
+  if (!fs.existsSync(file)) return ["404.html: required to disable Cloudflare Pages SPA fallback"];
+  const problems = [];
+  const html = read(file);
+  if (!/<meta name="robots" content="noindex, follow">/.test(html)) problems.push("404.html: missing noindex");
+  if (/rel="canonical"/.test(html)) problems.push("404.html: do not canonicalize missing URLs to the homepage");
+  if (read(path.join(ROOT, "sitemap.xml")).includes(`${ORIGIN}/404`)) problems.push("sitemap.xml: error page must not be listed");
+  if (!read(path.join(ROOT, ".github/workflows/cloudflare-pages.yml")).includes("cp index.html 404.html ")) problems.push("deployment: missing 404.html");
   return problems;
 }
 

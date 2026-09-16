@@ -64,7 +64,7 @@ function collectHtmlFiles() {
     files.add(path.join(ROOT, file));
   }
 
-  for (const file of ["index.html", "privacy.html", "terms.html"]) {
+  for (const file of ["index.html", "404.html", "privacy.html", "terms.html"]) {
     files.add(path.join(ROOT, file));
   }
 
