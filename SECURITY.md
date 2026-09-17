@@ -40,3 +40,7 @@
 ```powershell
 rg -n --hidden --glob '!.git/**' --glob '!node_modules/**' --glob '!.browser-profile/**' --glob '!.cloudflare-dist/**' --glob '!.wrangler/**' "(api[_-]?key|secret|token|password|private[_-]?key|BEGIN .*PRIVATE KEY|ghp_|github_pat_)"
 ```
+
+## Pull request validation
+
+The `CI / verify` job prepares the same managed site tags as deployment and runs `npm run check` with read-only repository permissions and no deployment secrets. Production deployment remains restricted to main pushes. External Actions in CI and deployment are pinned to reviewed commit SHAs.
